@@ -1,0 +1,337 @@
+﻿@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+    else
+    {
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    }
+}
+
+<style>
+    * {
+        font-family: "微軟正黑體";
+    }
+
+    .originalPanel,
+    .demoPanel {
+        position: relative;
+        width: 500px;
+        height: 50px;
+        background: #3c3d41;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .demoSlider,
+    .originalSlider {
+        -webkit-appearance: none;
+        display: inline-block;
+        border-radius: 50px;
+        width: 70%;
+        height: 5px;
+        outline: none;
+        margin: 10px;
+    }
+
+        .slider-range::-webkit-slider-thumb,
+        .demoSlider::-webkit-slider-thumb,
+        .originalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 10px;
+            height: 10px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+            .demoSlider::-webkit-slider-thumb:hover,
+            .originalSlider::-webkit-slider-thumb:hover {
+                cursor: pointer;
+                width: 14px;
+                height: 14px;
+            }
+
+    .demoSlider,
+    .originalSlider,
+    .vbtn {
+        cursor: pointer;
+    }
+
+    .vbtn {
+        display: inline;
+    }
+
+        .vbtn img {
+            width: 20px;
+            height: 15px;
+            filter: invert();
+        }
+
+    mainbox span {
+        color: white;
+    }
+
+    mainbox p {
+        font-size: 12px;
+        font-style: italic;
+        color: gray;
+        margin: 5px;
+    }
+
+    .slider {
+        margin: 20px;
+        width: 500px;
+    }
+</style>
+
+<body>
+
+    <div class="container playerPanel">
+        <input type="file" id="upload" multiple="multiple">
+
+        <hr>
+        <h5>原始檔案</h5>
+        <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+        <div class="py-2 originalPanel">
+
+            <audio class="originalAudio"></audio>
+            <span class="nowTime">00:00</span>
+            <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+            <span class="totalTime">00:00</span>
+            <div class="vbtn oplay" data-><img src="/PlayerImg/play.png"></div>
+            <div class="vbtn opause"><img src="/PlayerImg/pause.png"></div>
+        </div>
+
+        <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+        <input type="text" class="start" value="00:00.00">
+        <p></p>
+        <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+        <input type="text" class="end" value="00:00.00">
+        <p>也可以直接拉動滑條直接選取試聽範圍</p>
+        <div id="slider-range" class="slider"></div>
+
+        <h5>試聽檔案</h5>
+        <p>在此確認擷取的範圍</p>
+        <div class="py-2 demoPanel">
+            <audio class="demoAudio"></audio>
+            <span class="nowDemo">00:00</span>
+            <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+            <span class="totalDemo">00:00</span>
+            <div class="vbtn dplay"><img src="/PlayerImg/play.png"></div>
+            <div class="vbtn dpause"><img src="/PlayerImg/pause.png"></div>
+        </div>
+        <hr>
+    </div>
+
+    <script>
+        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+        var demoStart;
+        var demoEnd;
+
+        var oplaying = false;
+        var dplaying = false;
+        var fileName;
+
+        $(".opause").css("display", "none");
+        $(".dpause").css("display", "none");
+        var music = $(".originalAudio")[0];
+        music.volume = 0.6;
+        var demoMusic = $(".demoAudio")[0];
+        demoMusic.volume = 0.6;
+
+        //讀取檔案，一次只能讀取一個
+        $("#upload").on("change", function () {
+            let file = document.getElementById("upload").files[0];
+            if (file.type != "audio/mp3") {
+                file = null;
+            }
+
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                music.src = e.target.result;
+                demoMusic.src = e.target.result;
+            }
+        });
+
+        //讀取音樂時會進行初始化
+        $(".originalAudio").on("durationchange", function () {
+            let totalTime = parseInt(music.duration);
+
+            //如果是讀取資料庫時用這段
+            demostart = $(".start").val();
+            demoEnd = $(".end").val();
+
+            //如果是第一次上傳音樂資料時用這段
+            //demoStart = 0 ;
+            //demoEnd = music.duration;
+
+            console.log(totalTime);
+            $(".originalSlider").prop("max", totalTime);
+            $(".demoSlider").prop("max", totalTime);
+            $(".totalTime").text(getTimeText(totalTime));
+            $(".totalDemo").text(getTimeText(totalTime));
+
+            //同時初始化滑動條
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: `${music.duration}`,
+                step: 0.01,
+                values: [0, music.duration],//如果是讀取檔案就改成[demoStart,demoEnd]
+                slide: function () {
+                    demoStart = $("#slider-range").slider("values", 0)
+                    setStart();
+                    demoEnd = $("#slider-range").slider("values", 1)
+                    setEnd();
+                }
+            });
+        });
+
+        //播放器的timer
+        $(".originalAudio").on("timeupdate", function () {
+            $(".originalSlider").prop("value", music.currentTime);
+            let now = parseInt(music.currentTime);
+            $(".nowTime").text(getTimeText(now));
+        });
+
+        $(".demoAudio").on("timeupdate", function () {
+            $(".demoSlider").prop("value", demoMusic.currentTime);
+            let now = parseInt(demoMusic.currentTime);
+            $(".nowDemo").text(getTimeText(now));
+            if (demoMusic.currentTime > $(".demoSlider").attr("max")) {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+                demoMusic.currentTime = demoStart;
+            }
+            //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
+            if (demoMusic.currentTime < demoStart + 3) {
+                demoMusic.volume = (demoMusic.currentTime - demoStart) * 0.2;
+            }
+            //試聽淡出效果
+            else if (demoMusic.currentTime + 7 > demoEnd) {
+                demoMusic.volume = (demoEnd - demoMusic.currentTime) * 0.1;
+            }
+            else {
+                demoMusic.volume = 0.6;
+            }
+        });
+
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            if ($(this).prop("className") == "vbtn oplay") {
+                music.play();
+                demoMusic.pause();
+                oplaying = true;
+                dplaying = false;
+                $(".oplay").css("display", "none");
+                $(".opause").css("display", "inline")
+                $(".dplay").css("display", "inline")
+                $(".dpause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dplay") {
+                demoMusic.play();
+                music.pause();
+                dplaying = true;
+                oplaying = false;
+                $(".dplay").css("display", "none");
+                $(".dpause").css("display", "inline")
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn opause") {
+                music.pause();
+                oplaying = false;
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+            }
+        })
+
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        //測試時直接讀取本頁會造成進度條出現bug，從別頁進來則不會，推測是jquery重複讀取的關係，暫無解(但一般使用者也不會直接進入這頁)
+        $(".originalSlider").on('input', function () {
+            music.pause();
+            $(this).trigger("change");
+        })
+        $(".demoSlider").on('input', function () {
+            demoMusic.pause();
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $(".originalSlider").on("change", function () {
+            music.currentTime = this.value;
+        });
+        $(".demoSlider").on("change", function () {
+            demoMusic.currentTime = this.value;
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $(".originalSlider").on("mouseup", function () {
+            if (oplaying)
+                music.play();
+        });
+        $(".demoSlider").on("mouseup", function () {
+            if (dplaying)
+                demoMusic.play();
+        });
+
+        //製作試聽用
+        //按鍵設置試聽開頭與結尾
+        $(".setStart").on("click", function () {
+            demoStart = music.currentTime;
+            setStart();
+        });
+        $(".setEnd").on("click", function () {
+            demoEnd = music.currentTime;
+            setEnd();
+        });
+
+        //取得音樂時間文字的方法(第二個有給到小數後兩位)
+        function getTimeText(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = parseInt(num % 60 % 10);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+        function getTimeText2(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = (num % 60 % 10).toFixed(2);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+
+        //設定範圍初始值與結尾值的方法
+        function setStart() {
+            $(".start").val(demoStart);
+            if (demoStart > demoMusic.currentTime) {
+                demoMusic.currentTime = demoStart;
+                $(".demoSlider").attr("value", `${demoStart}`);
+            }
+            $(".demoSlider").attr("min", `${demoStart}`);
+
+        }
+        function setEnd() {
+            $(".end").val(demoEnd);
+            $(".totalDemo").text(getTimeText(demoEnd));
+            if (demoEnd < demoMusic.currentTime) {
+                demoMusic.currentTime = demoEnd;
+                $(".demoSlider").attr("value", `${demoEnd}`);
+            }
+            $(".demoSlider").attr("max", `${demoEnd}`);
+        }
+
+    </script>
+</body>

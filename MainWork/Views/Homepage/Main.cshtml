@@ -1,0 +1,18 @@
+﻿@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+    else
+    {
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    }
+}
+@Html.ActionLink("搜尋", "BasicSearch", "BasicSearch")
+
+@* 為了讓首頁網址統一所寫的 *@
+@*<script>
+    if ($(".mainbox").attr("data-ajax") != null) {
+            history.replaceState(null, null, "Homepage/Main");
+        }
+</script>*@

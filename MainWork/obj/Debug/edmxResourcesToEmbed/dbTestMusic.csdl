@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbProjectMusicStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tAlbum">
+    <Key>
+      <PropertyRef Name="fAlbumID" />
+    </Key>
+    <Property Name="fAlbumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fAlbumName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fMaker" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fYear" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fType" Type="Int32" />
+    <Property Name="fStatus" Type="Int32" />
+    <Property Name="fALPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fCoverPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fPublisher" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tAlbumType" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbum" ToRole="tAlbumType" />
+    <NavigationProperty Name="tMember" Relationship="Self.FK_tAlbum_tMember" FromRole="tAlbum" ToRole="tMember" />
+    <NavigationProperty Name="tProducts" Relationship="Self.FK_tProducts_tAlbum" FromRole="tAlbum" ToRole="tProducts" />
+  </EntityType>
+  <EntityType Name="tAlbumType">
+    <Key>
+      <PropertyRef Name="fTypeID" />
+    </Key>
+    <Property Name="fTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbumType" ToRole="tAlbum" />
+  </EntityType>
+  <EntityType Name="tMember">
+    <Key>
+      <PropertyRef Name="fAccount" />
+    </Key>
+    <Property Name="fAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="fPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="fEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fPrivilege" Type="Int32" />
+    <Property Name="fNickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fMoney" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tMember" FromRole="tMember" ToRole="tAlbum" />
+    <NavigationProperty Name="tPurchaseItems" Relationship="Self.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
+    <NavigationProperty Name="tShoppingCarts" Relationship="Self.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
+  </EntityType>
+  <EntityType Name="tProductKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tProduct">
+    <Key>
+      <PropertyRef Name="fProductID" />
+    </Key>
+    <Property Name="fProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fAlbumID" Type="Int32" />
+    <Property Name="fProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fArtist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fSIPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fComposer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fArranger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fLyricist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fKind" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fMusic" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="fFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fPlayStart" Type="Time" Precision="7" />
+    <Property Name="fPlayEnd" Type="Time" Precision="7" />
+    <Property Name="fStatus" Type="Int32" />
+    <Property Name="fDownloadCount" Type="Int32" />
+    <Property Name="fModifiedDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fNation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tAlbum" Relationship="Self.FK_tProducts_tAlbum" FromRole="tProducts" ToRole="tAlbum" />
+    <NavigationProperty Name="tPurchaseItem" Relationship="Self.FK_tPurchaseItem_tProducts1" FromRole="tProducts" ToRole="tPurchaseItem" />
+    <NavigationProperty Name="tShoppingCarts" Relationship="Self.FK_tShoppingCart_tProducts" FromRole="tProducts" ToRole="tShoppingCart" />
+  </EntityType>
+  <EntityType Name="tPurchaseItem">
+    <Key>
+      <PropertyRef Name="fPurchaseItemID" />
+    </Key>
+    <Property Name="fPurchaseItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fCustomer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fProductID" Type="Int32" />
+    <Property Name="fDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fQuanity" Type="Int32" />
+    <NavigationProperty Name="tMember" Relationship="Self.FK_tPurchaseItem_tMember1" FromRole="tPurchaseItem" ToRole="tMember" />
+    <NavigationProperty Name="tProduct" Relationship="Self.FK_tPurchaseItem_tProducts1" FromRole="tPurchaseItem" ToRole="tProducts" />
+  </EntityType>
+  <EntityType Name="tShoppingCart">
+    <Key>
+      <PropertyRef Name="fCartID" />
+    </Key>
+    <Property Name="fCartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fProductID" Type="Int32" />
+    <Property Name="fQuanity" Type="Int32" />
+    <Property Name="fCustomer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fPrice" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="tMember" Relationship="Self.FK_tShoppingCart_tMember" FromRole="tShoppingCart" ToRole="tMember" />
+    <NavigationProperty Name="tProduct" Relationship="Self.FK_tShoppingCart_tProducts" FromRole="tShoppingCart" ToRole="tProducts" />
+  </EntityType>
+  <Association Name="FK_tAlbum_tAlbumType">
+    <End Role="tAlbumType" Type="Self.tAlbumType" Multiplicity="0..1" />
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbumType">
+        <PropertyRef Name="fTypeID" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tMember">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tProducts_tAlbum">
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="0..1" />
+    <End Role="tProducts" Type="Self.tProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbum">
+        <PropertyRef Name="fAlbumID" />
+      </Principal>
+      <Dependent Role="tProducts">
+        <PropertyRef Name="fAlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tMember1">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fCustomer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tShoppingCart_tMember">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tShoppingCart">
+        <PropertyRef Name="fCustomer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tProducts1">
+    <End Role="tProducts" Type="Self.tProduct" Multiplicity="1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="tProducts">
+        <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fPurchaseItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tShoppingCart_tProducts">
+    <End Role="tProducts" Type="Self.tProduct" Multiplicity="0..1" />
+    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tProducts">
+        <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tShoppingCart">
+        <PropertyRef Name="fProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbProjectMusicStoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tAlbums" EntityType="Self.tAlbum" />
+    <EntitySet Name="tAlbumTypes" EntityType="Self.tAlbumType" />
+    <EntitySet Name="tMembers" EntityType="Self.tMember" />
+    <EntitySet Name="tProductKinds" EntityType="Self.tProductKind" />
+    <EntitySet Name="tProducts" EntityType="Self.tProduct" />
+    <EntitySet Name="tPurchaseItems" EntityType="Self.tPurchaseItem" />
+    <EntitySet Name="tShoppingCarts" EntityType="Self.tShoppingCart" />
+    <AssociationSet Name="FK_tAlbum_tAlbumType" Association="Self.FK_tAlbum_tAlbumType">
+      <End Role="tAlbumType" EntitySet="tAlbumTypes" />
+      <End Role="tAlbum" EntitySet="tAlbums" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tMember" Association="Self.FK_tAlbum_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tAlbum" EntitySet="tAlbums" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tProducts_tAlbum" Association="Self.FK_tProducts_tAlbum">
+      <End Role="tAlbum" EntitySet="tAlbums" />
+      <End Role="tProducts" EntitySet="tProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tMember1" Association="Self.FK_tPurchaseItem_tMember1">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tShoppingCart_tMember" Association="Self.FK_tShoppingCart_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tProducts1" Association="Self.FK_tPurchaseItem_tProducts1">
+      <End Role="tProducts" EntitySet="tProducts" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tShoppingCart_tProducts" Association="Self.FK_tShoppingCart_tProducts">
+      <End Role="tProducts" EntitySet="tProducts" />
+      <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

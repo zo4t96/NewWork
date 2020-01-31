@@ -1,0 +1,98 @@
+﻿@model IEnumerable<MainWork.tProductKind>
+@{
+    //如果是ajax讀取出這頁，取消讀取框架只讀內容
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+    //如果是按重新整理就必須讀取框架，並且將下列這些參考讀出來(否則會抓不到jquery)
+    //由於讀取layout理應也會讀取參照的script，此處有待考察
+    else
+    {
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    }
+}
+<style>
+
+    .kindPage {
+        /* 方塊浮動(不用float)，自動換行，*/
+        display: flex;
+        flex-wrap: wrap;
+        /*align-items: stretch;
+        align-content: stretch; /*還不曉得怎麼發揮作用*/
+        position: relative;
+        background-color: #2b2828;
+        padding: 10px;
+        font-family: "微軟正黑體";
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    .kindBlock {
+        /* 寬高單位同為vw或vx可達成等比例縮放的方形效果 */
+        width: 13vw;
+        height: 13vw;
+        min-width: 150px;
+        min-height: 150px;
+        border-radius: 10px;
+        margin: 8px;
+        padding: 10px;
+        background-color: #6bc477;
+        /*輕微漸層效果，意外的很帶感*/
+        background-image: linear-gradient(to bottom,#16161660 15%,#6bc477);
+        overflow: hidden;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .kindBlock:hover {
+            width: 14vw;
+            height: 14vw;
+            min-width: 165px;
+            min-height: 165px;
+            margin: 2px;
+        }
+
+    .photo {
+        position: relative;
+        width: 70%;
+        height: 70%;
+        bottom: -25%;
+        right: -50%;
+        /* 設置音樂封面作為背景圖片，使圖片填滿div，添加陰影，斜向旋轉，輕微透明效果 */
+        background-image: url("#");
+        background-size: cover;
+        box-shadow: 0px 1px 1px 1px #0000004b;
+        transform: rotate(25deg);
+        opacity: 0.75;
+    }
+</style>
+<title>BasicSerch</title>
+<body>
+    <div class="kindPage">
+        @{string[] color = new string[] { "#FF8789", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B", "#E8B274", "#F587DE", }; }
+        @foreach (var item in Model)
+        {
+            string id = Html.DisplayFor(modelItem => item.KindID).ToString();
+            <div class="kindBlock" data-kind="@id">
+                <span class="kindName">@Html.DisplayFor(modelItem => item.KindName)</span>
+                <div class="photo" style="background-image:url(/Images/@(id).jpg)"></div>
+            </div>
+        }
+    </div>
+    <script>//讓類別窗格不同色的程式碼，暫時是寫死的(9種顏色而已)
+        var color = ["#FF8789", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B", "#E8B274", "#F587DE"];
+        var c = $(".kindBlock");
+        for (let i = 1; i <= c.length; i++) {
+            c.eq(i).css("background-color", color[i]);
+            c.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 15%,${color[i]})`);
+        }
+        c.on("click", function () {
+
+            //待商品頁面出來，直連商品頁面
+            $.post("", { type: $(this).attr("data-kind") }, function (data) {
+                $(".mainbox").html(data);
+            });
+        })</script>
+</body>

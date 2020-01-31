@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="57688f632eb7478ca08d99fa184f5223" Name="Diagram1">
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbum" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumType" Width="1.5" PointX="3.125" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMember" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tProductKind" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tProduct" Width="1.5" PointX="5.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPurchaseItem" Width="1.5" PointX="7.375" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tShoppingCart" Width="1.5" PointX="7.375" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tProducts_tAlbum" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tShoppingCart_tProducts" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

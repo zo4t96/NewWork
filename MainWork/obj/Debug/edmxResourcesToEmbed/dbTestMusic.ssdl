@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbProjectMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tAlbum">
+    <Key>
+      <PropertyRef Name="fAlbumID" />
+    </Key>
+    <Property Name="fAlbumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fAlbumName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fMaker" Type="nvarchar" MaxLength="50" />
+    <Property Name="fAccount" Type="nvarchar" MaxLength="50" />
+    <Property Name="fYear" Type="nvarchar" MaxLength="50" />
+    <Property Name="fType" Type="int" />
+    <Property Name="fStatus" Type="int" />
+    <Property Name="fALPrice" Type="money" />
+    <Property Name="fCoverPath" Type="nvarchar(max)" />
+    <Property Name="fPublisher" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tAlbumType">
+    <Key>
+      <PropertyRef Name="fTypeID" />
+    </Key>
+    <Property Name="fTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fTypeName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tMember">
+    <Key>
+      <PropertyRef Name="fAccount" />
+    </Key>
+    <Property Name="fAccount" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="fPassword" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="fEmail" Type="nvarchar" MaxLength="50" />
+    <Property Name="fPrivilege" Type="int" />
+    <Property Name="fNickName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fMoney" Type="money" />
+  </EntityType>
+  <EntityType Name="tProductKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KindName" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="tProducts">
+    <Key>
+      <PropertyRef Name="fProductID" />
+    </Key>
+    <Property Name="fProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fAlbumID" Type="int" />
+    <Property Name="fProductName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fArtist" Type="nvarchar" MaxLength="50" />
+    <Property Name="fSIPrice" Type="money" />
+    <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
+    <Property Name="fArranger" Type="nvarchar" MaxLength="50" />
+    <Property Name="fLyricist" Type="nvarchar" MaxLength="50" />
+    <Property Name="fKind" Type="nvarchar(max)" />
+    <Property Name="fMusic" Type="varbinary(max)" />
+    <Property Name="fFilePath" Type="nvarchar(max)" />
+    <Property Name="fPlayStart" Type="time" Precision="7" />
+    <Property Name="fPlayEnd" Type="time" Precision="7" />
+    <Property Name="fStatus" Type="int" />
+    <Property Name="fDownloadCount" Type="int" />
+    <Property Name="fModifiedDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="fNation" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tPurchaseItem">
+    <Key>
+      <PropertyRef Name="fPurchaseItemID" />
+    </Key>
+    <Property Name="fPurchaseItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fCustomer" Type="nvarchar" MaxLength="50" />
+    <Property Name="fProductID" Type="int" />
+    <Property Name="fDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="fPrice" Type="money" />
+    <Property Name="fQuanity" Type="int" />
+  </EntityType>
+  <EntityType Name="tShoppingCart">
+    <Key>
+      <PropertyRef Name="fCartID" />
+    </Key>
+    <Property Name="fCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fProductID" Type="int" />
+    <Property Name="fQuanity" Type="int" />
+    <Property Name="fCustomer" Type="nvarchar" MaxLength="50" />
+    <Property Name="fDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="fPrice" Type="money" />
+  </EntityType>
+  <Association Name="FK_tAlbum_tAlbumType">
+    <End Role="tAlbumType" Type="Self.tAlbumType" Multiplicity="0..1" />
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbumType">
+        <PropertyRef Name="fTypeID" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tMember">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tProducts_tAlbum">
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="0..1" />
+    <End Role="tProducts" Type="Self.tProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbum">
+        <PropertyRef Name="fAlbumID" />
+      </Principal>
+      <Dependent Role="tProducts">
+        <PropertyRef Name="fAlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tMember1">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fCustomer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tProducts1">
+    <End Role="tProducts" Type="Self.tProducts" Multiplicity="1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="tProducts">
+        <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fPurchaseItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tShoppingCart_tMember">
+    <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
+    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tShoppingCart">
+        <PropertyRef Name="fCustomer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tShoppingCart_tProducts">
+    <End Role="tProducts" Type="Self.tProducts" Multiplicity="0..1" />
+    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tProducts">
+        <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tShoppingCart">
+        <PropertyRef Name="fProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbProjectMusicStoreModelStoreContainer">
+    <EntitySet Name="tAlbum" EntityType="Self.tAlbum" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tAlbumType" EntityType="Self.tAlbumType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tMember" EntityType="Self.tMember" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tProductKind" EntityType="Self.tProductKind" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tProducts" EntityType="Self.tProducts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tPurchaseItem" EntityType="Self.tPurchaseItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tShoppingCart" EntityType="Self.tShoppingCart" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tAlbum_tAlbumType" Association="Self.FK_tAlbum_tAlbumType">
+      <End Role="tAlbumType" EntitySet="tAlbumType" />
+      <End Role="tAlbum" EntitySet="tAlbum" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tMember" Association="Self.FK_tAlbum_tMember">
+      <End Role="tMember" EntitySet="tMember" />
+      <End Role="tAlbum" EntitySet="tAlbum" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tProducts_tAlbum" Association="Self.FK_tProducts_tAlbum">
+      <End Role="tAlbum" EntitySet="tAlbum" />
+      <End Role="tProducts" EntitySet="tProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tMember1" Association="Self.FK_tPurchaseItem_tMember1">
+      <End Role="tMember" EntitySet="tMember" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tProducts1" Association="Self.FK_tPurchaseItem_tProducts1">
+      <End Role="tProducts" EntitySet="tProducts" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tShoppingCart_tMember" Association="Self.FK_tShoppingCart_tMember">
+      <End Role="tMember" EntitySet="tMember" />
+      <End Role="tShoppingCart" EntitySet="tShoppingCart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tShoppingCart_tProducts" Association="Self.FK_tShoppingCart_tProducts">
+      <End Role="tProducts" EntitySet="tProducts" />
+      <End Role="tShoppingCart" EntitySet="tShoppingCart" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

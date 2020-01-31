@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="dbTestModelStoreContainer" CdmEntityContainer="dbTestEntities">
+    <EntitySetMapping Name="tUpload">
+      <EntityTypeMapping TypeName="dbTestModel.tUpload">
+        <MappingFragment StoreEntitySet="tUpload">
+          <ScalarProperty Name="fId" ColumnName="fId" />
+          <ScalarProperty Name="fDate" ColumnName="fDate" />
+          <ScalarProperty Name="fDescription" ColumnName="fDescription" />
+          <ScalarProperty Name="fPath" ColumnName="fPath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
