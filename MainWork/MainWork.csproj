@@ -219,6 +219,7 @@
     <Compile Include="tUpload.cs">
       <DependentUpon>dbUpload.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
     <Compile Include="ViewModels\CSearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
     <Content Include="Views\TwoPlayer\demoPlayer.cshtml" />
     <Content Include="Views\Search\Kinds.cshtml" />
     <Content Include="Views\Search\Result.cshtml" />
+    <Content Include="Views\Search\AdvancedResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

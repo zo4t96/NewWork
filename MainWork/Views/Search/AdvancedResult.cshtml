@@ -1,0 +1,13 @@
+﻿@model IEnumerable<MainWork.tAlbum>
+
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    <div>專輯名稱:@item.fAlbumName</div>
+    <div>社團名稱:@item.fMaker</div>
+    <div>@*發行類別:@item.tAlbumType.fTypeName*@</div>
+    <div>========================================</div>
+}

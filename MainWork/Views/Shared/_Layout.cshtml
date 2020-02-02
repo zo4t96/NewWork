@@ -79,18 +79,6 @@
             color: white;
         }
 
-        .side-li-home-img {
-            list-style-image: url(image/1-mini.jpg);
-        }
-
-        .side-li-serach-img {
-            list-style-image: url(image/2-mini.jpg);
-        }
-
-        .side-li-mymusiclibiary-img {
-            list-style-image: url(image/3-mini.jpg);
-        }
-
         .mainbox {
             width: 100%;
             height: calc(100%-70px);
@@ -151,9 +139,11 @@
         .itemAdd {
             display: inline-block;
             border-radius: 5px;
-            border: 1px solid whitesmoke;
+            border:1px solid #212121;
             padding: 5px;
             margin: 2px 1px;
+            color:white;
+            font-weight:600;
         }
         .selectedItem{
             display:none;
@@ -170,6 +160,7 @@
             .itemAdd:hover {
                 background-color: rgba(6, 78, 137, 0.90)
             }
+
         .selectableItemPanel {
             display: none;
             position: absolute;
@@ -178,7 +169,7 @@
             border-radius: 5px;
             background-color: rgba(0, 0, 0, 0.8);
             transition: 0.1s;
-            box-shadow: 1px 1px 2px #818181;
+            box-shadow: 1px 1px 2px #525252;
         }
         .adSwitch {
             opacity: 1;
@@ -363,32 +354,32 @@
                 <div class="advancedItemGroup">
                     <div class="advancedItem">
                         歌曲名稱
-                        <input type="text" class="advancedtxt form-control" name="song" />
+                        <input type="text" class="advancedtxt form-control" id="adSong" />
+                    </div>
+                    <div class="advancedItem">
+                        專輯名稱
+                        <input type="text" class="advancedtxt form-control" id="adAlbum" />
                     </div>
                     <div class="advancedItem">
                         歌手
-                        <input type="text" class="advancedtxt form-control" name="singer" />
+                        <input type="text" class="advancedtxt form-control" id="adSinger" />
                     </div>
                     <div class="advancedItem">
-                        團體名
-                        <input type="text" class="advancedtxt form-control" name="group" />
+                        團體名稱
+                        <input type="text" class="advancedtxt form-control" id="adGroup" />
                     </div>
                     <div class="advancedItem">
                         作曲者
-                        <input type="text" class="advancedtxt form-control" name="arranger" />
-                    </div>
-                    <div class="advancedItem">
-                        作詞者
-                        <input type="text" class="advancedtxt form-control" name="lyricist" />
+                        <input type="text" class="advancedtxt form-control" id="adArranger" />
                     </div>
                     <div class="advancedItem">
                         發行類別
-                        <select class="advancedtxt form-control" name="compose">
-                            <option>不指定</option>
+                        <select class="advancedtxt form-control" id="adCompose">
+                            <option value="0">不指定</option>
                             @*網頁初始化時會讀取資料庫的類別資料*@
                             @foreach (var item in webInitial.types)
                             {
-                                <option>@item.fTypeName</option>
+                                <option value="@item.fTypeID">@item.fTypeName</option>
                             }
                         </select>
                     </div>
@@ -685,6 +676,19 @@
             ///搜尋條棒相關///
             /////////////////
 
+            //初始化進階面板曲風選項的顏色
+            var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
+            , "##cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
+                , "", "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
+            var block = $(".selectableItemPanel").children(".selectableItem");
+            var block2 = $(".advancedBlock").children(".selectedItem");
+            for (let i = 0; i < block.length; i++) {
+                block.eq(i).css("background-color", color[i]);
+                block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+                block2.eq(i).css("background-color", color[i]);
+                block2.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+            }
+
             //開啟進階搜尋版面、開啟曲風選擇版面
             $("#advancedBtn").click(function () {
                 $(".advancedPanel").toggleClass("adSwitch");
@@ -697,13 +701,12 @@
                 if ($(e.target).parents(".searchBar").length == 0) {
                     $(".advancedPanel").removeClass("adSwitch");
                 }
-                if ($(e.target).parents(".advancedSelect").length == 0) {
+                if ($(e.target).parents(".selectableItemPanel").length == 0) {
                     $(".selectableItemPanel").removeClass("adSwitch");
                 }
-                
             })
 
-            //關鍵字搜尋(只查找歌名並輸出專輯)
+            //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
             $(".searchBtn").click(function () {
                 let keyword = $(".searchtxt").val();
                 $.post("/Search/Result", { keyword: keyword }, function (data) {
@@ -712,9 +715,22 @@
                 });
                 history.pushState(null, null, "/Search/Result");
             })
-            //進階搜尋
+            //進階搜尋(找出符合條件的專輯(專輯不重複))
             $(".adSearchBtn").click(function () {
-                
+                $(".advancedPanel").toggleClass("adSwitch");
+                $.post("/Search/AdvancedResult",
+                    {
+                        adSong: $("#adSong").val(),
+                        adSinger: $("#adSinger").val(),
+                        adGroup: $("#adGroup").val(),
+                        adArranger: $("#adArranger").val(),
+                        adAlbum: $("#adAlbum").val(),
+                        adCompose: $("#adCompose").val()
+                        //還有偏好曲風這個傢伙還沒放//
+                    },
+                    function (data) {
+                        $(".mainbox").html(data);
+                    });
             })
 
             //選擇曲風

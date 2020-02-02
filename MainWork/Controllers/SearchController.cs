@@ -1,4 +1,5 @@
 ﻿using MainWork.Models;
+using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace MainWork.Controllers
 
         public ActionResult Result()
         {
+            //按下重新整理或直接貼網址會跑回首頁
             return RedirectToAction("Main","Homepage");
         }
         [HttpPost]
@@ -38,6 +40,17 @@ namespace MainWork.Controllers
         {
             CSearch search = new CSearch();
             return View(search.byKeyword(keyword));
+        }
+
+        public ActionResult AdvancedResult()
+        {
+            return RedirectToAction("Main", "Homepage");
+        }
+        [HttpPost]
+        public ActionResult AdvancedResult(CAdvancedSearchObject keyObj)
+        {
+            CSearch search = new CSearch();
+            return View(search.byAdvanced(keyObj));
         }
     }
 }
