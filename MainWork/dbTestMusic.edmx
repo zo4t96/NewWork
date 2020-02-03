@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="dbProjectMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="dbProjectMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tAlbum">
           <Key>
             <PropertyRef Name="fAlbumID" />
@@ -19,6 +19,14 @@
           <Property Name="fALPrice" Type="money" />
           <Property Name="fCoverPath" Type="nvarchar(max)" />
           <Property Name="fPublisher" Type="nvarchar" MaxLength="50" />
+          <Property Name="fKinds" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tAlbumKind">
+          <Key>
+            <PropertyRef Name="KindID" />
+          </Key>
+          <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KindName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tAlbumType">
           <Key>
@@ -37,13 +45,6 @@
           <Property Name="fPrivilege" Type="int" />
           <Property Name="fNickName" Type="nvarchar" MaxLength="50" />
           <Property Name="fMoney" Type="money" />
-        </EntityType>
-        <EntityType Name="tProductKind">
-          <Key>
-            <PropertyRef Name="KindID" />
-          </Key>
-          <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="KindName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tProducts">
           <Key>
@@ -175,9 +176,9 @@
         </Association>
         <EntityContainer Name="dbProjectMusicStoreModelStoreContainer">
           <EntitySet Name="tAlbum" EntityType="Self.tAlbum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tAlbumKind" EntityType="Self.tAlbumKind" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tAlbumType" EntityType="Self.tAlbumType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tMember" EntityType="Self.tMember" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tProductKind" EntityType="Self.tProductKind" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tProducts" EntityType="Self.tProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tPurchaseItem" EntityType="Self.tPurchaseItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tShoppingCart" EntityType="Self.tShoppingCart" Schema="dbo" store:Type="Tables" />
@@ -210,8 +211,7 @@
             <End Role="tShoppingCart" EntitySet="tShoppingCart" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbProjectMusicStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -232,6 +232,7 @@
           <NavigationProperty Name="tAlbumType" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbum" ToRole="tAlbumType" />
           <NavigationProperty Name="tMember" Relationship="Self.FK_tAlbum_tMember" FromRole="tAlbum" ToRole="tMember" />
           <NavigationProperty Name="tProducts" Relationship="Self.FK_tProducts_tAlbum" FromRole="tAlbum" ToRole="tProducts" />
+          <Property Name="fKinds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tAlbumType">
           <Key>
@@ -254,13 +255,6 @@
           <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tMember" FromRole="tMember" ToRole="tAlbum" />
           <NavigationProperty Name="tPurchaseItems" Relationship="Self.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
           <NavigationProperty Name="tShoppingCarts" Relationship="Self.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
-        </EntityType>
-        <EntityType Name="tProductKind">
-          <Key>
-            <PropertyRef Name="KindID" />
-          </Key>
-          <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tProduct">
           <Key>
@@ -401,7 +395,6 @@
           <EntitySet Name="tAlbums" EntityType="Self.tAlbum" />
           <EntitySet Name="tAlbumTypes" EntityType="Self.tAlbumType" />
           <EntitySet Name="tMembers" EntityType="Self.tMember" />
-          <EntitySet Name="tProductKinds" EntityType="Self.tProductKind" />
           <EntitySet Name="tProducts" EntityType="Self.tProduct" />
           <EntitySet Name="tPurchaseItems" EntityType="Self.tPurchaseItem" />
           <EntitySet Name="tShoppingCarts" EntityType="Self.tShoppingCart" />
@@ -433,7 +426,15 @@
             <End Role="tProducts" EntitySet="tProducts" />
             <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
           </AssociationSet>
+          <EntitySet Name="tAlbumKinds" EntityType="dbProjectMusicStoreModel.tAlbumKind" />
         </EntityContainer>
+        <EntityType Name="tAlbumKind">
+          <Key>
+            <PropertyRef Name="KindID" />
+          </Key>
+          <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -443,6 +444,7 @@
           <EntitySetMapping Name="tAlbums">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
               <MappingFragment StoreEntitySet="tAlbum">
+                <ScalarProperty Name="fKinds" ColumnName="fKinds" />
                 <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
                 <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
                 <ScalarProperty Name="fMaker" ColumnName="fMaker" />
@@ -473,14 +475,6 @@
                 <ScalarProperty Name="fPrivilege" ColumnName="fPrivilege" />
                 <ScalarProperty Name="fNickName" ColumnName="fNickName" />
                 <ScalarProperty Name="fMoney" ColumnName="fMoney" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tProductKinds">
-            <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProductKind">
-              <MappingFragment StoreEntitySet="tProductKind">
-                <ScalarProperty Name="KindID" ColumnName="KindID" />
-                <ScalarProperty Name="KindName" ColumnName="KindName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -528,6 +522,14 @@
                 <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
                 <ScalarProperty Name="fDate" ColumnName="fDate" />
                 <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tAlbumKinds">
+            <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
+              <MappingFragment StoreEntitySet="tAlbumKind">
+                <ScalarProperty Name="KindName" ColumnName="KindName" />
+                <ScalarProperty Name="KindID" ColumnName="KindID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

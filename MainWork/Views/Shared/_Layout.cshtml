@@ -370,11 +370,11 @@
                     </div>
                     <div class="advancedItem">
                         作曲者
-                        <input type="text" class="advancedtxt form-control" id="adArranger" />
+                        <input type="text" class="advancedtxt form-control" id="adComposer" />
                     </div>
                     <div class="advancedItem">
                         發行類別
-                        <select class="advancedtxt form-control" id="adCompose">
+                        <select class="advancedtxt form-control" id="adType">
                             <option value="0">不指定</option>
                             @*網頁初始化時會讀取資料庫的類別資料*@
                             @foreach (var item in webInitial.types)
@@ -393,7 +393,7 @@
                         <div class="advancedBlock">
                             @foreach (var item in webInitial.kinds)
                             {
-                                <div class="selectedItem" data-kind="@item.KindID">@item.KindName</div>
+                                <div class="selectedItem" data-kind="@item.KindName">@item.KindName</div>
                             }
                             <div class="itemAdd" data-selector="like">
                                 <i class="fa fa-plus"></i>
@@ -404,7 +404,7 @@
                         <div class="selectableItemPanel">
                             @foreach (var item in webInitial.kinds)
                             {
-                                <div class="selectableItem" data-kind="@item.KindID">@item.KindName</div>
+                                <div class="selectableItem" data-kind="@item.KindName">@item.KindName</div>
                             }
                         </div>
                     </div>
@@ -678,8 +678,8 @@
 
             //初始化進階面板曲風選項的顏色
             var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
-            , "##cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
-                , "", "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
+            , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
+            , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
             var block = $(".selectableItemPanel").children(".selectableItem");
             var block2 = $(".advancedBlock").children(".selectedItem");
             for (let i = 0; i < block.length; i++) {
@@ -718,15 +718,21 @@
             //進階搜尋(找出符合條件的專輯(專輯不重複))
             $(".adSearchBtn").click(function () {
                 $(".advancedPanel").toggleClass("adSwitch");
+                var kindArray = [];
+                $(".advancedBlock").children(".selectedItem").each(function () {
+                    if ($(this).css("display") == "inline-block") {
+                        kindArray.push($(this).data("kind"))
+                    }
+                })
                 $.post("/Search/AdvancedResult",
                     {
                         adSong: $("#adSong").val(),
                         adSinger: $("#adSinger").val(),
                         adGroup: $("#adGroup").val(),
-                        adArranger: $("#adArranger").val(),
+                        adComposer: $("#adComposer").val(),
                         adAlbum: $("#adAlbum").val(),
-                        adCompose: $("#adCompose").val()
-                        //還有偏好曲風這個傢伙還沒放//
+                        adType: $("#adType").val(),
+                        adKinds: kindArray
                     },
                     function (data) {
                         $(".mainbox").html(data);
@@ -735,16 +741,16 @@
 
             //選擇曲風
             $(".selectableItem").on("click", function () {
-                let kindId = $(this).data("kind");
+                let kindName = $(this).data("kind");
                 $(this).css("display", "none");
-                $(".advancedBlock").find(`[data-kind = '${kindId}']`).css("display", "inline-block");
+                $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
                 $(".selectableItemPanel").toggleClass("adSwitch");
             })
             //點擊選擇的曲風即可取消
             $(".selectedItem").on("click", function () {
-                let kindId = $(this).data("kind");
+                let kindName = $(this).data("kind");
                 $(this).css("display", "none");
-                $(".selectableItemPanel").find(`[data-kind = '${kindId}']`).css("display", "inline-block");
+                $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
             })
         }
 

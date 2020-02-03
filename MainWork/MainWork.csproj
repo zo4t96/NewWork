@@ -198,6 +198,9 @@
     <Compile Include="tAlbum.cs">
       <DependentUpon>dbTestMusic.tt</DependentUpon>
     </Compile>
+    <Compile Include="tAlbumKind.cs">
+      <DependentUpon>dbTestMusic.tt</DependentUpon>
+    </Compile>
     <Compile Include="tAlbumType.cs">
       <DependentUpon>dbTestMusic.tt</DependentUpon>
     </Compile>
@@ -205,9 +208,6 @@
       <DependentUpon>dbTestMusic.tt</DependentUpon>
     </Compile>
     <Compile Include="tProduct.cs">
-      <DependentUpon>dbTestMusic.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tProductKind.cs">
       <DependentUpon>dbTestMusic.tt</DependentUpon>
     </Compile>
     <Compile Include="tPurchaseItem.cs">

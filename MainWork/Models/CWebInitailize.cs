@@ -7,7 +7,7 @@ namespace MainWork.Models
 {
     public class CWebInitailize
     {
-        public IEnumerable<tProductKind> kinds { get; set; }
+        public IEnumerable<tAlbumKind> kinds { get; set; }
         public IEnumerable<tAlbumType> types { get; set; }
         public CWebInitailize advancedInitial()
         {

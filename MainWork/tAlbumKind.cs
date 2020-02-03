@@ -15,7 +15,7 @@ namespace MainWork
 using System;
     using System.Collections.Generic;
     
-public partial class tProductKind
+public partial class tAlbumKind
 {
 
     public int KindID { get; set; }

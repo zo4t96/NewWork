@@ -38,13 +38,13 @@ public partial class dbProjectMusicStoreEntities : DbContext
 
     public virtual DbSet<tMember> tMembers { get; set; }
 
-    public virtual DbSet<tProductKind> tProductKinds { get; set; }
-
     public virtual DbSet<tProduct> tProducts { get; set; }
 
     public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
 
     public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
+
+    public virtual DbSet<tAlbumKind> tAlbumKinds { get; set; }
 
 }
 

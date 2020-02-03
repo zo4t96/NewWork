@@ -4,6 +4,7 @@
     <EntitySetMapping Name="tAlbums">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
         <MappingFragment StoreEntitySet="tAlbum">
+          <ScalarProperty Name="fKinds" ColumnName="fKinds" />
           <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
           <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
           <ScalarProperty Name="fMaker" ColumnName="fMaker" />
@@ -34,14 +35,6 @@
           <ScalarProperty Name="fPrivilege" ColumnName="fPrivilege" />
           <ScalarProperty Name="fNickName" ColumnName="fNickName" />
           <ScalarProperty Name="fMoney" ColumnName="fMoney" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tProductKinds">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProductKind">
-        <MappingFragment StoreEntitySet="tProductKind">
-          <ScalarProperty Name="KindID" ColumnName="KindID" />
-          <ScalarProperty Name="KindName" ColumnName="KindName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -89,6 +82,14 @@
           <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
           <ScalarProperty Name="fDate" ColumnName="fDate" />
           <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tAlbumKinds">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
+        <MappingFragment StoreEntitySet="tAlbumKind">
+          <ScalarProperty Name="KindName" ColumnName="KindName" />
+          <ScalarProperty Name="KindID" ColumnName="KindID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

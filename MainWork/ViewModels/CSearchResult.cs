@@ -9,6 +9,6 @@ namespace MainWork.ViewModels
     {
         public tAlbum album { get; set; }
         public tProduct product { get; set; }
-        public tProductKind[] productKinds { get; set; }
+        //public tAlbumKind[] albumKinds { get; set; }
     }
 }

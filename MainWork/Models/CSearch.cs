@@ -11,9 +11,9 @@ namespace MainWork.Models
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
 
         //前兩個方法是用來初始化進階搜尋內容的方法
-        public IEnumerable<tProductKind> takeAllKind()
+        public IEnumerable<tAlbumKind> takeAllKind()
         {
-            var result = db.tProductKinds.Select(p => p);
+            var result = db.tAlbumKinds.Select(p => p);
             return result;
         }
         
@@ -48,9 +48,9 @@ namespace MainWork.Models
             {
                 data = data.Where(p => p.product.fArtist.Contains(keyObj.adSinger));
             }
-            if (!string.IsNullOrEmpty(keyObj.adArranger))
+            if (!string.IsNullOrEmpty(keyObj.adComposer))
             {
-                data = data.Where(p => p.product.fArranger.Contains(keyObj.adArranger));
+                data = data.Where(p => p.product.fArranger.Contains(keyObj.adComposer));
             }
             if (!string.IsNullOrEmpty(keyObj.adAlbum))
             {
@@ -60,14 +60,21 @@ namespace MainWork.Models
             {
                 data = data.Where(a => a.album.fMaker.Contains(keyObj.adGroup));
             }
-            if (keyObj.adCompose != 0)
+            if (keyObj.adType != 0)
             {
-                data = data.Where(a => a.album.fType == keyObj.adCompose);
+                data = data.Where(a => a.album.fType == keyObj.adType);
+            }
+            if(keyObj.adKinds != null)
+            {
+                for (int i = 0; i < keyObj.adKinds.Length; i++)
+                {
+                    //lambda似乎不能直接接受陣列[i]的內容，必須先轉換成一個變數
+                    string kind = keyObj.adKinds[i];
+                    data = data.Where(a => a.album.fKinds.Contains(kind));
+                }
             }
 
-            //還有曲風還沒做
-
-            //因為前面所挑出來的專輯會重複，因此要再過濾一次
+            //因為前面所挑出來的專輯可能會重複，因此要再過濾一次重複的專輯
             List<tAlbum> result = new List<tAlbum>();
             foreach(var a in data)
             {

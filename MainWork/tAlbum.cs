@@ -47,6 +47,8 @@ public partial class tAlbum
 
     public string fPublisher { get; set; }
 
+    public string fKinds { get; set; }
+
 
 
     public virtual tAlbumType tAlbumType { get; set; }

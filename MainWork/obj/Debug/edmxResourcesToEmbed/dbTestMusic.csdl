@@ -17,6 +17,7 @@
     <NavigationProperty Name="tAlbumType" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbum" ToRole="tAlbumType" />
     <NavigationProperty Name="tMember" Relationship="Self.FK_tAlbum_tMember" FromRole="tAlbum" ToRole="tMember" />
     <NavigationProperty Name="tProducts" Relationship="Self.FK_tProducts_tAlbum" FromRole="tAlbum" ToRole="tProducts" />
+    <Property Name="fKinds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tAlbumType">
     <Key>
@@ -39,13 +40,6 @@
     <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tMember" FromRole="tMember" ToRole="tAlbum" />
     <NavigationProperty Name="tPurchaseItems" Relationship="Self.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
     <NavigationProperty Name="tShoppingCarts" Relationship="Self.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
-  </EntityType>
-  <EntityType Name="tProductKind">
-    <Key>
-      <PropertyRef Name="KindID" />
-    </Key>
-    <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tProduct">
     <Key>
@@ -186,7 +180,6 @@
     <EntitySet Name="tAlbums" EntityType="Self.tAlbum" />
     <EntitySet Name="tAlbumTypes" EntityType="Self.tAlbumType" />
     <EntitySet Name="tMembers" EntityType="Self.tMember" />
-    <EntitySet Name="tProductKinds" EntityType="Self.tProductKind" />
     <EntitySet Name="tProducts" EntityType="Self.tProduct" />
     <EntitySet Name="tPurchaseItems" EntityType="Self.tPurchaseItem" />
     <EntitySet Name="tShoppingCarts" EntityType="Self.tShoppingCart" />
@@ -218,5 +211,13 @@
       <End Role="tProducts" EntitySet="tProducts" />
       <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
     </AssociationSet>
+    <EntitySet Name="tAlbumKinds" EntityType="dbProjectMusicStoreModel.tAlbumKind" />
   </EntityContainer>
+  <EntityType Name="tAlbumKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>
