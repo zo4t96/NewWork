@@ -128,6 +128,7 @@
             width: 140px;
             margin: 10px;
         }
+        .ui-menu-item-wrapper,
         option {
             color: black;
         }
@@ -183,7 +184,6 @@
             background-image: linear-gradient(to bottom right, #22b7e8,#1347d9);
             margin-right:10px;
         }
-        
     </style>
 
     <!--播放器style-->
@@ -643,7 +643,7 @@
 
                 //如果有上傳參數到後端則使用$.post的ajax方法
                 //不過為了配合重新整理頁面不跑掉的系統，暫時是一律使用$.post來處理所有ajax
-                $.post(link, { ajax: true }, function (data) {
+                $.post(link , { ajax: true }, function (data) {
                     $(".mainbox").html(data);
                 })
             }
@@ -698,7 +698,8 @@
             })
             //點選搜尋區域以外的地方會自動關閉進階搜尋版面(很礙眼)
             $(document).mousedown(function (e) {
-                if ($(e.target).parents(".searchBar").length == 0) {
+                if ($(e.target).parents(".searchBar").length == 0 &&
+                    $(e.target).parents(".ui-menu-item").length == 0) {
                     $(".advancedPanel").removeClass("adSwitch");
                 }
                 if ($(e.target).parents(".selectableItemPanel").length == 0) {
@@ -706,38 +707,75 @@
                 }
             })
 
+            var stateObj;
             //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
             $(".searchBtn").click(function () {
                 let keyword = $(".searchtxt").val();
-                $.post("/Search/Result", { keyword: keyword }, function (data) {
-                    console.log(data);
+                if (keyword == "") {
+                    return;
+                }
+                let url = `/Search/Result/?keyword=${keyword}`;
+                stateObj = { keyword: keyword, ajax: true };
+                $.post(url, { keyword: keyword , ajax: true}, function (data) {
                     $(".mainbox").html(data);
                 });
-                history.pushState(null, null, "/Search/Result");
+                history.pushState(stateObj, null, url);
             })
             //進階搜尋(找出符合條件的專輯(專輯不重複))
             $(".adSearchBtn").click(function () {
                 $(".advancedPanel").toggleClass("adSwitch");
-                var kindArray = [];
+                let adSong = $("#adSong").val();
+                let adSinger = $("#adSinger").val();
+                let adGroup = $("#adGroup").val();
+                let adComposer = $("#adComposer").val();
+                let adAlbum = $("#adAlbum").val();
+                let adType = $("#adType").val();
+                let adkinds = [];
                 $(".advancedBlock").children(".selectedItem").each(function () {
                     if ($(this).css("display") == "inline-block") {
-                        kindArray.push($(this).data("kind"))
+                        adkinds.push($(this).data("kind"))
                     }
                 })
-                $.post("/Search/AdvancedResult",
+                let url = `/Search/AdvancedResult/?adSong=${adSong}&?adSinger=${adSinger}&?adGroup=${adGroup}
+`
+
+                $.post(url,
                     {
-                        adSong: $("#adSong").val(),
-                        adSinger: $("#adSinger").val(),
-                        adGroup: $("#adGroup").val(),
-                        adComposer: $("#adComposer").val(),
-                        adAlbum: $("#adAlbum").val(),
-                        adType: $("#adType").val(),
-                        adKinds: kindArray
+                        adSong: adSong,
+                        adSinger: adSinger,
+                        adGroup: adGroup,
+                        adComposer: adComposer,
+                        adAlbum: adAlbum,
+                        adType: adType,
+                        adKinds: adkinds,
+                        adAjax: true
                     },
                     function (data) {
                         $(".mainbox").html(data);
                     });
             })
+
+            //所有搜尋text實作autocomplete
+            $(".searchtxt,#adSong").autocomplete(
+                {
+                    source: "/Search/AutoCompleteSong"
+                });
+            $("#adSinger").autocomplete(
+                {
+                    source: "/Search/AutoCompleteSinger"
+                });
+            $("#adGroup").autocomplete(
+                {
+                    source: "/Search/AutoCompleteGroup"
+                });
+            $("#adComposer").autocomplete(
+                {
+                    source: "/Search/AutoCompleteComposer"
+                });
+            $("#adAlbum").autocomplete(
+                {
+                    source: "/Search/AutoCompleteAlbum"
+                });
 
             //選擇曲風
             $(".selectableItem").on("click", function () {
@@ -753,7 +791,7 @@
                 $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
             })
         }
-
+        console.log(stateObj);
     </script>
 </body>
 </html>

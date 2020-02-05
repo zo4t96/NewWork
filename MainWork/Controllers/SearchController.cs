@@ -11,6 +11,7 @@ namespace MainWork.Controllers
     public class SearchController : Controller
     {
         // GET: BasicSearch
+        //曲風選擇頁面
         public ActionResult Kinds()
         {
             CWebInitailize ad = new CWebInitailize();
@@ -30,16 +31,20 @@ namespace MainWork.Controllers
             return View(tk.takeAllKind());
         }
 
-        public ActionResult Result()
+        //基礎搜尋頁面，只有帶參數版本
+        public ActionResult Result(CSearchObject keyObj)
         {
-            //按下重新整理或直接貼網址會跑回首頁
-            return RedirectToAction("Main","Homepage");
-        }
-        [HttpPost]
-        public ActionResult Result(string keyword)
-        {
+            if (keyObj.ajax)
+            {
+                ViewBag.ajax = true;
+            }
+            else
+            {
+                CWebInitailize ad = new CWebInitailize();
+                ViewBag.InitialModel = ad.advancedInitial();
+            }
             CSearch search = new CSearch();
-            return View(search.byKeyword(keyword));
+            return View(search.byKeyword(keyObj.keyword));
         }
 
         public ActionResult AdvancedResult()
@@ -51,6 +56,33 @@ namespace MainWork.Controllers
         {
             CSearch search = new CSearch();
             return View(search.byAdvanced(keyObj));
+        }
+
+        //以下皆為autocomplete的實作
+        public JsonResult AutoCompleteSong(string term)
+        {
+            CAutoComplete cc = new CAutoComplete();
+            return Json(cc.searchSong(term), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AutoCompleteSinger(string term)
+        {
+            CAutoComplete cc = new CAutoComplete();
+            return Json(cc.searchSiger(term), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AutoCompleteGroup(string term)
+        {
+            CAutoComplete cc = new CAutoComplete();
+            return Json(cc.searchGroup(term), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AutoCompleteComposer(string term)
+        {
+            CAutoComplete cc = new CAutoComplete();
+            return Json(cc.searchComposer(term), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AutoCompleteAlbum(string term)
+        {
+            CAutoComplete cc = new CAutoComplete();
+            return Json(cc.searchAlbum(term), JsonRequestBehavior.AllowGet);
         }
     }
 }
