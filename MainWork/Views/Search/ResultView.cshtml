@@ -1,0 +1,14 @@
+﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
+
+@* 這份頁面只顯示抓到的資料，所以不需要額外的script *@
+@(Layout = null);
+
+<body>
+    @foreach (var item in Model)
+    {
+        <div>專輯名稱:@item.album.fAlbumName</div>
+        <div>@item.product.fProductName</div>
+        <div>========================================</div>
+    }
+</body>
+

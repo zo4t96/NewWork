@@ -152,6 +152,7 @@
       <DependentUpon>dbTestMusic.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Music\‪02 紅魔 「Un-demystified Fantasy」.mp3" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -260,8 +261,9 @@
     <Content Include="Views\Homepage\Main.cshtml" />
     <Content Include="Views\TwoPlayer\demoPlayer.cshtml" />
     <Content Include="Views\Search\Kinds.cshtml" />
-    <Content Include="Views\Search\Result.cshtml" />
+    <Content Include="Views\Search\ResultView.cshtml" />
     <Content Include="Views\Search\AdvancedResult.cshtml" />
+    <Content Include="Views\Search\Result.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -272,7 +274,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
-    <Folder Include="Music\" />
     <Folder Include="Views\testrazor\" />
   </ItemGroup>
   <ItemGroup>

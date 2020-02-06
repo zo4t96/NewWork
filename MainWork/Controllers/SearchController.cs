@@ -31,7 +31,7 @@ namespace MainWork.Controllers
             return View(tk.takeAllKind());
         }
 
-        //基礎搜尋頁面，只有帶參數版本
+        //進行搜尋時先跳轉到空頁面，並將搜尋資料傳遞，之後再讓該頁面實作搜尋的指令
         public ActionResult Result(CSearchObject keyObj)
         {
             if (keyObj.ajax)
@@ -43,6 +43,11 @@ namespace MainWork.Controllers
                 CWebInitailize ad = new CWebInitailize();
                 ViewBag.InitialModel = ad.advancedInitial();
             }
+            return View();
+        }
+        //基礎搜尋頁面，只有帶參數版本
+        public ActionResult ResultView(CSearchObject keyObj)
+        {
             CSearch search = new CSearch();
             return View(search.byKeyword(keyObj.keyword));
         }

@@ -332,7 +332,7 @@
 <body>
     <div class="header">
         <div class="header-logo">
-            <a href="#"><img src="image/1-mini.jpg" alt=""></a>
+            <a href="#"><img @*src=""*@ alt=""></a>
             <button class="navbar-toggler header-logo-text" type="button">LOGO</button>
         </div>
 
@@ -486,7 +486,7 @@
             </div>
 
             <!--播放器本體-->
-            <audio id="mainPlayer" src="/mp3/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>
+            <audio id="mainPlayer" src="/Music/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>
         </div>
     </div>
     <!-- Optional JavaScript -->
@@ -707,7 +707,6 @@
                 }
             })
 
-            var stateObj;
             //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
             $(".searchBtn").click(function () {
                 let keyword = $(".searchtxt").val();
@@ -715,12 +714,13 @@
                     return;
                 }
                 let url = `/Search/Result/?keyword=${keyword}`;
-                stateObj = { keyword: keyword, ajax: true };
-                $.post(url, { keyword: keyword , ajax: true}, function (data) {
+                var stateObj = { keyword: keyword, ajax: true };
+                $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
                 });
                 history.pushState(stateObj, null, url);
             })
+
             //進階搜尋(找出符合條件的專輯(專輯不重複))
             $(".adSearchBtn").click(function () {
                 $(".advancedPanel").toggleClass("adSwitch");
@@ -791,7 +791,6 @@
                 $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
             })
         }
-        console.log(stateObj);
     </script>
 </body>
 </html>

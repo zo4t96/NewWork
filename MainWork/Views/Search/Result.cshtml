@@ -1,6 +1,4 @@
-﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
-
-@{
+﻿@{
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
@@ -10,12 +8,10 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     }
 }
-<body>
-    @foreach (var item in Model)
-    {
-        <div>專輯名稱:@item.album.fAlbumName</div>
-        <div>@item.product.fProductName</div>
-        <div>========================================</div>
-    }
-</body>
 
+<script>
+    console.log(history.state);
+    $.post("/Search/ResultView/", history.state, function (data) {
+        $(".mainbox").html(data);
+    })
+</script>
