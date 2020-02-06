@@ -64,12 +64,13 @@ namespace MainWork.Models
             {
                 data = data.Where(a => a.album.fType == keyObj.adType);
             }
-            if(keyObj.adKinds != null)
+            if (keyObj.adKinds != null)
             {
-                for (int i = 0; i < keyObj.adKinds.Length; i++)
+                string[] adkinds = keyObj.adKinds.Split(',');
+                for (int i = 0; i < adkinds.Length; i++)
                 {
                     //lambda似乎不能直接接受陣列[i]的內容，必須先轉換成一個變數
-                    string kind = keyObj.adKinds[i];
+                    string kind = adkinds[i];
                     data = data.Where(a => a.album.fKinds.Contains(kind));
                 }
             }

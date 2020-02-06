@@ -8,10 +8,9 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     }
 }
-
 <script>
     console.log(history.state);
     $.post("/Search/ResultView/", history.state, function (data) {
         $(".mainbox").html(data);
-    })
+    });
 </script>

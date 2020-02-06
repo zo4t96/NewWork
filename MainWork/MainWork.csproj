@@ -262,6 +262,7 @@
     <Content Include="Views\TwoPlayer\demoPlayer.cshtml" />
     <Content Include="Views\Search\Kinds.cshtml" />
     <Content Include="Views\Search\ResultView.cshtml" />
+    <Content Include="Views\Search\AdvancedResultView.cshtml" />
     <Content Include="Views\Search\AdvancedResult.cshtml" />
     <Content Include="Views\Search\Result.cshtml" />
     <None Include="Web.Debug.config">

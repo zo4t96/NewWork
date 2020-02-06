@@ -52,12 +52,21 @@ namespace MainWork.Controllers
             return View(search.byKeyword(keyObj.keyword));
         }
 
-        public ActionResult AdvancedResult()
-        {
-            return RedirectToAction("Main", "Homepage");
-        }
-        [HttpPost]
+        //進階搜尋根
         public ActionResult AdvancedResult(CAdvancedSearchObject keyObj)
+        {
+            if (keyObj.adAjax)
+            {
+                ViewBag.ajax = true;
+            }
+            else
+            {
+                CWebInitailize ad = new CWebInitailize();
+                ViewBag.InitialModel = ad.advancedInitial();
+            }
+            return View();
+        }
+        public ActionResult AdvancedResultView(CAdvancedSearchObject keyObj)
         {
             CSearch search = new CSearch();
             return View(search.byAdvanced(keyObj));

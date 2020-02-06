@@ -13,7 +13,7 @@ namespace MainWork.ViewModels
         public string adComposer { get; set; }
         public string adAlbum { get; set; }
         public int adType { get; set; }
-        public string[] adKinds { get; set; }
+        public string adKinds { get; set; }
         public bool adAjax { get; set; }
     }
 }

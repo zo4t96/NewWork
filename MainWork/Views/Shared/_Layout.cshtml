@@ -343,7 +343,7 @@
                 <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
                 <div class="input-group-append">
                     <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
-                    <div class="btn btn-outline-secondary searchBtn" href="/Search/Result">
+                    <div class="btn btn-outline-secondary searchBtn">
                         <i class="fa fa-search"></i>
                     </div>
                 </div>
@@ -714,7 +714,7 @@
                     return;
                 }
                 let url = `/Search/Result/?keyword=${keyword}`;
-                var stateObj = { keyword: keyword, ajax: true };
+                let stateObj = { keyword: keyword, ajax: true };
                 $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
                 });
@@ -730,29 +730,28 @@
                 let adComposer = $("#adComposer").val();
                 let adAlbum = $("#adAlbum").val();
                 let adType = $("#adType").val();
-                let adkinds = [];
+                let adKinds = "";
                 $(".advancedBlock").children(".selectedItem").each(function () {
                     if ($(this).css("display") == "inline-block") {
-                        adkinds.push($(this).data("kind"))
+                        adKinds += ($(this).data("kind") + ",");
                     }
                 })
-                let url = `/Search/AdvancedResult/?adSong=${adSong}&?adSinger=${adSinger}&?adGroup=${adGroup}
-`
-
-                $.post(url,
-                    {
-                        adSong: adSong,
-                        adSinger: adSinger,
-                        adGroup: adGroup,
-                        adComposer: adComposer,
-                        adAlbum: adAlbum,
-                        adType: adType,
-                        adKinds: adkinds,
-                        adAjax: true
-                    },
-                    function (data) {
-                        $(".mainbox").html(data);
-                    });
+                let url = `/Search/AdvancedResult/?adSong=${adSong}&adSinger=${adSinger}&adGroup=${adGroup}
+                           &adComposer=${adComposer}&adAlbum=${adAlbum}&adType=${adType}&adKinds=${adKinds}`
+                let stateObj = {
+                    adSong: adSong,
+                    adSinger: adSinger,
+                    adGroup: adGroup,
+                    adComposer: adComposer,
+                    adAlbum: adAlbum,
+                    adType: adType,
+                    adKinds: adKinds,
+                    adAjax: true
+                }
+                $.post(url, stateObj, function (data) {
+                    $(".mainbox").html(data);
+                });
+                history.pushState(stateObj,null,url);
             })
 
             //所有搜尋text實作autocomplete
