@@ -14,6 +14,6 @@ namespace MainWork.ViewModels
         public string adAlbum { get; set; }
         public int adType { get; set; }
         public string adKinds { get; set; }
-        public bool adAjax { get; set; }
+        public bool ajax { get; set; }
     }
 }

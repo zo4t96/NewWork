@@ -384,7 +384,7 @@
                         </select>
                     </div>
                 </div>
-
+                
                 @* 這邊放自選類別 *@
                 <div class="typeSelectGroup">
                     @* 選擇想要的類別 *@
@@ -408,14 +408,6 @@
                             }
                         </div>
                     </div>
-
-                    @* 剔除不想要的類別，暫時先不用 *@
-                    @*<div class="typeDislikeSelect advancedSelect">
-                       想剔除的曲風
-                         <div class="advancedBlock">
-                            <div class="selected typeAdd" data-selector="dislike"><i class="fa fa-plus"></i></div>
-                         </div>
-                     </div>*@
 
                     @* 進階搜尋鍵 *@
                     <div class="searchPanel">
@@ -441,8 +433,7 @@
             </ul>
         </div>
 
-        @* 為了讓首頁網址統一所寫的 *@
-        <div class="mainbox" @*data-first="@ViewBag.ajax"*@>
+        <div class="mainbox" >
 
             @RenderBody()
         </div>
@@ -629,12 +620,14 @@
 
 
             //為了使用ajax所寫的自定義方法
+            //link參數為url字串
             function changePage(link) {
 
                 //$(".mainbox").load(link);
-
-                //上下兩者都是ajax，目前產生結果會相同，尚不了解箇中差異
-                //link參數為url字串
+                //更新老師上課說法
+                //load可以讀取一個頁面中的部分位置如"AAA/BBB #div1>img"這種寫法
+                //意為讀取該網頁id為div1中的img
+                //但是mvc本身有PartailView這個功能，因此應該用不到load
 
                 //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
                 //$.get(link, function (data) {
@@ -653,6 +646,8 @@
                 let link = $(this).attr("href");
                 changePage(link);
                 //給予網頁虛擬網址，隨便打都能過，但是最好讓他跟實際變換的網址同名
+                //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
+                //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
                 history.pushState(null, null, link);
                 //因為要將網頁連結變成自定義的切換模式，所以記得取消原本a標籤的超連結功能
                 e.preventDefault();
@@ -713,7 +708,7 @@
                 if (keyword == "") {
                     return;
                 }
-                let url = `/Search/Result/?keyword=${keyword}`;
+                let url = `@Url.Action("Result", "Search")/?keyword=${keyword}`;
                 let stateObj = { keyword: keyword, ajax: true };
                 $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
@@ -736,8 +731,7 @@
                         adKinds += ($(this).data("kind") + ",");
                     }
                 })
-                let url = `/Search/AdvancedResult/?adSong=${adSong}&adSinger=${adSinger}&adGroup=${adGroup}
-                           &adComposer=${adComposer}&adAlbum=${adAlbum}&adType=${adType}&adKinds=${adKinds}`
+                let url = `@Url.Action("AdvancedResult", "Search")/?adSong=${adSong}&adSinger=${adSinger}&adGroup=${adGroup}&adComposer=${adComposer}&adAlbum=${adAlbum}&adType=${adType}&adKinds=${adKinds}`
                 let stateObj = {
                     adSong: adSong,
                     adSinger: adSinger,
@@ -746,7 +740,7 @@
                     adAlbum: adAlbum,
                     adType: adType,
                     adKinds: adKinds,
-                    adAjax: true
+                    ajax: true
                 }
                 $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
@@ -757,23 +751,23 @@
             //所有搜尋text實作autocomplete
             $(".searchtxt,#adSong").autocomplete(
                 {
-                    source: "/Search/AutoCompleteSong"
+                    source: '@Url.Action("AutoCompleteSong", "Search")'
                 });
             $("#adSinger").autocomplete(
                 {
-                    source: "/Search/AutoCompleteSinger"
+                    source: '@Url.Action("AutoCompleteSinger", "Search")'
                 });
             $("#adGroup").autocomplete(
                 {
-                    source: "/Search/AutoCompleteGroup"
+                    source: '@Url.Action("AutoCompleteGroup", "Search")'
                 });
             $("#adComposer").autocomplete(
                 {
-                    source: "/Search/AutoCompleteComposer"
+                    source: '@Url.Action("AutoCompleteComposer", "Search")'
                 });
             $("#adAlbum").autocomplete(
                 {
-                    source: "/Search/AutoCompleteAlbum"
+                    source: '@Url.Action("AutoCompleteAlbum", "Search")'
                 });
 
             //選擇曲風

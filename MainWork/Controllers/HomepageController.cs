@@ -10,11 +10,6 @@ namespace MainWork.Controllers
     public class HomepageController : Controller
     {
         // GET: Homepage
-        
-        public ActionResult homepage()
-        {
-            return View();
-        }
 
         //第一次進入網站會讀這個(會讀取母框架)
         public ActionResult Main()

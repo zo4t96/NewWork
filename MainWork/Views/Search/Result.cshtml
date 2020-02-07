@@ -10,7 +10,7 @@
 }
 <script>
     console.log(history.state);
-    $.post("/Search/ResultView/", history.state, function (data) {
+    $.post('@Url.Action("ResultView", "Search")', history.state, function (data) {
         $(".mainbox").html(data);
     });
 </script>

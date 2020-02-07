@@ -28,7 +28,12 @@
         font-weight: 700;
         font-size: 20px;
     }
-
+    .outline {
+        width: 14vw;
+        height: 14vw;
+        min-width: 160px;
+        min-height: 160px;
+    }
     .kindBlock {
         /* 寬高單位同為vw或vx可達成等比例縮放的方形效果 */
         width: 13vw;
@@ -74,9 +79,11 @@
         @foreach (var item in Model)
         {
             string id = Html.DisplayFor(modelItem => item.KindID).ToString();
-            <div class="kindBlock" data-kind="@item.KindName">
-                <span class="kindName">@Html.DisplayFor(modelItem => item.KindName)</span>
-                <div class="photo" style="background-image:url(/Images/@(id).jpg)"></div>
+            <div class="outline">
+                <div class="kindBlock" data-kind="@id" data-kindName="@item.KindName">
+                    <span class="kindName">@Html.DisplayFor(modelItem => item.KindName)</span>
+                    <div class="photo"></div>
+                </div>
             </div>
         }
     </div>
@@ -88,11 +95,13 @@
         for (let i = 0; i <= c.length; i++) {
             c.eq(i).css("background-color", color[i]);
             c.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 15%,${color[i]})`);
+            c.eq(i).find(".photo").css("background-image", `url(/Images/${c.eq(i).data("kind")}.jpg)`)
         }
         c.on("click", function () {
-
             //待商品頁面出來，直連商品頁面
-            $.post("", { type: $(this).attr("data-kind") }, function (data) {
+           
+            let url = '@Url.Action("AdvancedResult", "Search")'
+            $.post(url, { adKinds: $(this).data("kindName"),ajax:true }, function (data) {
                 $(".mainbox").html(data);
             });
         })</script>

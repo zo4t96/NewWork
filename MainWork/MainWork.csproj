@@ -152,7 +152,6 @@
       <DependentUpon>dbTestMusic.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Music\‪02 紅魔 「Un-demystified Fantasy」.mp3" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -237,6 +236,7 @@
       <DependentUpon>dbUpload.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
+    <Compile Include="ViewModels\CKindObject.cs" />
     <Compile Include="ViewModels\CSearchObject.cs" />
     <Compile Include="ViewModels\CSearchResult.cs" />
   </ItemGroup>
@@ -265,6 +265,7 @@
     <Content Include="Views\Search\AdvancedResultView.cshtml" />
     <Content Include="Views\Search\AdvancedResult.cshtml" />
     <Content Include="Views\Search\Result.cshtml" />
+    <Content Include="Views\Search\KindResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -275,6 +276,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
+    <Folder Include="Music\" />
     <Folder Include="Views\testrazor\" />
   </ItemGroup>
   <ItemGroup>

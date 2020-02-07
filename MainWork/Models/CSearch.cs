@@ -23,6 +23,14 @@ namespace MainWork.Models
             return result;
         }
 
+        //曲風頁面點選查詢
+        public IEnumerable<tAlbum> byKindPage(int kindID)
+        {
+            string kind = db.tAlbumKinds.Where(s => s.KindID == kindID).First().KindName;
+            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind));
+            return result;
+        }
+
         //基礎關鍵字搜尋，只會找符合條件的歌名，但要透過歌名回傳相對應的專輯
         public IEnumerable<CSearchResult> byKeyword(string keyword)
         {

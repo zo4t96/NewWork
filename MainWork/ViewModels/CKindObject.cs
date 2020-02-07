@@ -5,9 +5,9 @@ using System.Web;
 
 namespace MainWork.ViewModels
 {
-    public class CSearchResult
+    public class CKindObject
     {
-        public tAlbum album { get; set; }
-        public tProduct product { get; set; }
+        public int kindID { get; set; }
+        public bool ajax { get; set; }
     }
 }
