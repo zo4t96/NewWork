@@ -1,11 +1,129 @@
 ﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
- 
-    @foreach (var item in Model)
-    {
-        <div>專輯名稱:@item.album.fAlbumName</div>
-        <div>@item.product.fProductName</div>
-        <div>========================================</div>
+<style>
+    .albumPanel {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 600px;
+        position: relative;
+        padding: 20px;
     }
 
+    .albumBlock {
+        display: block;
+        width: 15vw;
+        height: 22vw;
+        min-width: 200px;
+        min-height: 293px;
+        text-align: center;
+        background-color: #292929;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        cursor: pointer;
+    }
+        .albumBlock:hover {
+            background-color: #303030;
+            text-decoration:none;
+        }
 
+    .albumCover {
+        position: relative;
+        display: inline-block;
+        width: 12vw;
+        height: 12vw;
+        min-width: 160px;
+        min-height: 160px;
+        /*測試用圖片*/
+        background-image: url("/Images/4.jpg");
+        background-size: cover;
+    }
 
+    .albumContent {
+        position: relative;
+        width: 12vw;
+        min-width: 160px;
+        overflow: hidden;
+        text-align: left;
+        margin: 5px 0px;
+    }
+
+    .albumTitle {
+        display: block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        /*使多出的字元變...，下面三個屬性都要設才有效果*/
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .albumDescripion {
+        display: inline-block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #808080;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        /*查無資料*/
+    .noResult {
+        position: relative;
+        text-align: center;
+        top: 200px;
+    }
+    .noResult h3 {
+        font-family: "微軟正黑體"
+    }
+</style>
+
+@if (Model.FirstOrDefault() == null)
+{
+    <div class="noResult">
+        <h3>查無資料</h3>
+        <p>請確認關鍵字輸入是否正確，或者使用進階搜尋時降低條件數量</p>
+    </div>
+}
+
+<body>
+    <div class="albumPanel">
+        <a class="albumBlock" href="">
+            <div class="albumCover"></div>
+            <div class="albumContent">
+                <span class="albumTitle">音樂名稱</span>
+                <span class="albumDescripion">專輯名稱</span>
+                <span class="albumDescripion">歌手</span>
+                <span class="albumDescripion">作曲者</span>
+            </div>
+        </a>
+        @foreach (var item in Model)
+        {
+            //因應需求在href放置連結(或額外寫code?)
+            <a class="albumBlock" href="">
+                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+                <div class="albumCover"></div>
+                <div class="albumContent">
+                    <span class="albumTitle">@item.product.fProductName</span>
+                    <span class="albumDescripion">@item.album.fAlbumName</span>
+                    @if (item.product.fArtist != null)
+                    {
+                        <span class="albumDescripion">歌手:@item.product.fArtist</span>
+                    }
+                    <span class="albumDescripion">作曲:@item.product.fComposer</span>
+                </div>
+            </a>
+        }
+    </div>
+    <script>
+        $(".albumBlock").click(function (e) {
+            //連結到商品頁面
+            e.preventDefault();
+        });
+    </script>
+</body>

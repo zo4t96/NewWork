@@ -10,15 +10,8 @@ namespace MainWork.Controllers
     public class TwoPlayerController : Controller
     {
         // GET: TwoPlayer
-        public ActionResult DemoPlayer()
-        {
-            CWebInitailize ad = new CWebInitailize();
-            ViewBag.InitialModel = ad.advancedInitial();
-            return View();
-        }
 
-        [HttpPost]
-        public ActionResult DemoPlayer(bool ajax)
+        public ActionResult DemoPlayer(bool ajax = false)
         {
             if (ajax)
             {

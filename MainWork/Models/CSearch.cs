@@ -9,7 +9,6 @@ namespace MainWork.Models
     public class CSearch
     {
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
-
         //前兩個方法是用來初始化進階搜尋內容的方法
         public IEnumerable<tAlbumKind> takeAllKind()
         {
@@ -21,6 +20,13 @@ namespace MainWork.Models
         {
             var result = db.tAlbumTypes.Select(p => p).ToList();
             return result;
+        }
+
+        //首頁商品項目，選取所有商品
+        public IEnumerable<tAlbum> allAlbum()
+        {
+            var all = db.tAlbums.Select(a => a);
+            return all;
         }
 
         //曲風頁面點選查詢

@@ -21,50 +21,44 @@ namespace MainWork.Controllers
             {
                 ViewBag.ajax = true;
             }
-            else
-            {
-                CWebInitailize ad = new CWebInitailize();
-                ViewBag.InitialModel = (new CWebInitailize()).advancedInitial();
-            }
             return View(search.takeAllKind());
         }
-
-        public ActionResult KindResult(CKindObject kindObj)
-        {
-            return View(search.byKindPage(kindObj.kindID));
-        }
-
+        
         //進行搜尋時先跳轉到空頁面，並將搜尋資料傳遞，之後再讓該頁面實作搜尋的指令
-        public ActionResult Result(CSearchObject keyObj)
+        public ActionResult KindResult(bool ajax = false)
         {
-            if (keyObj.ajax)
+            if (ajax)
             {
                 ViewBag.ajax = true;
-            }
-            else
-            {
-                CWebInitailize ad = new CWebInitailize();
-                ViewBag.InitialModel = ad.advancedInitial();
             }
             return View();
         }
-        //基礎搜尋頁面，只有帶參數版本
-        public ActionResult ResultView(CSearchObject keyObj)
+        //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
+        public ActionResult KindResultView(int kindID)
         {
-            return PartialView(search.byKeyword(keyObj.keyword));
+            return PartialView(search.byKindPage(kindID));
         }
-
-        //進階搜尋，實作方法與普通差不多
-        public ActionResult AdvancedResult(CAdvancedSearchObject keyObj)
+        
+        //基礎搜尋頁面
+        public ActionResult Result(bool ajax = false)
         {
-            if (keyObj.ajax)
+            if (ajax)
             {
                 ViewBag.ajax = true;
             }
-            else
+            return View();
+        }
+        public ActionResult ResultView(string keyword)
+        {
+            return PartialView(search.byKeyword(keyword));
+        }
+
+        //進階搜尋，實作方法與普通差不多
+        public ActionResult AdvancedResult(bool ajax = false)
+        {
+            if (ajax)
             {
-                CWebInitailize ad = new CWebInitailize();
-                ViewBag.InitialModel = ad.advancedInitial();
+                ViewBag.ajax = true;
             }
             return View();
         }
@@ -94,6 +88,24 @@ namespace MainWork.Controllers
         public JsonResult AutoCompleteAlbum(string term)
         {
             return Json(cc.searchAlbum(term), JsonRequestBehavior.AllowGet);
+        }
+
+        //進階搜尋內容的初始化
+        public ActionResult SetTypes()
+        {
+            CSearch cs = new CSearch();
+            var data = cs.takeAllType();
+            //用json直接回傳entity物件時，會產生循環參考的錯誤
+            //這邊選擇直接將資料轉為匿名物件回傳
+            var result = data.Select(d => new { d.fTypeID, d.fTypeName });
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SetKinds()
+        {
+            CSearch cs = new CSearch();
+            var data = cs.takeAllKind();
+            var result = data.Select(d => new { d.KindName });
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

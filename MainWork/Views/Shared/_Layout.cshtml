@@ -1,10 +1,4 @@
 ﻿@using MainWork.Models
-@{ 
-    //將初始化物件丟進Viewbag後扔過來，在這邊再轉型成原本的物件
-    //這樣可以不必佔用return View()內的參數欄位，轉型後也因為變回強型別而可以輕鬆選擇屬性
-    //當然，要記得using命名空間
-    CWebInitailize webInitial = ViewBag.InitialModel;
-}
 
 <!doctype html>
 <html lang="en">
@@ -18,6 +12,8 @@
     @* ↓主要用來讀取一些特殊icon *@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <!--原始style-->
     <style>
         * {
@@ -70,11 +66,9 @@
         }
 
         .sidebox {
+            width:200px;
             position: fixed;
             top: 70px;
-            left: 0; /*使元素靠左*/
-            margin-left: 70px;
-            margin-top: 30px;
             background-color: #040404;
             color: white;
         }
@@ -84,7 +78,7 @@
             height: calc(100%-70px);
             min-height: 1600px;
             border-left: 200px solid #040404; /*設置右邊框寬度為XXXpx像素，同等於sidebox的寬度*/
-            background-color: #2b2828;
+            background-color: #191919;
             margin-bottom: 110px;
         }
 
@@ -93,8 +87,29 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #474747;
             color: white;
+            background-color:#252525;
+            box-shadow: 0 0 2em black;
+        }
+
+        /*額外更新左邊選單*/
+        .menuItem{
+            width:190px;
+            font-weight:600;
+            font-size:14px;
+            text-decoration:none;
+            border-radius:5px;
+            transition:0.4s;
+        }
+        .menuItem:hover{
+            background-color:#818181;
+        }
+        .menuItem .fa{
+            font-size:20px;
+            margin:10px 20px;
+        }
+        .menuItem span{
+            display:inline-block;
         }
     </style>
 
@@ -108,50 +123,58 @@
             min-width: 200px;
         }
         /*不用id變不了bootstrap的文字顏色*/
-        #advancedBtn{
-            color:whitesmoke;
+        #advancedBtn {
+            color: whitesmoke;
         }
+
         .advancedPanel {
             display: none;
             width: 530px;
             border-radius: 10px;
-            padding: 5px 20px 0px 20px;
+            padding: 5px 20px 20px 20px;
             background-color: #040404;
             background-image: linear-gradient(#474747,#040404);
             opacity: 0;
             transition: 0.1s;
             box-shadow: 1px 1px 2px #818181;
         }
+
         .advancedItem {
             display: inline-flex;
             flex-wrap: wrap;
             width: 140px;
             margin: 10px;
         }
+
         .ui-menu-item-wrapper,
         option {
             color: black;
         }
+
         .advancedSelect {
             margin: 10px;
         }
+
         .selectedItem,
         .selectableItem,
         .itemAdd {
             display: inline-block;
             border-radius: 5px;
-            border:1px solid #212121;
+            border: 1px solid #212121;
             padding: 5px;
             margin: 2px 1px;
-            color:white;
-            font-weight:600;
+            color: white;
+            font-weight: 600;
         }
-        .selectedItem{
-            display:none;
+
+        .selectedItem {
+            display: none;
         }
+
         .itemAdd {
             padding: 5px 10px;
         }
+
         .selectableItem,
         .selectedItem,
         .itemAdd {
@@ -172,17 +195,20 @@
             transition: 0.1s;
             box-shadow: 1px 1px 2px #525252;
         }
+
         .adSwitch {
             opacity: 1;
             display: block;
         }
-        .searchPanel{
-            width:100%;
-            text-align:right;
+
+        .searchPanel {
+            width: 100%;
+            text-align: right;
         }
+
         .adSearchBtn {
             background-image: linear-gradient(to bottom right, #22b7e8,#1347d9);
-            margin-right:10px;
+            margin-right: 10px;
         }
     </style>
 
@@ -194,7 +220,6 @@
             width: 100%;
             min-width: 1200px;
             height: 110px;
-            background: #3c3d41;
         }
 
         #titlePanel {
@@ -241,7 +266,6 @@
             width: 400px;
             margin: auto;
             text-align: center;
-            background: #3c3d41;
         }
 
         #progressPanel {
@@ -249,14 +273,12 @@
             width: 55%;
             margin: 5px auto;
             text-align: center;
-            background: #3c3d41;
         }
 
         #volumePanel {
             position: absolute;
             right: 0px;
             top: 40px;
-            background: #3c3d41;
             width: 160px;
         }
 
@@ -328,6 +350,7 @@
             filter: invert();
         }
     </style>
+
 </head>
 <body>
     <div class="header">
@@ -337,85 +360,72 @@
         </div>
 
         @* 搜尋條--套用bootstrap(input-group) *@
-        <div class="searchBar">
-            @* 基本搜尋條(結合進階搜尋鍵) *@
-            <div class="input-group">
-                <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
-                <div class="input-group-append">
-                    <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
-                    <div class="btn btn-outline-secondary searchBtn">
-                        <i class="fa fa-search"></i>
-                    </div>
+    <div class="searchBar">
+        @* 基本搜尋條(結合進階搜尋鍵) *@
+        <div class="input-group">
+            <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
+            <div class="input-group-append">
+                <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
+                <div class="btn btn-outline-secondary searchBtn">
+                    <i class="fa fa-search"></i>
+                </div>
+            </div>
+        </div>
+
+        @* 進階搜尋面板 *@
+        <div class="advancedPanel">
+            <div class="advancedItemGroup">
+                <div class="advancedItem">
+                    歌曲名稱
+                    <input type="text" class="advancedtxt form-control" id="adSong" />
+                </div>
+                <div class="advancedItem">
+                    專輯名稱
+                    <input type="text" class="advancedtxt form-control" id="adAlbum" />
+                </div>
+                <div class="advancedItem">
+                    歌手
+                    <input type="text" class="advancedtxt form-control" id="adSinger" />
+                </div>
+                <div class="advancedItem">
+                    團體名稱
+                    <input type="text" class="advancedtxt form-control" id="adGroup" />
+                </div>
+                <div class="advancedItem">
+                    作曲者
+                    <input type="text" class="advancedtxt form-control" id="adComposer" />
+                </div>
+                <div class="advancedItem">
+                    發行類別
+                    <select class="advancedtxt form-control" id="adType">
+                        <option value="0">不指定</option>
+                        @* 網頁初始化時會在這裡更新搜尋的類別 *@
+                    </select>
                 </div>
             </div>
 
-            <div class="advancedPanel">
-                @* 這邊放text搜尋欄位 *@
-                <div class="advancedItemGroup">
-                    <div class="advancedItem">
-                        歌曲名稱
-                        <input type="text" class="advancedtxt form-control" id="adSong" />
-                    </div>
-                    <div class="advancedItem">
-                        專輯名稱
-                        <input type="text" class="advancedtxt form-control" id="adAlbum" />
-                    </div>
-                    <div class="advancedItem">
-                        歌手
-                        <input type="text" class="advancedtxt form-control" id="adSinger" />
-                    </div>
-                    <div class="advancedItem">
-                        團體名稱
-                        <input type="text" class="advancedtxt form-control" id="adGroup" />
-                    </div>
-                    <div class="advancedItem">
-                        作曲者
-                        <input type="text" class="advancedtxt form-control" id="adComposer" />
-                    </div>
-                    <div class="advancedItem">
-                        發行類別
-                        <select class="advancedtxt form-control" id="adType">
-                            <option value="0">不指定</option>
-                            @*網頁初始化時會讀取資料庫的類別資料*@
-                            @foreach (var item in webInitial.types)
-                            {
-                                <option value="@item.fTypeID">@item.fTypeName</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                
-                @* 這邊放自選類別 *@
-                <div class="typeSelectGroup">
-                    @* 選擇想要的類別 *@
-                    <div class="typeSelect advancedSelect">
-                        偏好的曲風
-                        <div class="advancedBlock">
-                            @foreach (var item in webInitial.kinds)
-                            {
-                                <div class="selectedItem" data-kind="@item.KindName">@item.KindName</div>
-                            }
-                            <div class="itemAdd" data-selector="like">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                        </div>
-
-                        @* 點選+號後會出現的type選擇表，位置應在+號正下方 *@
-                        <div class="selectableItemPanel">
-                            @foreach (var item in webInitial.kinds)
-                            {
-                                <div class="selectableItem" data-kind="@item.KindName">@item.KindName</div>
-                            }
-                        </div>
+            @* 這邊放自選類別 *@
+            <div class="typeSelectGroup">
+                @* 選擇想要的類別 *@
+                <div class="typeSelect advancedSelect">
+                    偏好的曲風
+                    <div class="advancedBlock">
+                        @* 網頁初始化時會在這裡更新曲風與增加鈕 *@
                     </div>
 
-                    @* 進階搜尋鍵 *@
-                    <div class="searchPanel">
-                        <button class="btn btn-primary adSearchBtn">搜尋</button>
+                    @* 點選+號後會出現的type選擇表，位置應在+號正下方 *@
+                    <div class="selectableItemPanel">
+                        @* 網頁初始化時會在這裡更新曲風 *@
                     </div>
                 </div>
-       　　 </div>
-    　　</div>
+
+                @* 進階搜尋鍵 *@
+                <div class="searchPanel">
+                    <button class="btn btn-primary adSearchBtn">搜尋</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <div class="header-button">
             <button type="button">註冊</button>
@@ -424,20 +434,46 @@
     </div>
 
     <div id="container">
+        <!--邊條選項欄-->
         <div class="sidebox">
             <ul>
-                <li class="side-li-home-img"><a href="/Homepage/Main">首頁</a></li>
-                <li class="side-li-serach-img"><a href="/Search/Kinds">音樂分類</a></li>
-                <li class="side-li-mymusiclibiary-img">你的音樂庫</li>
-                <li class="side-li-twoPlayer"><a href="/TwoPlayer/DemoPlayer">雙重播放器測試</a></li>
+                <li>
+                    <a href="/Homepage/Main">
+                        <div class="menuItem">
+                            <i class="fa fa-home"></i>
+                            <span>首頁</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="side-li-serach-img">
+                    <a href="/Search/Kinds">
+                        <div class="menuItem">
+                            <i class="fa fa-search"></i>
+                            <span>音樂分類</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="side-li-mymusiclibiary-img">
+                    <a>
+                        <div class="menuItem">
+                            <i class="fa fa-music"></i>
+                            <span>你的音樂庫</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="side-li-twoPlayer">
+                    <div class="menuItem">
+                        <a href="/TwoPlayer/DemoPlayer">雙重播放器測試</a>
+                    </div>
+                </li>
             </ul>
         </div>
 
-        <div class="mainbox" >
 
+        <!--內容主體-->
+        <div class="mainbox">
             @RenderBody()
         </div>
-
     </div>
 
     <div id="footer">
@@ -483,18 +519,17 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
         /////////////////
         ///主播放器相關///
-        ////////////////
-        
+        /////////////////
+
         var player;//主播放器
         var playing;//是否正在播放中
         var totalTime;//本次歌曲的秒數總長度
@@ -612,7 +647,7 @@
             $("#progress").mouseup(function () {
                 if (playing)
                     player.play();
-            }); 
+            });
 
             /////////////////////
             ///AJAX切換頁面相關///
@@ -659,30 +694,53 @@
                 changePage(location.pathname);
             })
 
-            ////先讀取主頁面(全商品頁面)並填入母版的主容器
-            ////為了讓初始網址永遠統一為這個才寫的，其實也可以刪掉
-            //$.post("/Homepage/Main", { ajax: true }, function (data) {
-            //    history.replaceState(null, null, "/Homepage/Main");
-            //    $(".mainbox").html(data);
-            //})
-
-
             /////////////////
             ///搜尋條棒相關///
             /////////////////
 
-            //初始化進階面板曲風選項的顏色
-            var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
-            , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
-            , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
-            var block = $(".selectableItemPanel").children(".selectableItem");
-            var block2 = $(".advancedBlock").children(".selectedItem");
-            for (let i = 0; i < block.length; i++) {
-                block.eq(i).css("background-color", color[i]);
-                block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
-                block2.eq(i).css("background-color", color[i]);
-                block2.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
-            }
+            //進階搜尋內容的初始化
+            $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
+                $.each(datas, function (name, value) {
+                    $("#adType").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
+                })
+            })
+            $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
+                $.each(datas, function (name, value) {
+                    $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}">${value.KindName}</div>`);
+                    $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}">${value.KindName}</div>`)
+                })
+                $(".advancedBlock").append('<div class="itemAdd"><i class="fa fa-plus"></i></div>');
+
+                $(".itemAdd").click(function () {
+                    $(".selectableItemPanel").toggleClass("adSwitch");
+                })
+
+                //初始化進階面板曲風選項的顏色
+                var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
+                  , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
+                  , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
+                  var block = $(".selectableItemPanel").children(".selectableItem");
+                  var block2 = $(".advancedBlock").children(".selectedItem");
+                for (let i = 0; i < block.length; i++) {
+                    block.eq(i).css("background-color", color[i]);
+                    block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+                    block2.eq(i).css("background-color", color[i]);
+                    block2.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+                }
+                //選擇曲風
+                $(".selectableItem").on("click", function () {
+                    let kindName = $(this).data("kind");
+                    $(this).css("display", "none");
+                    $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+                    $(".selectableItemPanel").toggleClass("adSwitch");
+                })
+                //點擊選擇的曲風即可取消
+                $(".selectedItem").on("click", function () {
+                    let kindName = $(this).data("kind");
+                    $(this).css("display", "none");
+                    $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+                })
+            }) 
 
             //開啟進階搜尋版面、開啟曲風選擇版面
             $("#advancedBtn").click(function () {
@@ -703,12 +761,13 @@
             })
 
             //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
+            //用trim()除去空白字串
             $(".searchBtn").click(function () {
-                let keyword = $(".searchtxt").val();
+                let keyword = $(".searchtxt").val().trim();
                 if (keyword == "") {
                     return;
                 }
-                let url = `@Url.Action("Result", "Search")/?keyword=${keyword}`;
+                let url = `@Url.Action("Result", "Search")`;
                 let stateObj = { keyword: keyword, ajax: true };
                 $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
@@ -719,11 +778,11 @@
             //進階搜尋(找出符合條件的專輯(專輯不重複))
             $(".adSearchBtn").click(function () {
                 $(".advancedPanel").toggleClass("adSwitch");
-                let adSong = $("#adSong").val();
-                let adSinger = $("#adSinger").val();
-                let adGroup = $("#adGroup").val();
-                let adComposer = $("#adComposer").val();
-                let adAlbum = $("#adAlbum").val();
+                let adSong = $("#adSong").val().trim();
+                let adSinger = $("#adSinger").val().trim();
+                let adGroup = $("#adGroup").val().trim();
+                let adComposer = $("#adComposer").val().trim();
+                let adAlbum = $("#adAlbum").val().trim();
                 let adType = $("#adType").val();
                 let adKinds = "";
                 $(".advancedBlock").children(".selectedItem").each(function () {
@@ -731,7 +790,7 @@
                         adKinds += ($(this).data("kind") + ",");
                     }
                 })
-                let url = `@Url.Action("AdvancedResult", "Search")/?adSong=${adSong}&adSinger=${adSinger}&adGroup=${adGroup}&adComposer=${adComposer}&adAlbum=${adAlbum}&adType=${adType}&adKinds=${adKinds}`
+                let url = `@Url.Action("AdvancedResult", "Search")`
                 let stateObj = {
                     adSong: adSong,
                     adSinger: adSinger,
@@ -768,22 +827,9 @@
             $("#adAlbum").autocomplete(
                 {
                     source: '@Url.Action("AutoCompleteAlbum", "Search")'
-                });
-
-            //選擇曲風
-            $(".selectableItem").on("click", function () {
-                let kindName = $(this).data("kind");
-                $(this).css("display", "none");
-                $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
-                $(".selectableItemPanel").toggleClass("adSwitch");
-            })
-            //點擊選擇的曲風即可取消
-            $(".selectedItem").on("click", function () {
-                let kindName = $(this).data("kind");
-                $(this).css("display", "none");
-                $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
-            })
+                });      
         }
     </script>
+
 </body>
 </html>

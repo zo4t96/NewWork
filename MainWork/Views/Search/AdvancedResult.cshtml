@@ -3,13 +3,8 @@
     {
         @(Layout = null);
     }
-    else
-    {
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    }
 }
 <script>
-    console.log(history.state);
     $.post('@Url.Action("AdvancedResultView", "Search")', history.state, function (data) {
         $(".mainbox").html(data);
     });

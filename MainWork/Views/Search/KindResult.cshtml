@@ -1,20 +1,12 @@
-﻿@model IEnumerable<MainWork.tAlbum>
-
-@{
+﻿@{
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
     }
-    else
-    {
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    }
 }
-
-@foreach (var item in Model)
-{
-    <div>專輯名稱:@item.fAlbumName</div>
-    <div>社團名稱:@item.fMaker</div>
-    <div>專輯曲風:@item.fKinds</div>
-    <div>========================================</div>
-}
+<script>
+    console.log(history.state)
+    $.post('@Url.Action("KindResultView", "Search")', history.state, function (data) {
+        $(".mainbox").html(data);
+    });
+</script>

@@ -5,12 +5,6 @@
     {
         @(Layout = null);
     }
-    //如果是按重新整理就必須讀取框架，並且將下列這些參考讀出來(否則會抓不到jquery)
-    //由於讀取layout理應也會讀取參照的script，此處有待考察
-    else
-    {
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    }
 }
 <style>
 
@@ -18,10 +12,8 @@
         /* 方塊浮動(不用float)，自動換行，*/
         display: flex;
         flex-wrap: wrap;
-        /*align-items: stretch;
-        align-content: stretch; /*還不曉得怎麼發揮作用*/
         position: relative;
-        background-color: #2b2828;
+        background-color: #191919;
         padding: 10px;
         font-family: "微軟正黑體";
         color: white;
@@ -43,7 +35,7 @@
         border-radius: 10px;
         margin: 8px;
         padding: 10px;
-        background-color: #6bc477;
+        /*background-color: #6bc477;*/
         /*輕微漸層效果，意外的很帶感*/
         background-image: linear-gradient(to bottom,#16161660 15%,#6bc477);
         overflow: hidden;
@@ -78,13 +70,13 @@
     <div class="kindPage">
         @foreach (var item in Model)
         {
-            string id = Html.DisplayFor(modelItem => item.KindID).ToString();
-            <div class="outline">
-                <div class="kindBlock" data-kind="@id" data-kindName="@item.KindName">
-                    <span class="kindName">@Html.DisplayFor(modelItem => item.KindName)</span>
+            string id = item.KindID.ToString();
+            <a class="outline">
+                <div class="kindBlock" data-kind="@id">
+                    <span class="kindName">@item.KindName</span>
                     <div class="photo"></div>
                 </div>
-            </div>
+            </a>
         }
     </div>
     <script>//讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
@@ -98,11 +90,13 @@
             c.eq(i).find(".photo").css("background-image", `url(/Images/${c.eq(i).data("kind")}.jpg)`)
         }
         c.on("click", function () {
-            //待商品頁面出來，直連商品頁面
-           
-            let url = '@Url.Action("AdvancedResult", "Search")'
-            $.post(url, { adKinds: $(this).data("kindName"),ajax:true }, function (data) {
+            let kindID = $(this).data("kind");
+            let url = `@Url.Action("KindResult", "Search")`
+            let stateObj = { kindID: kindID, ajax: true };
+            $.post(url, stateObj, function (data) {
                 $(".mainbox").html(data);
             });
-        })</script>
+            history.pushState(stateObj,null,url);
+        })
+    </script>
 </body>
