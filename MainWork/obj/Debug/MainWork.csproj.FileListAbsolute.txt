@@ -412,3 +412,4 @@ C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\System.Net.Http.Form
 C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\System.Web.Http.xml
 C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\System.Web.Http.WebHost.xml
 C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\zh-Hant\EntityFramework.SqlServer.resources.dll
+C:\Users\User\Desktop\期末專題\期末專題New\Test\MainWork\bin\zh-Hant\EntityFramework.SqlServer.resources.dll

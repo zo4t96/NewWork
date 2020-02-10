@@ -22,28 +22,20 @@
             font-family: "微軟正黑體";
             color: white;
         }
-
-        li {
-            list-style-type: none;
-            margin: 5px;
-        }
-
         .header {
             position: fixed;
             width: 100%;
             height: 70px;
             background-color: #0b0b0b;
-            z-index: 10;
+            z-index:1;
         }
 
         .header-logo {
-            position: absolute;
+            position: relative;
             top: 10px;
             left: 10px;
-            height: 50px;
             width: 180px;
             padding-left: 40px;
-            padding-top: 3px;
             font-size: 25px;
             background: #0b0b0b;
         }
@@ -58,28 +50,30 @@
             right: 16px;
         }
 
-        #container {
+        #content {
+            display: flex;
             position: relative;
-            top: 70px;
             left: 0; /*將子元素的定位到具體的參照對象*/
             width: 100%;
+            background-color: #191919;
         }
 
         .sidebox {
-            width:200px;
             position: fixed;
-            top: 70px;
+            width: 200px;
+            height: 100vh;
             background-color: #040404;
             color: white;
+            margin-top:70px;
         }
 
         .mainbox {
-            width: 100%;
-            height: calc(100%-70px);
-            min-height: 1600px;
-            border-left: 200px solid #040404; /*設置右邊框寬度為XXXpx像素，同等於sidebox的寬度*/
-            background-color: #191919;
+            min-height:calc(100vh - 200px);
+            position: relative;
+            margin-top: 70px;
             margin-bottom: 110px;
+            margin-left: 200px;
+            overflow:auto;
         }
 
         #footer {
@@ -93,13 +87,18 @@
         }
 
         /*額外更新左邊選單*/
-        .menuItem{
-            width:190px;
-            font-weight:600;
-            font-size:14px;
-            text-decoration:none;
-            border-radius:5px;
-            transition:0.4s;
+        li {
+            list-style-type: none;
+            margin: 5px;
+        }
+
+        .menuItem {
+            width: 190px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.4s;
         }
         .menuItem:hover{
             background-color:#818181;
@@ -110,12 +109,15 @@
         }
         .menuItem span{
             display:inline-block;
+            position:relative;
+            bottom:3px;
         }
     </style>
 
     <!--搜尋條style-->
     <style>
         .searchBar {
+            top:-35px;
             position: relative;
             left: 250px;
             margin: 15px;
@@ -224,7 +226,7 @@
 
         #titlePanel {
             position: absolute;
-            left: 100px;
+            left: 120px;
             width: 200px;
             height: 80px;
             margin: 10px;
@@ -232,8 +234,8 @@
         }
 
         img.title {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             margin: 2px 10px;
         }
 
@@ -244,21 +246,20 @@
             color: white;
         }
 
-        #playerfigcaption {
-            margin: 1px;
-            text-align: center;
-        }
-
         .description {
-            font-size: 12px;
-            overflow: hidden;
+            font-size: 14px;
+            font-weight:600;
+            white-space: nowrap;
         }
 
-        #singer {
+        .descriptionSub {
             color: rgb(199, 194, 194);
-            font-style: italic;
             font-size: 10px;
+            white-space: nowrap;
         }
+            .descriptionSub.singer {
+                font-style: italic;
+            }
 
         #btnPanel {
             position: relative;
@@ -360,72 +361,72 @@
         </div>
 
         @* 搜尋條--套用bootstrap(input-group) *@
-    <div class="searchBar">
-        @* 基本搜尋條(結合進階搜尋鍵) *@
-        <div class="input-group">
-            <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
-            <div class="input-group-append">
-                <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
-                <div class="btn btn-outline-secondary searchBtn">
-                    <i class="fa fa-search"></i>
-                </div>
-            </div>
-        </div>
-
-        @* 進階搜尋面板 *@
-        <div class="advancedPanel">
-            <div class="advancedItemGroup">
-                <div class="advancedItem">
-                    歌曲名稱
-                    <input type="text" class="advancedtxt form-control" id="adSong" />
-                </div>
-                <div class="advancedItem">
-                    專輯名稱
-                    <input type="text" class="advancedtxt form-control" id="adAlbum" />
-                </div>
-                <div class="advancedItem">
-                    歌手
-                    <input type="text" class="advancedtxt form-control" id="adSinger" />
-                </div>
-                <div class="advancedItem">
-                    團體名稱
-                    <input type="text" class="advancedtxt form-control" id="adGroup" />
-                </div>
-                <div class="advancedItem">
-                    作曲者
-                    <input type="text" class="advancedtxt form-control" id="adComposer" />
-                </div>
-                <div class="advancedItem">
-                    發行類別
-                    <select class="advancedtxt form-control" id="adType">
-                        <option value="0">不指定</option>
-                        @* 網頁初始化時會在這裡更新搜尋的類別 *@
-                    </select>
-                </div>
-            </div>
-
-            @* 這邊放自選類別 *@
-            <div class="typeSelectGroup">
-                @* 選擇想要的類別 *@
-                <div class="typeSelect advancedSelect">
-                    偏好的曲風
-                    <div class="advancedBlock">
-                        @* 網頁初始化時會在這裡更新曲風與增加鈕 *@
+        <div class="searchBar">
+            @* 基本搜尋條(結合進階搜尋鍵) *@
+            <div class="input-group">
+                <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
+                <div class="input-group-append">
+                    <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
+                    <div class="btn btn-outline-secondary searchBtn">
+                        <i class="fa fa-search"></i>
                     </div>
+                </div>
+            </div>
 
-                    @* 點選+號後會出現的type選擇表，位置應在+號正下方 *@
-                    <div class="selectableItemPanel">
-                        @* 網頁初始化時會在這裡更新曲風 *@
+            @* 進階搜尋面板 *@
+            <div class="advancedPanel">
+                <div class="advancedItemGroup">
+                    <div class="advancedItem">
+                        歌曲名稱
+                        <input type="text" class="advancedtxt form-control" id="adSong" />
+                    </div>
+                    <div class="advancedItem">
+                        專輯名稱
+                        <input type="text" class="advancedtxt form-control" id="adAlbum" />
+                    </div>
+                    <div class="advancedItem">
+                        歌手
+                        <input type="text" class="advancedtxt form-control" id="adSinger" />
+                    </div>
+                    <div class="advancedItem">
+                        團體名稱
+                        <input type="text" class="advancedtxt form-control" id="adGroup" />
+                    </div>
+                    <div class="advancedItem">
+                        作曲者
+                        <input type="text" class="advancedtxt form-control" id="adComposer" />
+                    </div>
+                    <div class="advancedItem">
+                        發行類別
+                        <select class="advancedtxt form-control" id="adType">
+                            <option value="0">不指定</option>
+                            @* 網頁初始化時會在這裡更新搜尋的類別 *@
+                        </select>
                     </div>
                 </div>
 
-                @* 進階搜尋鍵 *@
-                <div class="searchPanel">
-                    <button class="btn btn-primary adSearchBtn">搜尋</button>
+                @* 這邊放自選類別 *@
+                <div class="typeSelectGroup">
+                    @* 選擇想要的類別 *@
+                    <div class="typeSelect advancedSelect">
+                        偏好的曲風
+                        <div class="advancedBlock">
+                            @* 網頁初始化時會在這裡更新曲風與增加鈕 *@
+                        </div>
+
+                        @* 點選+號後會出現的type選擇表，位置應在+號正下方 *@
+                        <div class="selectableItemPanel">
+                            @* 網頁初始化時會在這裡更新曲風 *@
+                        </div>
+                    </div>
+
+                    @* 進階搜尋鍵 *@
+                    <div class="searchPanel">
+                        <button class="btn btn-primary adSearchBtn">搜尋</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <div class="header-button">
             <button type="button">註冊</button>
@@ -433,7 +434,7 @@
         </div>
     </div>
 
-    <div id="container">
+    <div id="content">
         <!--邊條選項欄-->
         <div class="sidebox">
             <ul>
@@ -481,11 +482,11 @@
             <!-- 封面與歌名div -->
             <figure id="playerfigure">
                 <img src="#" class="title">
-                <figcaption id="playerfigcaption" class="description title">這裡放專輯名</figcaption>
             </figure>
             <div id="titlePanel">
-                <span class="description">這裡放歌名</span><br>
-                <span id="singer">這裡放歌手</span>
+                <span class="album description">這裡放專輯</span><br />
+                <span class="music descriptionSub">這裡放歌名</span><br />
+                <span class="singer descriptionSub">這裡放歌手</span>
             </div>
 
             <!-- 基本按鍵div -->
