@@ -12,6 +12,7 @@
     @* ↓主要用來讀取一些特殊icon *@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <!--原始style-->
@@ -22,12 +23,13 @@
             font-family: "微軟正黑體";
             color: white;
         }
+
         .header {
             position: fixed;
             width: 100%;
             height: 70px;
             background-color: #0b0b0b;
-            z-index:1;
+            z-index: 1;
         }
 
         .header-logo {
@@ -64,16 +66,16 @@
             height: 100vh;
             background-color: #040404;
             color: white;
-            margin-top:70px;
+            margin-top: 70px;
         }
 
         .mainbox {
-            min-height:calc(100vh - 200px);
+            width: 100%;
+            min-height: calc(100vh - 200px);
             position: relative;
             margin-top: 70px;
             margin-bottom: 110px;
             margin-left: 200px;
-            overflow:auto;
         }
 
         #footer {
@@ -82,7 +84,7 @@
             left: 0;
             width: 100%;
             color: white;
-            background-color:#252525;
+            background-color: #252525;
             box-shadow: 0 0 2em black;
         }
 
@@ -90,6 +92,11 @@
         li {
             list-style-type: none;
             margin: 5px;
+        }
+
+        a {
+            /*要加上!important才能強行刪除底線*/
+            text-decoration: none !important;
         }
 
         .menuItem {
@@ -100,24 +107,36 @@
             border-radius: 5px;
             transition: 0.4s;
         }
-        .menuItem:hover{
-            background-color:#818181;
+            /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+            .menuItem:hover > span,
+            .menuItem:hover > .fa {
+                color: white;
+            }
+
+        .menuItemSelected {
+            background-color: #3a3a3a;
         }
-        .menuItem .fa{
-            font-size:20px;
-            margin:10px 20px;
+
+        .menuItem .fa {
+            font-size: 20px;
+            margin: 10px 20px;
+            color: #656565;
+            transition: 0.4s;
         }
-        .menuItem span{
-            display:inline-block;
-            position:relative;
-            bottom:3px;
+
+        .menuItem span {
+            display: inline-block;
+            position: relative;
+            bottom: 3px;
+            color: #656565;
+            transition: 0.4s;
         }
     </style>
 
     <!--搜尋條style-->
     <style>
         .searchBar {
-            top:-35px;
+            top: -35px;
             position: relative;
             left: 250px;
             margin: 15px;
@@ -226,17 +245,19 @@
 
         #titlePanel {
             position: absolute;
-            left: 120px;
-            width: 200px;
+            left: 110px;
+            width: 14%;
             height: 80px;
             margin: 10px;
-            background: none;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
-        img.title {
+        img.playerCover {
             width: 100px;
             height: 100px;
-            margin: 2px 10px;
+            margin: 3px;
         }
 
         #playerfigure {
@@ -248,8 +269,7 @@
 
         .description {
             font-size: 14px;
-            font-weight:600;
-            white-space: nowrap;
+            font-weight: 600;
         }
 
         .descriptionSub {
@@ -257,6 +277,7 @@
             font-size: 10px;
             white-space: nowrap;
         }
+
             .descriptionSub.singer {
                 font-style: italic;
             }
@@ -463,9 +484,12 @@
                     </a>
                 </li>
                 <li class="side-li-twoPlayer">
-                    <div class="menuItem">
-                        <a href="/TwoPlayer/DemoPlayer">雙重播放器測試</a>
-                    </div>
+                    <a href="/TwoPlayer/DemoPlayer">
+                        <div class="menuItem">
+                            <i class="fa fa-headphones"></i>
+                            <span >雙重播放器測試</span>
+                        </div>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -481,7 +505,7 @@
         <div id="playerPanel">
             <!-- 封面與歌名div -->
             <figure id="playerfigure">
-                <img src="#" class="title">
+                <img src="#" class="playerCover">
             </figure>
             <div id="titlePanel">
                 <span class="album description">這裡放專輯</span><br />
@@ -828,7 +852,15 @@
             $("#adAlbum").autocomplete(
                 {
                     source: '@Url.Action("AutoCompleteAlbum", "Search")'
-                });      
+                });    
+
+            //讓左側選單被選擇時有點變化
+            $(".menuItem").click(function () {
+                $(this).parents("li").siblings().find(".menuItem").removeClass("menuItemSelected");
+                $(this).parents("li").siblings().find(".menuItem").children().css("color", "#656565");
+                $(this).addClass("menuItemSelected");
+                $(this).children().css("color", "white");
+            })
         }
     </script>
 
