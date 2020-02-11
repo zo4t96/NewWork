@@ -36,5 +36,6 @@ namespace MainWork
         public virtual DbSet<tProduct> tProducts { get; set; }
         public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
         public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
+
     }
 }

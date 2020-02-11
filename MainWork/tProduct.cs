@@ -11,7 +11,8 @@ namespace MainWork
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class tProduct
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -38,7 +39,11 @@ namespace MainWork
         public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
         public Nullable<int> fPlaybackCount { get; set; }
-    
+        //額外新增
+        public HttpPostedFileBase fRealFile { get; set; }
+        public Nullable<double> fPlays { get; set; }
+        public Nullable<double> fPlaye { get; set; }
+
         public virtual tAlbum tAlbum { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPlayList> tPlayLists { get; set; }

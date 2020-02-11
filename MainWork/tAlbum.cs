@@ -11,7 +11,8 @@ namespace MainWork
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class tAlbum
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -31,7 +32,8 @@ namespace MainWork
         public string fCoverPath { get; set; }
         public string fPublisher { get; set; }
         public string fKinds { get; set; }
-    
+        public HttpPostedFileBase fCoverRealFile { get; set; }
+
         public virtual tAlbumType tAlbumType { get; set; }
         public virtual tMember tMember { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,0 +1,417 @@
+﻿@model IEnumerable<MainWork.tAlbum>
+@using MainWork.Models;
+
+@{
+    ViewBag.Title = "MyAlbumList2";
+    if (Request.IsAjaxRequest()==false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    int count = 0;
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+    tAlbum tA = new tAlbum();
+    CWebInitailize webInitial = ViewBag.InitialModel;
+}
+
+<style>
+
+        .container ul{
+	width: 120px;
+    padding: 15px;
+    min-height:300px;
+    background-color:#FFFFF0;
+    margin:20px;
+	display: block;
+	float: left;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+}
+.container ul li{
+    display: block;
+    float: left;
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+    background-color:#EED2EE;
+    margin-bottom:10px;
+	-moz-user-select: none;
+    user-select: none;
+    text-indent: 10px;
+    color: #555;
+}
+
+</style>
+
+    <div style="padding-left:50px;padding-top:50px">
+        <h3 class="fold-title" data-playurl=""><i class="fa fa-chevron-right"></i> 新增專輯</h3>
+        <div class="fold">
+            <div class="fold-container">
+                <div class="container" style="color:white">
+                    @*for start*@
+                    @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>tAlbum</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tA.fYear, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <select class="advancedtxt form-control" name="tA.fType">
+                                    @foreach (var item in webInitial.types)
+                                    {
+                                        if (webInitial.types == null)
+                                        {
+                                            <option value=''>載入失敗請重試</option>
+                                        }
+                                        else
+                                        {
+                                            <option value='@item.fTypeID'>@item.fTypeName</option>
+                                        }
+                                    }
+                                </select>
+                                @*@Html.EditorFor(model => tA.fType, new { htmlAttributes = new { @class = "form-control" } })*@
+                                @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tA.fALPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fALPrice, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="container" style="height:300px">
+                                    <ul></ul>
+                                    <ul>
+                                        @foreach (var item in webInitial.kinds)
+                                        {
+                                            if (webInitial.kinds == null)
+                                            {
+                                                <li>載入失敗請重試</li>
+                                            }
+                                            else
+                                            {
+                                                <li>@item.KindName</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <script>
+                            $(function () {
+                                drag.init('container');
+                            });
+                            var drag = {
+
+                                class_name: null,
+                                permitDrag: false,
+                                _x: 0,
+                                _y: 0,
+                                _left: 0,
+                                _top: 0,
+                                old_elm: null,
+                                tmp_elm: null,
+                                new_elm: null,
+
+                                //初始化
+                                init: function (className) {
+                                    drag.class_name = className;
+
+                                    $('.' + drag.class_name).on('mousedown', 'ul li', function (event) {
+                                        drag.permitDrag = true;
+                                        drag.old_elm = $(this);
+                                        drag.mousedown(event);
+                                        return false;
+                                    });
+
+                                    $(document).mousemove(function (event) {
+                                        if (!drag.permitDrag) return false;
+                                        drag.mousemove(event);
+                                        return false;
+                                    });
+
+                                    $(document).mouseup(function (event) {
+                                        if (!drag.permitDrag) return false;
+                                        drag.permitDrag = false;
+                                        drag.mouseup(event);
+                                        return false;
+                                    });
+
+                                },
+
+                                mousedown: function (event) {
+
+                                    console.log('我被mousedown了');
+                                    drag.tmp_elm = $(drag.old_elm).clone();
+
+                                    drag._x = $(drag.old_elm).offset().left;
+                                    drag._y = $(drag.old_elm).offset().top;
+
+                                    var e = event || window.event;
+                                    drag._left = e.pageX - drag._x;
+                                    drag._top = e.pageY - drag._y;
+
+                                    $(drag.tmp_elm).css({
+                                        'position': 'absolute',
+                                        'background-color': '#FF8C69',
+                                        'left': drag._x,
+                                        'top': drag._y,
+                                    });
+
+                                    tmp = $(drag.old_elm).parent().append(drag.tmp_elm);
+                                    drag.tmp_elm = $(tmp).find(drag.tmp_elm);
+                                    $(drag.tmp_elm).css('cursor', 'move');
+
+                                },
+
+                                mousemove: function (event) {
+
+                                    console.log('我被mousemove了');
+
+                                    var e = event || window.event;
+                                    var x = e.pageX - drag._left;
+                                    var y = e.pageY - drag._top;
+                                    var maxL = $(document).width() - $(drag.old_elm).outerWidth();
+                                    var maxT = $(document).height() - $(drag.old_elm).outerHeight();
+
+                                    x = x < 0 ? 0 : x;
+                                    x = x > maxL ? maxL : x;
+                                    y = y < 0 ? 0 : y;
+                                    y = y > maxT ? maxT : y;
+
+                                    $(drag.tmp_elm).css({
+                                        'left': x,
+                                        'top': y,
+                                    });
+
+                                    $.each($('.' + drag.class_name + ' ul'), function (index, value) {
+
+                                        var box_x = $(value).offset().left;
+                                        var box_y = $(value).offset().top;
+                                        var box_width = $(value).outerWidth();
+                                        var box_height = $(value).outerHeight();
+
+                                        if (e.pageX > box_x && e.pageX < box_x - 0 + box_width && e.pageY > box_y && e.pageY < box_y - 0 + box_height) {
+
+                                            if ($(value).offset().left !== drag.old_elm.parent().offset().left
+                                                || $(value).offset().top !== drag.old_elm.parent().offset().top) {
+
+                                                $(value).css('background-color', '#FFEFD5');
+                                            }
+                                        } else {
+                                            $(value).css('background-color', '#FFFFF0');
+                                        }
+
+                                    });
+
+                                },
+
+                                mouseup: function (event) {
+
+                                    console.log('我被mouseup了');
+                                    $(drag.tmp_elm).remove();
+
+                                    var e = event || window.event;
+
+                                    $.each($('.' + drag.class_name + ' ul'), function (index, value) {
+
+                                        var box_x = $(value).offset().left;
+                                        var box_y = $(value).offset().top;
+                                        var box_width = $(value).outerWidth();
+                                        var box_height = $(value).outerHeight();
+
+                                        if (e.pageX > box_x && e.pageX < box_x - 0 + box_width && e.pageY > box_y && e.pageY < box_y - 0 + box_height) {
+
+                                            if ($(value).offset().left !== drag.old_elm.parent().offset().left
+                                                || $(value).offset().top !== drag.old_elm.parent().offset().top) {
+                                                tmp = $(drag.old_elm).clone();
+                                                var newObj = $(value).append(tmp);
+                                                $(drag.old_elm).remove();
+                                                drag.new_elm = $(newObj).find(tmp);
+                                            }
+                                        }
+                                        $(value).css('background-color', '#FFFFF0');
+                                    });
+
+                                },
+
+                            };
+
+                        </script>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <select class="advancedtxt form-control" name="tA.fKinds" multiple>
+                                    @foreach (var item in webInitial.kinds)
+                                    {
+                                        if (webInitial.kinds == null)
+                                        {
+                                            <option value=''>載入失敗請重試</option>
+                                        }
+                                        else
+                                        {
+                                            <option value='@item.KindName'>@item.KindName</option>
+                                        }
+                                    }
+                                </select>
+                                @*@Html.EditorFor(model => tA.fKinds, new { htmlAttributes = new { @class = "form-control" } })*@
+                                @Html.ValidationMessageFor(model => tA.fKinds, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10" style="display:inline-block">
+                                <input type="file" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
+                            </div>
+                            <div style="display:inline-block">
+                                <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fPublisher, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tA.fPublisher, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fPublisher, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-warning" />
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @*for end*@
+                </div>
+            </div>
+        </div>
+        <h1 class="headtitle">你的所有專輯</h1>
+        <table>
+            <tr>
+                @*此處<tr>為自動依瀏覽器大小換欄*@
+                @foreach (var item in Model)
+                {
+                    count++;
+                    if (count % 7 == 1)
+                    {
+                        //      @:<tr>
+                    }
+                    <td class="productitem">
+                        <a href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" class="productitemhy">
+                            <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
+                                <table>
+                                    <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                    <tr>
+                                        <td>
+                                            <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
+                                </table>
+                            </fieldset>
+
+                        </a>
+                    </td>
+                    if (count % 7 == 0)
+                    {
+                        //     @:</tr>
+                    }
+                }
+            </tr>
+        </table>
+    </div>
+
+<script>
+            $("#preview_fCoverRealFile").css("display", "none");
+            $(function () {
+            $('h3').click(function () {
+                if ($(this).next('.fold').hasClass('o') == true) {
+                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $(this).next('.fold').removeClass('o').slideUp();
+                }
+                else {
+                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                    $(this).next('.fold').addClass('o').slideDown();
+                }
+            });
+            });
+
+          $("#preview_fCoverRealFile_source").change(function(){
+
+            readURL(this);
+
+            });
+
+            function readURL(input){
+
+  if(input.files && input.files[0]){
+
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+
+       $("#preview_fCoverRealFile").attr('src', e.target.result);
+                    $("#preview_fCoverRealFile").css("display", "inline");
+    }
+
+    reader.readAsDataURL(input.files[0]);
+
+  }
+
+}
+</script>

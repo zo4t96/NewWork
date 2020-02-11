@@ -117,7 +117,10 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\select.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\sweet-alert.css" />
     <Content Include="dbMusicStore.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>dbMusicStore.edmx</DependentUpon>
@@ -148,6 +151,13 @@
     </Content>
     <Content Include="Images\4.jpg" />
     <Content Include="Images\8.jpg" />
+    <Content Include="Images\avatar-01.jpg" />
+    <Content Include="Images\del.png" />
+    <Content Include="Images\infor.png" />
+    <Content Include="Images\logo-blue.png" />
+    <Content Include="Images\logo-mini.png" />
+    <Content Include="Images\logo-white.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -251,6 +261,7 @@
     <Content Include="Scripts\src\utils\setAttributes.js" />
     <Content Include="Scripts\src\utils\setStyles.js" />
     <Content Include="Scripts\src\utils\setupEventListeners.js" />
+    <Content Include="Scripts\sweet-alert.min.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -260,7 +271,11 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\AutoCompleteController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomepageController.cs" />
     <Compile Include="Controllers\TwoPlayerController.cs" />
@@ -299,6 +314,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CAutoComplete.cs" />
+    <Compile Include="Models\CDictionary.cs" />
     <Compile Include="Models\CSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tActivity.cs">
@@ -338,6 +354,7 @@
       <DependentUpon>dbUpload.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
+    <Compile Include="ViewModels\CLoginViewModel.cs" />
     <Compile Include="ViewModels\CSearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +392,29 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Search\KindResult.cshtml" />
+    <Content Include="Views\Admin\calendar.cshtml" />
+    <Content Include="Views\Admin\chart.cshtml" />
+    <Content Include="Views\Admin\form.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Index2.cshtml" />
+    <Content Include="Views\Admin\Index3.cshtml" />
+    <Content Include="Views\Admin\Index4.cshtml" />
+    <Content Include="Views\Admin\login.cshtml" />
+    <Content Include="Views\Admin\map.cshtml" />
+    <Content Include="Views\Admin\register.cshtml" />
+    <Content Include="Views\Admin\table.cshtml" />
+    <Content Include="Views\Album\AddAlbum.cshtml" />
+    <Content Include="Views\Album\AlbumDetail.cshtml" />
+    <Content Include="Views\Album\AlbumInfo.cshtml" />
+    <Content Include="Views\Album\DelteSong.cshtml" />
+    <Content Include="Views\Album\Index.cshtml" />
+    <Content Include="Views\Album\MyAlbumList.cshtml" />
+    <Content Include="Views\Album\PlayLists.cshtml" />
+    <Content Include="Views\Album\_PlayLists.cshtml" />
+    <Content Include="Views\Common\Login.cshtml" />
+    <Content Include="Views\Common\Loginout.cshtml" />
+    <Content Include="Views\Message\MessageBox.cshtml" />
+    <Content Include="Views\Shared\_Layout_admin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -385,6 +425,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Music\" />
+    <Folder Include="Views\App_LocalResources\NewFolder1\" />
     <Folder Include="Views\testrazor\" />
   </ItemGroup>
   <ItemGroup>

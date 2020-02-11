@@ -373,6 +373,91 @@
         }
     </style>
 
+    <!--會員專輯頁-->
+    <style>
+        .albumname {
+            width: 200px;
+            height: 45px;
+            overflow: hidden; /*超出範圍的部分隱藏*/
+            text-overflow: ellipsis; /*出現省略號*/
+            white-space: nowrap;
+        }
+
+        .productitem {
+            float: left;
+            color: white;
+            margin-left: 10px;
+            margin-bottom: 0.5%;
+            font-family: 微軟正黑體;
+            background-color: #444444;
+            cursor: pointer;
+            border-radius: 10px
+        }
+
+            .productitem:hover {
+                background-color: dimgray;
+            }
+
+        .productitemhy:link {
+            color: white;
+            text-decoration: none;
+        }
+
+        .productitemhy:visited {
+            color: white;
+        }
+
+        .headtitle {
+            color: white;
+            margin-left: 20px;
+            font-family: 微軟正黑體;
+        }
+    </style>
+
+    <!--商品詳細頁-->
+    <style>
+        /*albuminfo開始*/
+        /*專輯圖/介紹開始*/
+        .albumset {
+            display: inline-block;
+            margin-left: 5%;
+            margin-top: 3%;
+            width: 20%;
+        }
+        /*專輯圖/介紹*/
+        /*單曲列表開始*/
+        .albumtext {
+            text-align: center;
+            color: white;
+            width: 97%;
+            font-family: 微軟正黑體;
+        }
+        /*單曲列表結束*/
+        /*albuminfo結束*/
+        /*MyAlbumList開始*/
+        /*摺疊樣式開始*/
+        .fold-title {
+            background-color: #f3f3f3;
+            padding: 10px;
+            cursor: pointer;
+            color: #525252;
+            margin-bottom: 0;
+            width: 100%
+        }
+
+        .fold {
+            display: none;
+            line-height: 17pt;
+            width: 100%
+        }
+
+        .fold-container {
+            padding: 10px 10px 10px 30px;
+            border: solid #f3f3f3 2px;
+        }
+        /*摺疊樣式結束*/
+        /*MyAlbumList結束*/
+    </style>
 </head>
 <body>
     <div class="header">
@@ -449,9 +534,29 @@
             </div>
         </div>
 
+        @* 登入註冊鍵 *@
         <div class="header-button">
-            <button type="button">註冊</button>
-            <button type="button">登入</button>
+            @{
+                if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+                {
+                    <button type="button">註冊</button>
+                    @*<button type="button">@Html.ActionLink("登入", "Login", "Common", null, new { @class = "side-li-home-img" })</button>*@
+                    <button id="logininterface" type="button">登入</button>
+                }
+                else
+                {
+                    if (Session[CDictionary.SK_ACCOUNT].ToString() == "aaa")
+                    {
+                        <button id="admininterface" type="button">後臺管理介面</button>
+                    }
+                    <span>hi,@Session[CDictionary.SK_ACCOUNT].ToString()</span>
+                    <button type="button">會員中心</button>
+                    <button type="button">@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })</button>
+                    <button id="logoutinterface" type="button">登出</button>
+                    @*<button id="logoutinterface2" type="button">@Html.ActionLink("登出", "Loginout", "Common", null, new { @class = "side-li-home-img" })</button>*@
+
+                }
+            }
         </div>
     </div>
 
@@ -483,14 +588,23 @@
                         </div>
                     </a>
                 </li>
+
                 <li class="side-li-twoPlayer">
                     <a href="/TwoPlayer/DemoPlayer">
                         <div class="menuItem">
                             <i class="fa fa-headphones"></i>
-                            <span >雙重播放器測試</span>
+                            <span>雙重播放器測試</span>
                         </div>
                     </a>
                 </li>
+
+                @* 待調整 *@
+                @if (Session[CDictionary.SK_ACCOUNT] != null && !string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+                {
+                    <li class="side-li-mymusiclibiary-img">@Html.ActionLink("你的音樂庫", "PlayLists", "Album", null, new { @class = "side-li-home-img" })</li>
+                    <li class="side-li-serach-img">@Html.ActionLink("我的發行", "MyAlbumList", "Album", new { account = Session[CDictionary.SK_ACCOUNT].ToString() }, new { @class = "side-li-home-img" })</li>
+                }
+
             </ul>
         </div>
 
@@ -505,12 +619,12 @@
         <div id="playerPanel">
             <!-- 封面與歌名div -->
             <figure id="playerfigure">
-                <img src="#" class="playerCover">
+                <img id="playercover" src="#" class="playerCover">
             </figure>
             <div id="titlePanel">
                 <span class="album description">這裡放專輯</span><br />
-                <span class="music descriptionSub">這裡放歌名</span><br />
-                <span class="singer descriptionSub">這裡放歌手</span>
+                <span id="Descriptiontwo" class="music descriptionSub">這裡放歌名</span><br />
+                <span id="singer" class="singer descriptionSub">這裡放歌手</span>
             </div>
 
             <!-- 基本按鍵div -->
@@ -526,7 +640,7 @@
             <!-- 進度條div -->
             <div id="progressPanel">
                 <span id="nowTime">00:00</span>
-                <input id="progress" type="range" min="0" max="100" step="0.01" value="0">
+                <input id="progress" class="demoSlider" type="range" min="0" max="100" step="0.01" value="0">
                 <span id="totalTime">00:00</span>
             </div>
 
@@ -554,6 +668,14 @@
         /////////////////
         ///主播放器相關///
         /////////////////
+
+        //新增
+        var m_soid;
+        var m_singer;
+        var m_song;
+        var m_songcover;
+        var playerAjaxExecu = false;
+        //****
 
         var player;//主播放器
         var playing;//是否正在播放中
@@ -765,7 +887,7 @@
                     $(this).css("display", "none");
                     $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
                 })
-            }) 
+            })
 
             //開啟進階搜尋版面、開啟曲風選擇版面
             $("#advancedBtn").click(function () {
@@ -852,7 +974,7 @@
             $("#adAlbum").autocomplete(
                 {
                     source: '@Url.Action("AutoCompleteAlbum", "Search")'
-                });    
+                });
 
             //讓左側選單被選擇時有點變化
             $(".menuItem").click(function () {
@@ -861,6 +983,23 @@
                 $(this).addClass("menuItemSelected");
                 $(this).children().css("color", "white");
             })
+
+            //登入登出
+            //     function admininterface() {
+        $("#admininterface").on("click", function () {
+       //     window.location.href = '../Admin/Index/';
+            window.location.href = '@Url.Action("Index","Admin")';
+        })
+        $("#logoutinterface").on("click", function () {
+          //  window.location.href = '../../test/Common/Loginout/';
+            window.location.href = '@Url.Action("Loginout","Common")';
+        })
+        $("#logininterface").on("click", function () {
+         //   window.location.href = '../../test/Common/Login/';
+                        window.location.href = '@Url.Action("Login","Common")';
+            })
+
+
         }
     </script>
 
