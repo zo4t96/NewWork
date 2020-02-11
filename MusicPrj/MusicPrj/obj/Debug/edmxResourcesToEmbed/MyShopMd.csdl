@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MyShopDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Album">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+    </Key>
+    <Property Name="AlbumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AlbumName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Cover" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Maker" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Account" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Year" Type="DateTime" Precision="0" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="Release" Type="Int32" />
+    <Property Name="ALPrice" Type="Int32" />
+    <Property Name="CoverPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Member" Relationship="Self.FK_Album_Member" FromRole="Album" ToRole="Member" />
+    <NavigationProperty Name="AlbumType" Relationship="Self.FK_Album_Type" FromRole="Album" ToRole="AlbumType" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_Products_Album" FromRole="Album" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="AlbumType">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Album" Relationship="Self.FK_Album_Type" FromRole="AlbumType" ToRole="Album" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="Account" />
+    </Key>
+    <Property Name="Account" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Privi" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Money" Type="Int32" Nullable="false" />
+    <Property Name="Age" Type="Int32" />
+    <NavigationProperty Name="Album" Relationship="Self.FK_Album_Member" FromRole="Member" ToRole="Album" />
+    <NavigationProperty Name="MyCart" Relationship="Self.FK_MyCart_Account" FromRole="Member" ToRole="MyCart" />
+  </EntityType>
+  <EntityType Name="MyCart">
+    <Key>
+      <PropertyRef Name="CartID" />
+    </Key>
+    <Property Name="CartID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Quanity" Type="Int32" Nullable="false" />
+    <Property Name="Account" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Member" Relationship="Self.FK_MyCart_Account" FromRole="MyCart" ToRole="Member" />
+  </EntityType>
+  <EntityType Name="ProductKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="Int32" Nullable="false" />
+    <Property Name="KindName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AlbumID" Type="Int32" Nullable="false" />
+    <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Artist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SIPrice" Type="Int32" />
+    <Property Name="Composer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Arranger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Lyricist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Kind" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Music" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Filepath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PlayStart" Type="Time" Precision="7" />
+    <Property Name="PlayEnd" Type="Time" Precision="7" />
+    <NavigationProperty Name="Album" Relationship="Self.FK_Products_Album" FromRole="Products" ToRole="Album" />
+  </EntityType>
+  <Association Name="FK_Album_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+    <End Role="Album" Type="Self.Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="Account" />
+      </Principal>
+      <Dependent Role="Album">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Album_Type">
+    <End Role="AlbumType" Type="Self.AlbumType" Multiplicity="0..1" />
+    <End Role="Album" Type="Self.Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AlbumType">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Album">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_Album">
+    <End Role="Album" Type="Self.Album" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Album">
+        <PropertyRef Name="AlbumID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="AlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MyCart_Account">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="MyCart" Type="Self.MyCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="Account" />
+      </Principal>
+      <Dependent Role="MyCart">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MyShopDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Album" EntityType="Self.Album" />
+    <EntitySet Name="AlbumType" EntityType="Self.AlbumType" />
+    <EntitySet Name="Member" EntityType="Self.Member" />
+    <EntitySet Name="MyCart" EntityType="Self.MyCart" />
+    <EntitySet Name="ProductKind" EntityType="Self.ProductKind" />
+    <EntitySet Name="Products" EntityType="Self.Products" />
+    <AssociationSet Name="FK_Album_Member" Association="Self.FK_Album_Member">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="Album" EntitySet="Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Album_Type" Association="Self.FK_Album_Type">
+      <End Role="AlbumType" EntitySet="AlbumType" />
+      <End Role="Album" EntitySet="Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_Album" Association="Self.FK_Products_Album">
+      <End Role="Album" EntitySet="Album" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MyCart_Account" Association="Self.FK_MyCart_Account">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="MyCart" EntitySet="MyCart" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

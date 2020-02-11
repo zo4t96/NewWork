@@ -1,0 +1,143 @@
+﻿@model IEnumerable<MusicPrj.tProduct>
+
+@{
+    ViewBag.Title = "Search";
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+}
+
+<h2>Search</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.fProductID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fAlbumID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fArtist)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fSIPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fComposer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fArranger)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fLyricist)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fKind)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fFilePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fPlayStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fPlayEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fPlays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fPlaye)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fDownloadCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fModifiedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fNation)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.fProductID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fAlbumID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fArtist)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fSIPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fComposer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fArranger)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fLyricist)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fKind)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fFilePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fPlayStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fPlayEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fPlays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fPlaye)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fDownloadCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fModifiedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fNation)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

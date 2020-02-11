@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MusicPrj.tMessage>
+@using MusicPrj.Models;
+
+@{
+    ViewBag.Title = "MessageBox";
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+}
+
+<h2>MessageBox</h2>
+
+<div class="list-group container py-3 px-3" >
+    @foreach (var item in Model)
+    {
+        <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">@Html.DisplayFor(modelItem => item.fTitle)</h5>
+                <small>@Html.DisplayFor(modelItem => item.fTime)</small>
+            </div>
+            <p class="mb-1">@Html.DisplayFor(modelItem => item.fContent)</p>
+            <small>@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
+        </a>
+    }
+</div>
+
+<script>
+
+
+
+</script>

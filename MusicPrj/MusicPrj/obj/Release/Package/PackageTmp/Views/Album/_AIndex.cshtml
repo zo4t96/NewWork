@@ -1,0 +1,77 @@
+﻿
+@model IEnumerable<MusicPrj.tAlbum>
+
+@{
+    int count = 0;
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<div style="padding-left:50px">
+    <h1 class="headtitle">所有專輯</h1>
+    <div id="AAlbumDetailtest">
+        <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+        <script type="text/javascript">
+                    function MyAjaxCall() {
+                        var resultConfirm = '';
+                        $.ajax({
+                            type: "post",
+                            url: "@Url.Action("AAlbumDetail", "Album")",
+                            //不用傳參數的話，放個大括弧就好
+                            data: "{}",
+                            //data: '{txtContent: "' + $("input[id*=txtTest]").val() + '" }',
+                            contentType: "application/html; charset=utf-8",
+                            dataType: "html",
+                            async: false,//由於最後需要使用ajax取得的result的數值，必須設定為false(才會變成sync同步執行）
+                            cache: false, //防止ie8一直取到舊資料的話，請設定為false
+                            success: function (result) {
+                                //平常是取得result.d才對，但是這邊要取result
+                                resultConfirm = result;
+                            },
+                            failure: function (response) {
+                                //callback function result(on failure)
+                                alert(response.d);
+                            }
+                        });
+
+                        $("#AAlbumDetailtest").html(resultConfirm);
+                    }
+        </script>
+        <input type='button' id='AjaxCallTop1Btn' value='AjaxCallTop1Btn' onclick='MyAjaxCall();' />
+
+        <table>
+
+            <tr>
+                @*此處<tr>為自動依瀏覽器大小換欄*@
+                @foreach (var item in Model)
+                {
+                    count++;
+                    if (count % 7 == 1)
+                    {
+                        //      @:<tr>
+                    }
+                    <td class="productitem">
+                        <a href="~/Album/AlbumDetail?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" class="productitemhy">
+                            <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
+                                <table>
+                                    <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                    <tr>
+                                        <td>
+                                            <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
+                                </table>
+                            </fieldset>
+
+                        </a>
+                    </td>
+                    if (count % 7 == 0)
+                    {
+                        //     @:</tr>
+                    }
+                }
+            </tr>
+        </table>
+    </div>
+</div>

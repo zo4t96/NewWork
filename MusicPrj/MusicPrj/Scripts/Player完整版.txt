@@ -1,0 +1,331 @@
+        //撥放器開始
+        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+        var demoStart;
+        var demoEnd;
+        //新增
+        var m_soid;
+        var m_singer;
+        var m_song;
+        //****
+        var oplaying = false;
+        var dplaying = false;
+        var fileName;
+
+        $(".opause").css("display", "none");
+        $(".dpause").css("display", "none");
+        var music = $(".originalAudio")[0];
+        music.volume = 0.6;
+        var demoMusic = $(".demoAudio")[0];
+        demoMusic.volume = 0.6;
+
+        //讀取檔案，一次只能讀取一個
+        //$("#upload").on("change", function () {
+        //    let file = document.getElementById("upload").files[0];
+        //    if (file.type != "audio/mp3") {
+        //        file = null;
+        //    }
+
+        //    let reader = new FileReader();
+        //    reader.readAsDataURL(file);
+        //    reader.onload = function (e) {
+        //        music.src = e.target.result;
+        //        demoMusic.src = e.target.result;
+        //    }
+        //});
+
+        //讀取音樂時會進行初始化
+        $(".demoAudio").on("durationchange", function () { //originalAudio換成demoAudio
+            //   let totalTime = parseInt(music.duration);
+            let totalTime = demoEnd - demoStart; //為與新player變數一致將demoTotal換成totalTime
+            //$(".originalSlider").prop("max", totalTime);
+            //       $(".demoSlider").prop("max",totalTime);
+            $(".demoSlider").prop("max", totalTime);
+            //$(".totalTime").text(getTimeText(totalTime));
+            //         $(".totalDemo").text(getTimeText(totalTime));
+            // $(".totalDemo").text(getTimeText(totalTime));//網頁已預設載入,不再刷新
+
+            //*新撥放器加入
+            //$("#progress").prop("max", totalTime); //與function setEnd()作相同事情故移除
+            //let m1 = parseInt(totalTime / 600);
+            //let m2 = parseInt(totalTime / 60);
+            //let s1 = parseInt(totalTime % 60 / 10);
+            //let s2 = parseInt(totalTime % 60 % 10);
+            //$("#totalTime").text(`${m1}${m2}:${s1}${s2}`);
+
+            //同時初始化滑動條
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: `${music.duration}`,
+                step: 0.01,
+                values: [0, music.duration],
+                slide: function () {
+                    demoStart = $("#slider-range").slider("values", 0)
+                    setStart();
+                    demoEnd = $("#slider-range").slider("values", 1)
+                    setEnd();
+                }
+            });
+            $(".start").val(demoStart);
+            $(".end").val(demoEnd);
+            setStart();
+            setEnd();
+        });
+
+        //播放器的timer
+        $(".originalAudio").on("timeupdate", function () {
+            $(".originalSlider").prop("value", music.currentTime);
+            let now = parseInt(music.currentTime);
+            $(".nowTime").text(getTimeText(now));
+        });
+        $(".demoAudio").on("timeupdate", function () {
+
+            //新撥放器新增開始
+            //$("#progress").prop("value", demoAudio.currentTime);
+            let now = parseInt(demoMusic.currentTime);//player-->demoaudio修改
+            let m1 = parseInt(now / 600);
+            let m2 = parseInt(now / 60);
+            let s1 = parseInt(now % 60 / 10);
+            let s2 = parseInt(now % 60 % 10);
+            $("#nowTime").text(`${m1}${m2}:${s1}${s2}`);
+            //進度條的變化
+            let persent = now / totalTime * 100;
+            let p = parseInt($("#progress").css("width")) / 100;
+            let f = persent * p;
+            console.log(f);
+            $("#progress").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${f}px,#fff 0px)` });
+            //新撥放器新增結束
+
+            $(".demoSlider").prop("value", demoMusic.currentTime);
+            // let now = parseInt(demoMusic.currentTime);//變數名稱與上面新撥放器now相衝
+            //  $(".nowDemo").text(getTimeText(now));//現在播放時間移除
+            if (demoMusic.currentTime > $(".demoSlider").attr("max")) {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+                demoMusic.currentTime = demoStart;
+            }
+            //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
+            if (demoMusic.currentTime < demoStart + 3) {
+                demoMusic.volume = (demoMusic.currentTime - demoStart) * 0.2;
+            }
+            //試聽淡出效果
+            else if (demoMusic.currentTime + 4 > demoEnd) {
+                demoMusic.volume = (demoEnd - demoMusic.currentTime) * 0.1;
+            }
+            else {
+                demoMusic.volume = 0.6;
+            }
+        });
+
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            //if ($(this).prop("className") == "vbtn oplay") {
+            //    music.play();
+            //    demoMusic.pause();
+            //    oplaying = true;
+            //    dplaying = false;
+            //    $(".oplay").css("display", "none");
+            //    $(".opause").css("display", "inline")
+            //    $(".dplay").css("display", "inline")
+            //    $(".dpause").css("display", "none")
+            //}
+            if ($(this).prop("class") == "vbtn dplay") {
+                //載入音樂參數
+                music.src = $(this).data('playurl');
+                demoMusic.src = $(this).data('playurl');
+                demoStart = $(this).data('start');
+                demoEnd = $(this).data('end');
+                m_soid = $(this).data('soid');
+                m_singer = $(this).data('singer');
+                m_song = $(this).data('songn');
+                $("#Descriptiontwo").text(m_song);
+                $("#singer").text(m_singer);
+                //載入音樂連結
+                demoMusic.play();
+                //    music.pause();
+
+                dplaying = true;
+                //oplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dpause").css("display", "inline");
+                $("#play").css("display", "none");
+                $("#pause").css("display", "inline-block")
+            }
+            //else if ($(this).prop("class") == "vbtn opause") {
+            //    music.pause();
+            //    oplaying = false;
+            //    $(".oplay").css("display", "inline");
+            //    $(".opause").css("display", "none")
+            //}
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dplay").css("display", "inline");
+                $("#play").css("display", "inline-block");
+                $("#pause").css("display", "none")
+            }
+        })
+
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        $(".originalSlider").on('input', function () {
+            music.pause();
+            $(this).trigger("change");
+        })
+        $(".demoSlider").on('input', function () {
+            demoMusic.pause();
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $(".originalSlider").on("change", function () {
+            music.currentTime = this.value;
+        });
+        $(".demoSlider").on("change", function () {
+            demoMusic.currentTime = this.value;
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $(".originalSlider").on("mouseup", function () {
+            if (oplaying)
+                music.play();
+        });
+        $(".demoSlider").on("mouseup", function () {
+            if (dplaying)
+                demoMusic.play();
+        });
+
+        //製作試聽用
+        //按鍵設置試聽開頭與結尾
+        $(".setStart").on("click", function () {
+            demoStart = music.currentTime;
+            setStart();
+        });
+        $(".setEnd").on("click", function () {
+            demoEnd = music.currentTime;
+            setEnd();
+        });
+
+        //取得音樂時間文字的方法(第二個有給到小數後兩位)
+        function getTimeText(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = parseInt(num % 60 % 10);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+        function getTimeText2(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = (num % 60 % 10).toFixed(2);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+
+        //設定範圍初始值與結尾值的方法
+        function setStart() {
+            $(".start").val(demoStart);
+            if (demoStart > demoMusic.currentTime) {
+                demoMusic.currentTime = demoStart;
+                $(".demoSlider").attr("value", `${demoStart}`);
+                /*$("#progress").attr("value", `${demoStart}`);*/ //新加入新撥放器控制,已用.demoSlider去控制不重複加
+            }
+            $(".demoSlider").attr("min", `${demoStart}`);
+            /*  $("#progress").attr("min", `${demoStart}`);*/ //新加入新撥放器控制,已用.demoSlider去控制不重複加
+
+        }
+        function setEnd() {
+            $(".end").val(demoEnd);
+            /* $(".totalDemo").text(getTimeText(demoEnd));*///網頁已預設載入,不再刷新
+            $("#totalTime").text(getTimeText(demoEnd));
+            if (demoEnd < demoMusic.currentTime) {
+                demoMusic.currentTime = demoEnd;
+                $(".demoSlider").attr("value", `${demoEnd}`);
+                /*  $("#progress").attr("value", `${demoEnd}`);*///新加入新撥放器控制,已用.demoSlider去控制不重複加
+            }
+            $(".demoSlider").attr("max", `${demoEnd}`);
+            /*   $("#progress").attr("max", `${demoEnd}`);*///新加入新撥放器控制,已用.demoSlider去控制不重複加
+        }
+        //撥放器結束
+
+        //新撥放器開始
+        var playing = false;
+        var nowVolume = demoMusic.volume; //player-->demoaudio修改
+        $("#pause").css("display", "none");
+        $("#muteImg").css("display", "none");
+        $("#volumeBar").css({ "background-image": "-webkit-linear-gradient(left , #5599FF 0%,#fff 0px)" });
+        $("#play").click(function () {
+            demoMusic.play();//player-->demoaudio修改
+            playing = true;
+            $("#play").css("display", "none");
+            $("#pause").css("display", "inline-block")
+        })
+        //音樂暫停鍵
+        $("#pause").click(function () {
+            demoMusic.pause();//player-->demoaudio修改
+            playing = false;
+            $("#play").css("display", "inline-block");
+            $("#pause").css("display", "none")
+        })
+
+        //調整音量時能立即更動而不用放開滑鼠
+        $("#volumeBar").on('input', function () {
+            $(this).trigger("change");
+        })
+        //音量調節鍵
+        $("#volumeBar").change(function () {
+            demoMusic.volume = this.value;
+            let v = this.value * 100;
+            $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${v}%,#fff 0px)` });
+            if (demoMusic.volume == 0) {
+                $("#volumeImg").css("display", "none");
+                $("#muteImg").css("display", "inline-block");
+            }
+            else {
+                $("#volumeImg").css("display", "inline-block");
+                $("#muteImg").css("display", "none");
+            }
+        });
+
+        //靜音鍵
+        $(".sound").click(function () {
+            let data = $(this).data("sound");
+            switch (data) {
+                case "volumeImg":
+                    nowVolume = demoMusic.volume;
+                    demoMusic.volume = 0;
+                    $("#volumeBar").prop("value", 0);
+                    $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${0}%,#fff 0px)` });
+                    $("#volumeImg").css("display", "none");
+                    $("#muteImg").css("display", "inline-block");
+                    break;
+
+                case "muteImg":
+                    demoMusic.volume = nowVolume;
+                    $("#volumeBar").prop("value", nowVolume);
+                    $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${nowVolume * 100}%,#fff 0px)` });
+                    $("#volumeImg").css("display", "inline-block");
+                    $("#muteImg").css("display", "none");
+                    break;
+            }
+        });
+
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        $("#progress").on('input', function () {
+            demoMusic.pause();//player-->demoaudio修改
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $("#progress").change(function () {
+            demoMusic.currentTime = this.value;//player-->demoaudio修改
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $("#progress").mouseup(function () {
+            if (playing)
+                demoMusic.play();//player-->demoaudio修改
+        });

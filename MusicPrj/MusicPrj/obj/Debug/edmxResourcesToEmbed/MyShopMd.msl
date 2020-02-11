@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MyShopDBModelStoreContainer" CdmEntityContainer="MyShopDBEntities">
+    <EntitySetMapping Name="Album">
+      <EntityTypeMapping TypeName="MyShopDBModel.Album">
+        <MappingFragment StoreEntitySet="Album">
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+          <ScalarProperty Name="Cover" ColumnName="Cover" />
+          <ScalarProperty Name="Maker" ColumnName="Maker" />
+          <ScalarProperty Name="Account" ColumnName="Account" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Release" ColumnName="Release" />
+          <ScalarProperty Name="ALPrice" ColumnName="ALPrice" />
+          <ScalarProperty Name="CoverPath" ColumnName="CoverPath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AlbumType">
+      <EntityTypeMapping TypeName="MyShopDBModel.AlbumType">
+        <MappingFragment StoreEntitySet="AlbumType">
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Member">
+      <EntityTypeMapping TypeName="MyShopDBModel.Member">
+        <MappingFragment StoreEntitySet="Member">
+          <ScalarProperty Name="Account" ColumnName="Account" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Privi" ColumnName="Privi" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Money" ColumnName="Money" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MyCart">
+      <EntityTypeMapping TypeName="MyShopDBModel.MyCart">
+        <MappingFragment StoreEntitySet="MyCart">
+          <ScalarProperty Name="CartID" ColumnName="CartID" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="Quanity" ColumnName="Quanity" />
+          <ScalarProperty Name="Account" ColumnName="Account" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductKind">
+      <EntityTypeMapping TypeName="MyShopDBModel.ProductKind">
+        <MappingFragment StoreEntitySet="ProductKind">
+          <ScalarProperty Name="KindID" ColumnName="KindID" />
+          <ScalarProperty Name="KindName" ColumnName="KindName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="MyShopDBModel.Products">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+          <ScalarProperty Name="Artist" ColumnName="Artist" />
+          <ScalarProperty Name="SIPrice" ColumnName="SIPrice" />
+          <ScalarProperty Name="Composer" ColumnName="Composer" />
+          <ScalarProperty Name="Arranger" ColumnName="Arranger" />
+          <ScalarProperty Name="Lyricist" ColumnName="Lyricist" />
+          <ScalarProperty Name="Kind" ColumnName="Kind" />
+          <ScalarProperty Name="Music" ColumnName="Music" />
+          <ScalarProperty Name="Filepath" ColumnName="Filepath" />
+          <ScalarProperty Name="PlayStart" ColumnName="PlayStart" />
+          <ScalarProperty Name="PlayEnd" ColumnName="PlayEnd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

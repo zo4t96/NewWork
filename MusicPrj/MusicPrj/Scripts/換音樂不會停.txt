@@ -1,0 +1,66 @@
+############################index:
+                <div class="AAlbumDetailtest">
+                    @*<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>*@
+                    <script type="text/javascript">
+                    function MyAjaxCall() {
+                        var resultConfirm = '';
+                        $.ajax({
+                            type: "post",
+                            url: "@Url.Action("AAlbumDetail", "Album",new { amid=6})",
+                            //不用傳參數的話，放個大括弧就好
+                            data: "{}",
+                            //data: '{txtContent: "' + $("input[id*=txtTest]").val() + '" }',
+                           // data: '{amid: 6}',
+                            contentType: "application/html; charset=utf-8",
+                            dataType: "html",
+                            async: false,//由於最後需要使用ajax取得的result的數值，必須設定為false(才會變成sync同步執行）
+                            cache: false, //防止ie8一直取到舊資料的話，請設定為false
+                            success: function (result) {
+                                //平常是取得result.d才對，但是這邊要取result
+                                resultConfirm = result;
+                            },
+                            failure: function (response) {
+                                //callback function result(on failure)
+                                alert(response.d);
+                            }
+                        });
+
+                        $(".AAlbumDetailtest").html(resultConfirm);
+                    }
+                    </script>
+                    <input type='button' id='AjaxCallTop1Btn' value='換頁音樂不會停' onclick='MyAjaxCall();' />
+            </div>
+
+############################AlbumDetail:
+
+    <div id="AAlbumDetailtest">
+            @*<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>*@
+            <script type="text/javascript">
+                    function MyAjaxCall() {
+                        var resultConfirm = '';
+                        $.ajax({
+                            type: "post",
+                            url: "@Url.Action("AIndex", "Album")",
+                            //不用傳參數的話，放個大括弧就好
+                            data: "{}",
+                            //data: '{txtContent: "' + $("input[id*=txtTest]").val() + '" }',
+                            contentType: "application/html; charset=utf-8",
+                            dataType: "html",
+                            async: false,//由於最後需要使用ajax取得的result的數值，必須設定為false(才會變成sync同步執行）
+                            cache: false, //防止ie8一直取到舊資料的話，請設定為false
+                            success: function (result) {
+                                //平常是取得result.d才對，但是這邊要取result
+                                resultConfirm = result;
+                            },
+                            failure: function (response) {
+                                //callback function result(on failure)
+                                alert(response.d);
+                            }
+                        });
+
+                        $("#AAlbumDetailtest").html(resultConfirm);
+                    }
+            </script>
+            <input type='button' id='AjaxCallTop1Btn' value='換頁音樂不會停' onclick='MyAjaxCall();' />
+
+    </div>

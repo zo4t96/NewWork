@@ -1,0 +1,65 @@
+﻿@using MusicPrj.ViewModel;
+@using MusicPrj.Models;
+
+@{
+    ViewBag.Title = "Login";
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    //if (Session[CDictionary.SK_ACCOUNT] != null || Session[CDictionary.SK_ACCOUNT].ToString()!="")
+    //{
+    //    Response.Redirect("~/Album/Index/");
+    //}
+    CLoginViewModel clv = new CLoginViewModel();
+}
+
+<style>
+
+    .box {
+        margin: 0 auto;
+        max-width: 450px;
+        text-align: center;
+    }
+
+    .form-input-password {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .form-loingherf {
+        margin-left: 50%;
+        border: 2px solid #1db954;
+        background: #1db954;
+        border-radius: 15px;
+    }
+
+    .form-a {
+        color: white;
+        text-align: center;
+    }
+</style>
+
+<div class="box">
+    @*<form action="~/" method="post">*@
+    @using (Html.BeginForm("Login", "Common", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken();
+        <h1>SIT125Music</h1>
+        <div class="col-xs-12">
+            <input type="text" name="emailoraccount" placeholder="用戶名稱" class="form-control " value="">
+        </div>
+        <div class="form-input-password">
+            <input type="password" name="password" placeholder="密碼" class="form-control " value="">
+        </div>
+        <div class="form-loingherf ">
+            <a href="#" class="form-a">登入</a>
+        </div>
+        <input type="submit" value="送出" />
+    }
+    @*</form>*@
+</div>

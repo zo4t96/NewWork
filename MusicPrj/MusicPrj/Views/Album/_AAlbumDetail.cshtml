@@ -1,0 +1,121 @@
+﻿@model IEnumerable<MusicPrj.tProduct>
+@using MusicPrj.Models;
+
+@{
+        if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    ViewBag.Title = "AlbumDetail2";
+    var AlbInfo = ViewBag.AlbInfo;
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+//    tProduct tP = new tProduct();
+    int demotimeStart = 0, demotimeEnd = 0;
+    string demotimestring = "", demotimestringstart = "";
+}
+
+
+    <div class="albumset">
+        <img src="~/CoverFiles/@AlbInfo.fCoverPath" width="320" height="320" /><br />
+        <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
+        <h3 class="albumtext">@AlbInfo.fMaker </h3>
+        <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+    </div>
+    <div style="display: inline-block;vertical-align:top;">
+        @foreach (var item in Model)
+        {
+            demotimeEnd = (int)item.fPlayEnd;
+            demotimeStart = (int)item.fPlayStart;
+            demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
+            demotimestring = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
+
+            <div class="container">
+                <div class="py-2 demoPanel">
+
+                    <div class="vbtn dplay" data-singer="@Html.DisplayFor(modelItem => item.fComposer)" data-songn="@Html.DisplayFor(modelItem => item.fProductName)" data-soid="@item.fProductID" data-start="@Html.DisplayFor(modelItem => item.fPlayStart)" data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)" data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"><img src="~/Content/play.png"></div>
+                    <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                    <span>@Html.DisplayFor(modelItem => item.fProductName)</span>
+                    @*<input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">*@
+                    @*<span class="nowDemo">@demotimestringstart</span>
+                        <span> / </span>*@
+                    <span class="totalDemo">@(demotimestring)</span>
+
+                </div>
+                <hr>
+            </div>
+
+        }
+
+    </div>
+
+
+    <script>
+        $(".dplay").css("display", "inline");
+        $(".dpause").css("display", "none");
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            //if ($(this).prop("className") == "vbtn oplay") {
+            //    music.play();
+            //    demoMusic.pause();
+            //    oplaying = true;
+            //    dplaying = false;
+            //    $(".oplay").css("display", "none");
+            //    $(".opause").css("display", "inline")
+            //    $(".dplay").css("display", "inline")
+            //    $(".dpause").css("display", "none")
+            //}
+            if ($(this).prop("class") == "vbtn dplay") {
+                //載入音樂參數
+                music.src = $(this).data('playurl');
+                demoMusic.src = $(this).data('playurl');
+                demoStart = $(this).data('start');
+                demoEnd = $(this).data('end');
+                m_soid = $(this).data('soid');
+                m_singer = $(this).data('singer');
+                m_song = $(this).data('songn');
+                $("#Descriptiontwo").text(m_song);
+                $("#singer").text(m_singer);
+                //載入音樂連結
+                demoMusic.play();
+                //    music.pause();
+
+                dplaying = true;
+                //oplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dpause").css("display", "inline");
+                $("#play").css("display", "none");
+                $("#pause").css("display", "inline-block")
+            }
+            //else if ($(this).prop("class") == "vbtn opause") {
+            //    music.pause();
+            //    oplaying = false;
+            //    $(".oplay").css("display", "inline");
+            //    $(".opause").css("display", "none")
+            //}
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dplay").css("display", "inline");
+                $("#play").css("display", "inline-block");
+                $("#pause").css("display", "none")
+            }
+        })
+    </script>

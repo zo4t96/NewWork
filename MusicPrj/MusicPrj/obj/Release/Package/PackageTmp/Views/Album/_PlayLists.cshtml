@@ -1,0 +1,200 @@
+﻿@model IEnumerable<MusicPrj.tProduct>
+@using MusicPrj.Models;
+
+@{
+    ViewBag.Title = "PlayLists";
+    var account = "";
+    account = Session[CDictionary.SK_ACCOUNT].ToString();
+    int demotimeStart = 0, demotimeEnd = 0;
+    string demotimestring = "", demotimestringstart = "";
+}
+
+<style>
+    .PLtitle {
+        color: white;
+    }
+</style>
+
+@{
+    demotimeEnd = (int)Model.First().fPlayEnd;
+    demotimeStart = (int)Model.First().fPlayStart;
+    demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
+    demotimestring = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
+    int FirstAlbumId = (int)Model.First().fAlbumID;
+    tAlbum tA = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == FirstAlbumId);
+    FirstAlbumId = 0;
+}
+
+<div class="container py-3 px-3 PLtitle">
+    <div class="py-2">
+        <h2>撥放佇列</h2>
+        <div class="container">
+            <div class="py-2">
+                <h3>現在撥放</h3>
+                <div style="display:inline-block" class="vbtn dplay" data-singer="@Model.First().fComposer"
+                     data-songn="@Model.First().fProductName"
+                     data-soid="@Model.First().fProductID"
+                     data-start="@Model.First().fPlayStart"
+                     data-end="@Model.First().fPlayEnd"
+                     data-songcover="@tA.fCoverPath"
+                     data-playurl="@(Url.Content("~/MusicFiles/") + Model.First().fFilePath)">
+                    <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#FFFFFF" d="M78.158 51.843L25.842 82.048c-1.418.819-3.191-.205-3.191-1.843v-60.41c0-1.638 1.773-2.661 3.191-1.843l52.317 30.205c1.418.819 1.418 2.867-.001 3.686z"></path>
+                    </svg>
+                </div>
+                <div class="vbtn dpause">
+                    <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#FFFFFF" d="M43.12 79.844H27.379a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H43.12c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
+                        <path fill="#FFFFFF" d="M72.62 79.844H56.879a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H72.62c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
+                    </svg>
+                </div>
+
+
+                <h3 style="display:inline-block" class="fold-title">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="foldText">@Model.First().fProductName</span>
+                    <span class="nowDemo foldText">@demotimestringstart</span>
+                    <span class="foldText"> － </span>
+                    <span class="totalDemo foldText">@(demotimestring)</span>
+                </h3>
+                <div class="fold" style="margin-left:23px">
+                    <div class="fold-container">
+                        @*<input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">*@
+                        <span style="color:white">@Model.First().fComposer)</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <h3>接下來</h3>
+        @foreach (var item in Model)
+        {
+            FirstAlbumId++;
+            if (FirstAlbumId == 1)
+            { continue; }
+
+
+            tA = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == item.fAlbumID);
+            demotimeEnd = (int)item.fPlayEnd;
+            demotimeStart = (int)item.fPlayStart;
+            demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
+            demotimestring = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
+
+            <div class="container">
+                <div class="py-2">
+                    <div style="display:inline-block" class="vbtn dplay" data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
+                         data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
+                         data-soid="@item.fProductID"
+                         data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
+                         data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
+                         data-songcover="@tA.fCoverPath"
+                         data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
+                        <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#FFFFFF" d="M78.158 51.843L25.842 82.048c-1.418.819-3.191-.205-3.191-1.843v-60.41c0-1.638 1.773-2.661 3.191-1.843l52.317 30.205c1.418.819 1.418 2.867-.001 3.686z"></path>
+                        </svg>
+                    </div>
+                    <div class="vbtn dpause">
+                        <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#FFFFFF" d="M43.12 79.844H27.379a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H43.12c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
+                            <path fill="#FFFFFF" d="M72.62 79.844H56.879a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H72.62c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
+                        </svg>
+                    </div>
+                    <h3 style="display:inline-block" class="fold-title">
+                        <i class="fa fa-chevron-right"></i>
+                        <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
+                        <span class="nowDemo foldText">@demotimestringstart</span>
+                        <span class="foldText"> － </span>
+                        <span class="totalDemo foldText">@(demotimestring)</span>
+                    </h3>
+                    <div class="fold" style="margin-left:23px">
+                        <div class="fold-container">
+                            @*<input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">*@
+                            <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <hr>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+<script>
+        $(".dplay").css("display", "inline");
+        $(".dpause").css("display", "none");
+        $(".foldText").css("color", "black");
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            //if ($(this).prop("className") == "vbtn oplay") {
+            //    music.play();
+            //    demoMusic.pause();
+            //    oplaying = true;
+            //    dplaying = false;
+            //    $(".oplay").css("display", "none");
+            //    $(".opause").css("display", "inline")
+            //    $(".dplay").css("display", "inline")
+            //    $(".dpause").css("display", "none")
+            //}
+            if ($(this).prop("class") == "vbtn dplay") {
+                //載入音樂參數
+                music.src = $(this).data('playurl');
+                demoMusic.src = $(this).data('playurl');
+                demoStart = $(this).data('start');
+                demoEnd = $(this).data('end');
+                m_songcover = "/test/CoverFiles/" + $(this).data('songcover');
+
+                m_singer = $(this).data('singer');
+                m_song = $(this).data('songn');
+                $("#Descriptiontwo").text(m_song);
+                $("#singer").text(m_singer);
+                $("#playercover").attr("src", m_songcover);
+                //載入音樂連結
+                demoMusic.play();
+                //music.pause();
+                dplaying = true;
+                 m_soid = $(this).data('soid');
+                //oplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dpause").css("display", "inline");
+                $("#play").css("display", "none");
+                $("#pause").css("display", "inline-block")
+            }
+            //else if ($(this).prop("class") == "vbtn opause") {
+            //    music.pause();
+            //    oplaying = false;
+            //    $(".oplay").css("display", "inline");
+            //    $(".opause").css("display", "none")
+            //}
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                $(this).css("display", "none");
+                $(this).next(".dplay").css("display", "inline");
+                $("#play").css("display", "inline-block");
+                $("#pause").css("display", "none")
+            }
+        })
+        $(function () {
+            $('h3').click(function () {
+                if ($(this).next('.fold').hasClass('o') == true) {
+                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $(this).next('.fold').removeClass('o').slideUp();
+                }
+                else {
+                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                    $(this).next('.fold').addClass('o').slideDown();
+                }
+            });
+        });
+
+</script>

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MyShopDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Album">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+    </Key>
+    <Property Name="AlbumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AlbumName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Cover" Type="image" />
+    <Property Name="Maker" Type="nvarchar" MaxLength="50" />
+    <Property Name="Account" Type="nvarchar" MaxLength="50" />
+    <Property Name="Year" Type="date" />
+    <Property Name="Type" Type="int" />
+    <Property Name="Release" Type="int" />
+    <Property Name="ALPrice" Type="int" />
+    <Property Name="CoverPath" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="AlbumType">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="Account" />
+    </Key>
+    <Property Name="Account" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+    <Property Name="Privi" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Money" Type="int" Nullable="false" />
+    <Property Name="Age" Type="int" />
+  </EntityType>
+  <EntityType Name="MyCart">
+    <Key>
+      <PropertyRef Name="CartID" />
+    </Key>
+    <Property Name="CartID" Type="int" Nullable="false" />
+    <Property Name="ProductID" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Quanity" Type="int" Nullable="false" />
+    <Property Name="Account" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="int" Nullable="false" />
+    <Property Name="KindName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AlbumID" Type="int" Nullable="false" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Artist" Type="nvarchar" MaxLength="50" />
+    <Property Name="SIPrice" Type="int" />
+    <Property Name="Composer" Type="nvarchar" MaxLength="50" />
+    <Property Name="Arranger" Type="nvarchar" MaxLength="50" />
+    <Property Name="Lyricist" Type="nvarchar" MaxLength="50" />
+    <Property Name="Kind" Type="nvarchar(max)" />
+    <Property Name="Music" Type="varbinary(max)" />
+    <Property Name="Filepath" Type="nvarchar(max)" />
+    <Property Name="PlayStart" Type="time" Precision="7" />
+    <Property Name="PlayEnd" Type="time" Precision="7" />
+  </EntityType>
+  <Association Name="FK_Album_Member">
+    <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+    <End Role="Album" Type="Self.Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="Account" />
+      </Principal>
+      <Dependent Role="Album">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Album_Type">
+    <End Role="AlbumType" Type="Self.AlbumType" Multiplicity="0..1" />
+    <End Role="Album" Type="Self.Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AlbumType">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Album">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MyCart_Account">
+    <End Role="Member" Type="Self.Member" Multiplicity="1" />
+    <End Role="MyCart" Type="Self.MyCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="Account" />
+      </Principal>
+      <Dependent Role="MyCart">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_Album">
+    <End Role="Album" Type="Self.Album" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Album">
+        <PropertyRef Name="AlbumID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="AlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MyShopDBModelStoreContainer">
+    <EntitySet Name="Album" EntityType="Self.Album" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AlbumType" EntityType="Self.AlbumType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MyCart" EntityType="Self.MyCart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductKind" EntityType="Self.ProductKind" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Album_Member" Association="Self.FK_Album_Member">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="Album" EntitySet="Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Album_Type" Association="Self.FK_Album_Type">
+      <End Role="AlbumType" EntitySet="AlbumType" />
+      <End Role="Album" EntitySet="Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MyCart_Account" Association="Self.FK_MyCart_Account">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="MyCart" EntitySet="MyCart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_Album" Association="Self.FK_Products_Album">
+      <End Role="Album" EntitySet="Album" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MusicPrj.tAlbum>
+@using MusicPrj.Models;
+
+@{
+    int count = 0;
+    ViewBag.Title = "Index";
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+
+
+}
+
+
+        <div style="padding-left:50px">
+            <h1 class="headtitle">所有專輯</h1>
+            <table>
+                <tr>
+                    @*此處<tr>為自動依瀏覽器大小換欄*@
+                    @foreach (var item in Model)
+                    {
+                        count++;
+                        if (count % 7 == 1)
+                        {
+                            //      @:<tr>
+                        }
+                        <td class="productitem">
+
+                            <div class="productitemhy" data-singid="@Html.DisplayFor(modelItem => item.fAlbumID)">
+                                <fieldset style="height:300px;border-radius:10px;padding:5px;">
+                                <table>
+                                    <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                    <tr>
+                                        <td>
+                                            <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
+                                </table>
+                                </fieldset>
+
+                            </div>
+                        </td>
+                        if (count % 7 == 0)
+                        {
+                            //     @:</tr>
+                        }
+                    }
+                </tr>
+            </table>
+        </div>
+
+        <script>
+
+                    $(".productitemhy").on("click", function () {
+         //               console.log($(this).data('singid'));
+    //        let where = @Url.Content("/AlbumDetail");
+                //        let link = "/test/Album/AlbumDetail?amid=" + $(this).data('singid');
+                        let link = "@Url.Action("AlbumDetail","Album")?amid=" + $(this).data('singid');
+        //    href = "~/Album/test?amid=" + link;
+                            var $this = $(this),
+                                  url = link,
+                                title = $this.text(),
+                                ajax = true;
+                      history.pushState({
+	                      url:  url,
+                        title: title,
+                          ajax:true
+                      }, title,  url);
+                          document.title = title;
+               $.post(link, {ajax:true}, function (data) {
+                $(".mainbox").html(data);
+            })
+        })
+        </script>

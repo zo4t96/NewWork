@@ -1,0 +1,8 @@
+
+@{
+        Layout = null;
+    ViewBag.Title = "Index";
+  //  ViewBag.Title = "test";
+}
+
+<h2>我叫test</h2>
