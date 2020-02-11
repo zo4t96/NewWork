@@ -15,9 +15,9 @@
     }
 
     .albumBlock {
-        display:block;
-        width:15vw;
-        height:22vw;
+        display: block;
+        width: 15vw;
+        height: 22vw;
         min-width: 200px;
         min-height: 293px;
         text-align: center;
@@ -26,10 +26,19 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
+
+        transform: scale(0.8);
+        transition: 0.4s;
+        opacity: 0;
+    }
+
+    .animation {
+        transform: scale(1);
+        opacity: 1;
     }
 
         .albumBlock:hover {
-            background-color: #303030;
+            background-color: #353535;
             text-decoration:none;
         }
 
@@ -107,6 +116,9 @@
          }
     </div>
     <script>
+        setTimeout(function () {
+            $(".albumBlock").addClass("animation");
+        }, 100)
         $(".albumBlock").click(function (e) {
             //連結到商品頁面
             e.preventDefault();

@@ -27,6 +27,15 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
+
+        transform: scale(0.8);
+        transition: 0.4s;
+        opacity: 0;
+    }
+
+    .animation {
+        transform: scale(1);
+        opacity: 1;
     }
 
         .albumBlock:hover {
@@ -104,6 +113,9 @@
     }
 </div>
 <script>
+    setTimeout(function () {
+        $(".albumBlock").addClass("animation");
+    }, 100)
     $(".albumBlock").click(function (e) {
         //連結到商品頁面
         e.preventDefault();

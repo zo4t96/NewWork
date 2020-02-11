@@ -62,7 +62,11 @@
         background-size: cover;
         box-shadow: 0px 1px 1px 1px #0000004b;
         transform: rotate(25deg);
-        opacity: 0.8;
+        transition: 0.4s;
+        opacity: 0;
+    }
+    .fadein{
+        opacity:0.8;
     }
 </style>
 <title>BasicSerch</title>
@@ -79,7 +83,12 @@
             </a>
         }
     </div>
-    <script>//讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
+    <script>
+        setTimeout(function () {
+            $(".photo").addClass("fadein");
+        }, 100)
+
+        //讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
         var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
             , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
             , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
