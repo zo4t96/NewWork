@@ -278,7 +278,7 @@
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomepageController.cs" />
-    <Compile Include="Controllers\TwoPlayerController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\UploadTestController.cs" />
     <Compile Include="dbMusicStore.Context.cs">
       <AutoGen>True</AutoGen>
@@ -315,6 +315,7 @@
     </Compile>
     <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
+    <Compile Include="Models\CMusic.cs" />
     <Compile Include="Models\CSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tActivity.cs">
@@ -374,7 +375,7 @@
     <Content Include="Views\UploadTest\upload.cshtml" />
     <Content Include="Views\Homepage\homepage.cshtml" />
     <Content Include="Views\Homepage\Main.cshtml" />
-    <Content Include="Views\TwoPlayer\demoPlayer.cshtml" />
+    <Content Include="Views\Player\demoPlayer.cshtml" />
     <Content Include="Views\Search\Kinds.cshtml" />
     <Content Include="Views\Search\ResultView.cshtml" />
     <Content Include="Views\Search\AdvancedResultView.cshtml" />
@@ -415,6 +416,7 @@
     <Content Include="Views\Common\Loginout.cshtml" />
     <Content Include="Views\Message\MessageBox.cshtml" />
     <Content Include="Views\Shared\_Layout_admin.cshtml" />
+    <Content Include="Views\Player\LittlePlayer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

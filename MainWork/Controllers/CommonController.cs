@@ -44,5 +44,5 @@ namespace MusicPrj.Controllers
                 return Content("<span>你還沒登入喔<span>");
         }
 
-        }
+    }
 }

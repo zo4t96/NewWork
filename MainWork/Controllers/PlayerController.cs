@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace MainWork.Controllers
 {
-    public class TwoPlayerController : Controller
+    public class PlayerController : Controller
     {
         // GET: TwoPlayer
 
@@ -18,6 +18,13 @@ namespace MainWork.Controllers
                 ViewBag.ajax = true;
             }
             return View();
+        }
+
+        //商品內容頁的試聽曲專用小播放器
+        public ActionResult LittlePlayer(int musicId)
+        {
+            CMusic cm = new CMusic();
+            return PartialView(cm.getMusic(musicId));
         }
     }
 }
