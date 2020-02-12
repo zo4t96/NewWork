@@ -108,9 +108,11 @@
             transition: 0.4s;
         }
             /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+            /*透過jQuery改變css會導致此項失效(jQuery的語法會將改變的內容放在標籤內，優先層級較高)
+　　　　　　 /*一樣使用!important可以解決*/
             .menuItem:hover > span,
-            .menuItem:hover > .fa {
-                color: white;
+            .menuItem:hover > .fa{
+                color: white!important;
             }
 
         .menuItemSelected {
@@ -565,32 +567,24 @@
         <div class="sidebox">
             <ul>
                 <li>
-                    <a href="/Homepage/Main">
+                    <a href="@Url.Action("Main","Homepage")">
                         <div class="menuItem">
                             <i class="fa fa-home"></i>
                             <span>首頁</span>
                         </div>
                     </a>
                 </li>
-                <li class="side-li-serach-img">
-                    <a href="/Search/Kinds">
+                <li>
+                    <a href="@Url.Action("Kinds","Search")">
                         <div class="menuItem">
                             <i class="fa fa-search"></i>
                             <span>音樂分類</span>
                         </div>
                     </a>
                 </li>
-                <li class="side-li-mymusiclibiary-img">
-                    <a>
-                        <div class="menuItem">
-                            <i class="fa fa-music"></i>
-                            <span>你的音樂庫</span>
-                        </div>
-                    </a>
-                </li>
 
-                <li class="side-li-twoPlayer">
-                    <a href="/TwoPlayer/DemoPlayer">
+                <li>
+                    <a href="@Url.Action("DemoPlayer","TwoPlayer")">
                         <div class="menuItem">
                             <i class="fa fa-headphones"></i>
                             <span>雙重播放器測試</span>
@@ -598,11 +592,25 @@
                     </a>
                 </li>
 
-                @* 待調整 *@
                 @if (Session[CDictionary.SK_ACCOUNT] != null && !string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
                 {
-                    <li class="side-li-mymusiclibiary-img">@Html.ActionLink("你的音樂庫", "PlayLists", "Album", null, new { @class = "side-li-home-img" })</li>
-                    <li class="side-li-serach-img">@Html.ActionLink("我的發行", "MyAlbumList", "Album", new { account = Session[CDictionary.SK_ACCOUNT].ToString() }, new { @class = "side-li-home-img" })</li>
+                    <li>
+                        <a href="@Url.Action("MyAlbumList","Album")/?account=@Session[CDictionary.SK_ACCOUNT].ToString()">
+                            <div class="menuItem">
+                                <i class="fa fa-headphones"></i>
+                                <span>我的發行(測試用)</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("Album","PlayLists")">
+                            <div class="menuItem">
+                                <i class="fa fa-music"></i>
+                                <span>我的音樂庫</span>
+                            </div>
+                        </a>
+                    </li>
                 }
 
             </ul>
@@ -978,8 +986,8 @@
 
             //讓左側選單被選擇時有點變化
             $(".menuItem").click(function () {
-                $(this).parents("li").siblings().find(".menuItem").removeClass("menuItemSelected");
-                $(this).parents("li").siblings().find(".menuItem").children().css("color", "#656565");
+                $(this).parents("li").siblings().find(".menuItemSelected").children().css("color", "#656565");
+                $(this).parents("li").siblings().find(".menuItemSelected").removeClass("menuItemSelected");
                 $(this).addClass("menuItemSelected");
                 $(this).children().css("color", "white");
             })
