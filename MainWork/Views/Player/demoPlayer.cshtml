@@ -10,7 +10,7 @@
     .demoPanel {
         position: relative;
         width: 500px;
-        height: 30px;
+        height: 40px;
         background: #252525;
         margin: 10px;
         padding: 5px;
@@ -62,6 +62,9 @@
             height: 15px;
             filter: invert();
         }
+    .dpause{
+        display:none;
+    }
 
     .demoPanel span {
         display: inline-block;
@@ -78,7 +81,7 @@
     string demoEnd = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
 }
 
-<div class="demoPanel">@*@Model.fFilePath*@
+<div class="demoPanel">
     <audio class="demoAudio" src="~/@Model.fFilePath" data-playing="false"></audio>
     <span class="nowTime">@demoStart</span>
     <input type="range" class="demoSlider" min="@Model.fPlayStart" max="@Model.fPlayEnd" step="0.01" value="@Model.fPlayStart">
@@ -96,4 +99,4 @@
     </div>
     <div class="vbtn dpause"><img src="/PlayerImg/pause.png"></div>
 </div>
-@* 播放器的控制程碼在AlbumDetail.cshtml *@
+@* 播放器的相關程式碼放在AlbumDetail.cshtml *@

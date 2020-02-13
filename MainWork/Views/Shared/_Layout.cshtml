@@ -541,7 +541,7 @@
                 </li>
 
                 <li>
-                    <a href="@Url.Action("DemoPlayer","Player")">
+                    <a href="@Url.Action("TwoPlayer","Player")">
                         <div class="menuItem">
                             <i class="fa fa-headphones"></i>
                             <span>雙重播放器測試</span>
@@ -693,7 +693,10 @@
                 player.play();
                 playing = true;
                 $("#play").css("display", "none");
-                $("#pause").css("display", "inline-block")
+                $("#pause").css("display", "inline-block");
+
+                //若有其他播放器則全部暫停
+                $(".dpause").trigger("click");
             })
 
             //音樂暫停鍵

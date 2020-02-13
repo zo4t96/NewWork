@@ -51,7 +51,7 @@
         display: inline-block;
         vertical-align: top;
         /*width:70%;*/
-        min-width: 800px;
+        min-width: 700px;
     }
 
     .fold-title {
@@ -72,7 +72,7 @@
     }
 
     .fold-container {
-        padding: 10px 10px 10px 30px;
+        padding: 10px 10px 0px 30px;
         border: solid #f3f3f3 2px;
     }
     /*摺疊樣式結束*/
@@ -112,27 +112,33 @@
                     <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
                     @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
                 </div>
-
             </div>
         </div>
     }
 
 </div>
 <script>
-
-    $(".dpause").css("display", "none");
     $(".demoAudio").each(function () {
         this.volume = 0.6;
     })
 
+    //讀取音樂時會進行初始化
+        $(".demoAudio").on("durationchange", function () {
+            let demostart = $(this).siblings(".dplay").data("start");
+            let demoEnd = $(this).siblings(".dplay").data("end");
+            $(this).siblings(".demoSlider").prop("min", demostart);
+            $(this).siblings(".demoSlider").prop("max", demoEnd);
+            $(this).siblings(".demoSlider").prop("value", demostart);
+            this.currentTime =$(this).siblings(".demoSlider").prop("min");
+        });
+
     //播放器的timer
     $(".demoAudio").on("timeupdate", function () {
-        //$(".demoSlider").prop("value", demoMusic.currentTime);
-        $(this).prop("value", this.currentTime);
-        //let now = parseInt(demoMusic.currentTime);
+        $(this).siblings(".demoSlider").prop("value", this.currentTime);
         let now = parseInt(this.currentTime);
+        $(this).siblings(".nowTime").text(getTimeText(now));
 
-        $(this).siblings(".nowDemo").text(getTimeText(now));
+        //假如播完會暫停播放並回到開頭
         if (this.currentTime >= $(this).siblings(".demoSlider").attr("max")) {
             this.pause();
             $(this).data("playing", "false");
@@ -142,7 +148,7 @@
         }
 
         let start = $(this).siblings(".dplay").data("start");
-        let end = $(this).siblings("dplay").data("demoEnd");
+        let end = $(this).siblings(".dplay").data("end");
         //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
         if (this.currentTime < start + 3) {
             this.volume = (this.currentTime - start) * 0.2;
@@ -158,11 +164,14 @@
 
     //音樂播放暫停鍵
     $(".dplay").click(function () {
+        //按下播放鍵的同時其他正在放的音樂就會暫停
+        $(".dpause").trigger("click");
+        $("#pause").trigger("click");
+
         $(this).siblings(".demoAudio")[0].play();
         $(this).siblings(".demoAudio").data("playing", "true");
         $(this).css("display", "none");
         $(this).siblings(".dpause").css("display", "inline-block");
-        console.log($(this).siblings(".demoAudio")[0])
     })
     $(".dpause").click(function () {
         $(this).siblings(".demoAudio")[0].pause();
@@ -173,18 +182,18 @@
 
     //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
     //測試時直接讀取本頁會造成進度條出現bug，從別頁進來則不會，推測是jquery重複讀取的關係，暫無解(但一般使用者也不會直接進入這頁)
-    $(".demoSlider").on('input', function () {
-        $(this).siblings(".demoMusic")[0].pause();
+    $(".demoSlider").on("input",function () {
+        $(this).siblings(".demoAudio")[0].pause();
         $(this).trigger("change");
     })
     //音樂進度條改變
-    $(".demoSlider").on("change", function () {
-        $(this).siblings(".demoMusic").currentTime = this.value;
+    $(".demoSlider").on("change",function () {
+        $(this).siblings(".demoAudio")[0].currentTime = this.value;
     });
     //拖動進度條直到放開滑鼠才重新開始播放
-    $(".demoSlider").on("mouseup", function () {
-        if ($(this).siblings(".demoMusic").data("playing") == "true")
-            $(this).siblings(".demoMusic")[0].play();
+    $(".demoSlider").on("mouseup",function () {
+        if ($(this).siblings(".demoAudio").data("playing") == "true")
+            $(this).siblings(".demoAudio")[0].play();
     });
 
     //取得音樂時間文字的方法(第二個有給到小數後兩位)
