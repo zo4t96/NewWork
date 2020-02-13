@@ -11,7 +11,7 @@ namespace MainWork.Controllers
     {
         // GET: TwoPlayer
 
-        public ActionResult DemoPlayer(bool ajax = false)
+        public ActionResult TwoPlayer(bool ajax = false)
         {
             if (ajax)
             {
@@ -21,7 +21,7 @@ namespace MainWork.Controllers
         }
 
         //商品內容頁的試聽曲專用小播放器
-        public ActionResult LittlePlayer(int musicId)
+        public ActionResult DemoPlayer(int musicId)
         {
             CMusic cm = new CMusic();
             return PartialView(cm.getMusic(musicId));
