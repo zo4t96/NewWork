@@ -39,7 +39,7 @@ namespace MainWork
         public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
         public Nullable<int> fPlaybackCount { get; set; }
-        //額外新增
+
         public HttpPostedFileBase fRealFile { get; set; }
         public Nullable<double> fPlays { get; set; }
         public Nullable<double> fPlaye { get; set; }

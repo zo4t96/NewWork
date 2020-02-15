@@ -48,8 +48,22 @@
 
         .header-button {
             position: absolute;
-            top: 15px;
+            top: 0px;
             right: 16px;
+        }
+
+        /*登入頭像*/
+        .header-Upperrightcorner-img {
+            position: relative;
+            display: inline-block;
+            top: 15px;
+            margin-right: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-image: url('Images/4.jpg')
         }
 
         #content {
@@ -375,7 +389,7 @@
         }
     </style>
 
-    <!--會員專輯頁-->
+    <!--會員專輯頁style-->
     <style>
         .albumname {
             width: 200px;
@@ -416,9 +430,51 @@
         }
     </style>
 
+    <!--modal(彈出)版面style-->
+    <style>
+        #modal {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 5;
+            transition: 0.6s;
+            opacity: 0;
+        }
+        #modal.fadein {
+            opacity: 1;
+        }
+
+        #modalContent {
+            position: relative;
+            top: 10%;
+            width: 40%;
+            padding: 20px;
+            background-color: #191919;
+            border-radius: 20px;
+            margin: auto;
+            transition: 0.6s;
+            opacity: 0;
+        }
+        #modalContent.fadein {
+            top: 20%;
+            opacity: 1;
+
+        }
+
+    </style>
 
 </head>
 <body>
+
+    @* 測試modal *@
+    <div id="modal">
+        <div id="modalContent">
+            @* 這裡的內容隨按鍵改變而讀取 *@
+        </div>
+    </div>
+
     <div class="header">
         <div class="header-logo">
             <a href="#"><img @*src=""*@ alt=""></a>
@@ -496,24 +552,24 @@
         @* 登入註冊鍵 *@
         <div class="header-button">
             @{
+                //登入後會顯示的會員頭像，待修正
+                <div class="header-Upperrightcorner-img"></div>
+
                 if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
                 {
-                    <button type="button">註冊</button>
-                    @*<button type="button">@Html.ActionLink("登入", "Login", "Common", null, new { @class = "side-li-home-img" })</button>*@
-                    <button id="logininterface" type="button">登入</button>
-                }
+                    <div id="logoninterface"class="btn btn-outline-secondary">註冊</div>
+                    <div id="logininterface" class="btn btn-outline-secondary">登入</div>
+                    }
                 else
                 {
                     if (Session[CDictionary.SK_ACCOUNT].ToString() == "aaa")
                     {
-                        <button id="admininterface" type="button">後臺管理介面</button>
+                        <button id = "admininterface" class="btn btn-outline-secondary">後臺管理介面</button>
                     }
                     <span>hi,@Session[CDictionary.SK_ACCOUNT].ToString()</span>
-                    <button type="button">會員中心</button>
+                    <button type = "button" > 會員中心 </button >
                     <button type="button">@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })</button>
-                    <button id="logoutinterface" type="button">登出</button>
-                    @*<button id="logoutinterface2" type="button">@Html.ActionLink("登出", "Loginout", "Common", null, new { @class = "side-li-home-img" })</button>*@
-
+                    <button id = "logoutinterface" type="button">登出</button>
                 }
             }
         </div>
@@ -580,6 +636,7 @@
         </div>
     </div>
 
+    <!--播放器-->
     <div id="footer">
         <div id="playerPanel">
             <!-- 封面與歌名div -->
@@ -617,7 +674,7 @@
             </div>
 
             <!--播放器本體-->
-            <audio id="mainPlayer" src="/Music/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>
+            <audio id="mainPlayer" src="/Music/‪紅魔 「Un-demystified Fantasy」.mp3"></audio>
         </div>
     </div>
     <!-- Optional JavaScript -->
@@ -779,7 +836,7 @@
             //$.get(link, function (data) {
             //    $(".mainbox").html(data);
             //})
-            
+
             //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
             $(".sidebox > a").on("click", function (e) {
                 let link = $(this).attr("href");
@@ -950,21 +1007,55 @@
                 $(this).children().css("color", "white");
             })
 
-            //登入登出
+            @*//登入登出
             //     function admininterface() {
-        $("#admininterface").on("click", function () {
-       //     window.location.href = '../Admin/Index/';
-            window.location.href = '@Url.Action("Index","Admin")';
-        })
-        $("#logoutinterface").on("click", function () {
-          //  window.location.href = '../../test/Common/Loginout/';
-            window.location.href = '@Url.Action("Loginout","Common")';
-        })
-        $("#logininterface").on("click", function () {
-         //   window.location.href = '../../test/Common/Login/';
-                        window.location.href = '@Url.Action("Login","Common")';
+            $("#admininterface").on("click", function () {
+                window.location.href = '@Url.Action("Index","Admin")';
             })
+            $("#logoutinterface").on("click", function () {
+                window.location.href = '@Url.Action("Loginout","Common")';
+            })
+            $("#logininterface").on("click", function () {
+                window.location.href = '@Url.Action("Login","Common")';
+            })*@
 
+
+            //////////////////////////
+            ///透過modal介面載入資訊///
+            /////////////////////////
+
+            $("#logininterface").on("click", function () {
+                $.get("@Url.Action("Login","Common")", function (data) {
+                    $("#modalContent").html(data);
+                });
+                $("#modal").css("display", "block");
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $("#modalContent").addClass("fadein");
+                }, 10)
+            })
+            $("#logoninterface").on("click", function () {
+                $.get("@Url.Action("New","MemberLogin")", function (data) {
+                    $("#modalContent").html(data);
+                });
+                $("#modal").css("display", "block");
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $("#modalContent").addClass("fadein");
+                }, 10)
+            })
+            //點擊主視窗以外的位置會讓介面消失
+            $("#modal").click(function (e) {
+                if ($(e.target).children("#modalContent").length != 0) {
+                    setTimeout(function () {
+                        $("#modal").removeClass("fadein");
+                        $("#modalContent").removeClass("fadein");
+                    }, 10)
+                    setTimeout(function () {
+                        $("#modal").css("display", "none");
+                    }, 500)
+                }
+            })
 
         }
     </script>

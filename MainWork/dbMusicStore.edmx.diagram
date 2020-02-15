@@ -8,14 +8,14 @@
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tActivity" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbum" Width="1.5" PointX="3.125" PointY="9.25" IsExpanded="true" />
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumKind" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumType" Width="1.5" PointX="3.125" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tLog" Width="1.5" PointX="5.375" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumType" Width="1.5" PointX="2.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tLog" Width="1.5" PointX="4.75" PointY="14.625" IsExpanded="true" />
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMember" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMessage" Width="1.5" PointX="0.75" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMessage" Width="1.5" PointX="0.5" PointY="13.875" IsExpanded="true" />
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPlayList" Width="1.5" PointX="7.5" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tProduct" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPurchaseItem" Width="1.5" PointX="7.5" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tShoppingCart" Width="1.5" PointX="7.5" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tProduct" Width="1.5" PointX="5.375" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPurchaseItem" Width="1.5" PointX="7.625" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tShoppingCart" Width="1.5" PointX="7.5" PointY="12.5" IsExpanded="true" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tActivity_tMember" ManuallyRouted="false" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" ManuallyRouted="false" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tMember" ManuallyRouted="false" />

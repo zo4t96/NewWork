@@ -273,6 +273,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\MemberLoginController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -314,6 +315,7 @@
     </Compile>
     <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
+    <Compile Include="Models\CMemberFactory.cs" />
     <Compile Include="Models\CMusic.cs" />
     <Compile Include="Models\CSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -354,6 +356,7 @@
       <DependentUpon>dbUpload.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
+    <Compile Include="ViewModels\CLoginData.cs" />
     <Compile Include="ViewModels\CLoginViewModel.cs" />
     <Compile Include="ViewModels\CSearchResult.cs" />
   </ItemGroup>
@@ -416,6 +419,7 @@
     <Content Include="Views\Message\MessageBox.cshtml" />
     <Content Include="Views\Shared\_Layout_admin.cshtml" />
     <Content Include="Views\Player\DemoPlayer.cshtml" />
+    <Content Include="Views\MemberLogin\New.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
