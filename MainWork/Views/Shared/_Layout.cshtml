@@ -48,8 +48,22 @@
 
         .header-button {
             position: absolute;
-            top: 15px;
+            top: 0px;
             right: 16px;
+        }
+
+        /*登入頭像*/
+        .header-Upperrightcorner-img {
+            position:relative;
+            display:inline-block;
+            top:15px;
+            margin-right: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+	        background-image:url('Images/4.jpg')
         }
 
         #content {
@@ -146,9 +160,9 @@
             min-width: 200px;
         }
         /*不用id變不了bootstrap的文字顏色*/
-        #advancedBtn {
+        /*#advancedBtn {
             color: whitesmoke;
-        }
+        }*/
 
         .advancedPanel {
             display: none;
@@ -416,9 +430,53 @@
         }
     </style>
 
-
+    <style>
+        #modal{
+            position:fixed;
+            width:100vw;
+            height:100vh;
+            background-color:rgba(0, 0, 0, 0.85);
+            display:none;
+            z-index:5;
+            transition:0.6s;
+            opacity:0;
+        }
+        #modal.fadein {
+            opacity:1;
+        }
+        #modalContent {
+            position:relative;
+            top:10%;
+            width:40%;
+            padding:20px;
+            background-color:#191919;
+            border-radius:20px;
+            margin:auto;
+            transition:0.6s;
+            opacity:0;
+        }
+        #modalContent.fadein {
+            top:20%;
+            opacity:1;
+        }
+    </style>
 </head>
 <body>
+
+    @* 測試modal *@
+    <div id="modal">
+        <div id="modalContent">
+            @Html.Action("Login", "Common")
+        </div>
+    </div>
+
+
+        
+
+
+
+
+
     <div class="header">
         <div class="header-logo">
             <a href="#"><img @*src=""*@ alt=""></a>
@@ -496,24 +554,24 @@
         @* 登入註冊鍵 *@
         <div class="header-button">
             @{
+                //登入後會顯示的會員頭像，待修正
+                <div class="header-Upperrightcorner-img"></div>
+
                 if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
                 {
-                    <button type="button">註冊</button>
-                    @*<button type="button">@Html.ActionLink("登入", "Login", "Common", null, new { @class = "side-li-home-img" })</button>*@
-                    <button id="logininterface" type="button">登入</button>
+                    <div class="btn btn-outline-secondary">註冊</div>
+                    <div id="logininterface" class="btn btn-outline-secondary">登入</div>
                 }
                 else
                 {
                     if (Session[CDictionary.SK_ACCOUNT].ToString() == "aaa")
                     {
-                        <button id="admininterface" type="button">後臺管理介面</button>
+                        <button id="admininterface" class="btn btn-outline-secondary">後臺管理介面</button>
                     }
                     <span>hi,@Session[CDictionary.SK_ACCOUNT].ToString()</span>
                     <button type="button">會員中心</button>
                     <button type="button">@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })</button>
                     <button id="logoutinterface" type="button">登出</button>
-                    @*<button id="logoutinterface2" type="button">@Html.ActionLink("登出", "Loginout", "Common", null, new { @class = "side-li-home-img" })</button>*@
-
                 }
             }
         </div>
@@ -786,7 +844,7 @@
 
                 //如果有上傳參數到後端則使用$.post的ajax方法
                 //為了配合重新整理頁面不跑掉的系統，暫時是一律使用$.post來處理所有ajax
-                $.post(link , { ajax: true }, function (data) {
+                $.post(link, { ajax: true }, function (data) {
                     $(".mainbox").html(data);
                 })
             }
@@ -832,10 +890,10 @@
 
                 //初始化進階面板曲風選項的顏色
                 var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
-                  , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
-                  , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
-                  var block = $(".selectableItemPanel").children(".selectableItem");
-                  var block2 = $(".advancedBlock").children(".selectedItem");
+                    , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
+                    , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
+                var block = $(".selectableItemPanel").children(".selectableItem");
+                var block2 = $(".advancedBlock").children(".selectedItem");
                 for (let i = 0; i < block.length; i++) {
                     block.eq(i).css("background-color", color[i]);
                     block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
@@ -919,7 +977,7 @@
                 $.post(url, stateObj, function (data) {
                     $(".mainbox").html(data);
                 });
-                history.pushState(stateObj,null,url);
+                history.pushState(stateObj, null, url);
             })
 
             //所有搜尋text實作autocomplete
@@ -952,22 +1010,36 @@
                 $(this).children().css("color", "white");
             })
 
-            //登入登出
+            @*//登入登出
             //     function admininterface() {
-        $("#admininterface").on("click", function () {
-       //     window.location.href = '../Admin/Index/';
-            window.location.href = '@Url.Action("Index","Admin")';
-        })
-        $("#logoutinterface").on("click", function () {
-          //  window.location.href = '../../test/Common/Loginout/';
-            window.location.href = '@Url.Action("Loginout","Common")';
-        })
-        $("#logininterface").on("click", function () {
-         //   window.location.href = '../../test/Common/Login/';
-                        window.location.href = '@Url.Action("Login","Common")';
+            $("#admininterface").on("click", function () {
+                window.location.href = '@Url.Action("Index","Admin")';
             })
+            $("#logoutinterface").on("click", function () {
+                window.location.href = '@Url.Action("Loginout","Common")';
+            })
+            $("#logininterface").on("click", function () {
+                window.location.href = '@Url.Action("Login","Common")';
+            })*@
 
-
+            $("#logininterface").on("click", function () {
+                $("#modal").css("display", "block");
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $("#modalContent").addClass("fadein");
+                }, 10)
+            })
+            $("#modal").click(function (e) {
+                if ($(e.target).children("#modalContent").length != 0) {
+                    setTimeout(function () {
+                        $("#modal").removeClass("fadein");
+                        $("#modalContent").removeClass("fadein");
+                    }, 10)
+                    setTimeout(function () {
+                        $("#modal").css("display", "none");
+                    },600)
+                }
+            })
         }
     </script>
 
