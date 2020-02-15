@@ -23,16 +23,18 @@ namespace MainWork.Controllers
             }
             return View(search.takeAllKind());
         }
-        
+
         //進行搜尋時先跳轉到空頁面，並將搜尋資料傳遞，之後再讓該頁面實作搜尋的指令
-        public ActionResult KindResult(bool ajax = false)
+        public ActionResult KindResult(int kindId ,bool ajax = false)
         {
             if (ajax)
             {
                 ViewBag.ajax = true;
             }
+            ViewBag.kindId = kindId;
             return View();
         }
+
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
         public ActionResult KindResultView(int kindID)
         {

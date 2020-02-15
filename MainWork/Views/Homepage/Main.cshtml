@@ -102,8 +102,8 @@
         </a>
         @foreach (var item in Model)
         {
-            //因應需求在href放置連結(或額外寫code?)
-            <a class="albumBlock" href="">
+            //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
                 <div class="albumContent">
@@ -119,9 +119,17 @@
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
         }, 100)
+
         $(".albumBlock").click(function (e) {
-            //連結到商品頁面
             e.preventDefault();
+            let amid = $(this).data("album");
+            let url = `${$(this).attr("href")}?amid=${amid}`;
+            let stateObj = { amid: amid, ajax: true };
+            $.post(url, stateObj, function (data) {
+                $(".mainbox").html(data);
+            })
+            history.pushState(stateObj, null, url);
+            $(window).scrollTop(0);
         });
     </script>
 </body>

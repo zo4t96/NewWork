@@ -28,7 +28,7 @@
             position: fixed;
             width: 100%;
             height: 70px;
-            background-color: #0b0b0b;
+            background-color: black;
             z-index: 1;
         }
 
@@ -39,7 +39,7 @@
             width: 180px;
             padding-left: 40px;
             font-size: 25px;
-            background: #0b0b0b;
+            background: black;
         }
 
         .header-logo-text {
@@ -64,7 +64,7 @@
             position: fixed;
             width: 200px;
             height: 100vh;
-            background-color: #040404;
+            background-color: #060606;
             color: white;
             margin-top: 70px;
         }
@@ -769,32 +769,23 @@
             /////////////////////
 
 
-            //為了使用ajax所寫的自定義方法
-            //link參數為url字串
-            function changePage(link) {
+            //$(".mainbox").load(link);
+            //更新老師上課說法
+            //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
+            //意為讀取該網頁id為div1中的img
+            //但是mvc本身有PartailView這個功能，因此應該用不到load
 
-                //$(".mainbox").load(link);
-                //更新老師上課說法
-                //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
-                //意為讀取該網頁id為div1中的img
-                //但是mvc本身有PartailView這個功能，因此應該用不到load
-
-                //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
-                //$.get(link, function (data) {
-                //    $(".mainbox").html(data);
-                //})
-
-                //如果有上傳參數到後端則使用$.post的ajax方法
-                //為了配合重新整理頁面不跑掉的系統，暫時是一律使用$.post來處理所有ajax
-                $.post(link , { ajax: true }, function (data) {
+            //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
+            //$.get(link, function (data) {
+            //    $(".mainbox").html(data);
+            //})
+            
+            //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
+            $(".sidebox > a").on("click", function (e) {
+                let link = $(this).attr("href");
+                $.post(link, { ajax: true }, function (data) {
                     $(".mainbox").html(data);
                 })
-            }
-
-            //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
-            $("a").on("click", function (e) {
-                let link = $(this).attr("href");
-                changePage(link);
                 //給予網頁虛擬網址，隨便打都能過，但是最好讓他跟實際變換的網址同名
                 //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
                 //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
@@ -805,8 +796,15 @@
 
             //每當點選瀏覽器的上一頁下一頁便會發動此事件
             //location.pathname為動作完成後所得到的該頁url
-            window.addEventListener('popstate', function (e) {
-                changePage(location.pathname);
+            window.addEventListener('popstate', function () {
+                //changePage(location.pathname);
+                if (history.state == null) {
+                    history.replaceState({ ajax: true }, null);
+                }
+                $.post(location.pathname, history.state, function (data) {
+                    $(".mainbox").html(data);
+                })
+                console.log(history.state);
             })
 
             /////////////////
