@@ -32,6 +32,8 @@
     <EntitySetMapping Name="tAlbumKinds">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
         <MappingFragment StoreEntitySet="tAlbumKind">
+          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
+          <ScalarProperty Name="fColor" ColumnName="fColor" />
           <ScalarProperty Name="KindID" ColumnName="KindID" />
           <ScalarProperty Name="KindName" ColumnName="KindName" />
         </MappingFragment>
@@ -42,8 +44,6 @@
         <MappingFragment StoreEntitySet="tAlbumType">
           <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
           <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
-          <ScalarProperty Name="fColor" ColumnName="fColor" />
-          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

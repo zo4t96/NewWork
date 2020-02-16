@@ -28,7 +28,8 @@ namespace MusicPrj.Controllers
             string account = post.emailoraccount;
             string password = post.password;
             Session[CDictionary.SK_ACCOUNT] = account;
-            Response.Redirect("~/Album/Index/");
+            //這邊移動的網址改變
+            Response.Redirect("~/Homepage/Main/");
             return View();
         }
 
@@ -41,7 +42,7 @@ namespace MusicPrj.Controllers
 
         public ActionResult _PlayLists()
         {
-                return Content("<span>你還沒登入喔<span>");
+            return Content("<span>你還沒登入喔<span>");
         }
 
     }

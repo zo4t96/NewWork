@@ -2,11 +2,17 @@
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
+
     }
+    <script>
+        console.log(history.state)
+        let bag = @ViewBag.kindId;
+        if (bag != null) {
+            let stateObj = { kindId:@ViewBag.kindId , ajax: true };
+            history.replaceState(stateObj, null);
+        }
+        $.post('@Url.Action("KindResultView", "Search")', history.state, function (data) {
+                $(".mainbox").html(data);
+        });
+    </script>
 }
-<script>
-    console.log(history.state)
-    $.post('@Url.Action("KindResultView", "Search")', history.state, function (data) {
-        $(".mainbox").html(data);
-    });
-</script>

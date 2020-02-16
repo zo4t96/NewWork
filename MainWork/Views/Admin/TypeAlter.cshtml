@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MainWork.tAlbumType>
+
+@{
+    //Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 0px;
+    }
+
+    .groupPanel {
+        width: 40%;
+        margin-bottom:40px;
+    }
+ 
+
+</style>
+<div class="container">
+    <div class="title">
+        <p>販售類別</p>
+    </div>
+
+    <div class="groupPanel">
+        <div class="h5">新增販賣類別</div>
+        <form action="@Url.Action("TypeNew","Admin")" method="post">
+            <div class="input-group mb-3">
+                <input type="text" name="typeName" class="form-control typeName" placeholder="請輸入要新增的販賣類別名稱">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary new">新增</button>
+                </div>
+            </div>
+            <small class="form-text text-muted">最多不得超過八個字(目前是說說的)</small>
+        </form>
+    </div>
+
+    <div class="groupPanel">
+        <div class="h5">現有類別刪除或修改</div>
+        <small class="form-text text-muted">任意刪除或修改都會造成專輯分類上的影響!請慎選</small>
+        <p></p>
+
+        @foreach (var item in Model)
+        {
+            <form class="falter" action="@Url.Action("TypeAlter", "Admin")" method="post">
+                <input type="hidden" value="@item.fTypeID" name="typeOrigin" />
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <input type="text" readonly class="input-group-text" value="@item.fTypeName" />
+                    </div>
+                    <input type="text" class="form-control" name="typeChange" placeholder="請輸入修改名稱">
+                    <div class="input-group-append">
+                        <button class="btn btn-warning alter" type="button">修改</button>
+                        <button class="btn btn-danger delete" type="button">刪除</button>
+                    </div>
+                </div>
+            </form>
+            <form class="fdelete" action="@Url.Action("TypeDelete","Admin")" method="post">
+                <input type="hidden" name="deleteId" value="7" />
+            </form>
+
+            <p></p>
+        }
+    </div>
+</div>
+<script>
+    $(".alter").click(function () {
+        if (confirm("這麼做會連帶改變所有使用此曲風的專輯，確定要修改嗎?")) {
+            $(".falter").submit();
+        }
+    })
+
+    $(".delete").click(function () {
+        if (confirm("這麼做會影響所有使用此曲風的專輯，真的要刪除嗎?")) {
+            $(".fdelete").submit();
+        }
+    })
+</script>

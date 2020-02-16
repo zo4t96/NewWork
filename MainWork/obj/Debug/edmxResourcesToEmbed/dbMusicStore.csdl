@@ -36,6 +36,8 @@
     </Key>
     <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fColor" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tAlbumType">
     <Key>
@@ -43,8 +45,6 @@
     </Key>
     <Property Name="fTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="fTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="fColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbumType" ToRole="tAlbum" />
   </EntityType>
   <EntityType Name="tLog">

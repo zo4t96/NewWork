@@ -32,6 +32,8 @@
     </Key>
     <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="KindName" Type="nvarchar(max)" />
+    <Property Name="fColor" Type="char" MaxLength="10" />
+    <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbumType">
     <Key>
@@ -39,8 +41,6 @@
     </Key>
     <Property Name="fTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="fTypeName" Type="nvarchar" MaxLength="50" />
-    <Property Name="fColor" Type="nvarchar" MaxLength="50" />
-    <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tLog">
     <Key>

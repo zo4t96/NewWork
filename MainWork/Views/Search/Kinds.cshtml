@@ -86,22 +86,22 @@
     <script>
         setTimeout(function () {
             $(".photo").addClass("fadein");
-        }, 100)
+        }, 300)
 
         //讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
         var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
             , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
             , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
-        var c = $(".kindBlock");
-        for (let i = 0; i <= c.length; i++) {
-            c.eq(i).css("background-color", color[i]);
-            c.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 15%,${color[i]})`);
-            c.eq(i).find(".photo").css("background-image", `url(/Images/${c.eq(i).data("kind")}.jpg)`)
+        var kindBlock = $(".kindBlock");
+        for (let i = 0; i <= kindBlock.length; i++) {
+            kindBlock.eq(i).css("background-color", color[i]);
+            kindBlock.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 15%,${color[i]})`);
+            kindBlock.eq(i).find(".photo").css("background-image", `url(/Images/${kindBlock.eq(i).data("kind")}.jpg)`)
         }
-        c.on("click", function () {
-            let kindID = $(this).data("kind");
-            let url = `@Url.Action("KindResult", "Search")`
-            let stateObj = { kindID: kindID, ajax: true };
+        kindBlock.on("click", function () {
+            let kindId = $(this).data("kind");
+            let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`
+            let stateObj = { kindId: kindId, ajax: true };
             $.post(url, stateObj, function (data) {
                 $(".mainbox").html(data);
             });

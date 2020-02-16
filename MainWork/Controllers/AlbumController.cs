@@ -400,7 +400,12 @@ namespace MusicPrj.Controllers
             return Redirect(s1);
         }
 
+        //public HttpPostedFileBase fRealFile { get; set; }
+        //public HttpPostedFileBase fCoverRealFile { get; set; }
+        //public Nullable<double> fPlays { get; set; }
+        //public Nullable<double> fPlaye{ get; set; }
         //上傳單曲
+
         [HttpPost]
         public ActionResult AlbumInfo(tProduct tP)
         {

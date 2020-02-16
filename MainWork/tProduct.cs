@@ -39,10 +39,10 @@ namespace MainWork
         public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
         public Nullable<int> fPlaybackCount { get; set; }
-        //額外新增
+        public HttpPostedFileBase fCoverRealFile { get; set; }
         public HttpPostedFileBase fRealFile { get; set; }
         public Nullable<double> fPlays { get; set; }
-        public Nullable<double> fPlaye { get; set; }
+        public Nullable<double> fPlaye{ get; set; }
 
         public virtual tAlbum tAlbum { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

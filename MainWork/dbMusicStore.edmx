@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="dbProjectMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="dbProjectMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tActivity">
           <Key>
             <PropertyRef Name="fId" />
@@ -37,6 +37,8 @@
           </Key>
           <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="KindName" Type="nvarchar(max)" />
+          <Property Name="fColor" Type="char" MaxLength="10" />
+          <Property Name="fPhotoPath" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tAlbumType">
           <Key>
@@ -44,8 +46,6 @@
           </Key>
           <Property Name="fTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fTypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="fColor" Type="nvarchar" MaxLength="50" />
-          <Property Name="fPhotoPath" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tLog">
           <Key>
@@ -372,8 +372,7 @@
             <End Role="tShoppingCart" EntitySet="tShoppingCart" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbProjectMusicStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -413,6 +412,8 @@
           </Key>
           <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fColor" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tAlbumType">
           <Key>
@@ -420,8 +421,6 @@
           </Key>
           <Property Name="fTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tAlbums" Relationship="Self.FK_tAlbum_tAlbumType" FromRole="tAlbumType" ToRole="tAlbum" />
         </EntityType>
         <EntityType Name="tLog">
@@ -809,6 +808,8 @@
           <EntitySetMapping Name="tAlbumKinds">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
               <MappingFragment StoreEntitySet="tAlbumKind">
+                <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
+                <ScalarProperty Name="fColor" ColumnName="fColor" />
                 <ScalarProperty Name="KindID" ColumnName="KindID" />
                 <ScalarProperty Name="KindName" ColumnName="KindName" />
               </MappingFragment>
@@ -819,9 +820,7 @@
               <MappingFragment StoreEntitySet="tAlbumType">
                 <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
                 <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
-                <ScalarProperty Name="fColor" ColumnName="fColor" />
-                <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tLogs">

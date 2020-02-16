@@ -1,4 +1,9 @@
 ﻿@using MainWork.Models
+@using prjSpotifyProject.Models
+@{ 
+    //因為直接把會員物件整份傳過來，所以在此先轉型
+    var sk = Session[CDictionary.SK_CURRENT_LOGINED_USER] as tMember;
+}
 
 <!doctype html>
 <html lang="en">
@@ -28,7 +33,7 @@
             position: fixed;
             width: 100%;
             height: 70px;
-            background-color: #0b0b0b;
+            background-color: black;
             z-index: 1;
         }
 
@@ -39,7 +44,7 @@
             width: 180px;
             padding-left: 40px;
             font-size: 25px;
-            background: #0b0b0b;
+            background: black;
         }
 
         .header-logo-text {
@@ -48,22 +53,24 @@
 
         .header-button {
             position: absolute;
-            top: 0px;
+            top: 15px;
             right: 16px;
         }
 
         /*登入頭像*/
         .header-Upperrightcorner-img {
-            position:relative;
+            position:absolute;
             display:inline-block;
-            top:15px;
             margin-right: 5px;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
+            top:-5px;
+            right:120px;
             border-radius: 50%;
+            background-size:100%;
             background-repeat: no-repeat;
-            background-size: 100% 100%;
-	        background-image:url('Images/4.jpg')
+            background-image: url('Images/4.jpg');
+            cursor:pointer;
         }
 
         #content {
@@ -78,7 +85,7 @@
             position: fixed;
             width: 200px;
             height: 100vh;
-            background-color: #040404;
+            background-color: #060606;
             color: white;
             margin-top: 70px;
         }
@@ -389,7 +396,7 @@
         }
     </style>
 
-    <!--會員專輯頁-->
+    <!--會員專輯頁style-->
     <style>
         .albumname {
             width: 200px;
@@ -430,52 +437,49 @@
         }
     </style>
 
+    <!--modal(彈出)版面style-->
     <style>
-        #modal{
-            position:fixed;
-            width:100vw;
-            height:100vh;
-            background-color:rgba(0, 0, 0, 0.85);
-            display:none;
-            z-index:5;
-            transition:0.6s;
-            opacity:0;
+        #modal {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 5;
+            transition: 0.6s;
+            opacity: 0;
         }
         #modal.fadein {
-            opacity:1;
+            opacity: 1;
         }
+
         #modalContent {
-            position:relative;
-            top:10%;
-            width:40%;
-            padding:20px;
-            background-color:#191919;
-            border-radius:20px;
-            margin:auto;
-            transition:0.6s;
-            opacity:0;
+            position: relative;
+            top: 10%;
+            width: 40%;
+            padding: 20px;
+            background-color: #191919;
+            border-radius: 20px;
+            margin: auto;
+            transition: 0.6s;
+            opacity: 0;
         }
         #modalContent.fadein {
-            top:20%;
-            opacity:1;
+            top: 20%;
+            opacity: 1;
+
         }
     </style>
+
 </head>
 <body>
 
     @* 測試modal *@
     <div id="modal">
         <div id="modalContent">
-            @Html.Action("Login", "Common")
+            @* 這裡的內容隨按鍵改變而讀取 *@
         </div>
     </div>
-
-
-        
-
-
-
-
 
     <div class="header">
         <div class="header-logo">
@@ -552,29 +556,30 @@
         </div>
 
         @* 登入註冊鍵 *@
-        <div class="header-button">
-            @{
-                //登入後會顯示的會員頭像，待修正
+    <div class="header-button">
+        @{
+            //登入後會顯示的會員頭像，待修正
+
+            if (sk == null)
+            {
+                <div id="logonInterface" class="btn btn-outline-secondary">註冊</div>
+                <div id="loginInterface" class="btn btn-outline-secondary">登入</div>
+            }
+            else
+            {
+                //會員頭像兼會員中心預定
                 <div class="header-Upperrightcorner-img"></div>
 
-                if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
-                {
-                    <div class="btn btn-outline-secondary">註冊</div>
-                    <div id="logininterface" class="btn btn-outline-secondary">登入</div>
-                }
-                else
-                {
-                    if (Session[CDictionary.SK_ACCOUNT].ToString() == "aaa")
-                    {
-                        <button id="admininterface" class="btn btn-outline-secondary">後臺管理介面</button>
-                    }
-                    <span>hi,@Session[CDictionary.SK_ACCOUNT].ToString()</span>
-                    <button type="button">會員中心</button>
-                    <button type="button">@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })</button>
-                    <button id="logoutinterface" type="button">登出</button>
-                }
+                @*@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })*@
+                <a href="@Url.Action("MessageBox","Message")">
+                    <div class="btn btn-outline-secondary">訊息</div>
+                </a>
+                <a href="@Url.Action("Logout","MemberLogin")">
+                    <div id="logoutInterface" class="btn btn-outline-secondary">登出</div>
+                </a>
             }
-        </div>
+        }
+    </div>
     </div>
 
     <div id="content">
@@ -607,10 +612,10 @@
                     </a>
                 </li>
 
-                @if (Session[CDictionary.SK_ACCOUNT] != null && !string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+                @if (sk != null)
                 {
                     <li>
-                        <a href="@Url.Action("MyAlbumList","Album")/?account=@Session[CDictionary.SK_ACCOUNT].ToString()">
+                        <a href="@Url.Action("MyAlbumList","Album")/?account=@sk.fAccount">
                             <div class="menuItem">
                                 <i class="fa fa-headphones"></i>
                                 <span>我的發行(測試用)</span>
@@ -626,6 +631,16 @@
                             </div>
                         </a>
                     </li>
+                    if (sk.fAccount == "aaa")
+                    {
+                    <li>
+                        <a href="">
+                            <div class="menuItem" id="admininterface">
+                                <i class="fa fa-th-list"></i>
+                                <span>後臺管理介面</span>
+                            </div>
+                        </a>
+                    </li>}
                 }
 
             </ul>
@@ -638,6 +653,7 @@
         </div>
     </div>
 
+    <!--播放器-->
     <div id="footer">
         <div id="playerPanel">
             <!-- 封面與歌名div -->
@@ -675,7 +691,7 @@
             </div>
 
             <!--播放器本體-->
-            <audio id="mainPlayer" src="/Music/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>
+            <audio id="mainPlayer" src="~/Music/紅魔 「Un-demystified Fantasy」.mp3"></audio>
         </div>
     </div>
     <!-- Optional JavaScript -->
@@ -827,32 +843,23 @@
             /////////////////////
 
 
-            //為了使用ajax所寫的自定義方法
-            //link參數為url字串
-            function changePage(link) {
+            //$(".mainbox").load(link);
+            //更新老師上課說法
+            //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
+            //意為讀取該網頁id為div1中的img
+            //但是mvc本身有PartailView這個功能，因此應該用不到load
 
-                //$(".mainbox").load(link);
-                //更新老師上課說法
-                //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
-                //意為讀取該網頁id為div1中的img
-                //但是mvc本身有PartailView這個功能，因此應該用不到load
+            //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
+            //$.get(link, function (data) {
+            //    $(".mainbox").html(data);
+            //})
 
-                //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
-                //$.get(link, function (data) {
-                //    $(".mainbox").html(data);
-                //})
-
-                //如果有上傳參數到後端則使用$.post的ajax方法
-                //為了配合重新整理頁面不跑掉的系統，暫時是一律使用$.post來處理所有ajax
+            //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
+            $("li > a").on("click", function (e) {
+                let link = $(this).attr("href");
                 $.post(link, { ajax: true }, function (data) {
                     $(".mainbox").html(data);
                 })
-            }
-
-            //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
-            $("a").on("click", function (e) {
-                let link = $(this).attr("href");
-                changePage(link);
                 //給予網頁虛擬網址，隨便打都能過，但是最好讓他跟實際變換的網址同名
                 //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
                 //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
@@ -863,8 +870,15 @@
 
             //每當點選瀏覽器的上一頁下一頁便會發動此事件
             //location.pathname為動作完成後所得到的該頁url
-            window.addEventListener('popstate', function (e) {
-                changePage(location.pathname);
+            window.addEventListener('popstate', function () {
+                //changePage(location.pathname);
+                if (history.state == null) {
+                    history.replaceState({ ajax: true }, null);
+                }
+                $.post(location.pathname, history.state, function (data) {
+                    $(".mainbox").html(data);
+                })
+                console.log(history.state);
             })
 
             /////////////////
@@ -1022,13 +1036,36 @@
                 window.location.href = '@Url.Action("Login","Common")';
             })*@
 
-            $("#logininterface").on("click", function () {
+
+            //////////////////////////
+            ///透過modal介面載入資訊///
+            /////////////////////////
+
+            //登入註冊介面與登出
+            $("#loginInterface").on("click", function () {
+                $.get("@Url.Action("Login","MemberLogin")", function (data) {
+                    $("#modalContent").html(data);
+                });
                 $("#modal").css("display", "block");
                 setTimeout(function () {
                     $("#modal").addClass("fadein");
                     $("#modalContent").addClass("fadein");
                 }, 10)
             })
+            $("#logonInterface").on("click", function () {
+                $.get("@Url.Action("New","MemberLogin")", function (data) {
+                    $("#modalContent").html(data);
+                });
+                $("#modal").css("display", "block");
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $("#modalContent").addClass("fadein");
+                }, 10)
+            })
+            $("#logoutInterface").on("click", function () {
+                
+            })
+            //點擊主視窗以外的位置會讓介面消失
             $("#modal").click(function (e) {
                 if ($(e.target).children("#modalContent").length != 0) {
                     setTimeout(function () {
@@ -1037,7 +1074,7 @@
                     }, 10)
                     setTimeout(function () {
                         $("#modal").css("display", "none");
-                    },600)
+                    }, 500)
                 }
             })
         }
