@@ -31,6 +31,7 @@
     <EntitySetMapping Name="tMembers">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
         <MappingFragment StoreEntitySet="tMember">
+          <ScalarProperty Name="fLastPlaySong" ColumnName="fLastPlaySong" />
           <ScalarProperty Name="fSubscriptEndDate" ColumnName="fSubscriptEndDate" />
           <ScalarProperty Name="fSubscriptStartDate" ColumnName="fSubscriptStartDate" />
           <ScalarProperty Name="fPicPath" ColumnName="fPicPath" />
@@ -46,11 +47,11 @@
     <EntitySetMapping Name="tProducts">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProduct">
         <MappingFragment StoreEntitySet="tProducts">
+          <ScalarProperty Name="fSinger" ColumnName="fSinger" />
           <ScalarProperty Name="fPlaybackCount" ColumnName="fPlaybackCount" />
           <ScalarProperty Name="fProductID" ColumnName="fProductID" />
           <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
           <ScalarProperty Name="fProductName" ColumnName="fProductName" />
-          <ScalarProperty Name="fArtist" ColumnName="fArtist" />
           <ScalarProperty Name="fSIPrice" ColumnName="fSIPrice" />
           <ScalarProperty Name="fComposer" ColumnName="fComposer" />
           <ScalarProperty Name="fArranger" ColumnName="fArranger" />
@@ -110,14 +111,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tAlbumKinds">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
-        <MappingFragment StoreEntitySet="tAlbumKind">
-          <ScalarProperty Name="KindName" ColumnName="KindName" />
-          <ScalarProperty Name="KindID" ColumnName="KindID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tLogs">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tLog">
         <MappingFragment StoreEntitySet="tLog">
@@ -140,6 +133,14 @@
           <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
           <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
           <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tAlbumKinds">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
+        <MappingFragment StoreEntitySet="tAlbumKind">
+          <ScalarProperty Name="KindName" ColumnName="KindName" />
+          <ScalarProperty Name="KindID" ColumnName="KindID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

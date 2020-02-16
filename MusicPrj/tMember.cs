@@ -37,6 +37,7 @@ namespace MusicPrj
         public string fPicPath { get; set; }
         public Nullable<System.DateTime> fSubscriptStartDate { get; set; }
         public Nullable<System.DateTime> fSubscriptEndDate { get; set; }
+        public Nullable<int> fLastPlaySong { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tAlbum> tAlbums { get; set; }

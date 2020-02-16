@@ -250,20 +250,24 @@
     <Content Include="fonts\poppins\poppins-v5-latin-regular.woff" />
     <Content Include="fonts\poppins\poppins-v5-latin-regular.woff2" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="images\avatar-01.jpg" />
     <Content Include="images\del.png" />
     <Content Include="images\infor.png" />
     <Content Include="images\logo.png" />
+    <Content Include="jdataview.js" />
     <Content Include="js\bootstrap-datetimepicker.js" />
     <Content Include="js\main.js" />
     <Content Include="js\moment.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dragableplugin.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.top-droppable.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -272,6 +276,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\flushpage.js" />
+    <Content Include="Scripts\musicmetadata.js" />
     <Content Include="Scripts\sweet-alert.min.js" />
     <Content Include="vendor\animsition\animsition.min.css" />
     <Content Include="vendor\animsition\animsition.min.js" />
@@ -414,7 +419,10 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\HomepageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="dbMusicStore.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -433,10 +441,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CAlbum.cs" />
+    <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
-    <Compile Include="Models\CTakeKind.cs" />
-    <Compile Include="Models\CTakeType.cs" />
-    <Compile Include="Models\CWebInitailize.cs" />
+    <Compile Include="Models\CMusic.cs" />
+    <Compile Include="Models\CPlaylist.cs" />
+    <Compile Include="Models\CSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tActivity.cs">
       <DependentUpon>dbMusicStore.tt</DependentUpon>
@@ -471,19 +481,17 @@
     <Compile Include="tShoppingCart.cs">
       <DependentUpon>dbMusicStore.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CAdvancedSearchObject.cs" />
     <Compile Include="ViewModel\CLoginViewModel.cs" />
+    <Compile Include="ViewModel\CSearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Album\AddAlbum.cshtml" />
     <Content Include="Views\Album\test.cshtml" />
-    <Content Include="Views\Album\AlbumInfo3.cshtml" />
-    <Content Include="Views\Album\AlbumInfo4.cshtml" />
     <Content Include="Views\Album\DelteSong.cshtml" />
     <Content Include="Views\Album\updateSongTryLimit.cshtml" />
     <Content Include="Views\Album\Index.cshtml" />
@@ -493,7 +501,6 @@
     <Content Include="Views\Album\_AAlbumDetail.cshtml" />
     <Content Include="Views\Album\_AIndex.cshtml" />
     <Content Include="Views\Album\PlayLists.cshtml" />
-    <Content Include="Views\Album\Search.cshtml" />
     <Content Include="Views\Common\Login.cshtml" />
     <Content Include="Views\Album\AlbumInfo.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
@@ -540,6 +547,16 @@
     <Content Include="Views\Album\_PlayLists.cshtml" />
     <Content Include="Views\Admin\login.cshtml" />
     <Content Include="Views\Admin\register.cshtml" />
+    <Content Include="Views\Search\Kinds.cshtml" />
+    <Content Include="Views\Search\Result.cshtml" />
+    <Content Include="Views\Search\KindResult.cshtml" />
+    <Content Include="Views\Search\KindResultView.cshtml" />
+    <Content Include="Views\Search\ResultView.cshtml" />
+    <Content Include="Views\Search\AdvancedResult.cshtml" />
+    <Content Include="Views\Search\AdvancedResultView.cshtml" />
+    <Content Include="Views\Homepage\Main.cshtml" />
+    <Content Include="Views\Album\_EditSong.cshtml" />
+    <Content Include="Views\Player\DemoPlayer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

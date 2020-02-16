@@ -65,6 +65,7 @@
     <Property Name="fPicPath" Type="nvarchar(max)" />
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
+    <Property Name="fLastPlaySong" Type="int" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -94,7 +95,7 @@
     <Property Name="fProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="fAlbumID" Type="int" />
     <Property Name="fProductName" Type="nvarchar" MaxLength="50" />
-    <Property Name="fArtist" Type="nvarchar" MaxLength="50" />
+    <Property Name="fSinger" Type="nvarchar" MaxLength="50" />
     <Property Name="fSIPrice" Type="money" />
     <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
     <Property Name="fArranger" Type="nvarchar" MaxLength="50" />

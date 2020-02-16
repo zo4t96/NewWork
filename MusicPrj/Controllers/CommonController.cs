@@ -19,9 +19,8 @@ namespace MusicPrj.Controllers
         // GET: Common
         public ActionResult Login()
         {
-            CWebInitailize ad = new CWebInitailize();
-            ViewBag.InitialModel = ad.advancedInitial();
-            return View();
+      //      return View();
+            return View(new CLoginViewModel( ));
         }
 
         [HttpPost]
@@ -30,16 +29,12 @@ namespace MusicPrj.Controllers
             string account = post.emailoraccount;
             string password = post.password;
             Session[CDictionary.SK_ACCOUNT] = account;
-            CWebInitailize ad = new CWebInitailize();
-            ViewBag.InitialModel = ad.advancedInitial();
             Response.Redirect("~/Album/Index/");
             return View();
         }
 
         public ActionResult Loginout()
         {
-            CWebInitailize ad = new CWebInitailize();
-            ViewBag.InitialModel = ad.advancedInitial();
             Session[CDictionary.SK_ACCOUNT] = "";
          //   Response.Redirect(Request.Url.ToString());
             return View();

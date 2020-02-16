@@ -29,7 +29,7 @@ namespace MusicPrj
         public string fProductName { get; set; }
         [Display(Name = "演唱者")]
         [Required(ErrorMessage = "演唱者名稱必填")]
-        public string fArtist { get; set; }
+        public string fSinger { get; set; }
         [Display(Name = "售價")]
         [Required(ErrorMessage = "售價必填")]
         public Nullable<decimal> fSIPrice { get; set; }
@@ -54,6 +54,7 @@ namespace MusicPrj
         public string fModifiedDate { get; set; }
         public Nullable<int> fPlaybackCount { get; set; }
 
+    
         public virtual tAlbum tAlbum { get; set; }
         public virtual tPurchaseItem tPurchaseItem { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

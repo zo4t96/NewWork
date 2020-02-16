@@ -1,127 +1,172 @@
 ﻿@model IEnumerable<MusicPrj.tProduct>
-    @using MusicPrj.Models;
+@using MusicPrj.Models;
 
-    @{
-        if (Request.IsAjaxRequest() == false)
-        {
-            Layout = "~/Views/Shared/_Layout.cshtml";
-        }
-        else
-        {
-            Layout = null;
-        }
-        ViewBag.Title = "AlbumDetail2";
-        var AlbInfo = ViewBag.AlbInfo;
-        var account = "";
-        if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
-        {
-  //          Response.Redirect("~/Index/");
-        }
-        else
-        {
-            account = Session[CDictionary.SK_ACCOUNT].ToString();
-        }
-        tProduct tP = new tProduct();
-        int demotimeStart = 0, demotimeEnd = 0;
-        string demotimestring = "", demotimestringstart = "";
+@{
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
     }
-    <style>
+    else
+    {
+        Layout = null;
+    }
+    ViewBag.Title = "AlbumDetail2";
+    var AlbInfo = ViewBag.AlbInfo;
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        //          Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+    tProduct tP = new tProduct();
+    int demotimeStart = 0, demotimeEnd = 0;
+    string demotimestring, demotimestringstart;
+}
+<!--商品詳細頁-->
+<style>
+    /*albuminfo開始*/
+    /*專輯圖/介紹開始*/
+    .albumset {
+        display: inline-block;
+        margin-left: 5%;
+        margin-top: 3%;
+        width: 20%;
+    }
+    /*專輯圖/介紹*/
+    /*單曲列表開始*/
+    .albumtext {
+        text-align: center;
+        color: white;
+        width: 97%;
+        font-family: 微軟正黑體;
+    }
+    /*單曲列表結束*/
+    /*albuminfo結束*/
+    /*MyAlbumList開始*/
+    /*摺疊樣式開始*/
+    .musicsPanel {
+        display: inline-block;
+        vertical-align: top;
+        /*width:70%;*/
+        min-width: 700px;
+    }
 
-    </style>
+    .fold-title {
+        background-color: #f3f3f3;
+        padding: 5px;
+        color: #525252;
+        margin-bottom: 0;
+        width: 100%
+    }
 
-    <div class="albumset">
-        <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
-        <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
-        <h3 class="albumtext">@AlbInfo.fMaker </h3>
-        <h3 class="albumtext">共有@(Model.Count()) 首</h3>
-    </div>
-    <div style="display: inline-block;vertical-align:top;">
-        
+        .fold-title * {
+            color: black;
+        }
+
+    .fold {
+        line-height: 17pt;
+        width: 100%
+    }
+
+    .fold-container {
+        padding: 10px 10px 0px 30px;
+        border: solid #f3f3f3 2px;
+    }
+    /*摺疊樣式結束*/
+    /*MyAlbumList結束*/
+</style>
+
+<div class="albumset">
+    <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
+    <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
+    <h3 class="albumtext">@AlbInfo.fMaker </h3>
+    <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+</div>
+<div class="musicsPanel">
+
+    @{int count = 0;}
     @foreach (var item in Model)
     {
-        demotimeEnd = (int)item.fPlayEnd;
-        demotimeStart = (int)item.fPlayStart;
-        demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
-        demotimestring = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
+
+        count++;
 
         <div class="container">
-            <div class="py-2">
-                <div style="display:inline-block" class="vbtn dplay" data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
-                     data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
-                     data-soid="@item.fProductID"
-                     data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
-                     data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
-                     data-songcover="@AlbInfo.fCoverPath"
-                     data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
-                    <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#FFFFFF" d="M78.158 51.843L25.842 82.048c-1.418.819-3.191-.205-3.191-1.843v-60.41c0-1.638 1.773-2.661 3.191-1.843l52.317 30.205c1.418.819 1.418 2.867-.001 3.686z"></path>
-                    </svg>
-                </div>
-                <div class="vbtn dpause">
-                    <svg viewBox="0 0 100 100" y="0" x="0" width="35px" height="35px" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#FFFFFF" d="M43.12 79.844H27.379a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H43.12c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
-                        <path fill="#FFFFFF" d="M72.62 79.844H56.879a1.798 1.798 0 0 1-1.798-1.798V21.954c0-.993.805-1.798 1.798-1.798H72.62c.993 0 1.798.805 1.798 1.798v56.092a1.797 1.797 0 0 1-1.798 1.798z"></path>
-                    </svg>
-                </div>
-                <h3 style="display:inline-block" class="fold-title">
-                    <i class="fa fa-chevron-right"></i>
-                    <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
-                    <span class="nowDemo foldText">@demotimestringstart</span>
-                    <span class="foldText"> － </span>
-                    <span class="totalDemo foldText">@(demotimestring)</span>
-                </h3>
-                <div class="fold" style="margin-left:23px">
-                    <div class="fold-container">
-                        @*<input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">*@
-                        <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
-                    </div>
-                </div>
-
-
-
+            <div style="display:inline-block" class="vbtn dplay"
+                 data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
+                 data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
+                 data-soid="@item.fProductID"
+                 data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
+                 data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
+                 data-songcover="@item.tAlbum.fCoverPath"
+                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
             </div>
-            <hr>
+            <h4 style="display:inline-block" class="fold-title">
+                <span>@(count).</span>
+                <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
+            </h4>
+            <div class="fold">
+                <div class="fold-container">
+                    <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
+                </div>
+            </div>
         </div>
-
     }
 
-    </div>
-
-    <script>
-        $(".dplay").css("display", "inline");
-        $(".dpause").css("display", "none");
-        $(".foldText").css("color", "black");
-        //音樂播放暫停鍵
-        $(".vbtn").on("click", function () {
-            console.log($(this).prop("class"));
-            //if ($(this).prop("className") == "vbtn oplay") {
-            //    music.play();
-            //    demoMusic.pause();
-            //    oplaying = true;
-            //    dplaying = false;
-            //    $(".oplay").css("display", "none");
-            //    $(".opause").css("display", "inline")
-            //    $(".dplay").css("display", "inline")
-            //    $(".dpause").css("display", "none")
-            //}
-            if ($(this).prop("class") == "vbtn dplay") {
-                //載入音樂參數
-                music.src = $(this).data('playurl');
-                demoMusic.src = $(this).data('playurl');
-                demoStart = $(this).data('start');
-                demoEnd = $(this).data('end');
-                m_songcover = "/test/CoverFiles/" + $(this).data('songcover');
-
-                m_singer = $(this).data('singer');
-                m_song = $(this).data('songn');
-                $("#Descriptiontwo").text(m_song);
-                $("#singer").text(m_singer);
-                $("#playercover").attr("src", m_songcover);
-                //載入音樂連結
-                demoMusic.play();
-                //music.pause();
-                dplaying = true;
-                if (m_soid != $(this).data('soid')) {
+</div>
+<script>
+    $(".demoAudio").each(function () {
+        this.volume = 0.6;
+    })
+    //讀取音樂時會進行初始化
+    $(".demoAudio").on("durationchange", function () {
+        let demostart = $(this).siblings(".dplay").data("start");
+        let demoEnd = $(this).siblings(".dplay").data("end");
+        $(this).siblings(".demoSlider").prop("min", demostart);
+        $(this).siblings(".demoSlider").prop("max", demoEnd);
+        $(this).siblings(".demoSlider").prop("value", demostart);
+        this.currentTime = $(this).siblings(".demoSlider").prop("min");
+    });
+    //播放器的timer
+    $(".demoAudio").on("timeupdate", function () {
+        $(this).siblings(".demoSlider").prop("value", this.currentTime);
+        let now = parseInt(this.currentTime);
+        $(this).siblings(".nowTime").text(getTimeText(now));
+        //假如播完會暫停播放並回到開頭
+        if (this.currentTime >= $(this).siblings(".demoSlider").attr("max")) {
+            this.pause();
+            $(this).data("playing", "false");
+            $(this).siblings(".dplay").css("display", "inline-block");
+            $(this).siblings(".dpause").css("display", "none");
+            this.currentTime = $(this).siblings(".demoSlider").attr("min");
+        }
+        let start = $(this).siblings(".dplay").data("start");
+        let end = $(this).siblings(".dplay").data("end");
+        //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
+        if (this.currentTime < start + 3) {
+            this.volume = (this.currentTime - start) * 0.2;
+        }
+        //試聽淡出效果
+        else if (this.currentTime + 7 > end) {
+            this.volume = (end - this.currentTime) * 0.1;
+        }
+        else {
+            this.volume = 0.6;
+        }
+    });
+    //音樂播放暫停鍵
+    $(".dplay").click(function () {
+        //按下播放鍵的同時其他正在放的音樂就會暫停
+        $(".dpause").trigger("click");
+        $("#pause").trigger("click");
+        $(this).siblings(".demoAudio")[0].play();
+        $(this).siblings(".demoAudio").data("playing", "true");
+        $(this).css("display", "none");
+        $(this).siblings(".dpause").css("display", "inline-block");
+                        if (m_soid != $(this).data('soid')) {
                     m_soid = $(this).data('soid');
                     //Playlist紀錄
                     $.ajax({
@@ -140,42 +185,34 @@
                 } else {
                     m_soid = $(this).data('soid');
                 }
-                //oplaying = false;
-                $(".dplay").css("display", "inline");
-                $(".dpause").css("display", "none");
-                $(this).css("display", "none");
-                $(this).next(".dpause").css("display", "inline");
-                $("#play").css("display", "none");
-                $("#pause").css("display", "inline-block")
-            }
-            //else if ($(this).prop("class") == "vbtn opause") {
-            //    music.pause();
-            //    oplaying = false;
-            //    $(".oplay").css("display", "inline");
-            //    $(".opause").css("display", "none")
-            //}
-            else if ($(this).prop("class") == "vbtn dpause") {
-                demoMusic.pause();
-                dplaying = false;
-                $(".dplay").css("display", "inline");
-                $(".dpause").css("display", "none");
-                $(this).css("display", "none");
-                $(this).next(".dplay").css("display", "inline");
-                $("#play").css("display", "inline-block");
-                $("#pause").css("display", "none")
-            }
-        })
-        $(function () {
-            $('h3').click(function () {
-                if ($(this).next('.fold').hasClass('o') == true) {
-                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
-                    $(this).next('.fold').removeClass('o').slideUp();
-                }
-                else {
-                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
-                    $(this).next('.fold').addClass('o').slideDown();
-                }
-            });
-        });
-
-    </script>
+    })
+    $(".dpause").click(function () {
+        $(this).siblings(".demoAudio")[0].pause();
+        $(this).siblings(".demoAudio").data("playing", "false");
+        $(this).css("display", "none");
+        $(this).siblings(".dplay").css("display", "inline-block")
+    })
+    //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+    //測試時直接讀取本頁會造成進度條出現bug，從別頁進來則不會，推測是jquery重複讀取的關係，暫無解(但一般使用者也不會直接進入這頁)
+    $(".demoSlider").on("input", function () {
+        $(this).siblings(".demoAudio")[0].pause();
+        $(this).trigger("change");
+    })
+    //音樂進度條改變
+    $(".demoSlider").on("change", function () {
+        $(this).siblings(".demoAudio")[0].currentTime = this.value;
+    });
+    //拖動進度條直到放開滑鼠才重新開始播放
+    $(".demoSlider").on("mouseup", function () {
+        if ($(this).siblings(".demoAudio").data("playing") == "true")
+            $(this).siblings(".demoAudio")[0].play();
+    });
+    //取得音樂時間文字的方法(第二個有給到小數後兩位)
+    function getTimeText(num) {
+        let m1 = parseInt(num / 600);
+        let m2 = parseInt(num / 60 % 10);
+        let s1 = parseInt(num % 60 / 10);
+        let s2 = parseInt(num % 60 % 10);
+        return `${m1}${m2}:${s1}${s2}`;
+    }
+</script>

@@ -1,0 +1,14 @@
+﻿@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+}
+<script>
+    //history.state屬性為這個頁面所有的狀態物件，只有一個
+    //可以透過pushState()方法來將參數在網頁間傳遞
+    //這頁的history.state是當使用者按下搜尋鍵後會自動把寫好的ajax布林值與關鍵字傳過來
+    $.post('@Url.Action("ResultView", "Search")', history.state, function (data) {
+        $(".mainbox").html(data);
+    });
+</script>

@@ -33,8 +33,8 @@ namespace MusicPrj
         public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
         public virtual DbSet<tPlayList> tPlayLists { get; set; }
         public virtual DbSet<tActivity> tActivities { get; set; }
-        public virtual DbSet<tAlbumKind> tAlbumKinds { get; set; }
         public virtual DbSet<tLog> tLogs { get; set; }
         public virtual DbSet<tMessage> tMessages { get; set; }
+        public virtual DbSet<tAlbumKind> tAlbumKinds { get; set; }
     }
 }

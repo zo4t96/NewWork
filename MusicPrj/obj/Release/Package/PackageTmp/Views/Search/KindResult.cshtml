@@ -1,0 +1,12 @@
+﻿@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+}
+<script>
+    console.log(history.state)
+    $.post('@Url.Action("KindResultView", "Search")', history.state, function (data) {
+        $(".mainbox").html(data);
+    });
+</script>

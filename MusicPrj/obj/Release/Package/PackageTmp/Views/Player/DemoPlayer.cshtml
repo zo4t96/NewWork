@@ -1,0 +1,103 @@
+﻿@model MusicPrj.tProduct
+
+@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
+<!--試聽撥放器的style-->
+<style>
+    * {
+        font-family: "微軟正黑體";
+    }
+
+    .demoPanel {
+        position: relative;
+        width: 500px;
+        height: 40px;
+        background: #252525;
+        margin: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+        left: -25px;
+    }
+
+    .demoSlider {
+        -webkit-appearance: none;
+        display: inline-block;
+        border-radius: 50px;
+        width: 70%;
+        height: 5px;
+        outline: none;
+        margin: 10px;
+    }
+
+        .slider-range::-webkit-slider-thumb,
+        .demoSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 10px;
+            height: 10px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+            .demoSlider::-webkit-slider-thumb:hover {
+                cursor: pointer;
+                width: 14px;
+                height: 14px;
+            }
+
+    .demoSlider,
+    .vbtn {
+        cursor: pointer;
+    }
+
+    .vbtn {
+        display: inline-block;
+        position: relative;
+        top: 4px;
+    }
+
+        .vbtn img {
+            width: 20px;
+            height: 15px;
+            filter: invert();
+        }
+
+    .dpause {
+        display: none;
+    }
+
+    .demoPanel span {
+        display: inline-block;
+        position: relative;
+        top: 3px;
+        color: white;
+    }
+</style>
+
+@{
+    int demotimeEnd = (int)Model.fPlayEnd;
+    int demotimeStart = (int)Model.fPlayStart;
+    string demoStart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
+    string demoEnd = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
+}
+
+<div class="demoPanel">
+    <audio class="demoAudio" src="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => Model.fFilePath))" data-playing="false"></audio>
+    <span class="nowTime">@demoStart</span>
+    <input type="range" class="demoSlider" min="@Model.fPlayStart" max="@Model.fPlayEnd" step="0.01" value="@Model.fPlayStart">
+    <span class="endTime">@demoEnd</span>
+    @* 塞很多很多資料的播放鍵 *@
+    <div class="vbtn dplay"
+         data-singer="@Html.DisplayFor(modelItem => Model.fComposer)"
+         data-songn="@Html.DisplayFor(modelItem => Model.fProductName)"
+         data-soid="@Model.fProductID"
+         data-start="@Html.DisplayFor(modelItem => Model.fPlayStart)"
+         data-end="@Html.DisplayFor(modelItem => Model.fPlayEnd)"
+         data-songcover="@Model.tAlbum.fCoverPath"
+         data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => Model.fFilePath))">
+        <img src="~/Content/play.png">
+    </div>
+    <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+</div>
+@* 播放器的相關程式碼放在AlbumDetail.cshtml *@

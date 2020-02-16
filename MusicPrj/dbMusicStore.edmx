@@ -70,6 +70,7 @@
           <Property Name="fPicPath" Type="nvarchar(max)" />
           <Property Name="fSubscriptStartDate" Type="datetime" />
           <Property Name="fSubscriptEndDate" Type="datetime" />
+          <Property Name="fLastPlaySong" Type="int" />
         </EntityType>
         <EntityType Name="tMessage">
           <Key>
@@ -99,7 +100,7 @@
           <Property Name="fProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fAlbumID" Type="int" />
           <Property Name="fProductName" Type="nvarchar" MaxLength="50" />
-          <Property Name="fArtist" Type="nvarchar" MaxLength="50" />
+          <Property Name="fSinger" Type="nvarchar" MaxLength="50" />
           <Property Name="fSIPrice" Type="money" />
           <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
           <Property Name="fArranger" Type="nvarchar" MaxLength="50" />
@@ -428,6 +429,7 @@
           <NavigationProperty Name="tLogs1" Relationship="dbProjectMusicStoreModel.FK_tLog_tMember1" FromRole="tMember" ToRole="tLog" />
           <NavigationProperty Name="tMessages" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMember" ToRole="tMessage" />
           <NavigationProperty Name="tMessages1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMember" ToRole="tMessage" />
+          <Property Name="fLastPlaySong" Type="Int32" />
         </EntityType>
         <EntityType Name="tProduct">
           <Key>
@@ -436,7 +438,6 @@
           <Property Name="fProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fAlbumID" Type="Int32" />
           <Property Name="fProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fArtist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fSIPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="fComposer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fArranger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -454,6 +455,7 @@
           <NavigationProperty Name="tShoppingCarts" Relationship="Self.FK_tShoppingCart_tProducts" FromRole="tProducts" ToRole="tShoppingCart" />
           <NavigationProperty Name="tPlayLists" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" FromRole="tProduct" ToRole="tPlayList" />
           <Property Name="fPlaybackCount" Type="Int32" />
+          <Property Name="fSinger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           </EntityType>
         <EntityType Name="tPurchaseItem">
           <Key>
@@ -610,7 +612,6 @@
             <End Role="tPlayList" EntitySet="tPlayLists" />
           </AssociationSet>
           <EntitySet Name="tActivities" EntityType="dbProjectMusicStoreModel.tActivity" />
-          <EntitySet Name="tAlbumKinds" EntityType="dbProjectMusicStoreModel.tAlbumKind" />
           <EntitySet Name="tLogs" EntityType="dbProjectMusicStoreModel.tLog" />
           <EntitySet Name="tMessages" EntityType="dbProjectMusicStoreModel.tMessage" />
           <AssociationSet Name="FK_tActivity_tMember" Association="dbProjectMusicStoreModel.FK_tActivity_tMember">
@@ -633,6 +634,7 @@
             <End Role="tMember" EntitySet="tMembers" />
             <End Role="tMessage" EntitySet="tMessages" />
           </AssociationSet>
+          <EntitySet Name="tAlbumKinds" EntityType="dbProjectMusicStoreModel.tAlbumKind" />
           </EntityContainer>
         <EntityType Name="tPlayList">
           <Key>
@@ -678,13 +680,6 @@
           <Property Name="fEndTime" Type="DateTime" Precision="3" />
           <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tActivity" ToRole="tMember" />
-        </EntityType>
-        <EntityType Name="tAlbumKind">
-          <Key>
-            <PropertyRef Name="KindID" />
-          </Key>
-          <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tLog">
           <Key>
@@ -773,6 +768,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tAlbumKind">
+          <Key>
+            <PropertyRef Name="KindID" />
+          </Key>
+          <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -809,6 +811,7 @@
           <EntitySetMapping Name="tMembers">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
               <MappingFragment StoreEntitySet="tMember">
+                <ScalarProperty Name="fLastPlaySong" ColumnName="fLastPlaySong" />
                 <ScalarProperty Name="fSubscriptEndDate" ColumnName="fSubscriptEndDate" />
                 <ScalarProperty Name="fSubscriptStartDate" ColumnName="fSubscriptStartDate" />
                 <ScalarProperty Name="fPicPath" ColumnName="fPicPath" />
@@ -824,11 +827,11 @@
           <EntitySetMapping Name="tProducts">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProduct">
               <MappingFragment StoreEntitySet="tProducts">
+                <ScalarProperty Name="fSinger" ColumnName="fSinger" />
                 <ScalarProperty Name="fPlaybackCount" ColumnName="fPlaybackCount" />
                 <ScalarProperty Name="fProductID" ColumnName="fProductID" />
                 <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
                 <ScalarProperty Name="fProductName" ColumnName="fProductName" />
-                <ScalarProperty Name="fArtist" ColumnName="fArtist" />
                 <ScalarProperty Name="fSIPrice" ColumnName="fSIPrice" />
                 <ScalarProperty Name="fComposer" ColumnName="fComposer" />
                 <ScalarProperty Name="fArranger" ColumnName="fArranger" />
@@ -888,14 +891,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tAlbumKinds">
-            <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
-              <MappingFragment StoreEntitySet="tAlbumKind">
-                <ScalarProperty Name="KindName" ColumnName="KindName" />
-                <ScalarProperty Name="KindID" ColumnName="KindID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tLogs">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tLog">
               <MappingFragment StoreEntitySet="tLog">
@@ -918,6 +913,14 @@
                 <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
                 <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
                 <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tAlbumKinds">
+            <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
+              <MappingFragment StoreEntitySet="tAlbumKind">
+                <ScalarProperty Name="KindName" ColumnName="KindName" />
+                <ScalarProperty Name="KindID" ColumnName="KindID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
