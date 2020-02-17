@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MainWork.tAlbumKind>
+
+<style>
+    .outer{
+        display:flex;
+    }
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 0px;
+    }
+
+    .groupPanel {
+        width: 45%;
+        margin: 30px 30px 30px 0px;
+    }
+</style>
+
+<div class="container">
+    <div class="title">
+        <p>樂曲風格</p>
+    </div>
+    <div class="outer">
+        <div class="groupPanel">
+            <div class="h5">曲風</div>
+            <select class="custom-select w-25">
+                <option>新增類別...</option>
+                @foreach (var item in Model)
+                {
+                    <option>@item.KindName</option>
+                }
+            </select>
+
+            <form class="form-inline">
+                <div class="input-group w-50 mb-3 mr-3 mt-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">名稱</div>
+                    </div>
+                    <input type="text" class="form-control w-50 mb-3 mr-3 mt-3 " placeholder="請輸入修改名稱">
+                </div>
+
+                <div class="input-group w-50 mb-3 mr-3 mt-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">色碼#</div>
+                    </div>
+                    <input type="text" class="form-control" placeholder="#FFFFFF">
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">儲存</button>
+            </form>
+
+        </div>
+
+
+
+
+
+
+        <div class="groupPanel">
+            <div class="h5">預覽</div>
+        </div>
+
+    </div>
+    
+</div>

@@ -422,6 +422,7 @@
     <Content Include="Views\MemberLogin\New.cshtml" />
     <Content Include="Views\MemberLogin\Login.cshtml" />
     <Content Include="Views\Admin\TypeAlter.cshtml" />
+    <Content Include="Views\Admin\KindAlter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

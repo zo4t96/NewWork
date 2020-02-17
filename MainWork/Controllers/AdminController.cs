@@ -59,7 +59,7 @@ namespace MainWork.Controllers
         }
 
 
-        //類型曲風新刪修
+        //販售類型新刪修
         public ActionResult TypeAlter()
         {
             CSearch cs = new CSearch();
@@ -99,6 +99,13 @@ namespace MainWork.Controllers
             at.fTypeName = typeChange;
             db.SaveChanges();
             return RedirectToAction("TypeAlter");
+        }
+
+        //音樂風格新刪修
+        public ActionResult KindAlter()
+        {
+            CSearch cs = new CSearch();
+            return View(cs.takeAllKind());
         }
     }
 }
