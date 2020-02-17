@@ -78,6 +78,14 @@ namespace MainWork.Controllers
         [HttpPost]
         public ActionResult TypeDelete(int deleteId) 
         {
+            //刪除類別之前，把所有符合該類別的專輯id全部改為1(類別為不指定)，使這項目不會有NULL情況發生
+            var al = db.tAlbums.Where(a => a.fType == deleteId);
+            foreach (var a in al)
+            {
+                a.fType = 1;
+            }
+            db.SaveChanges();
+
             tAlbumType at = db.tAlbumTypes.Where(p => p.fTypeID == deleteId).FirstOrDefault();
             db.tAlbumTypes.Remove(at);
             db.SaveChanges();

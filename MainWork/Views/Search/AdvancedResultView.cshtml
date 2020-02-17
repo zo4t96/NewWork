@@ -140,10 +140,9 @@
             let stateObj = { amid: amid, ajax: true };
             $.post(url, stateObj, function (data) {
                 $(".mainbox").html(data);
+                $(window).scrollTop(0);
             })
             history.pushState(stateObj, null, url);
-            $(window).scrollTop(0);
         });
-
     </script>
 </body>

@@ -109,7 +109,10 @@
                 <div class="albumContent">
                     <span class="albumTitle">@item.fAlbumName</span>
                     <span class="albumDescripion">@item.fMaker</span>
-                    <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
+                    @if (item.tAlbumType.fTypeName != "不指定")
+                    {
+                        <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
+                    }
                     <span class="albumDescripion">@item.fKinds</span>
                 </div>
             </a>
@@ -127,9 +130,9 @@
             let stateObj = { amid: amid, ajax: true };
             $.post(url, stateObj, function (data) {
                 $(".mainbox").html(data);
+                $(window).scrollTop(0);
             })
             history.pushState(stateObj, null, url);
-            $(window).scrollTop(0);
         });
     </script>
 </body>
