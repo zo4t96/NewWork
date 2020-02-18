@@ -75,7 +75,6 @@ namespace MainWork.Controllers
             return RedirectToAction("TypeAlter");
         }
 
-        [HttpPost]
         public ActionResult TypeDelete(int deleteId) 
         {
             //刪除類別之前，把所有符合該類別的專輯id全部改為1(類別為不指定)，使這項目不會有NULL情況發生
@@ -91,9 +90,8 @@ namespace MainWork.Controllers
             db.SaveChanges();
             return RedirectToAction("TypeAlter");
         }
-
-        [HttpPost]
-        public ActionResult TypeAlter(int typeOrigin,string typeChange)
+        
+        public ActionResult TypeEdit(int typeOrigin,string typeChange)
         {
             tAlbumType at = db.tAlbumTypes.Where(p => p.fTypeID == typeOrigin).FirstOrDefault();
             at.fTypeName = typeChange;
@@ -106,6 +104,40 @@ namespace MainWork.Controllers
         {
             CSearch cs = new CSearch();
             return View(cs.takeAllKind());
+        }
+
+        public ActionResult KindDelete(int deleteId)
+        {
+            //刪除曲風之前先將相關專輯的相同曲風都刪除
+            string kindName = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault().KindName;
+            var albums = db.tAlbums.Where(a => a.fKinds.Contains(kindName));
+            foreach(var a in albums)
+            {
+                if (a.fKinds.Contains(kindName + ","))
+                {
+                    a.fKinds.Replace(kindName + ",","");
+                }
+                else 
+                {
+                    a.fKinds.Replace(kindName, "");
+                }
+            }
+            db.SaveChanges();
+
+            var kind = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault();
+            db.tAlbumKinds.Remove(kind);
+            db.SaveChanges();
+            return RedirectToAction("KindAlter", "Admin");
+        }
+
+        public ActionResult KindNew()
+        {
+            return RedirectToAction("KindAlter", "Admin");
+        }
+
+        public ActionResult KindEdit()
+        {
+            return RedirectToAction("KindAlter", "Admin");
         }
     }
 }

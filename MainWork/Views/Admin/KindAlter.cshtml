@@ -94,7 +94,7 @@
                 }
             </select>
 
-            <form id="kindForm">
+            <form id="kindForm" method="post">
                 @* 輸入名稱 *@
                 <div class="input-group w-50 mr-3 mt-3">
                     <div class="input-group-prepend">
@@ -239,7 +239,7 @@
         }
     })
 
-    //初始化方法(把顏色都弄回正常什麼的，初次進入與選單換取風的時候會發動)
+    //初始化方法(把顏色都弄回正常什麼的，初次進入與選單換曲風的時候會發動)
     function initialize() {
         $(".kindBlockSmall").each(function () {
             $(this).css("background-color", $(this).data("color"))
@@ -253,13 +253,18 @@
         $(".upload").val('');
     }
 
-    $(".new").click(function () {
-
+    //三種按鍵對應新刪修，直接修改form的action
+    $(".new").click(function (e) {
+        e.originalEvent()
     })
-    $(".save").click(function () {
-
+    $(".save").click(function (e) {
+        e.originalEvent()
     })
-    $(".delete").click(function () {
-
+    $(".delete").click(function (e) {
+        e.originalEvent()
+        if (confirm("這會讓跟本曲風相關聯的專輯資料也刪去相同的曲風，確定要這麼做嗎?")) {
+            $("#kindForm").attr("action", "@Url.Action("KindDelete","Admin")")
+            $("#kindForm").submit();
+        }
     })
 </script>

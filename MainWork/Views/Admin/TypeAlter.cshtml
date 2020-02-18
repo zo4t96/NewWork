@@ -50,7 +50,7 @@
                 continue;
             }
             <div>
-                <form class="falter" action="@Url.Action("TypeAlter", "Admin")" method="post">
+                <form class="fedit" action="@Url.Action("TypeEdit", "Admin")" method="post">
                     <input type="hidden" value="@item.fTypeID" name="typeOrigin" />
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -58,7 +58,7 @@
                         </div>
                         <input type="text" class="form-control changeName" name="typeChange" placeholder="請輸入修改名稱">
                         <div class="input-group-append">
-                            <button class="btn btn-warning alter" type="button">修改</button>
+                            <button class="btn btn-warning edit" type="button">修改</button>
                             <button class="btn btn-danger delete" type="button">刪除</button>
                         </div>
                     </div>
@@ -79,18 +79,18 @@
         }
     })
 
-    $(".alter").click(function () {
+    $(".edit").click(function () {
         var changeName = $(this).parent().siblings(".changeName").val();
         if (!nameTwice(changeName)) {
             if (confirm("這麼做會連帶改變所有使用此類別的專輯，確定要修改嗎?")) {
-                $(this).parents(".falter").submit();
+                $(this).parents(".fedit").submit();
             }
         }
     })
 
     $(".delete").click(function () {
         if (confirm("這麼做會影響所有使用此類別的專輯，真的要刪除嗎?")) {
-            $(this).parents(".falter").siblings(".fdelete").submit();
+            $(this).parents(".fedit").siblings(".fdelete").submit();
         }
     })
 
