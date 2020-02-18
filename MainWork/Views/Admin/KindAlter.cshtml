@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<MainWork.tAlbumKind>
 
 <style>
-    .outer{
-        display:flex;
+    .outer {
+        display: flex;
+        margin:0px 50px;
     }
+
     .title {
         font-weight: 800;
         font-size: 30px;
@@ -11,56 +13,253 @@
     }
 
     .groupPanel {
-        width: 45%;
-        margin: 30px 30px 30px 0px;
+        width: 40%;
+        margin: 30px 0px;
+        min-width: 500px;
+    }
+
+    #colorpicker {
+        height: 36px;
+        padding: 2px 3px;
+    }
+
+    .kindBlockSmall {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 2px 1px;
+        color: white;
+        font-weight: 600;
+    }
+
+    /*以下為預覽介面*/
+    .kindPanel {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+        background-color: #191919;
+    }
+
+    .kindBlockBig {
+        width: 6vw;
+        height: 6vw;
+        min-width: 70px;
+        min-height: 70px;
+        border-radius: 10px;
+        margin: 4px;
+        padding: 5px;
+        background-image: linear-gradient(to bottom,#16161660 15%,#ffffff);
+        overflow: hidden;
+    }
+
+    .photo {
+        position: relative;
+        width: 70%;
+        height: 70%;
+        bottom: -25%;
+        right: -50%;
+        background-size: cover;
+        box-shadow: 0px 1px 1px 1px #0000004b;
+        transform: rotate(25deg);
+    }
+    .selected{
+        box-shadow:0px 0px 10px 7px #0caaef;
     }
 </style>
 
-<div class="container">
+<div class="container-fluid">
     <div class="title">
-        <p>樂曲風格</p>
+        <p>樂曲風格&介面修改</p>
     </div>
     <div class="outer">
         <div class="groupPanel">
-            <div class="h5">曲風</div>
-            <select class="custom-select w-25">
-                <option>新增類別...</option>
+
+            <div class="h5">曲風一覽</div>
+            <div class="mb-5 w-75">
                 @foreach (var item in Model)
                 {
-                    <option>@item.KindName</option>
+                    <div class="kindBlockSmall" data-color="@item.fColor">@item.KindName</div>
+                }
+            </div>
+
+            <div class="h5">曲風選擇</div>
+            <select class="custom-select w-25 mr-3 menu" form="kindForm">
+                <option value="0" data-color="#000000">新增曲風...</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.KindID" data-color="@item.fColor" data-path="/Images/@item.fPhotoPath">@item.KindName</option>
                 }
             </select>
 
-            <form class="form-inline">
-                <div class="input-group w-50 mb-3 mr-3 mt-3">
+            <form id="kindForm">
+                @* 輸入名稱 *@
+                <div class="input-group w-50 mr-3 mt-3">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">名稱</div>
+                        <div class="input-group-text name">名稱</div>
                     </div>
-                    <input type="text" class="form-control w-50 mb-3 mr-3 mt-3 " placeholder="請輸入修改名稱">
+                    <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱">
                 </div>
 
-                <div class="input-group w-50 mb-3 mr-3 mt-3">
+                @* 改變顏色 *@
+                <div class="input-group w-50 mr-3 mt-3 ">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">色碼#</div>
+                        <div class="input-group-text color">色碼</div>
                     </div>
-                    <input type="text" class="form-control" placeholder="#FFFFFF">
+                    <input type="color" id="colorpicker" value="#ffffff">
+                    <input type="text" readonly class="form-control color colortxt" value="#ffffff">
                 </div>
 
+                @* 上傳圖片 *@
+                <div class="input-group w-50 mr-3 mt-3 ">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="on" type="radio" name="uploadCheck" value="true" checked />
+                        <label class="form-check-label" for="on">上傳圖片</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="off" type="radio" name="uploadCheck" value="false" />
+                        <label class="form-check-label" for="off">不上傳圖片</label>
+                    </div>
+                </div>
+                <div>
+                    <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg">
+                </div>
 
-                <button type="submit" class="btn btn-primary">儲存</button>
+                <input type="hidden" class="forDelete" name="deleteId" value="0"/>
+
+                <button type="submit" class="btn btn-primary mr-3 mt-3 save">儲存變更</button>
+                <button type="submit" class="btn btn-primary mr-3 mt-3 new">新增</button>
+                <button type="submit" class="btn btn-danger mt-3 delete">刪除此曲風</button>
+                <small class="form-text text-muted">注意，每次儲存僅會修改當前選擇的曲風</small>
             </form>
-
         </div>
-
-
-
-
-
 
         <div class="groupPanel">
-            <div class="h5">預覽</div>
+            <div class="h5">預覽介面</div>
+            <div class="kindPanel">
+                @foreach (var item in Model)
+                {
+                    <div class="kindBlockBig" data-kind="@item.KindID" data-color="@item.fColor" data-path="@item.fPhotoPath">
+                        <span class="kindName">@item.KindName</span>
+                        <div class="photo"></div>
+                    </div>
+                }
+                <div class="kindBlockBig newBlock selected" data-kind="0">
+                    <span class="kindName">新增曲風</span>
+                    <div class="photo"></div>
+                </div>
+            </div>
         </div>
-
     </div>
-    
 </div>
+
+<script>
+    $(".save").css("display", "none")
+    $(".delete").css("display", "none")
+    initialize()
+    
+    $(".color").click(function () {
+        $("#colorpicker").trigger("click");
+    })
+    $("#colorpicker").change(function () {
+        $(".colortxt").val($(this).val());
+        var target = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`);
+        target.css("background-color", $(this).val());
+        target.css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).val()})`)
+    })
+    $(".nameInput").keyup(function () {
+        $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text($(this).val());
+        if (this.value == "") {
+            var name = $(this).siblings().find(".name").text();
+            $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text(name);
+        }
+    })
+    $('input[type = "radio"]').on("input", function () {
+        if ($(this).attr("id") == "on") {
+            $(".upload").css("display", "block")
+        }
+        else {
+            $(".upload").css("display", "none")
+        }
+    })
+
+    $(".menu").change(function () {
+        initialize();
+        $(".forDelete").val($(this).val());
+        
+        //選擇現有曲風
+        if ($(this).val() != 0) {
+            $(".delete").css("display", "inline-block");
+            $(".save").css("display", "inline-block");
+            $(".new").css("display", "none");
+            $(".colortxt").val($(this).find("option:selected").data("color"));
+            $("#colorpicker").val($(this).find("option:selected").data("color"));
+            $(".name").text($(this).find("option:selected").text());
+            $(".nameInput").attr("placeholder", "請輸入要變更的名稱");
+
+            $(".newBlock").css("display", "none");
+            $(".kindPanel").children().removeClass("selected");
+            $(".kindPanel").find(`[data-kind = ${$(this).val()}]`).addClass("selected");
+        }
+        //選擇新增曲風
+        else {
+            $(".delete").css("display", "none");
+            $(".save").css("display", "none");
+            $(".new").css("display", "inline-block");
+            $(".colortxt").val("#ffffff");
+            $("#colorpicker").val("#ffffff");
+            $(".name").text("名稱");
+            $(".nameInput").attr("placeholder", "請輸入要新增的曲風名稱");
+
+            $(".newBlock").css("display", "block");
+            $(".kindPanel").children().removeClass("selected");
+            $(".newBlock").addClass("selected")
+
+        }
+    })
+
+    $(".kindBlockBig").click(function () {
+        $(".menu").val($(this).data("kind"));
+        $(".menu").trigger("change");
+    })
+
+    $(".upload").change(function () {
+        let file = this.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            console.log(e)
+            console.log(e.target)
+            console.log(e.target.result)
+
+            var photo = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".photo");
+            photo.css("background-image", `url(${e.target.result})`)
+        }
+    })
+
+    //初始化方法(把顏色都弄回正常什麼的，初次進入與選單換取風的時候會發動)
+    function initialize() {
+        $(".kindBlockSmall").each(function () {
+            $(this).css("background-color", $(this).data("color"))
+            $(this).css("background-image", `linear-gradient(to bottom,#26262660 100%,${$(this).data("color")})`);
+        })
+        $(".kindBlockBig").each(function () {
+            $(this).css("background-color", $(this).data("color"))
+            $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
+            $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("path")}`)
+        })
+        $(".upload").val('');
+    }
+
+    $(".new").click(function () {
+
+    })
+    $(".save").click(function () {
+
+    })
+    $(".delete").click(function () {
+
+    })
+</script>
