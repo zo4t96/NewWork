@@ -13,7 +13,6 @@
     }
 
     .groupPanel {
-        width: 40%;
         margin: 30px 0px;
         min-width: 500px;
     }
@@ -53,6 +52,7 @@
         padding: 5px;
         background-image: linear-gradient(to bottom,#16161660 15%,#ffffff);
         overflow: hidden;
+        cursor:pointer;
     }
 
     .photo {
@@ -75,8 +75,7 @@
         <p>樂曲風格&介面修改</p>
     </div>
     <div class="outer">
-        <div class="groupPanel">
-
+        <div class="groupPanel col-5">
             <div class="h5">曲風一覽</div>
             <div class="mb-5 w-75">
                 @foreach (var item in Model)
@@ -85,8 +84,9 @@
                 }
             </div>
 
+            @* 選擇曲風id *@
             <div class="h5">曲風選擇</div>
-            <select class="custom-select w-25 mr-3 menu" form="kindForm">
+            <select class="custom-select w-25 mr-3 menu" form="kindForm" name="kindId">
                 <option value="0" data-color="#000000">新增曲風...</option>
                 @foreach (var item in Model)
                 {
@@ -94,21 +94,22 @@
                 }
             </select>
 
-            <form id="kindForm" method="post">
+            <form id="kindForm" method="post" enctype="multipart/form-data">
                 @* 輸入名稱 *@
                 <div class="input-group w-50 mr-3 mt-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text name">名稱</div>
                     </div>
-                    <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱">
+                    <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱" name="kindName">
                 </div>
+                <small class="form-text text-muted">修改狀態下，不填寫名稱欄位視同不做修改</small>
 
                 @* 改變顏色 *@
                 <div class="input-group w-50 mr-3 mt-3 ">
                     <div class="input-group-prepend">
                         <div class="input-group-text color">色碼</div>
                     </div>
-                    <input type="color" id="colorpicker" value="#ffffff">
+                    <input type="color" id="colorpicker" value="#ffffff" name="kindColor">
                     <input type="text" readonly class="form-control color colortxt" value="#ffffff">
                 </div>
 
@@ -124,10 +125,10 @@
                     </div>
                 </div>
                 <div>
-                    <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg">
+                    <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="kindImage">
                 </div>
 
-                <input type="hidden" class="forDelete" name="deleteId" value="0"/>
+                <input type="hidden" class="forDelete" name="deleteId" value="0" />
 
                 <button type="submit" class="btn btn-primary mr-3 mt-3 save">儲存變更</button>
                 <button type="submit" class="btn btn-primary mr-3 mt-3 new">新增</button>
@@ -136,12 +137,12 @@
             </form>
         </div>
 
-        <div class="groupPanel">
+        <div class="groupPanel col-6">
             <div class="h5">預覽介面</div>
             <div class="kindPanel">
                 @foreach (var item in Model)
                 {
-                    <div class="kindBlockBig" data-kind="@item.KindID" data-color="@item.fColor" data-path="@item.fPhotoPath">
+                    <div class="kindBlockBig" data-name="@item.KindName" data-kind="@item.KindID" data-color="@item.fColor" data-path="@item.fPhotoPath">
                         <span class="kindName">@item.KindName</span>
                         <div class="photo"></div>
                     </div>
@@ -170,7 +171,7 @@
         target.css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).val()})`)
     })
     $(".nameInput").keyup(function () {
-        $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text($(this).val());
+        $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text($(this).val().trim());
         if (this.value == "") {
             var name = $(this).siblings().find(".name").text();
             $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text(name);
@@ -216,7 +217,6 @@
             $(".newBlock").css("display", "block");
             $(".kindPanel").children().removeClass("selected");
             $(".newBlock").addClass("selected")
-
         }
     })
 
@@ -237,7 +237,77 @@
             var photo = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".photo");
             photo.css("background-image", `url(${e.target.result})`)
         }
+    }) 
+
+    //三種按鍵對應新刪修，直接修改form的action
+    $(".new").click(function (e) {
+        e.preventDefault();
+
+        let radio = $("input[type = radio]").val();
+        let nameInput = $(".nameInput").val().trim();
+
+        if (nameInput == "") {
+            alert("還未填寫新曲風的名稱!")
+            return;
+        }
+        if (radio == "true" && fileIsNull()) {
+            alert("還未上傳圖片檔!");
+            return;
+        }
+        if (!nameTwice(nameInput)) {
+            $(".nameInput").val(nameInput);
+            $("#kindForm").attr("action", "@Url.Action("KindNew","Admin")")
+            $("#kindForm").submit();
+        }
     })
+
+    $(".save").click(function (e) {
+        e.preventDefault();
+
+        let radio = $("input[type = radio]").val();
+        let nameInput = $(".nameInput").val().trim();
+        
+        if (radio == "true" && fileIsNull()) {
+            alert("還未上傳圖片檔!");
+            return;
+        }
+        if (!nameTwice($(".nameInput").val())) {
+            if (nameInput == "") {
+                $(".nameInput").val(nameInput);
+            }
+            $("#kindForm").attr("action", "@Url.Action("KindEdit","Admin")")
+            $("#kindForm").submit();
+        }
+    })
+
+    $(".delete").click(function (e) {
+        e.preventDefault();
+        if (confirm("這會讓跟本曲風相關聯的專輯資料也刪去相同的曲風，確定要這麼做嗎?")) {
+            $("#kindForm").attr("action", "@Url.Action("KindDelete","Admin")")
+            $("#kindForm").submit();
+        }
+    })
+
+    //判斷是否有重名的方法
+    function nameTwice(name) {
+        let cancel = false;
+        $(".kindBlockSmall").each(function () {
+            if ($(this).text() == name) {
+                alert("資料庫裡已有同名的樂曲風格!")
+                cancel = true;
+            }
+        })
+        return cancel;
+    }
+
+    //假如勾選上傳圖片，則上傳檔案不該為空值
+    function fileIsNull() {
+        let cancel = false;
+        if ($(".upload").val() == "") {
+            cancel = true;
+        }
+        return cancel;
+    }
 
     //初始化方法(把顏色都弄回正常什麼的，初次進入與選單換曲風的時候會發動)
     function initialize() {
@@ -249,22 +319,10 @@
             $(this).css("background-color", $(this).data("color"))
             $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
             $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("path")}`)
+            $(this).find("span").text($(this).data("name"));
         })
-        $(".upload").val('');
+        //把上傳檔案資料清空
+        $(".upload").val("");
     }
-
-    //三種按鍵對應新刪修，直接修改form的action
-    $(".new").click(function (e) {
-        e.originalEvent()
-    })
-    $(".save").click(function (e) {
-        e.originalEvent()
-    })
-    $(".delete").click(function (e) {
-        e.originalEvent()
-        if (confirm("這會讓跟本曲風相關聯的專輯資料也刪去相同的曲風，確定要這麼做嗎?")) {
-            $("#kindForm").attr("action", "@Url.Action("KindDelete","Admin")")
-            $("#kindForm").submit();
-        }
-    })
+    
 </script>

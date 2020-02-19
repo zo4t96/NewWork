@@ -1,6 +1,8 @@
 ﻿using MainWork.Models;
+using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -130,13 +132,38 @@ namespace MainWork.Controllers
             return RedirectToAction("KindAlter", "Admin");
         }
 
-        public ActionResult KindNew()
+        public ActionResult KindNew(CKindEditObject kindObj)
         {
+            tAlbumKind kind = new tAlbumKind();
+            kind.KindName = kindObj.kindName;
+            kind.fColor = kindObj.kindColor;
+            //如果有勾選上傳圖片才處理圖片內容
+            //圖片檔名判斷已事先在前端限定jpg圖檔，因此此處就不多加條件判斷
+            if(kindObj.uploadCheck == "true")
+            {
+                string filename = Guid.NewGuid().ToString() + ".jpg";
+                string path = Path.Combine(Server.MapPath("~/Images"),filename);
+
+                kindObj.kindImage.SaveAs(path);
+
+                kind.fPhotoPath = filename;
+            }
+            db.tAlbumKinds.Add(kind);
+            db.SaveChanges();
             return RedirectToAction("KindAlter", "Admin");
         }
 
-        public ActionResult KindEdit()
+        public ActionResult KindEdit(CKindEditObject kindObj)
         {
+            tAlbumKind kind = db.tAlbumKinds.Where(k => k.KindID == kindObj.kindId).FirstOrDefault();
+            kind.fColor = kindObj.kindColor;
+            kind.KindName = kindObj.kindName;
+            if (kindObj.uploadCheck == "true")
+            {
+                string path = Path.Combine(Server.MapPath("~/Images"), kind.fPhotoPath);
+                kindObj.kindImage.SaveAs(path);
+            }
+            db.SaveChanges();
             return RedirectToAction("KindAlter", "Admin");
         }
     }
