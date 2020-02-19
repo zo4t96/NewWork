@@ -108,30 +108,6 @@ namespace MainWork.Controllers
             return View(cs.takeAllKind());
         }
 
-        public ActionResult KindDelete(int deleteId)
-        {
-            //刪除曲風之前先將相關專輯的相同曲風都刪除
-            string kindName = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault().KindName;
-            var albums = db.tAlbums.Where(a => a.fKinds.Contains(kindName));
-            foreach(var a in albums)
-            {
-                if (a.fKinds.Contains(kindName + ","))
-                {
-                    a.fKinds.Replace(kindName + ",","");
-                }
-                else 
-                {
-                    a.fKinds.Replace(kindName, "");
-                }
-            }
-            db.SaveChanges();
-
-            var kind = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault();
-            db.tAlbumKinds.Remove(kind);
-            db.SaveChanges();
-            return RedirectToAction("KindAlter", "Admin");
-        }
-
         public ActionResult KindNew(CKindEditObject kindObj)
         {
             tAlbumKind kind = new tAlbumKind();
@@ -156,6 +132,24 @@ namespace MainWork.Controllers
         public ActionResult KindEdit(CKindEditObject kindObj)
         {
             tAlbumKind kind = db.tAlbumKinds.Where(k => k.KindID == kindObj.kindId).FirstOrDefault();
+
+            //修正曲風時假設有修正曲風名字，那麼原本擁有該曲風專輯的相關曲風會被剔除
+            if (kind.KindName != kindObj.kindName)
+            {
+                var albums = db.tAlbums.Where(a => a.fKinds.Contains(kind.KindName));
+                foreach(var a in albums)
+                {
+                    if (a.fKinds.Contains(kind.KindName + ","))
+                    {
+                        a.fKinds = a.fKinds.Replace(kind.KindName + ",", "");
+                    }
+                    else
+                    {
+                        a.fKinds = a.fKinds.Replace(kind.KindName, "");
+                    }
+                }
+            }
+
             kind.fColor = kindObj.kindColor;
             kind.KindName = kindObj.kindName;
             if (kindObj.uploadCheck == "true")
@@ -163,6 +157,30 @@ namespace MainWork.Controllers
                 string path = Path.Combine(Server.MapPath("~/Images"), kind.fPhotoPath);
                 kindObj.kindImage.SaveAs(path);
             }
+            db.SaveChanges();
+            return RedirectToAction("KindAlter", "Admin");
+        }
+
+        public ActionResult KindDelete(int deleteId)
+        {
+            //刪除曲風之前先將相關專輯的相同曲風都刪除
+            string kindName = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault().KindName;
+            var albums = db.tAlbums.Where(a => a.fKinds.Contains(kindName));
+            foreach (var a in albums)
+            {
+                if (a.fKinds.Contains(kindName + ","))
+                {
+                    a.fKinds = a.fKinds.Replace(kindName + ",", "");
+                }
+                else
+                {
+                    a.fKinds = a.fKinds.Replace(kindName, "");
+                }
+            }
+            db.SaveChanges();
+
+            var kind = db.tAlbumKinds.Where(k => k.KindID == deleteId).FirstOrDefault();
+            db.tAlbumKinds.Remove(kind);
             db.SaveChanges();
             return RedirectToAction("KindAlter", "Admin");
         }

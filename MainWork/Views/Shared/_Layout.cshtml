@@ -892,8 +892,8 @@
             })
             $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
                 $.each(datas, function (name, value) {
-                    $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}">${value.KindName}</div>`);
-                    $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}">${value.KindName}</div>`)
+                    $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`);
+                    $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`)
                 })
                 $(".advancedBlock").append('<div class="itemAdd"><i class="fa fa-plus"></i></div>');
 
@@ -902,17 +902,15 @@
                 })
 
                 //初始化進階面板曲風選項的顏色
-                var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
-                    , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
-                    , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
-                var block = $(".selectableItemPanel").children(".selectableItem");
-                var block2 = $(".advancedBlock").children(".selectedItem");
-                for (let i = 0; i < block.length; i++) {
-                    block.eq(i).css("background-color", color[i]);
-                    block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
-                    block2.eq(i).css("background-color", color[i]);
-                    block2.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
-                }
+                $(".selectableItemPanel").children(".selectableItem").each(function () {
+                    $(this).css("background-color", $(this).data("color"));
+                    $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
+                })
+                $(".advancedBlock").children(".selectedItem").each(function () {
+                    $(this).css("background-color", $(this).data("color"));
+                    $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
+                })
+
                 //選擇曲風
                 $(".selectableItem").on("click", function () {
                     let kindName = $(this).data("kind");

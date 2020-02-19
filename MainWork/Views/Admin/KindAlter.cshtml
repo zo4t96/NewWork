@@ -96,7 +96,7 @@
 
             <form id="kindForm" method="post" enctype="multipart/form-data">
                 @* 輸入名稱 *@
-                <div class="input-group w-50 mr-3 mt-3">
+                <div class="input-group w-75 mr-3 mt-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text name">名稱</div>
                     </div>
@@ -105,7 +105,7 @@
                 <small class="form-text text-muted">修改狀態下，不填寫名稱欄位視同不做修改</small>
 
                 @* 改變顏色 *@
-                <div class="input-group w-50 mr-3 mt-3 ">
+                <div class="input-group w-75 mr-3 mt-3 ">
                     <div class="input-group-prepend">
                         <div class="input-group-text color">色碼</div>
                     </div>
@@ -243,7 +243,7 @@
     $(".new").click(function (e) {
         e.preventDefault();
 
-        let radio = $("input[type = radio]").val();
+        let radio = $("input[type = radio]:checked").val();
         let nameInput = $(".nameInput").val().trim();
 
         if (nameInput == "") {
@@ -264,19 +264,20 @@
     $(".save").click(function (e) {
         e.preventDefault();
 
-        let radio = $("input[type = radio]").val();
+        let radio = $("input[type = radio]:checked").val();
         let nameInput = $(".nameInput").val().trim();
-        
         if (radio == "true" && fileIsNull()) {
             alert("還未上傳圖片檔!");
             return;
         }
         if (!nameTwice($(".nameInput").val())) {
-            if (nameInput == "") {
-                $(".nameInput").val(nameInput);
+            if (confirm("假如修改曲風名稱，原本擁有此項的專輯的同曲風會被刪除，確定要修改嗎?")) {
+                if (nameInput == "") {
+                $(".nameInput").val($(".name").text());
             }
-            $("#kindForm").attr("action", "@Url.Action("KindEdit","Admin")")
-            $("#kindForm").submit();
+                $("#kindForm").attr("action", "@Url.Action("KindEdit","Admin")")
+                $("#kindForm").submit();
+            }
         }
     })
 
@@ -324,5 +325,5 @@
         //把上傳檔案資料清空
         $(".upload").val("");
     }
-    
+
 </script>

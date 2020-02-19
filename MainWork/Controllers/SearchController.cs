@@ -95,8 +95,7 @@ namespace MainWork.Controllers
         //進階搜尋內容的初始化
         public ActionResult SetTypes()
         {
-            CSearch cs = new CSearch();
-            var data = cs.takeAllType();
+            var data = search.takeAllType();
             //用json直接回傳entity物件時，會產生循環參考的錯誤
             //這邊選擇直接將資料轉為匿名物件回傳
             var result = data.Select(d => new { d.fTypeID, d.fTypeName });
@@ -104,9 +103,8 @@ namespace MainWork.Controllers
         }
         public ActionResult SetKinds()
         {
-            CSearch cs = new CSearch();
-            var data = cs.takeAllKind();
-            var result = data.Select(d => new { d.KindName });
+            var data = search.takeAllKind();
+            var result = data.Select(d => new { d.KindName, d.fColor });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
