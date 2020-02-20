@@ -74,7 +74,7 @@ namespace MainWork.Models
             {
                 data = data.Where(a => a.album.fMaker.Contains(keyObj.adGroup));
             }
-            if (keyObj.adType != 0)
+            if (keyObj.adType != 1)//不指定的id為1，資料庫若有更改得做修正
             {
                 data = data.Where(a => a.album.fType == keyObj.adType);
             }
@@ -100,5 +100,6 @@ namespace MainWork.Models
             }
             return result;
         }
+
     }
 }

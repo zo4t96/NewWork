@@ -184,5 +184,15 @@ namespace MainWork.Controllers
             db.SaveChanges();
             return RedirectToAction("KindAlter", "Admin");
         }
+
+        //活動設計頁面(包含活動查詢與新增活動)
+        public ActionResult EventPage()
+        {
+            CEvent ce = new CEvent();
+            CSearch cs = new CSearch();
+            ViewBag.types = cs.takeAllType();
+            ViewBag.kinds = cs.takeAllKind();
+            return View(ce.eventQuery());
+        }
     }
 }

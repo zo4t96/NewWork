@@ -87,7 +87,7 @@
             @* 選擇曲風id *@
             <div class="h5">曲風選擇</div>
             <select class="custom-select w-25 mr-3 menu" form="kindForm" name="kindId">
-                <option value="0" data-color="#000000">新增曲風...</option>
+                <option value="0">新增曲風...</option>
                 @foreach (var item in Model)
                 {
                     <option value="@item.KindID" data-color="@item.fColor" data-path="/Images/@item.fPhotoPath">@item.KindName</option>
@@ -147,7 +147,7 @@
                         <div class="photo"></div>
                     </div>
                 }
-                <div class="kindBlockBig newBlock selected" data-kind="0">
+                <div class="kindBlockBig newBlock selected" data-kind="0" data-color="#ffffff">
                     <span class="kindName">新增曲風</span>
                     <div class="photo"></div>
                 </div>
@@ -167,6 +167,8 @@
     $("#colorpicker").change(function () {
         $(".colortxt").val($(this).val());
         var target = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`);
+        $(this).css("background-color", $(this).data("color"))
+
         target.css("background-color", $(this).val());
         target.css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).val()})`)
     })

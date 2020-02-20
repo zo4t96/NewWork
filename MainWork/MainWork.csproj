@@ -315,6 +315,7 @@
     </Compile>
     <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
+    <Compile Include="Models\CEvent.cs" />
     <Compile Include="Models\CManagement.cs" />
     <Compile Include="Models\CMemberFactory.cs" />
     <Compile Include="Models\CMusic.cs" />
@@ -425,6 +426,7 @@
     <Content Include="Views\MemberLogin\Login.cshtml" />
     <Content Include="Views\Admin\TypeAlter.cshtml" />
     <Content Include="Views\Admin\KindAlter.cshtml" />
+    <Content Include="Views\Admin\EventPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,173 @@
+﻿@model IEnumerable<MainWork.tActivity>
+
+@{ 
+    var types = ViewBag.types as IEnumerable<tAlbumType>;
+    var kinds = ViewBag.kinds as IEnumerable<tAlbumKind>;
+}
+<style>
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 0px;
+    }
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        border-radius :5px 5px 0px 0px;
+        background-color: #9ae0d760;
+    }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+            .tab button:hover {
+                background-color: #9ae0d740;
+            }
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+        background-color:#9cbfab60;
+    }
+
+    .eventMenu {
+        text-align:center;
+    }
+    .kindPanel{
+        display:inline-block;
+        width:550px;
+    }
+</style>
+
+<div class="container-fluid py-1 px-5 col-10">
+    <div class="title">
+        <p>活動管理</p>
+    </div>
+
+    <div class="tab">
+        <button class="tablinks" data-link="eventMenu">活動查詢</button>
+        <button class="tablinks" data-link="eventNew">新增活動</button>
+    </div>
+
+    <div class="tabcontent eventMenu">
+        <div class="h3 m-4 font-weight-bold">活動一覽表</div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">排序</th>
+                    <th scope="col">活動名稱</th>
+                    <th scope="col">發起人</th>
+                    <th scope="col">開始日期</th>
+                    <th scope="col">結束日期</th>
+                    <th scope="col">編輯</th>
+                    <th scope="col">刪除</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.FirstOrDefault() == null)
+                {
+                    <tr><td>目前還沒有舉辦中的活動喔!</td></tr>
+                }
+                @{int count = 0; }
+                @foreach (var item in Model)
+                {
+                    count++;
+                    <tr>
+                        <th scope="row">@count</th>
+                        <td scope="row">@item.fTitle</td>
+                        <td scope="row">@item.tMember</td>
+                        <td scope="row">@item.fStartTime</td>
+                        <td scope="row">@item.fEndTime</td>
+                        <td scope="row"><div class="btn btn-success">編輯</div></td>
+                        <td scope="row"><div class="btn btn-danger">刪除</div></td>
+                    </tr>
+                }
+                    <tr>
+                        <td scope="row">1</td>
+                        <td scope="row"><div class="mt-2">範例名稱</div></td>
+                        <td scope="row"><div class="mt-2">活動發起人</div></td>
+                        <td scope="row"><div class="mt-2">02/16</div></td>
+                        <td scope="row"><div class="mt-2">02/28</div></td>
+                        <td scope="row"><div class="btn btn-success">編輯</div></td>
+                        <td scope="row"><div class="btn btn-danger">刪除</div></td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tabcontent eventNew">
+        <div class="h3 my-4 font-weight-bold">新增活動</div>
+
+        <form id="eventInfo">
+            <div class="form-group row">
+                <label for="eventName" class="col-1 col-form-label">活動名稱</label>
+                <div>
+                    <input class="form-control" type="text" name="eventName" placeholder="最多五十個字元" id="eventName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="chooseStart" class="col-1 col-form-label">開始日期</label>
+                <div>
+                    <input class="form-control" id="chooseStart" type="date" name="startDate">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="chooseEnd" class="col-1 col-form-label">結束日期</label>
+                <div>
+                    <input class="form-control" id="chooseEnd" type="date" name="endDate">
+                </div>
+            </div>
+
+            <div class="h3 my-4 font-weight-bold">專輯選擇</div>
+
+            <div class="form-group row">
+                <label class="col-1 col-form-label">販售類別</label>
+                <div>
+                    <select class="form-control" form="eventInfo">
+                        @foreach (var item in types)
+                        {
+                            <option value="@item.fTypeID">@item.fTypeName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-form-label mr-3">音樂曲風</div>
+            <div class="kindPanel">
+                @foreach (var item in kinds)
+                {
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID">
+                        <label class="form-check-label" for="checkbox@(item.KindID)">@item.KindName</label>
+                    </div>
+                }
+            </div>
+
+        </form>
+
+        <div class="result">
+            
+        </div>
+    </div>
+
+</div>
+
+<script>
+    //切換tab頁面的開關
+    $(".tab button").click(function () {
+        $(".tabcontent").each(function () {
+            $(this).css("display", "none");
+        })
+        $(`.${$(this).data("link")}`).css("display","block");
+    })
+    $(".tablinks[data-link = eventMenu]").trigger("click");
+
+</script>
