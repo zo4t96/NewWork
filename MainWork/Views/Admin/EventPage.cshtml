@@ -40,10 +40,27 @@
     .eventMenu {
         text-align:center;
     }
-    .kindPanel{
-        display:inline-block;
-        width:550px;
+    .eventNew{
+        display:flex;
     }
+    .newPanel {
+        padding: 20px 80px;
+    }
+    .kindPanel {
+        display: inline-block;
+        position:relative;
+    }
+    .image {
+        width: 588px;
+        height: 210px;
+        border: 1px dashed gray;
+        background-image: url("/Images/top12.jpg");
+        background-size: cover;
+    }
+    .albumRow{
+        display:inline-block;
+    }
+
 </style>
 
 <div class="container-fluid py-1 px-5 col-10">
@@ -103,62 +120,104 @@
     </div>
 
     <div class="tabcontent eventNew">
-        <div class="h3 my-4 font-weight-bold">新增活動</div>
+        <div class="newPanel row">
+            <div class="col-5">
+                <div class="h3 my-4 font-weight-bold">新增活動</div>
 
-        <form id="eventInfo">
-            <div class="form-group row">
-                <label for="eventName" class="col-1 col-form-label">活動名稱</label>
-                <div>
-                    <input class="form-control" type="text" name="eventName" placeholder="最多五十個字元" id="eventName">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="chooseStart" class="col-1 col-form-label">開始日期</label>
-                <div>
-                    <input class="form-control" id="chooseStart" type="date" name="startDate">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="chooseEnd" class="col-1 col-form-label">結束日期</label>
-                <div>
-                    <input class="form-control" id="chooseEnd" type="date" name="endDate">
-                </div>
-            </div>
-
-            <div class="h3 my-4 font-weight-bold">專輯選擇</div>
-
-            <div class="form-group row">
-                <label class="col-1 col-form-label">販售類別</label>
-                <div>
-                    <select class="form-control" form="eventInfo">
-                        @foreach (var item in types)
-                        {
-                            <option value="@item.fTypeID">@item.fTypeName</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-
-            <div class="col-form-label mr-3">音樂曲風</div>
-            <div class="kindPanel">
-                @foreach (var item in kinds)
-                {
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID">
-                        <label class="form-check-label" for="checkbox@(item.KindID)">@item.KindName</label>
+                <form id="eventInfo">
+                    <div class="form-group">
+                        <label for="eventName" class="col-form-label">活動名稱</label>
+                        <div>
+                            <input class="form-control" type="text" name="eventName" placeholder="最多五十個字元" id="eventName">
+                        </div>
                     </div>
-                }
+                    <div class="form-group">
+                        <label class="col-form-label">開始日期</label>
+                        <div>
+                            <input class="form-control" type="date" name="startDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">結束日期</label>
+                        <div>
+                            <input class="form-control" type="date" name="endDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label">特價折數</label>
+                        <div>
+                            <select class="form-control" form="eventInfo">
+                                <option value="0.9">九折</option>
+                                <option value="0.8">八折</option>
+                                <option value="0.7">七折</option>
+                                <option value="0.6">六折</option>
+                                <option value="0.5">五折</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label">上傳活動圖片</label>
+                        <div>
+                            <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="eventImage">
+                        </div>
+                    </div>
+                    <small class="form-text mb-3">活動圖片限制840x350，否則會產生變形</small>
+
+
+                    <div class="h3 mt-5 font-weight-bold">專輯選擇</div>
+                    <div class="form-group">
+                        <label class="col-form-label">販售類別</label>
+                        <div>
+                            <select class="form-control" form="eventInfo">
+                                @foreach (var item in types)
+                                {
+                                    <option value="@item.fTypeID">@item.fTypeName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-form-label mr-3">音樂曲風</div>
+                    <div class="kindPanel">
+                        @foreach (var item in kinds)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID">
+                                <label class="form-check-label" for="checkbox@(item.KindID)">@item.KindName</label>
+                            </div>
+                        }
+                    </div>
+
+                </form>
             </div>
+            <div class="col ml-5">
+                <div class="h5 my-4 font-weight-bold">上傳圖片預覽</div>
+                <div class="image mb-5">
+                    @* 上傳圖片會讀進來 *@
+                </div>
 
-        </form>
+                <div class="h5 mt-4 mb-3 font-weight-bold">專輯查詢結果</div>
+                <div class="result">
+                    <div class="row">
+                        <div class="col-2">
+                        <input type="checkbox" value="0" name="all"/>
+                            <span>全選</span>
+                        </div>
+                        <div class="col-3">專輯名稱</div>
+                        <div class="col-3">販賣類型</div>
+                        <div class="col-4">專輯曲風</div>
+                    </div>
+                    <div class="albumRow row">
 
-        <div class="result">
-            
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
+
 
 <script>
     //切換tab頁面的開關

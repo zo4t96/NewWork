@@ -88,11 +88,49 @@
         white-space: nowrap;
         overflow: hidden;
     }
+
+    /*廣告牆*/
+    #adCarousel {
+        margin: 50px auto;
+        width: 900px;
+    }
 </style>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
 <body>
+    <div id="adCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#adCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#adCarousel" data-slide-to="1"></li>
+            <li data-target="#adCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <a class="carousel-item active" href="@Url.Action("Kinds","Search")">
+                <img src="~/Images/top12.jpg" class="d-block w-100">
+            </a>
+            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
+                <img src="~/Images/top18.jpg" class="d-block w-100">
+            </a>
+            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
+                <img src="~/Images/top20.jpg" class="d-block w-100">
+            </a>
+        </div>
+        <a class="carousel-control-prev" href="#adCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#adCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+
+    <div class="h3 mx-5 mt-5 font-weight-bold">所有音樂</div>
     <div class="albumPanel">
         <a class="albumBlock" href="">
             <div class="albumCover"></div>
+
             <div class="albumContent">
                 <span class="albumTitle">專輯名稱</span>
                 <span class="albumDescripion">團體名或歌手</span>
@@ -116,8 +154,10 @@
                     <span class="albumDescripion">@item.fKinds</span>
                 </div>
             </a>
-         }
+        }
     </div>
+    @* 建立廣告牆輪播需讀取的js *@
+    <script src="~/Scripts/bootstrap.js"></script>
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
@@ -134,5 +174,11 @@
             })
             history.pushState(stateObj, null, url);
         });
+
+        $("#adCarousel").carousel(function () {
+            intetval: 1000;
+        });
+
+
     </script>
 </body>

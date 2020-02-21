@@ -151,6 +151,7 @@
     </Content>
     <Content Include="Images\4.jpg" />
     <Content Include="Images\8.jpg" />
+    <Content Include="Images\ad1.jpg" />
     <Content Include="Images\avatar-01.jpg" />
     <Content Include="Images\del.png" />
     <Content Include="Images\infor.png" />
@@ -158,6 +159,9 @@
     <Content Include="Images\logo-mini.png" />
     <Content Include="Images\logo-white.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\top12.jpg" />
+    <Content Include="Images\top18.jpg" />
+    <Content Include="Images\top20.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
