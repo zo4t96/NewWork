@@ -39,16 +39,15 @@ namespace MainWork
         public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
         public Nullable<int> fPlaybackCount { get; set; }
-        public HttpPostedFileBase fCoverRealFile { get; set; }
         public HttpPostedFileBase fRealFile { get; set; }
         public Nullable<double> fPlays { get; set; }
         public Nullable<double> fPlaye{ get; set; }
 
-        public virtual tAlbum tAlbum { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPlayList> tPlayLists { get; set; }
         public virtual tPurchaseItem tPurchaseItem { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tShoppingCart> tShoppingCarts { get; set; }
+        public virtual tAlbum tAlbum { get; set; }
     }
 }

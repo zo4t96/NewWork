@@ -49,11 +49,11 @@
         position:relative;
     }
     .preview {
-        width: 588px;
+        width: 504px;
         height: 210px;
         border: 1px dashed gray;
         /*background-image: url("/Images/top12.jpg");*/
-        background-size: cover;
+        background-size:cover;
     }
     .albumRowPanel{
         display:inline-block;
@@ -115,7 +115,7 @@
                     <tr>
                         <th>@count</th>
                         <td>@item.fTitle</td>
-                        <td>@item.tMember</td>
+                        @*<td>@item.tMember</td>*@
                         <td>@item.fStartTime</td>
                         <td>@item.fEndTime</td>
                         <td><div class="btn btn-success">編輯</div></td>
@@ -143,7 +143,7 @@
                 <div class="h3 my-3 font-weight-bold">新增活動</div>
 
                 @* 活動內容的表單 *@
-            <form id="eventNew" action="@Url.Action("EventNew","Admin")" >
+            <form id="eventNew" action="@Url.Action("EventNew","Admin")" enctype="multipart/form-data" method="post">
                 <div class="form-group">
                     <label for="eventName" class="col-form-label">活動名稱</label>
                     <div>
@@ -166,7 +166,7 @@
                 <div class="form-group">
                     <label class="col-form-label">特價折數</label>
                     <div>
-                        <select class="form-control" form="eventInfo" name="discount">
+                        <select class="form-control discount" form="eventInfo" name="discount">
                             <option value="0.9">九折</option>
                             <option value="0.8">八折</option>
                             <option value="0.7">七折</option>
@@ -179,10 +179,10 @@
                 <div class="form-group">
                     <label class="col-form-label">上傳活動圖片</label>
                     <div>
-                        <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="eventImage">
+                        <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="eventImage"/>
                     </div>
                 </div>
-                <small class="form-text mb-3">活動圖片僅限jpg檔，並且大小為840x350，否則會產生變形</small>
+                <small class="form-text mb-3">活動圖片僅限jpg檔，並且大小為840x350，否則會發生切圖</small>
 
                 @* 挑選專輯的表單 *@
                 <div class="h3 mt-5 font-weight-bold">專輯選擇</div>
@@ -203,7 +203,7 @@
                     @foreach (var item in kinds)
                     {
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID" >
+                            <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID" name="eventAlbums">
                             <label class="form-check-label" for="checkbox@(item.KindID)">@item.KindName</label>
                         </div>
                     }
@@ -295,25 +295,65 @@
         })
     })
 
-    $(".upload").change(function () {
-        let file = this.files[0];
+    //讀圖片檔使之呈現預覽
+    $(".upload").change(function (e) {
+        file = this.files[0];
+        f = e.target.files[0];
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function (e) {
             $(".preview").css("background-image", `url(${e.target.result})`)
+            
+            //透過ajax上傳圖檔要新建new FormData()
+            //newObj = new FormData();
+            //newObj.append("eventImage",file);
         }
     })
 
+    //建立活動．使用ajax實作，因為checkbox的數字陣列難以用一般的submit回傳
     $(".create").click(function () {
-        $("#eventNew").submit();
+        let eventAlbums = [];
+        $(".trItem").each(function () {
+            if ($(this).find("input").prop("checked")) {
+                eventAlbums.push($(this).find("input").val());
+            }
+        })
+        console.log(eventAlbums)
+
+        var newObj = {
+            eventName: $("#eventName").val(),
+            startDate: $(".startDate").val(),
+            endDate: $(".endDate").val(),
+            discount: $(".discount").val(),
+
+            eventAlbums: eventAlbums
+        }
+
+        //var newObj = new FormData($("#eventNew")[0]);
+
+        $.ajax({
+            url: '@Url.Action("EventNew","Admin")',
+            type: "post",
+            contentType: false,
+            processData: false,
+            data: newObj,
+            dataType: "json",
+            traditional: true,
+            success: function () {
+                alert("新增成功!")
+                window.location.href = "@Url.Action("EventPage","Admin")";
+            }
+        })
+
+        $.post('@Url.Action("EventNew","Admin")', newObj, function () {
+            alert("新增成功!")
+            window.location.href = "@Url.Action("EventPage","Admin")";
+        })
     })
     
-    $(".kindItem").change(function () {
-        listRenew();
-    })
-    $(".typeSelected").change(function () {
-        listRenew();
-    })
+    
+
+
     //自動更新列表的ajax方法
     function listRenew() {
         let type = $(".typeSelected").val();
@@ -346,7 +386,11 @@
             }
         });
     }
-
+    $(".kindItem").change(function () {
+        listRenew();
+    })
+    $(".typeSelected").change(function () {
+        listRenew();
+    })
     
-
 </script>

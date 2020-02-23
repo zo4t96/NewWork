@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MainWork.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -49,6 +51,28 @@ namespace MainWork.Models
                 }
             }
             return result;
+        }
+
+        //新增活動
+        public void createEvent(CEventObject eventObj ,string path)
+        {
+            tActivity ac = new tActivity();
+            ac.fTitle = eventObj.eventName;
+            ac.fStartTime = eventObj.startDate;
+            ac.fEndTime = eventObj.endDate;
+            ac.fPhotoPath = path;
+            db.tActivities.Add(ac);
+            db.SaveChanges();
+
+            //儲存活動後將新活動的id取出並跟折扣一起存在事前選取的專輯當中
+            //var latest = db.tActivities.Select(a => a).LastOrDefault();
+            //foreach(int i in eventObj.eventAlbums)
+            //{
+            //    var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
+            //    album.fDiscount = (float)eventObj.discount;
+            //    album.fActivity = latest.fId;
+            //}
+            //db.SaveChanges();
         }
     }
 }

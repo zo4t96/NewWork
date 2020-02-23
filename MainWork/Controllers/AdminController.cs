@@ -204,10 +204,18 @@ namespace MainWork.Controllers
         }
         public ActionResult EventNew(CEventObject eventObj)
         {
-            if (eventObj.eventAlbums.First().Equals(null))
+            if(eventObj.eventAlbums.Length > 1)
             {
-                return RedirectToAction("Main", "Homepage");
+                return RedirectToAction("Main","Homepage");
             }
+            CEvent ce = new CEvent();
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+            string path = Path.Combine(Server.MapPath("~/Images"), filename);
+            eventObj.eventImage.SaveAs(path);
+            ce.createEvent(eventObj, filename);
+            
+
+
             return RedirectToAction("EventPage", "Admin");
         }
 

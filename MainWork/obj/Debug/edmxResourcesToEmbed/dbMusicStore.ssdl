@@ -9,6 +9,7 @@
     <Property Name="fStartTime" Type="datetime" />
     <Property Name="fEndTime" Type="datetime" />
     <Property Name="fTitle" Type="nvarchar(max)" />
+    <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbum">
     <Key>
@@ -25,6 +26,8 @@
     <Property Name="fCoverPath" Type="nvarchar(max)" />
     <Property Name="fPublisher" Type="nvarchar" MaxLength="50" />
     <Property Name="fKinds" Type="nvarchar(max)" />
+    <Property Name="fDiscount" Type="real" />
+    <Property Name="fActivity" Type="int" />
   </EntityType>
   <EntityType Name="tAlbumKind">
     <Key>
@@ -32,7 +35,7 @@
     </Key>
     <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="KindName" Type="nvarchar(max)" />
-    <Property Name="fColor" Type="char" MaxLength="10" />
+    <Property Name="fColor" Type="char" MaxLength="7" />
     <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbumType">
@@ -139,6 +142,18 @@
       </Principal>
       <Dependent Role="tActivity">
         <PropertyRef Name="fLauncher" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tActivity">
+    <End Role="tActivity" Type="Self.tActivity" Multiplicity="0..1" />
+    <End Role="tAlbum" Type="Self.tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tActivity">
+        <PropertyRef Name="fId" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fActivity" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -313,6 +328,10 @@
     <AssociationSet Name="FK_tActivity_tMember" Association="Self.FK_tActivity_tMember">
       <End Role="tMember" EntitySet="tMember" />
       <End Role="tActivity" EntitySet="tActivity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tActivity" Association="Self.FK_tAlbum_tActivity">
+      <End Role="tActivity" EntitySet="tActivity" />
+      <End Role="tAlbum" EntitySet="tAlbum" />
     </AssociationSet>
     <AssociationSet Name="FK_tAlbum_tAlbumType" Association="Self.FK_tAlbum_tAlbumType">
       <End Role="tAlbumType" EntitySet="tAlbumType" />

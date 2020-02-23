@@ -4,28 +4,12 @@
     <EntitySetMapping Name="tActivities">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tActivity">
         <MappingFragment StoreEntitySet="tActivity">
+          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
           <ScalarProperty Name="fId" ColumnName="fId" />
           <ScalarProperty Name="fLauncher" ColumnName="fLauncher" />
           <ScalarProperty Name="fStartTime" ColumnName="fStartTime" />
           <ScalarProperty Name="fEndTime" ColumnName="fEndTime" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tAlbums">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
-        <MappingFragment StoreEntitySet="tAlbum">
-          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
-          <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
-          <ScalarProperty Name="fMaker" ColumnName="fMaker" />
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-          <ScalarProperty Name="fYear" ColumnName="fYear" />
-          <ScalarProperty Name="fType" ColumnName="fType" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fALPrice" ColumnName="fALPrice" />
-          <ScalarProperty Name="fCoverPath" ColumnName="fCoverPath" />
-          <ScalarProperty Name="fPublisher" ColumnName="fPublisher" />
-          <ScalarProperty Name="fKinds" ColumnName="fKinds" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -139,6 +123,25 @@
           <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
           <ScalarProperty Name="fDate" ColumnName="fDate" />
           <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tAlbums">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
+        <MappingFragment StoreEntitySet="tAlbum">
+          <ScalarProperty Name="fActivity" ColumnName="fActivity" />
+          <ScalarProperty Name="fDiscount" ColumnName="fDiscount" />
+          <ScalarProperty Name="fKinds" ColumnName="fKinds" />
+          <ScalarProperty Name="fPublisher" ColumnName="fPublisher" />
+          <ScalarProperty Name="fCoverPath" ColumnName="fCoverPath" />
+          <ScalarProperty Name="fALPrice" ColumnName="fALPrice" />
+          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
+          <ScalarProperty Name="fType" ColumnName="fType" />
+          <ScalarProperty Name="fYear" ColumnName="fYear" />
+          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
+          <ScalarProperty Name="fMaker" ColumnName="fMaker" />
+          <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
+          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
