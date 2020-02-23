@@ -362,6 +362,7 @@
       <DependentUpon>dbUpload.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
+    <Compile Include="ViewModels\CEventObject.cs" />
     <Compile Include="ViewModels\CKindEditObject.cs" />
     <Compile Include="ViewModels\CLoginData.cs" />
     <Compile Include="ViewModels\CLoginViewModel.cs" />
@@ -431,6 +432,7 @@
     <Content Include="Views\Admin\TypeAlter.cshtml" />
     <Content Include="Views\Admin\KindAlter.cshtml" />
     <Content Include="Views\Admin\EventPage.cshtml" />
+    <Content Include="Views\Admin\test.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

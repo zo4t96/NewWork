@@ -7,6 +7,7 @@ namespace MainWork.Models
 {
     public class CMusic
     {
+        //挑音樂給播放器用的
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
         public tProduct getMusic(int musicId)
         {

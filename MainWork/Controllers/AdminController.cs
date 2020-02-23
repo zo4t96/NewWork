@@ -194,5 +194,29 @@ namespace MainWork.Controllers
             ViewBag.kinds = cs.takeAllKind();
             return View(ce.eventQuery());
         }
+
+        public ActionResult EventAlbum(int type , int[] kinds)
+        {
+            CEvent ce = new CEvent();
+            var result = (ce.eventAlbum(kinds, type)).Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds });
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult EventNew(CEventObject eventObj)
+        {
+            if (eventObj.eventAlbums.First().Equals(null))
+            {
+                return RedirectToAction("Main", "Homepage");
+            }
+            return RedirectToAction("EventPage", "Admin");
+        }
+
+        //測試用介面
+        public ActionResult test()
+        {
+            CEvent ce = new CEvent();
+            int[] a = new int[] { 1,2};
+            return View(ce.eventAlbum(a,1));
+        }
     }
 }
