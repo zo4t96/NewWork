@@ -1,0 +1,52 @@
+﻿@model List<dbMusicStoreTest.Models.tProducts>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@using(Html.BeginForm())
+{
+    foreach(var x in Model)
+    {
+<div class="row">
+    <div class="col bg-secondary text-white">
+        <span>@x.fProductName</span>
+    </div>
+    <div class="col bg-info text-white" >
+        <span>@x.fAlbumID</span>
+    </div>
+    <div class="col bg-secondary text-white">
+        <span>@x.fMusic</span>
+    </div>
+    <div class="col bg-info text-white" >
+        <span>@x.fKind</span>
+    </div>
+    <div class="col ">
+        <input class="btn btn-primary" type="button" name="addShopcart" value="加入購物車" data-products="@x.fProductID"  />
+    </div>
+</div>
+
+    }
+}
+<div>
+    
+    <a href="@Url.Action("ShoppingCart", "tShoppingCart",new { cname="aaa"})">購物車</a>
+</div>
+@section scripts
+{
+    <script>
+        $("input[name='addShopcart']").on(
+            "click", function () {
+                //alert(`${""+$(this).data("products")}`)
+                $.post("@Url.Action("AddCart", "tShoppingCart")", { "cname": "aaa", "pdid": `${""+$(this).data("products")}` },
+                    function (data) {
+                        alert(data)
+                    })
+        })
+        @*$("input[name='shoppingcart']").on("click", function () {
+            //$.post("@Url.Action("ShoppingCart", "tShoppingCart")", { "cname": "aaa" }, function () {
+                
+            //})
+        })*@
+    </script>
+}
