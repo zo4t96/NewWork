@@ -19,7 +19,7 @@
             padding: 6px 12px;
             border: 1px solid #ccc;
             background-color: #9cbfab60;
-            margin:60px;
+            margin:20px 60px;
         }
 
         .newPanel {
@@ -64,11 +64,13 @@
         .hidden{
             display:none;
         }
+
     </style>
 </head>
 <body>
     <div class="tabcontent eventNew">
         <form id="eventNew" action="@Url.Action("EventNew","Admin")" enctype="multipart/form-data" method="post">
+            <input type="hidden" value="@Model.fId" name="eventId"/>
             <div class="newPanel row">
                 <div class="col-4">
                     <div class="h3 my-3 font-weight-bold">活動資訊</div>
@@ -84,13 +86,13 @@
                         <div class="form-group">
                             <label class="col-form-label">開始日期</label>
                             <div>
-                                <input class="form-control startDate" type="date" name="startDate">
+                                <input class="form-control startDate" type="date" name="startDate" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">結束日期</label>
                             <div>
-                                <input class="form-control endDate" type="date" name="endDate">
+                                <input class="form-control endDate" type="date" name="endDate" disabled>
                             </div>
                         </div>
 
@@ -170,13 +172,23 @@
                         <table class="table text-center table-bordered">
                             <thead>
                                 <tr class="tableTitle">
-                                    <th scope="col">選取</th>
+                                    <th scope="col" class="hidden">選取</th>
                                     <th scope="col">專輯名稱</th>
                                     <th scope="col">販賣類型</th>
                                     <th scope="col">專輯曲風</th>
                                 </tr>
                             </thead>
-                            <tbody class="list"></tbody>
+                            <tbody class="list">
+                                @foreach(var a in Model.tAlbums)
+                                 {
+                                <tr class="trItem">
+                                    <td class="hidden"><input type="checkbox" checked/></td>
+                                    <td>@a.fAlbumName</td>
+                                    <td>@a.tAlbumType.fTypeName</td>
+                                    <td>@a.fKinds</td>
+                                </tr> 
+                                 }
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -185,26 +197,71 @@
     </div>
     <script>
         //讀取頁面時初始化該活動的資訊內容
-        console.log("@Model.fStartTime");
-        console.log("@Model.fEndTime");
+
+        //很神奇的，必須從資料庫讀出時間字串，然後再轉換成Date格式，再轉換成ISO字串才能丟進input的value裡
+        //簡直WTF
+        //更WTF的是，資料庫26號存進input會顯示25號???先擱著
         let sd = "@Model.fStartTime".split(" ")[0].trim();
         let ed = "@Model.fEndTime".split(" ")[0].trim();
+        console.log(sd)
+        console.log(new Date())
 
-        console.log(sd,typeof(sd))
-        console.log(ed, typeof (ed))
-
+        sd = (new Date(sd)).toISOString().split("T")[0];
+        ed = (new Date(ed)).toISOString().split("T")[0];
         $(".startDate").val(sd);
-        $(".startDate").attr("value",sd);
-
         $(".endDate").val(ed);
 
+        //同樣要處理可選擇的時間限制
+        let date = new Date();
+        let date2 = new Date();
+        date2.setDate(date2.getDate() + 1);
+        date2 = date2.toISOString().split("T")[0];
+        $(".startDate").attr("min", date);
+        $(".endDate").attr("min", date2);
 
+        //每次設定起始時間時都要更新結束時間的最小值
+        $(".startDate").change(function () {
+            let min = new Date(this.value);
+            min.setDate(min.getDate() + 1);
+            min = min.toISOString().split("T")[0];
+            $(".endDate").attr("min", min);
+            //如果起始時間大於目前結束時間，自動將結束時間更改為起始時間＋１日
+            let end = new Date($(".endDate").val());
+            if (end < (new Date(this.value))) {
+                $(".endDate").val(min);
+            }
+        })
+
+        //初始化圖片、折數
         $(".preview").css("background-image", `url("/Images/@Model.fPhotoPath")`)
+        let discount = @ViewBag.discount;
+        $(".discount").val(discount);
+
+        //讀圖片檔上傳預覽
+        $(".upload").change(function (e) {
+            file = this.files[0];
+            f = e.target.files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                $(".preview").css("background-image", `url(${e.target.result})`)
+            }
+        })
+
+
         $(".edit").click(function () {
-            $(".hidden").addClass("tag").removeClass("hidden");
-            $(this).parent().addClass("hidden");
-            $(".listTitle").text("選擇專輯加入活動");
-            $(".textForm").find("input").prop("disabled", false);
+            let today = new Date();
+            let startDay = new Date($(".startDate").val());
+            if ( startDay <= today) {
+                alert("已經開始的活動禁止修改!");
+            }
+            else {
+                $(".hidden").addClass("tag").removeClass("hidden");
+                $(this).parent().addClass("hidden");
+                $(".listTitle").text("選擇專輯加入活動");
+                $(".textForm").find("input").prop("disabled", false);
+                $("select").prop("disabled", false);
+            }
         })
         $(".save").click(function () {
             $(".tag").addClass("hidden");
@@ -212,6 +269,42 @@
             $(".edit").parent().removeClass("hidden");
             $(".listTitle").text("參與本次活動的專輯清單");
         })
+
+        function listRenew() {
+        let type = $(".typeSelected").val();
+        let kinds = [];
+        $(".kindItem:checked").each(function () {
+            kinds.push(this.value);
+        })
+        $.ajax({
+            url: "@Url.Action("EventAlbum","Admin")",
+            data: { kinds: kinds, type: type },
+            method: "POST",
+            success: function (datas,a) {
+                $(".list").html("");
+                $.each(datas, function (name, value) {
+                    let chk = `<td><input type="checkbox" value="${value.fAlbumID}" name="eventAlbums"/></td>`;
+                    let title = `<td>${value.fAlbumName}</td>`;
+                    let type = `<td>${value.fTypeName}</td>`
+                    let kind = `<td>${value.fKinds}</td>`
+                    $(".list").append(`<tr class="trItem">${chk + title + type + kind}</tr>`);
+                })
+                //點選row等同點選checkbox
+                $(".trItem").on("click", function (e) {
+                    var target = $(this).find("input[type = checkbox]")[0];
+                    if (e.target != target) {
+                        target.checked = !target.checked;
+                    }
+                })
+            }
+        });
+    }
+    $(".kindItem").change(function () {
+        listRenew();
+    })
+    $(".typeSelected").change(function () {
+        listRenew();
+    })
     </script>
 </body>
 </html>

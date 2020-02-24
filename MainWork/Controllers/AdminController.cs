@@ -203,7 +203,6 @@ namespace MainWork.Controllers
         }
         public ActionResult EventNew(CEventObject eventObj)
         {
-
             CEvent ce = new CEvent();
             string filename = Guid.NewGuid().ToString() + ".jpg";
             string path = Path.Combine(Server.MapPath("~/Images"), filename);
@@ -218,7 +217,9 @@ namespace MainWork.Controllers
             CSearch cs = new CSearch();
             ViewBag.types = cs.takeAllType();
             ViewBag.kinds = cs.takeAllKind();
-            return View(ce.eventSelect(eventId));
+            var result = ce.eventSelect(eventId);
+            ViewBag.discount = result.tAlbums.Select(a => a).First().fDiscount;
+            return View(result);
         }
     }
 }
