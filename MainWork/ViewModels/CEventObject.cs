@@ -12,6 +12,6 @@ namespace MainWork.ViewModels
         public string eventName { get; set; }
         public int[] eventAlbums { get; set; }
         public HttpPostedFileBase eventImage { get; set; }
-        public double discount { get; set; }
+        public float discount { get; set; }
     }
 }

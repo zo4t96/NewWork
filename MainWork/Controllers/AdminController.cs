@@ -15,7 +15,7 @@ namespace MainWork.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-                return View();
+            return View();
         }
         public ActionResult Index2()
         {
@@ -77,7 +77,7 @@ namespace MainWork.Controllers
             return RedirectToAction("TypeAlter");
         }
 
-        public ActionResult TypeDelete(int deleteId) 
+        public ActionResult TypeDelete(int deleteId)
         {
             //刪除類別之前，把所有符合該類別的專輯id全部改為1(類別為不指定)，使這項目不會有NULL情況發生
             var al = db.tAlbums.Where(a => a.fType == deleteId);
@@ -92,8 +92,8 @@ namespace MainWork.Controllers
             db.SaveChanges();
             return RedirectToAction("TypeAlter");
         }
-        
-        public ActionResult TypeEdit(int typeOrigin,string typeChange)
+
+        public ActionResult TypeEdit(int typeOrigin, string typeChange)
         {
             tAlbumType at = db.tAlbumTypes.Where(p => p.fTypeID == typeOrigin).FirstOrDefault();
             at.fTypeName = typeChange;
@@ -115,10 +115,10 @@ namespace MainWork.Controllers
             kind.fColor = kindObj.kindColor;
             //如果有勾選上傳圖片才處理圖片內容
             //圖片檔名判斷已事先在前端限定jpg圖檔，因此此處就不多加條件判斷
-            if(kindObj.uploadCheck == "true")
+            if (kindObj.uploadCheck == "true")
             {
                 string filename = Guid.NewGuid().ToString() + ".jpg";
-                string path = Path.Combine(Server.MapPath("~/Images"),filename);
+                string path = Path.Combine(Server.MapPath("~/Images"), filename);
 
                 kindObj.kindImage.SaveAs(path);
 
@@ -137,7 +137,7 @@ namespace MainWork.Controllers
             if (kind.KindName != kindObj.kindName)
             {
                 var albums = db.tAlbums.Where(a => a.fKinds.Contains(kind.KindName));
-                foreach(var a in albums)
+                foreach (var a in albums)
                 {
                     if (a.fKinds.Contains(kind.KindName + ","))
                     {
@@ -195,36 +195,30 @@ namespace MainWork.Controllers
             return View(ce.eventQuery());
         }
 
-        public ActionResult EventAlbum(int type , int[] kinds)
+        public ActionResult EventAlbum(int type, int[] kinds)
         {
             CEvent ce = new CEvent();
             var result = (ce.eventAlbum(kinds, type)).Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds });
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult EventNew(CEventObject eventObj)
         {
-            if(eventObj.eventAlbums.Length > 1)
-            {
-                return RedirectToAction("Main","Homepage");
-            }
+
             CEvent ce = new CEvent();
             string filename = Guid.NewGuid().ToString() + ".jpg";
             string path = Path.Combine(Server.MapPath("~/Images"), filename);
             eventObj.eventImage.SaveAs(path);
-            ce.createEvent(eventObj, filename);
-            
-
-
+            ce.eventCreate(eventObj, filename);
             return RedirectToAction("EventPage", "Admin");
         }
 
-        //測試用介面
-        public ActionResult test()
+        public ActionResult EventEdit(int eventId)
         {
             CEvent ce = new CEvent();
-            int[] a = new int[] { 1,2};
-            return View(ce.eventAlbum(a,1));
+            CSearch cs = new CSearch();
+            ViewBag.types = cs.takeAllType();
+            ViewBag.kinds = cs.takeAllKind();
+            return View(ce.eventSelect(eventId));
         }
     }
 }

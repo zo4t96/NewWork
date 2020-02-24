@@ -10,10 +10,16 @@ namespace MainWork.Models
     public class CEvent
     {
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
-        //活動查詢
+        //全活動查詢
         public IEnumerable<tActivity> eventQuery()
         {
             var result = db.tActivities.Select(a => a);
+            return result;
+        }
+        //單一活動查詢
+        public tActivity eventSelect(int eventId)
+        {
+            var result = db.tActivities.Where(a => a.fId == eventId).FirstOrDefault();
             return result;
         }
 
@@ -54,7 +60,7 @@ namespace MainWork.Models
         }
 
         //新增活動
-        public void createEvent(CEventObject eventObj ,string path)
+        public void eventCreate(CEventObject eventObj ,string path)
         {
             tActivity ac = new tActivity();
             ac.fTitle = eventObj.eventName;
@@ -65,14 +71,17 @@ namespace MainWork.Models
             db.SaveChanges();
 
             //儲存活動後將新活動的id取出並跟折扣一起存在事前選取的專輯當中
-            //var latest = db.tActivities.Select(a => a).LastOrDefault();
-            //foreach(int i in eventObj.eventAlbums)
-            //{
-            //    var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
-            //    album.fDiscount = (float)eventObj.discount;
-            //    album.fActivity = latest.fId;
-            //}
-            //db.SaveChanges();
+            //entity會自動將語法轉換成sql語法去查詢資料庫，但資料庫沒有能夠查詢最後一個項目的方法！(只有TOP()函數)
+            //因此這邊的Last()會造成程式無法判斷(只有First()能夠運作)
+            //解決方法:反過來排序，使最後一個變第一個就好！！
+            var latest = db.tActivities.OrderByDescending(a=>a.fId).FirstOrDefault();
+            foreach (int i in eventObj.eventAlbums)
+            {
+                var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
+                album.fDiscount = eventObj.discount;
+                album.fActivity = latest.fId;
+            }
+            db.SaveChanges();
         }
     }
 }

@@ -1,0 +1,217 @@
+﻿@model MainWork.tActivity
+
+@{
+    var types = ViewBag.types as IEnumerable<tAlbumType>;
+    var kinds = ViewBag.kinds as IEnumerable<tAlbumKind>;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <style>
+        .title {
+            font-weight: 800;
+            font-size: 30px;
+            margin: 20px 0px;
+        }
+
+        .tabcontent {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            background-color: #9cbfab60;
+            margin:60px;
+        }
+
+        .newPanel {
+            padding: 20px 50px;
+        }
+
+        .kindPanel {
+            display: inline-block;
+            position: relative;
+        }
+
+        .preview {
+            width: 504px;
+            height: 210px;
+            border: 1px dashed gray;
+            background-size: cover;
+        }
+
+        .albumRowPanel {
+            display: inline-block;
+            border: 1px solid #282828;
+            width: 100%;
+            height: 550px;
+            box-shadow: inset 1px 1px 1px #484848;
+            padding: 3px;
+            overflow: auto;
+        }
+
+        .tableTitle {
+            background-color: #76a17e;
+        }
+
+        .trItem {
+            border-bottom: 1px solid white;
+            cursor: pointer;
+        }
+
+            .trItem:hover {
+                background-color: #657a66;
+            }
+
+        .hidden{
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="tabcontent eventNew">
+        <form id="eventNew" action="@Url.Action("EventNew","Admin")" enctype="multipart/form-data" method="post">
+            <div class="newPanel row">
+                <div class="col-4">
+                    <div class="h3 my-3 font-weight-bold">活動資訊</div>
+
+                    @* 活動內容的表單 *@
+                    <div class="textForm">
+                        <div class="form-group">
+                            <label for="eventName" class="col-form-label">活動名稱</label>
+                            <div>
+                                <input class="form-control" type="text" value="@Model.fTitle" maxlength="20" name="eventName" placeholder="最多二十個字元" id="eventName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">開始日期</label>
+                            <div>
+                                <input class="form-control startDate" type="date" name="startDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">結束日期</label>
+                            <div>
+                                <input class="form-control endDate" type="date" name="endDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label">特價折數</label>
+                            <div>
+                                <select class="form-control discount" value="0.8" form="eventNew" name="discount" disabled>
+                                    <option value="0.9">九折</option>
+                                    <option value="0.8">八折</option>
+                                    <option value="0.7">七折</option>
+                                    <option value="0.6">六折</option>
+                                    <option value="0.5">五折</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group hidden">
+                        <label class="col-form-label">上傳活動圖片</label>
+                        <div>
+                            <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="eventImage" />
+                        </div>
+                    </div>
+                    <div class="hidden">
+                        <small class="form-text mb-3">活動圖片僅限jpg檔，並且大小為840x350，否則會發生切圖</small>
+                    </div>
+
+                    @* 挑選專輯的表單 *@
+                    <div class="h3 mt-5 font-weight-bold hidden">專輯選擇</div>
+                    <div class="form-group hidden">
+                        <label class="col-form-label">販售類別</label>
+                        <div>
+                            <select class="form-control typeSelected" form="eventInfo">
+                                @foreach (var item in types)
+                                {
+                                    <option value="@item.fTypeID">@item.fTypeName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-form-label mr-3 hidden">音樂曲風</div>
+                    <div class="kindPanel hidden">
+                        @foreach (var item in kinds)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input kindItem" type="checkbox" id="checkbox@(item.KindID)" value="@item.KindID">
+                                <label class="form-check-label" for="checkbox@(item.KindID)">@item.KindName</label>
+                            </div>
+                        }
+                    </div>
+                    <div class="hidden">
+                        <small class="form-text mb-3">只要有一項曲風符合就會加入到清單中</small>
+                    </div>
+                    <div>
+                        <div class="btn btn-success mt-4 mr-3 edit">開啟修改</div>
+                    </div>
+                    <div class="hidden">
+                        <div class="btn btn-success mt-4 mr-3 save">儲存修改</div>
+                        <div class="btn btn-danger mt-4 mr-3">刪除此活動</div>
+                    </div>
+                    
+                </div>
+
+                @* 右邊那行(顯示資料) *@
+                <div class="col ml-5">
+                    <div class="h5 my-y font-weight-bold">圖片預覽</div>
+                    <div class="mb-5 preview">
+                        @* 上傳圖片會讀進來 *@
+                    </div>
+
+                    <div class="h5 mb-3 font-weight-bold listTitle">參與本次活動的專輯清單</div>
+                    <div class="hidden">
+                        <div class="btn btn-primary mb-1 all">全選擇</div>
+                        <div class="btn btn-info mb-1 cancelAll">全取消</div>
+                    </div>
+                    <div class="albumRowPanel">
+                        <table class="table text-center table-bordered">
+                            <thead>
+                                <tr class="tableTitle">
+                                    <th scope="col">選取</th>
+                                    <th scope="col">專輯名稱</th>
+                                    <th scope="col">販賣類型</th>
+                                    <th scope="col">專輯曲風</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        //讀取頁面時初始化該活動的資訊內容
+        console.log("@Model.fStartTime");
+        console.log("@Model.fEndTime");
+        let sd = "@Model.fStartTime".split(" ")[0].trim();
+        let ed = "@Model.fEndTime".split(" ")[0].trim();
+
+        console.log(sd,typeof(sd))
+        console.log(ed, typeof (ed))
+
+        $(".startDate").val(sd);
+        $(".startDate").attr("value",sd);
+
+        $(".endDate").val(ed);
+
+
+        $(".preview").css("background-image", `url("/Images/@Model.fPhotoPath")`)
+        $(".edit").click(function () {
+            $(".hidden").addClass("tag").removeClass("hidden");
+            $(this).parent().addClass("hidden");
+            $(".listTitle").text("選擇專輯加入活動");
+            $(".textForm").find("input").prop("disabled", false);
+        })
+        $(".save").click(function () {
+            $(".tag").addClass("hidden");
+            $(this).parent().addClass("hidden");
+            $(".edit").parent().removeClass("hidden");
+            $(".listTitle").text("參與本次活動的專輯清單");
+        })
+    </script>
+</body>
+</html>

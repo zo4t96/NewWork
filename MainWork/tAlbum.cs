@@ -35,6 +35,7 @@ namespace MainWork
         public Nullable<float> fDiscount { get; set; }
         public Nullable<int> fActivity { get; set; }
         public HttpPostedFileBase fCoverRealFile { get; set; }
+
         public virtual tAlbumType tAlbumType { get; set; }
         public virtual tMember tMember { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
