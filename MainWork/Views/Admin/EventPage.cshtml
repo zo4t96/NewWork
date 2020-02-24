@@ -301,7 +301,6 @@
         })
     })
 
-    //let eventObj = new FormData();
     //讀圖片檔使之呈現預覽
     $(".upload").change(function (e) {
         file = this.files[0];
@@ -325,6 +324,8 @@
             alert("沒有選擇任何專輯!")
             return;
         }
+
+        let eventObj = new FormData($("#eventNew")[0]);
 
         $.ajax({
             url: '@Url.Action("EventNew","Admin")',
