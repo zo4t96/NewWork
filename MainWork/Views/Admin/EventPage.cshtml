@@ -89,7 +89,7 @@
     @* 現有活動一覽 *@
     <div class="tabcontent eventMenu">
         <div class="h3 m-4 font-weight-bold">活動一覽表</div>
-        <table class="table">
+        <table class="table col-10 m-auto">
             <thead>
                 <tr>
                     <th scope="col">排序</th>
@@ -114,10 +114,10 @@
                         <th>@count</th>
                         <td>@item.fTitle</td>
                         @*<td>@item.tMember</td>*@
-                        <td>@item.fStartTime</td>
-                        <td>@item.fEndTime</td>
+                        <td>@item.fStartTime.ToString().Split(' ')[0]</td>
+                        <td>@item.fEndTime.ToString().Split(' ')[0]</td>
                         <td>
-                            <div class="btn btn-primary">查看</div>
+                            <a href="@Url.Action("EventEdit","Admin")?eventId=@item.fId"><div class="btn btn-primary">查看</div></a>
                         </td>
                     </tr>
                 }
@@ -138,7 +138,7 @@
 
     @* 新增活動版面 *@
     <div class="tabcontent eventNew">
-        <form id="eventNew" action="@Url.Action("EventNew","Admin")" enctype="multipart/form-data" method="post">
+        <form id="eventNew" enctype="multipart/form-data" method="post">
             <div class="newPanel row">
                 @* 左邊那行(表單輸入) *@
                 <div class="col-4">
@@ -312,7 +312,7 @@
         }
     })
 
-    //建立活動．使用ajax實作，因為checkbox的數字陣列難以用一般的submit回傳
+    //建立活動．使用ajax實作
     $(".create").click(function () {
         let eventAlbums = [];
         $(".trItem").each(function () {
@@ -320,10 +320,19 @@
                 eventAlbums.push($(this).find("input").val());
             }
         })
+        if ($("#eventName").val().trim() == "") {
+            alert("還未填寫活動名稱!")
+            return;
+        }
+        if ($(".upload").val() == "") {
+            alert("還沒有上傳活動圖片!");
+            return;
+        }
         if (eventAlbums.length == 0) {
             alert("沒有選擇任何專輯!")
             return;
         }
+        $("#eventName").val($("#eventName").val().trim()) 
 
         let eventObj = new FormData($("#eventNew")[0]);
 
@@ -352,8 +361,11 @@
             url: "@Url.Action("EventAlbum","Admin")",
             data: { kinds: kinds, type: type },
             method: "POST",
-            success: function (datas,a) {
+            success: function (datas) {
                 $(".list").html("");
+                if (datas.length == 0) {
+                    $(".list").append(`<tr><td colspan=4>沒有符合條件的專輯或相關專輯已有所屬活動</td></tr>`);
+                }
                 $.each(datas, function (name, value) {
                     let chk = `<td><input type="checkbox" value="${value.fAlbumID}" name="eventAlbums"/></td>`;
                     let title = `<td>${value.fAlbumName}</td>`;

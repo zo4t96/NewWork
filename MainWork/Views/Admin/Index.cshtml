@@ -2,18 +2,18 @@
 
 @{
     ViewBag.Title = "Index";
+    var sk = Session[CDictionary.SK_CURRENT_LOGINED_USER] as tMember;
 
-
-        Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
     var account = "";
 
-    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    if (sk == null)
     {
         Response.Redirect("~/Album/Index/");
     }
     else
     {
-        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        account = sk.fAccount.ToString();
         if (account != "aaa")
         {
             Response.Redirect("~/Album/Index/");

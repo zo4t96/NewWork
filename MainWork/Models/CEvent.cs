@@ -25,22 +25,24 @@ namespace MainWork.Models
 
         //新增活動時查詢音樂用(曲風只要一項有合就會挑出來，所以中間判斷會比較複雜，必須過濾重複)
         public IEnumerable<tAlbum> eventAlbum(int[] kinds , int type) {
-            var albums = db.tAlbums.Select(a => a);
+            var albums = db.tAlbums.Where(a => a.fActivity == null);
             var kindList = new List<tAlbumKind>();
             if(type != 1)
             {
                 albums = db.tAlbums.Where(a => a.fType == type);
             }
-            if (kinds != null)
-            {
-                foreach (int item in kinds)
-                {
-                    kindList.Add(db.tAlbumKinds.Where(k => k.KindID == item).FirstOrDefault());
-                }
-            }
-            else
+
+            //如果沒有選擇曲風，直接傳回所有專輯
+            if (kinds == null)
             {
                 kindList = db.tAlbumKinds.Select(k => k).ToList();
+                return albums;
+            }
+            
+            //有選擇曲風的狀態下再挑選符合的專輯
+            foreach (int item in kinds)
+            {
+                kindList.Add(db.tAlbumKinds.Where(k => k.KindID == item).FirstOrDefault());
             }
             List<tAlbum> result = new List<tAlbum>();
             List<tAlbum> temp = new List<tAlbum>();
@@ -81,6 +83,38 @@ namespace MainWork.Models
                 album.fDiscount = eventObj.discount;
                 album.fActivity = latest.fId;
             }
+            db.SaveChanges();
+        }
+
+        public void eventAlter(CEventObject eventObj)
+        {
+            //修改資料時，先把該活動的相關專輯的活動清空
+            var albums = db.tAlbums.Where(a => a.fActivity == eventObj.eventId);
+            foreach (var a in albums)
+            {
+                a.fActivity = null;
+            }
+            
+            var target = db.tActivities.Where(a => a.fId == eventObj.eventId).FirstOrDefault();
+            target.fTitle = eventObj.eventName;
+            target.fStartTime = eventObj.startDate;
+            target.fEndTime = eventObj.endDate;
+            if (eventObj.eventImage != null)
+            {
+                eventObj.eventImage.SaveAs(target.fPhotoPath);
+            }
+            db.SaveChanges();
+        }
+
+        public void eventDelete(int eventId)
+        {
+            var albums = db.tAlbums.Where(a => a.fActivity == eventId);
+            foreach (var a in albums)
+            {
+                a.fActivity = null;
+            }
+            var target = db.tActivities.Where(a => a.fId == eventId).FirstOrDefault();
+            db.tActivities.Remove(target);
             db.SaveChanges();
         }
     }

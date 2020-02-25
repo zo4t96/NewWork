@@ -13,5 +13,8 @@ namespace MainWork.ViewModels
         public int[] eventAlbums { get; set; }
         public HttpPostedFileBase eventImage { get; set; }
         public float discount { get; set; }
+
+        //活動ID，修正時才會用到的屬性
+        public int eventId { get; set; }
     }
 }

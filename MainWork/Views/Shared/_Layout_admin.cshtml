@@ -1,6 +1,9 @@
 ﻿@using MainWork.Models;
 <!DOCTYPE html>
 <html lang="en">
+@{ 
+    var sk = Session[CDictionary.SK_CURRENT_LOGINED_USER] as tMember;
+}
 
 <head>
     <!-- Required meta tags-->
@@ -20,7 +23,7 @@
     <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
 
     <!-- Bootstrap CSS-->
-    @*<link href="~/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">*@
+    <link href="~/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Vendor CSS-->
@@ -440,21 +443,21 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="~/images/avatar-01.jpg" alt="@Session[CDictionary.SK_ACCOUNT].ToString()" />
+                                            <img src="~/images/avatar-01.jpg" alt="@sk.fNickName.ToString()" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">@Session[CDictionary.SK_ACCOUNT].ToString()</a>
+                                            <a class="js-acc-btn" href="#">@sk.fNickName.ToString()</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="~/images/avatar-01.jpg" alt="@Session[CDictionary.SK_ACCOUNT].ToString()" />
+                                                        <img src="~/images/avatar-01.jpg" alt="@sk.fNickName.ToString()" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">Hello,@Session[CDictionary.SK_ACCOUNT].ToString()</a>
+                                                        <a href="#">Hello,@sk.fNickName.ToString()</a>
                                                     </h5>
                                                     <span class="email">johndoe@example.com</span>
                                                 </div>
@@ -503,12 +506,12 @@
         </div>
 
     </div>
-    @*<script src="@Url.Content("~/Scripts/flushpage.js")" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/flushpage.js")" type="text/javascript"></script>
     <!-- Jquery JS-->
     <script src="~/vendor/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap JS-->
-    @*<script src="~/vendor/bootstrap-4.1/popper.min.js"></script>
-        <script src="~/vendor/bootstrap-4.1/bootstrap.min.js"></script>*@
+    <script src="~/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="~/vendor/bootstrap-4.1/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- Vendor JS       -->

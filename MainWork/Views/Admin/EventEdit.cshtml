@@ -68,9 +68,11 @@
     </style>
 </head>
 <body>
-    <div class="tabcontent eventNew">
-        <form id="eventNew" action="@Url.Action("EventNew","Admin")" enctype="multipart/form-data" method="post">
+    <div class="tabcontent eventEdit">
+        <form id="eventEdit" enctype="multipart/form-data" method="post">
+            @* 跟新增頁面相比多了一個隱藏活動id的input *@
             <input type="hidden" value="@Model.fId" name="eventId"/>
+
             <div class="newPanel row">
                 <div class="col-4">
                     <div class="h3 my-3 font-weight-bold">活動資訊</div>
@@ -99,7 +101,7 @@
                         <div class="form-group">
                             <label class="col-form-label">特價折數</label>
                             <div>
-                                <select class="form-control discount" value="0.8" form="eventNew" name="discount" disabled>
+                                <select class="form-control discount" value="0.8" form="eventEdit" name="discount" disabled>
                                     <option value="0.9">九折</option>
                                     <option value="0.8">八折</option>
                                     <option value="0.7">七折</option>
@@ -151,7 +153,7 @@
                     </div>
                     <div class="hidden">
                         <div class="btn btn-success mt-4 mr-3 save">儲存修改</div>
-                        <div class="btn btn-danger mt-4 mr-3">刪除此活動</div>
+                        <div class="btn btn-danger mt-4 mr-3 delete">刪除此活動</div>
                     </div>
                     
                 </div>
@@ -200,16 +202,22 @@
 
         //很神奇的，必須從資料庫讀出時間字串，然後再轉換成Date格式，再轉換成ISO字串才能丟進input的value裡
         //簡直WTF
-        //更WTF的是，資料庫26號存進input會顯示25號???先擱著
+        //更WTF的是，資料庫26號存進input會顯示25號(目前先直接+1天處理)
         let sd = "@Model.fStartTime".split(" ")[0].trim();
         let ed = "@Model.fEndTime".split(" ")[0].trim();
         console.log(sd)
         console.log(new Date())
 
-        sd = (new Date(sd)).toISOString().split("T")[0];
-        ed = (new Date(ed)).toISOString().split("T")[0];
+        sd = new Date(sd)
+        sd.setDate(sd.getDate() + 1);
+        sd = sd.toISOString().split("T")[0];
+        ed = new Date(ed);
+        ed.setDate(ed.getDate() + 1);
+        ed = ed.toISOString().split("T")[0];
         $(".startDate").val(sd);
         $(".endDate").val(ed);
+
+        console.log($(".startDate").val())
 
         //同樣要處理可選擇的時間限制
         let date = new Date();
@@ -248,7 +256,19 @@
             }
         })
 
+        //音樂清單的全選全取消
+        $(".all").click(function () {
+            $(".trItem").find("input[type = checkbox]").each(function () {
+                this.checked = true;
+            })
+        })
+        $(".cancelAll").click(function () {
+            $(".trItem").find("input[type = checkbox]").each(function () {
+                this.checked = false;
+            })
+        })
 
+        //開啟修改
         $(".edit").click(function () {
             let today = new Date();
             let startDay = new Date($(".startDate").val());
@@ -263,48 +283,80 @@
                 $("select").prop("disabled", false);
             }
         })
+        //儲存修改
         $(".save").click(function () {
-            $(".tag").addClass("hidden");
-            $(this).parent().addClass("hidden");
-            $(".edit").parent().removeClass("hidden");
-            $(".listTitle").text("參與本次活動的專輯清單");
-        })
-
-        function listRenew() {
-        let type = $(".typeSelected").val();
-        let kinds = [];
-        $(".kindItem:checked").each(function () {
-            kinds.push(this.value);
-        })
-        $.ajax({
-            url: "@Url.Action("EventAlbum","Admin")",
-            data: { kinds: kinds, type: type },
-            method: "POST",
-            success: function (datas,a) {
-                $(".list").html("");
-                $.each(datas, function (name, value) {
-                    let chk = `<td><input type="checkbox" value="${value.fAlbumID}" name="eventAlbums"/></td>`;
-                    let title = `<td>${value.fAlbumName}</td>`;
-                    let type = `<td>${value.fTypeName}</td>`
-                    let kind = `<td>${value.fKinds}</td>`
-                    $(".list").append(`<tr class="trItem">${chk + title + type + kind}</tr>`);
-                })
-                //點選row等同點選checkbox
-                $(".trItem").on("click", function (e) {
-                    var target = $(this).find("input[type = checkbox]")[0];
-                    if (e.target != target) {
-                        target.checked = !target.checked;
+            let eventObj = new FormData($("#eventEdit")[0]);
+            if (confirm("確定要進行修改?")) {
+                $.ajax({
+                    url: '@Url.Action("EventAlter", "Admin")',
+                    type: "post",
+                    data: eventObj,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        alert("修改成功!")
+                        window.location.href = "@Url.Action("EventPage","Admin")";
                     }
                 })
             }
-        });
-    }
-    $(".kindItem").change(function () {
-        listRenew();
-    })
-    $(".typeSelected").change(function () {
-        listRenew();
-    })
+        })
+
+        //刪除修改
+        $(".delete").click(function () {
+            let eventObj = new FormData($("#eventEdit")[0]);
+            if (confirm("確定要刪除這個活動?")) {
+                $.ajax({
+                    url: '@Url.Action("EventDelete","Admin")',
+                    type: "post",
+                    data: eventObj,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        alert("已刪除活動!")
+                        window.location.href = "@Url.Action("EventPage","Admin")";
+                    }
+                })
+            }
+        })
+
+        function listRenew() {
+            let type = $(".typeSelected").val();
+            let kinds = [];
+            $(".kindItem:checked").each(function () {
+                kinds.push(this.value);
+            })
+            $.ajax({
+                url: "@Url.Action("EventAlbum","Admin")",
+                data: { kinds: kinds, type: type },
+                method: "POST",
+                success: function (datas) {
+                    $(".list").html("");
+                    if (datas.length == 0) {
+                        $(".list").append(`<tr><td colspan=4>沒有符合條件的專輯或相關專輯已有所屬活動</td></tr>`);
+                    }
+                    $.each(datas, function (name, value) {
+                        let chk = `<td><input type="checkbox" value="${value.fAlbumID}" name="eventAlbums"/></td>`;
+                        let title = `<td>${value.fAlbumName}</td>`;
+                        let type = `<td>${value.fTypeName}</td>`
+                        let kind = `<td>${value.fKinds}</td>`
+                        $(".list").append(`<tr class="trItem">${chk + title + type + kind}</tr>`);
+                    })
+                    //點選row等同點選checkbox
+                    $(".trItem").on("click", function (e) {
+                        let target = $(this).find("input[type = checkbox]")[0];
+                        if (e.target != target) {
+                            target.checked = !target.checked;
+                        }
+                    })
+                }
+            });
+        }
+        $(".kindItem").change(function () {
+            listRenew();
+        })
+        $(".typeSelected").change(function () {
+            listRenew();
+        })
     </script>
 </body>
 </html>

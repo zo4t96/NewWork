@@ -221,5 +221,19 @@ namespace MainWork.Controllers
             ViewBag.discount = result.tAlbums.Select(a => a).First().fDiscount;
             return View(result);
         }
+        
+        public ActionResult EventAlter(CEventObject eventObj)
+        {
+            CEvent ce = new CEvent();
+            ce.eventAlter(eventObj);
+            return RedirectToAction("EventPage", "Admin");
+        }
+
+        public ActionResult EventDelete(int eventId)
+        {
+            CEvent ce = new CEvent();
+            ce.eventDelete(eventId);
+            return RedirectToAction("EventPage", "Admin");
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿@model List<MainWork.tAlbum>
+    @using MainWork.Models;
 @{
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
     }
+    var events = ViewBag.events as IEnumerable<tActivity>;
 }
 <style>
     .albumPanel {
@@ -27,13 +29,11 @@
         padding: 20px;
         cursor: pointer;
 
-        transform: scale(0.8);
         transition: 0.4s;
         opacity: 0;
     }
 
     .animation {
-        transform: scale(1);
         opacity: 1;
     }
 
@@ -99,13 +99,42 @@
 <body>
     <div id="adCarousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-            <li data-target="#adCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#adCarousel" data-slide-to="1"></li>
-            <li data-target="#adCarousel" data-slide-to="2"></li>
-            
+            @{int c = 0;}
+            @foreach (var e in events)
+            {
+                if (c == 0)
+                {
+                    <li data-target="#adCarousel" data-slide-to="@c" class="active"></li>
+                }
+                else
+                {
+                <li data-target="#adCarousel" data-slide-to="@c"></li>
+                }
+                c++;
+            }
+            <li data-target="#adCarousel" data-slide-to="@(c)"></li>
+            <li data-target="#adCarousel" data-slide-to="@(c+1)+"></li>
+            <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>
         </ol>
         <div class="carousel-inner">
-            <a class="carousel-item active" href="@Url.Action("Kinds","Search")">
+            @{c = 0;}
+            @foreach (var e in events)
+            {
+                if (c == 0)
+                {
+                    <a class="carousel-item active" href="@Url.Action("Kinds", "Search")">
+                        <img src="~/Images/@e.fPhotoPath" class="d-block w-100">
+                    </a>
+                }
+                else
+                {
+                    <a class="carousel-item" href="@Url.Action("Kinds", "Search")">
+                        <img src="~/Images/@e.fPhotoPath" class="d-block w-100">
+                    </a>
+                }
+                c++;
+            }
+            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
                 <img src="~/Images/top12.jpg" class="d-block w-100">
             </a>
             <a class="carousel-item" href="@Url.Action("Kinds","Search")">
