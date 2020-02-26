@@ -852,33 +852,38 @@
             //    $(".mainbox").html(data);
             //})
 
+
             //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
             $("li > a").on("click", function (e) {
+                e.preventDefault();
                 let link = $(this).attr("href");
-                $.post(link, { ajax: true }, function (data) {
-                    $(".mainbox").html(data);
-                })
-                //給予網頁虛擬網址，隨便打都能過，但是最好讓他跟實際變換的網址同名
+
+                //切換頁面時，記錄當下SCROLL狀態，以利上一頁返回後可以回到原本狀態
+                let scrollY = window.scrollY;
+                history.replaceState({ ajax: true, scrollY: scrollY }, null);
+                console.log(history.state);
+
                 //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
                 //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
                 history.pushState(null, null, link);
-                //因為要將網頁連結變成自定義的切換模式，所以記得取消原本a標籤的超連結功能
-                e.preventDefault();
+                
                 $(window).scrollTop(0);
+
+                $.post(link, { ajax: true}, function (data) {
+                    $(".mainbox").html(data);
+                })
+                
             });
 
             //每當點選瀏覽器的上一頁下一頁便會發動此事件
             //location.pathname為動作完成後所得到的該頁url
             window.addEventListener('popstate', function () {
-                if (history.state == null) {
-                    history.replaceState({ ajax: true }, null);
-                }
                 $.post(location.pathname, history.state, function (data) {
                     $(".mainbox").html(data);
+                    $(window).scrollTop(history.state.scrollY);
                 })
                 console.log(history.state);
             })
-            //測試滾動
 
             /////////////////
             ///搜尋條棒相關///
