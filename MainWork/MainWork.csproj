@@ -432,6 +432,8 @@
     <Content Include="Views\Admin\KindAlter.cshtml" />
     <Content Include="Views\Admin\EventPage.cshtml" />
     <Content Include="Views\Admin\EventEdit.cshtml" />
+    <Content Include="Views\Search\EventResult.cshtml" />
+    <Content Include="Views\Search\EventResultView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

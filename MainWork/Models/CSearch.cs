@@ -101,5 +101,11 @@ namespace MainWork.Models
             return result;
         }
 
+        //尋找屬於特定活動的專輯
+        public IEnumerable<tAlbum> byEvent(int eventId)
+        {
+            var result = db.tAlbums.Where(a => a.fActivity == eventId);
+            return result;
+        }
     }
 }

@@ -27,7 +27,6 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-
         transition: 0.4s;
         opacity: 0;
     }
@@ -36,10 +35,10 @@
         opacity: 1;
     }
 
-        .albumBlock:hover {
-            background-color: #353535;
-            text-decoration:none;
-        }
+    .albumBlock:hover {
+        background-color: #353535;
+        text-decoration: none;
+    }
 
     .albumCover {
         position: relative;
@@ -119,12 +118,12 @@
         e.preventDefault();
         let amid = $(this).data("album");
         let url = `${$(this).attr("href")}?amid=${amid}`;
-        let stateObj = { amid: amid, ajax: true };
+        let stateObj = { amid: amid, ajax: true};
         $.post(url, stateObj, function (data) {
             $(".mainbox").html(data);
             $(window).scrollTop(0);
         })
-        history.pushState(stateObj, null, url);
+        history.pushState(stateObj, title, url);
 
         let title = $(this).data("title");
         document.title = title;

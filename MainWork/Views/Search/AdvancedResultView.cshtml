@@ -114,7 +114,7 @@
         </a>
         @foreach (var item in Model)
             {
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
                 <div class="albumContent">
@@ -141,6 +141,9 @@
                 $(window).scrollTop(0);
             })
             history.pushState(stateObj, null, url);
+
+            let title = $(this).data("title");
+            document.title = title;
         });
     </script>
 </body>

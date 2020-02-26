@@ -7,7 +7,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Title</title>
+    <title>SpiderFly</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -864,12 +864,12 @@
                 history.pushState(null, null, link);
                 //因為要將網頁連結變成自定義的切換模式，所以記得取消原本a標籤的超連結功能
                 e.preventDefault();
+                $(window).scrollTop(0);
             });
 
             //每當點選瀏覽器的上一頁下一頁便會發動此事件
             //location.pathname為動作完成後所得到的該頁url
             window.addEventListener('popstate', function () {
-                //changePage(location.pathname);
                 if (history.state == null) {
                     history.replaceState({ ajax: true }, null);
                 }
@@ -878,6 +878,7 @@
                 })
                 console.log(history.state);
             })
+            //測試滾動
 
             /////////////////
             ///搜尋條棒相關///
@@ -1073,6 +1074,7 @@
                     }, 500)
                 }
             })
+            
         }
 
     </script>

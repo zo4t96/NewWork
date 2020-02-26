@@ -94,6 +94,9 @@
         margin: 50px auto;
         width: 900px;
     }
+    .carousel-item{
+        cursor:pointer;
+    }
 </style>
 <link href="~/Content/bootstrap.css" rel="stylesheet" />
 <body>
@@ -118,18 +121,18 @@
         </ol>
         <div class="carousel-inner">
             @{c = 0;}
-            @foreach (var e in events)
+            @foreach (var item in events)
             {
                 if (c == 0)
                 {
-                    <a class="carousel-item active" href="@Url.Action("Kinds", "Search")">
-                        <img src="~/Images/@e.fPhotoPath" class="d-block w-100">
+                    <a class="carousel-item active" data-event="@item.fId">
+                        <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
                     </a>
                 }
                 else
                 {
-                    <a class="carousel-item" href="@Url.Action("Kinds", "Search")">
-                        <img src="~/Images/@e.fPhotoPath" class="d-block w-100">
+                    <a class="carousel-item" data-event="@item.fId">
+                        <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
                     </a>
                 }
                 c++;
@@ -203,12 +206,37 @@
                 $(window).scrollTop(0);
             })
             history.pushState(stateObj, null, url);
+
+            let title = $(this).data("title");
+            document.title = title;
         });
 
         $("#adCarousel").carousel(function () {
             intetval: 1000;
         });
 
+        $(".carousel-item").click(function (e) {
+            e.preventDefault();
+            let eventId = $(this).data("event");
+            let url = `@Url.Action("EventResult", "Search")/?eventId=${eventId}`;
+            let stateObj = { eventId: eventId, ajax: true };
+
+            history.pushState(stateObj, null, url);
+
+            $.ajax({
+                url: url,
+                data: stateObj,
+                beforeSend: function () {
+                    $(".mainbox").html(`<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>`);
+                    
+                },
+                //success: function (data) {
+                //    $(".mainbox").html(data);
+                //    $(window).scrollTop(0);
+                //}
+            })
+        })
 
     </script>
 </body>

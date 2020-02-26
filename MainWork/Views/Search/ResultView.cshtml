@@ -111,7 +111,7 @@
         </a>
         @foreach (var item in Model)
         {
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID">
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
                 <div class="albumContent">
@@ -141,6 +141,9 @@
             })
             history.pushState(stateObj, null, url);
             $(window).scrollTop(0);
+
+            let title = $(this).data("title");
+            document.title = title;
         });
 
         $(".noResult").find("h3").text(`查無 ${history.state.keyword} 的資料`);

@@ -107,5 +107,19 @@ namespace MainWork.Controllers
             var result = data.Select(d => new { d.KindName, d.fColor });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        //活動的商品一覽頁面
+        public ActionResult EventResult(bool ajax = false)
+        {
+            if (ajax)
+            {
+                ViewBag.ajax = true;
+            }
+            return View();
+        }
+        public ActionResult EventResultView(int eventId)
+        {
+            return PartialView(search.byEvent(eventId));
+        }
     }
 }
