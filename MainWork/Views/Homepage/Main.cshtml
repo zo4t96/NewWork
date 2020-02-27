@@ -227,14 +227,16 @@
                 url: url,
                 data: stateObj,
                 beforeSend: function () {
-                    $(".mainbox").html(`<i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span>`);
-                    
+                    $(".mainbox").html(
+                    `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
                 },
-                //success: function (data) {
-                //    $(".mainbox").html(data);
-                //    $(window).scrollTop(0);
-                //}
+                success: function (data) {
+                    $(".mainbox").html(data);
+                    $(window).scrollTop(0);
+                }
             })
         })
 

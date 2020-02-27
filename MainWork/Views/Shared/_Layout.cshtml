@@ -470,6 +470,15 @@
         }
     </style>
 
+    <!--通用介面的loading符號-->
+    <style>
+        .loading {
+            position:relative;
+            text-align:center;
+            top:50%;
+        }
+    </style>
+    
 </head>
 <body>
 
@@ -706,14 +715,6 @@
         ///主播放器相關///
         /////////////////
 
-        //新增
-        var m_soid;
-        var m_singer;
-        var m_song;
-        var m_songcover;
-        var playerAjaxExecu = false;
-        //****
-
         var player;//主播放器
         var playing;//是否正在播放中
         var totalTime;//本次歌曲的秒數總長度
@@ -853,38 +854,48 @@
             //})
 
 
+            //測試紀錄：history.state雖然可以直接賦值，但一旦切頁就會消失
+            //若要使該頁的history.state不管怎麼切頁都可以確實保存下去，一定得使用replaceState方法才行
+            //可以先利用history.state.xxx的方式賦予新定義的值，再用history.replaceState(history.state,null)的方式更新
+
+            //但!!是!!!該方法不能給值為null的history.state!
+            //最少最少得先建立一個{}空物件給它才能使用上述方式賦值，WTF
+
             //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
             $("li > a").on("click", function (e) {
                 e.preventDefault();
                 let link = $(this).attr("href");
-
-                //切換頁面時，記錄當下SCROLL狀態，以利上一頁返回後可以回到原本狀態
-                let scrollY = window.scrollY;
-                history.replaceState({ ajax: true, scrollY: scrollY }, null);
-                console.log(history.state);
-
                 //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
                 //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
-                history.pushState(null, null, link);
-                
+                history.pushState({ ajax: true, scrollY: null }, null, link);
                 $(window).scrollTop(0);
 
                 $.post(link, { ajax: true}, function (data) {
                     $(".mainbox").html(data);
                 })
-                
             });
 
             //每當點選瀏覽器的上一頁下一頁便會發動此事件
             //location.pathname為動作完成後所得到的該頁url
             window.addEventListener('popstate', function () {
+                history.state.ajax = true;
+                history.replaceState(history.state, null);
+                let y = history.state.scrollY;
+
                 $.post(location.pathname, history.state, function (data) {
                     $(".mainbox").html(data);
-                    $(window).scrollTop(history.state.scrollY);
+                    $(window).scrollTop(y);
                 })
-                console.log(history.state);
             })
 
+            $(window).scroll(function () {
+                if (history.state == null) {
+                    history.replaceState({}, null);
+                }
+                history.state.ajax = true;
+                history.state.scrollY = window.scrollY;
+                history.replaceState(history.state, null);
+            })
             /////////////////
             ///搜尋條棒相關///
             /////////////////
@@ -1026,28 +1037,27 @@
                 $(this).children().css("color", "white");
             })
 
-            @*//登入登出
-            //     function admininterface() {
-            $("#admininterface").on("click", function () {
-                window.location.href = '@Url.Action("Index","Admin")';
-            })
-            $("#logoutinterface").on("click", function () {
-                window.location.href = '@Url.Action("Loginout","Common")';
-            })
-            $("#logininterface").on("click", function () {
-                window.location.href = '@Url.Action("Login","Common")';
-            })*@
-
-
             //////////////////////////
             ///透過modal介面載入資訊///
             /////////////////////////
 
             //登入註冊介面與登出
             $("#loginInterface").on("click", function () {
-                $.get("@Url.Action("Login","MemberLogin")", function (data) {
-                    $("#modalContent").html(data);
-                });
+
+                $.ajax({
+                    url:"@Url.Action("Login","MemberLogin")",
+                    type: "get",
+                    beforeSend:function() {
+                        $("#modalContent").html(
+                            `<div class="loading">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Loading...</span>
+                        </div>`);
+                    },
+                    success: function (data) {
+                        $("#modalContent").html(data);
+                    }
+                })
                 $("#modal").css("display", "block");
                 setTimeout(function () {
                     $("#modal").addClass("fadein");
@@ -1055,9 +1065,20 @@
                 }, 10)
             })
             $("#logonInterface").on("click", function () {
-                $.get("@Url.Action("New","MemberLogin")", function (data) {
-                    $("#modalContent").html(data);
-                });
+                $.ajax({
+                    url:"@Url.Action("New","MemberLogin")",
+                    type: "get",
+                    beforeSend:function() {
+                        $("#modalContent").html(
+                            `<div class="loading">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Loading...</span>
+                        </div>`);
+                    },
+                    success: function (data) {
+                        $("#modalContent").html(data);
+                    }
+                })
                 $("#modal").css("display", "block");
                 setTimeout(function () {
                     $("#modal").addClass("fadein");
