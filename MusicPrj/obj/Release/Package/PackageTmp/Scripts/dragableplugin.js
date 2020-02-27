@@ -43,7 +43,7 @@ mousedown: function (event) {
 
             $(drag.tmp_elm).css({
                 'position': 'absolute',
-                'background-color': '#FF8C69',
+                'background-color': '#353535',
                 'left': drag._x,
                 'top': drag._y,
             });
@@ -86,10 +86,10 @@ mousedown: function (event) {
                     if ($(value).offset().left !== drag.old_elm.parent().offset().left
                         || $(value).offset().top !== drag.old_elm.parent().offset().top) {
 
-                        $(value).css('background-color', '#FFEFD5');
+                        $(value).css('background-color', '#292929');
                     }
                 } else {
-                    $(value).css('background-color', '#FFFFF0');
+                    $(value).css('background-color', '#292929');
                 }
 
             });
@@ -120,7 +120,7 @@ mousedown: function (event) {
                         drag.new_elm = $(newObj).find(tmp);
                     }
                 }
-                $(value).css('background-color', '#FFFFF0');
+                $(value).css('background-color', '#353535');
             });
 
         },

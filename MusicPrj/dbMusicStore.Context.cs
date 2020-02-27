@@ -25,16 +25,17 @@ namespace MusicPrj
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<tAlbum> tAlbums { get; set; }
         public virtual DbSet<tAlbumType> tAlbumTypes { get; set; }
-        public virtual DbSet<tMember> tMembers { get; set; }
         public virtual DbSet<tProduct> tProducts { get; set; }
-        public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
-        public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
         public virtual DbSet<tPlayList> tPlayLists { get; set; }
-        public virtual DbSet<tActivity> tActivities { get; set; }
         public virtual DbSet<tLog> tLogs { get; set; }
         public virtual DbSet<tMessage> tMessages { get; set; }
         public virtual DbSet<tAlbumKind> tAlbumKinds { get; set; }
+        public virtual DbSet<tMember> tMembers { get; set; }
+        public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
+        public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
+        public virtual DbSet<tStatistic> tStatistics { get; set; }
+        public virtual DbSet<tActivity> tActivities { get; set; }
+        public virtual DbSet<tAlbum> tAlbums { get; set; }
     }
 }

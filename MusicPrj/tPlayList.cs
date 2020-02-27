@@ -18,7 +18,7 @@ namespace MusicPrj
         public string fAccount { get; set; }
         public int fProductID { get; set; }
     
-        public virtual tMember tMember { get; set; }
         public virtual tProduct tProduct { get; set; }
+        public virtual tMember tMember { get; set; }
     }
 }

@@ -16,12 +16,15 @@ namespace MusicPrj
     {
         public int fPurchaseItemID { get; set; }
         public string fCustomer { get; set; }
-        public Nullable<int> fProductID { get; set; }
-        public string fDate { get; set; }
+        public int fProductID { get; set; }
+        public Nullable<System.DateTime> fDate { get; set; }
         public Nullable<decimal> fPrice { get; set; }
         public Nullable<int> fQuanity { get; set; }
+        public Nullable<int> fisAlbum { get; set; }
+        public Nullable<float> fDiscount { get; set; }
     
         public virtual tMember tMember { get; set; }
         public virtual tProduct tProduct { get; set; }
+        public virtual tShoppingCart tShoppingCart { get; set; }
     }
 }

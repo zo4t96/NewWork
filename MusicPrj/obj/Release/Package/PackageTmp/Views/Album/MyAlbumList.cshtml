@@ -11,7 +11,14 @@
     {
         Layout = null;
     }
-    int count = 0;
+    if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+        var message = @Html.Raw(Json.Encode(TempData["message"]));
+        alert(message);
+        </script>
+    }
+
     var account = "";
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
@@ -27,11 +34,12 @@
 
 <style>
 
+    /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 360px;
+        width: 340px;
         padding: 15px;
         min-height: 300px;
-        background-color: #FFFFF0;
+        background-color: rgb(255,255,240);
         margin: 20px;
         display: block;
         float: left;
@@ -49,180 +57,486 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            background-color: #EED2EE;
+            background-color: #292929;
             margin-bottom: 10px;
             -moz-user-select: none;
             user-select: none;
             text-indent: 10px;
-            color: #555;
-            margin-right:10px
+            color: whitesmoke;
+            margin-right: 10px
         }
 
+    .albumCreatePanel {
+        display: inline-block;
+        vertical-align: top;
+        padding-left: 50px;
+        padding-top: 50px;
+        min-width: 1200px;
+    }
+    /*滑鼠拖曳選擇Kind效果css結束*/
+    /*摺疊效果預設摺起來*/
     .foldAlbum {
         display: none;
         line-height: 17pt;
         width: 100%
     }
+    /*Tab換頁效果*/
+    .tab_btns li {
+        display: inline-block;
+    }
+
+    .tab_container {
+        overflow: hidden; /*關鍵-控制切第2頁時第一頁畫面消失位置*/
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+        width: 100% /*控制單頁框度使其不超出瀏覽範圍*/
+    }
+
+    .tab_contents {
+        position: relative; /*關鍵-控制切頁動作*/
+        white-space: nowrap; /*關鍵-文字是否換行-控制第二頁內容*/
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+        width: 100% /*控制單頁框度使其不超出瀏覽範圍*/
+    }
+
+        .tab_contents li {
+            display: inline-block; /*關鍵-控制第二頁內容*/
+            vertical-align: top; /*關鍵-控制第一頁內容*/
+            width: 100%; /*控制單頁框度使其不超出瀏覽範圍*/
+            padding: 0 5%;
+            margin: 0 auto;
+            /*box-sizing: border-box;*/
+        }
+    /*Tab換頁效果*/
+    /*專輯預覽block*/
+
+    .albumBlock {
+        display: block;
+        width: 15vw;
+        height: 22vw;
+        min-width: 200px;
+        min-height: 293px;
+        text-align: center;
+        background-color: #292929;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        cursor: pointer;
+        transform: scale(0.8);
+        transition: 0.4s;
+        opacity: 1;
+        transform: scale(1);
+    }
+
+        /*.animation {
+        transform: scale(1);
+        opacity: 1;
+    }*/
+
+        .albumBlock:hover {
+            background-color: #353535;
+            text-decoration: none;
+        }
+
+    .albumCover {
+        position: relative;
+        display: inline-block;
+        width: 12vw;
+        height: 12vw;
+        min-width: 160px;
+        min-height: 160px;
+        /*測試用圖片*/
+        /*background-image: url("/Images/4.jpg");*/
+        /*background-size: cover;*/
+    }
+
+    .albumContent {
+        position: relative;
+        width: 12vw;
+        min-width: 160px;
+        overflow: hidden;
+        text-align: left;
+        margin: 5px 0px;
+    }
+
+    .albumTitle {
+        display: block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        /*使多出的字元變...，下面三個屬性都要設才有效果*/
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .albumDescripion {
+        display: inline-block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #808080;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    /*專輯預覽block*/
 </style>
+<!-- Main CSS-->
+<link href="~/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+<script src="~/vendor/animsition/animsition.min.js"></script>
 
 
-<div style="padding-left:50px;padding-top:50px">
-    <h3 class="fold-title" data-playurl=""><i class="fa fa-chevron-right"></i> 新增專輯</h3>
-    <div class="foldAlbum">
-        <div class="fold-container">
-            <div class="container" style="color:white">
+
+<div id="wrapper">
+    <div class="container">
+        <ul class="tab_btns" style="display:inline-block">
+            <li class="on"><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">發行專輯</a></li>
+            <li><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1"> + 增加專輯</a></li>
+            <li><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">販售統計</a></li>
+        </ul>
+    </div>
+    @*<div class="container text-center">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs tab_btns">
+                    <li class="nav-item on">
+                        <a class="nav-link" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">Link</a>
+                    </li>
+                </ul>
+            </div>
+        </div>*@
+    <div class="tab_container">
+        <ul class="tab_contents" id="tab_contents1">
+            <li>
+
+                @Html.Action("_MyAlbumList")
+
+            </li>
+            <li>
+                <h1 class="headtitle">專輯新增</h1>
                 @*for start*@
                 @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
-                    @Html.AntiForgeryToken()
+                    <div class="albumCreatePanel row">
+                        <div class="col-md-6">
+                            <div class="container" style="color:white">
 
-                <div class="form-horizontal">
-                    <h4>請輸入專輯基本資料</h4>
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.AntiForgeryToken()
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                                <div class="form-horizontal">
+                                    <h4>請輸入專輯基本資料</h4>
+                                    <hr />
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <input class="form-control text-box single-line" data-val="true" data-val-required="發行日必填" id="tA_fYear" name="tA.fYear" type="date" value="2020-01-01">
-                            @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @*@Html.EditorFor(model => tA.fType, new { htmlAttributes = new { @class = "form-control" } })*@
-                            <select class="advancedtxt form-control" name="tA.fType" id="adTypePageload">
-                                <option value="0">不指定</option>
-                                @* 網頁初始化時會在這裡更新搜尋的類別 *@
-                            </select>
-                            @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            <input class="form-control text-box single-line" data-val="true" data-val-required="發行日必填" id="tA_fYear" name="tA.fYear" type="date" value="2020-01-01">
+                                            @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tA.fALPrice, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => tA.fALPrice, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            @*@Html.EditorFor(model => tA.fType, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            <select class="advancedtxt form-control ustom-select my-1 mr-sm-2" name="tA.fType" id="adTypePageload">
+                                                @* 網頁初始化時會在這裡更新搜尋的類別 *@
+                                            </select>
+                                            @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
 
-                    <div class="form-group" style="min-height:400px">
-                        @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="containerDrag">
-                                <ul id="userKindtaginput"></ul>
-                                <ul id="adKindULPageload">
-                                    <li>不指定</li>
-                                </ul>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">$</span>
+                                                </div>
+                                                @Html.EditorFor(model => tA.fALPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tA.fALPrice, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
+                                                <label class="custom-file-label" for="customFile">點選圖片</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => tA.fPublisher, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => tA.fPublisher, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => tA.fPublisher, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
-                            <hr />
-                            <input class="form-control text-box single-line" id="tA_fKinds" name="tA.fKinds" type="text" value="">
                         </div>
-                    </div>
-                    <script>
-                        $(function () {
-                            drag.init('containerDrag');
-                        });
-                    </script>
-                    @*<div class="form-group">
-            <h1></h1>
-            @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="advancedtxt form-control" name="tA.fKinds" id="adKindPageload" multiple>
-                    <option value="0">不指定</option>
-                     網頁初始化時會在這裡更新搜尋的類別
-                </select>
-                @Html.EditorFor(model => tA.fKinds, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => tA.fKinds, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                </div>
+                            </div>
+                            @*<div class="form-group" style="text-align:center">
+                                    <div  style="display:inline-block">
+                                        <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
+                                    </div>
+                                    <h3 id="previewTitle">Title</h3>
+                                    <h4 id="previewGroup">Group</h4>
+                                    <h4 id="previewPrice">Price</h4>
+                                    <h4 id="previewTitle">Type</h4>
+                                    <h4 id="previewTitle">Kind</h4>
+                                </div>*@
+                            <div class="form-group">
+                                <div class="albumBlock">
+                                    <div class="albumCover">
+                                        <img id="preview_fCoverRealFile" src="#" />
+                                    </div>
+                                    <div class="albumContent">
+                                        <span id="previewTitle" class="albumTitle"></span>
+                                        <span id="previewGroup" class="albumDescripion"></span>
+                                        <span id="previewTypes" class="albumDescripion"></span>
+                                        <span id="previewKinds" class="albumDescripion"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            @*使用拖曳填入input的專輯Kind*@
+                            <div class="form-group" style="min-height:400px">
+                                @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-12">
+                                    <div class="containerDrag">
+                                        <ul id="userKindtaginput"></ul>
+                                        <ul id="adKindULPageload">
+                                            <li>不指定</li>
+                                        </ul>
+                                    </div>
+                                    <hr />
+                                    @*input除錯用,平常type設成hide*@
+                                    <input class="form-control text-box single-line" id="tA_fKinds" name="tA.fKinds" type="hidden" value="">
+                                    @Html.ValidationMessageFor(model => tA.fKinds, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <script>
+                                $(function () {
+                                    drag.init('containerDrag');
+                                });
+                            </script>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-5">
+                                    <input type="submit" value="Create" class="btn btn-warning" />
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10" style="display:inline-block">
-                            <input type="file" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
-                        </div>
-                        <div style="display:inline-block">
-                            <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
-                        </div>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => tA.fPublisher, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tA.fPublisher, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => tA.fPublisher, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Create" class="btn btn-warning" />
-                        </div>
-                    </div>
-                </div>
                 }
-                @*for end*@
+                @*for End*@
+
+            </li>
+            <li>
+
+                <h1>統計資料</h1>
+                <div class="section__content section__content--p30">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="au-card m-b-20">
+                                <div class="au-card-inner">
+                                    <h3 class="title-2 m-b-40">By 月銷售專輯/單曲總額</h3>
+                                    <canvas id="byMonthSale"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="au-card m-b-20">
+                                <div class="au-card-inner">
+                                    <h3 class="title-2 m-b-40">試聽/銷售佔比</h3>
+                                    <canvas id="pieChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="au-card m-b-20">
+                                <div class="au-card-inner">
+                                    <h3 class="title-2 m-b-40">Single Bar Chart</h3>
+                                    <canvas id="singelBarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <span>個月銷量圖</span>
+                <span>最暢銷專輯</span>
+                <span>最暢銷單曲</span>
+                <span>最多試聽</span>
+
+            </li>
+        </ul>
+    </div>
+</div>
+@*<div class="container">
+        <h3 class="fold-title" data-playurl=""><i class="fa fa-chevron-right"></i> 新增專輯</h3>
+        <div class="foldAlbum">
+            <div class="fold-container">
+
             </div>
         </div>
-    </div>
-    <h1 class="headtitle">你的所有專輯</h1>
-    <table>
-        <tr>
-            @*此處<tr>為自動依瀏覽器大小換欄*@
-            @foreach (var item in Model)
-            {
-                count++;
-                if (count % 7 == 1)
-                {
-                    //      @:<tr>
-                }
-                <td class="productitem">
-                    <a href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" class="productitemhy">
-                        <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
-                            <table>
-                                <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
-                                <tr>
-                                    <td>
-                                        <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
-                                    </td>
-                                </tr>
-                                <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
-                            </table>
-                        </fieldset>
-
-                    </a>
-                </td>
-                if (count % 7 == 0)
-                {
-                    //     @:</tr>
-                }
-            }
-        </tr>
-    </table>
-</div>
-
+    </div>*@
 <script>
-    $("#preview_fCoverRealFile").css("display", "none");
+ //Tab頁面控制
+function tab_switch(_this) {
+  now_tab = $(_this).parent().index();
+
+  $(_this).parent().siblings().removeClass('on');
+  $(_this).parent().addClass('on');
+  control_div = $(_this).data('div');
+  $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
+}
+</script>
+<script src="~/vendor/chartjs/Chart.bundle.min.js"></script>
+<script src="~/js/main.js"></script>
+<script>
+        //Team chart
+    var ctx = document.getElementById("byMonthSale");
+    if (ctx) {
+        ctx.height = 150;
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: JSON.parse('@Html.Raw(ViewBag.monthSale1)'),
+          type: 'line',
+          defaultFontFamily: 'Poppins',
+          datasets: [{
+            data: [0, 7, 3, 5, 2, 10, 7],
+            label: "售出",
+            backgroundColor: 'rgba(0,103,255,.15)',
+            borderColor: 'rgba(0,103,255,0.5)',
+            borderWidth: 3.5,
+            pointStyle: 'circle',
+            pointRadius: 5,
+            pointBorderColor: 'transparent',
+            pointBackgroundColor: 'rgba(0,103,255,0.5)',
+          },]
+        },
+        options: {
+          responsive: true,
+          tooltips: {
+            mode: 'index',
+            titleFontSize: 12,
+            titleFontColor: '#000',
+            bodyFontColor: '#000',
+            backgroundColor: '#fff',
+            titleFontFamily: 'Poppins',
+            bodyFontFamily: 'Poppins',
+            cornerRadius: 3,
+            intersect: false,
+          },
+          legend: {
+            display: false,
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              fontFamily: 'Poppins',
+            },
+
+
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              gridLines: {
+                display: false,
+                drawBorder: false
+              },
+              scaleLabel: {
+                display: false,
+                labelString: 'Month'
+              },
+              ticks: {
+                fontFamily: "Poppins"
+              }
+            }],
+            yAxes: [{
+              display: true,
+              gridLines: {
+                display: false,
+                drawBorder: false
+              },
+              scaleLabel: {
+                display: true,
+                labelString: '購買次數',
+                fontFamily: "Poppins"
+              },
+              ticks: {
+                fontFamily: "Poppins"
+              }
+            }]
+          },
+          title: {
+            display: false,
+          }
+        }
+      });
+    }
+
+</script>
+<script>
+
+    //  $("#preview_fCoverRealFile").css("display", "none");
+    $("#tA_fAlbumName").keyup(function () {
+    $("#previewTitle").text($("#tA_fAlbumName").val());
+    })
+    $("#tA_fMaker").keyup(function () {
+        $("#previewGroup").text($("#tA_fMaker").val());
+    })
+    $("#adTypePageload").change(function () {
+        $("#previewType").text($("#adTypePageload option:selected").text());
+//        $("#previewTypes").text("123");
+    })
+    $("#userKindtaginput").mouseout(function () {
+        let kindtag = '';
+        $("#userKindtaginput li").each(function () {
+            kindtag += ""+$(this).text() + ',';
+        })
+        $("#previewKinds").text(kindtag);
+    })
             //摺疊
             $(function () {
             $('h3').click(function () {
@@ -261,25 +575,26 @@
                 })
                     $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
                 $.each(datas, function (name, value) {
-                    $("#adKindPageload").append(`<option value="${value.KindName}">${value.KindName}</option>`)
                     $("#adKindULPageload").append(`<li value="${value.KindName}">${value.KindName}</li>`)
                 })
                     })
-    $("#userKindtaginput").mouseout(function () {
+        //滑鼠拖動時取得拖曳內容轉成文字方塊
+        $("#userKindtaginput, #adKindULPageload").mouseout(function () {
         let kindtag = '';
         $("#userKindtaginput li").each(function () {
             kindtag += ""+$(this).text() + ',';
             console.log($(this).text());
         })
         $("#tA_fKinds").val(kindtag);
-    })
-
-        $("#adKindULPageload").mouseout(function () {
-        let kindtag = '';
-        $("#userKindtaginput li").each(function () {
-            kindtag += ""+$(this).text() + ',';
         })
-        $("#tA_fKinds").val(kindtag);
-    })
+
+        //$("#adKindULPageload").mouseout(function () {
+        //let kindtag = '';
+        //$("#userKindtaginput li").each(function () {
+        //    kindtag += ""+$(this).text() + ',';
+        //})
+        //$("#tA_fKinds").val(kindtag);
+        //})
+
 
 </script>

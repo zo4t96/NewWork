@@ -14,12 +14,21 @@ namespace MusicPrj
     
     public partial class tActivity
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tActivity()
+        {
+            this.tAlbums = new HashSet<tAlbum>();
+        }
+    
         public int fId { get; set; }
         public string fLauncher { get; set; }
         public Nullable<System.DateTime> fStartTime { get; set; }
         public Nullable<System.DateTime> fEndTime { get; set; }
         public string fTitle { get; set; }
+        public string fPhotoPath { get; set; }
     
         public virtual tMember tMember { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tAlbum> tAlbums { get; set; }
     }
 }

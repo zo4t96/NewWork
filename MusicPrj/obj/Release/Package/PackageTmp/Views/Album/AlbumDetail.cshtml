@@ -52,19 +52,20 @@
         vertical-align: top;
         /*width:70%;*/
         min-width: 700px;
+        margin-left:50px;
     }
 
     .fold-title {
         background-color: #f3f3f3;
-        padding: 5px;
+        padding: 10px;
         color: #525252;
         margin-bottom: 0;
         width: 100%
     }
 
-        .fold-title * {
-            color: black;
-        }
+    .fold-title * {
+        color: black;
+    }
 
     .fold {
         line-height: 17pt;
@@ -77,13 +78,26 @@
     }
     /*摺疊樣式結束*/
     /*MyAlbumList結束*/
+    /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+    .fold-title:hover > .fa .fas{
+                color: #525252;
+    }
+    .fa .fas{
+            margin: 10px 20px;
+            color: #000000;
+            transition: 0.4s;
+    }
 </style>
-
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <div class="albumset">
     <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
-    <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
-    <h3 class="albumtext">@AlbInfo.fMaker </h3>
-    <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+    <h4 class="albumtext"><b>@AlbInfo.fAlbumName</b></h4>
+    <h5 class="albumtext">@AlbInfo.fMaker </h5>
+    <h5 class="albumtext">特價:$ @($"{AlbInfo.fALPrice:#.#}") <a href="@Url.Action("Cart","Shopping", new { amid = "AL"+AlbInfo.fAlbumID})">
+                                                             <i class="fas fa-cart-arrow-down"></i></a></h5>
+    <h5 class="albumtext">風格/類別:@(AlbInfo.fType)</h5>
+    <h5 class="albumtext">類型:@(AlbInfo.fKinds)</h5>
+    <h5 class="albumtext">共有@(Model.Count()) 首</h5>
 </div>
 <div class="musicsPanel">
 
@@ -106,10 +120,15 @@
             <h4 style="display:inline-block" class="fold-title">
                 <span>@(count).</span>
                 <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
-            </h4>
+                <a href="@Url.Action("Cart","Shopping", new { productid = "SI"+item.fProductID})"><i class="fas fa-cart-arrow-down"></i></a>
+            <span><i class="fa fa-plus"></i></span></h4>
             <div class="fold">
                 <div class="fold-container">
-                    <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    <span style="color:white">主唱:@Html.DisplayFor(modelItem => item.fSinger)</span>
+                    <span style="color:white"> / 演奏:@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    <span style="color:white"> / 編曲:@Html.DisplayFor(modelItem => item.fArranger)</span>
+                    <span style="color:white"> / 作詞:@Html.DisplayFor(modelItem => item.fLyricist)</span>
+                    <span style="color:white"> / 售價:$ @($"{Html.DisplayFor(modelItem => item.fSIPrice):#.#}")</span>
                     @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
                 </div>
             </div>

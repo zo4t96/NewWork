@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MusicPrj.tAlbum>
+@using MusicPrj.Models;
+
+@{
+    Layout = null;
+        int count = 0;
+}
+
+
+
+
+    <div>
+        <h1 class="headtitle">你的所有上架專輯</h1>
+        <table>
+            <tr>
+                @*此處<tr>為自動依瀏覽器大小換欄*@
+                @foreach (var item in Model.Where(p => p.fStatus == 1))
+                {
+                    count++;
+
+                    <td class="productitem">
+                        <a href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" class="productitemhy">
+                            <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
+                                <table>
+                                    <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                    <tr>
+                                        <td>
+                                            <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
+                                </table>
+                            </fieldset>
+
+                        </a>
+                    </td>
+                }
+            </tr>
+        </table>
+        <h1 class="headtitle">你的所有待上架專輯</h1>
+        <table>
+            <tr>
+                @*此處<tr>為自動依瀏覽器大小換欄*@
+                @foreach (var item in Model.Where(p => p.fStatus == 0))
+                {
+                    count++;
+
+                    <td class="productitem">
+                        <a href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" class="productitemhy">
+                            <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
+                                <table>
+                                    <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                    <tr>
+                                        <td>
+                                            <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
+                                </table>
+                            </fieldset>
+
+                        </a>
+                    </td>
+                }
+            </tr>
+        </table>
+    </div>

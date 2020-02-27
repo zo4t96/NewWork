@@ -16,5 +16,7 @@ namespace MusicPrj
     {
         public int KindID { get; set; }
         public string KindName { get; set; }
+        public string fColor { get; set; }
+        public string fPhotoPath { get; set; }
     }
 }

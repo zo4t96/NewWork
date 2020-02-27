@@ -5,7 +5,7 @@
         public string fProductName { get; set; }
         [Display(Name = "演唱者")]
         [Required(ErrorMessage = "演唱者名稱必填")]
-        public string fArtist { get; set; }
+        public string fSinger { get; set; }
         [Display(Name = "售價")]
         [Required(ErrorMessage = "售價必填")]
         public Nullable<decimal> fSIPrice { get; set; }
@@ -20,11 +20,8 @@
         public byte[] fMusic { get; set; }
         [Display(Name = "音樂檔(限mp3)")]
         public string fFilePath { get; set; }
-        public System.Web.HttpPostedFileBase fRealFile { get; set; }
         public Nullable<double> fPlayStart { get; set; }
         public Nullable<double> fPlayEnd { get; set; }
-        public Nullable<int> fPlays { get; set; }
-        public Nullable<int> fPlaye { get; set; }
         public Nullable<int> fStatus { get; set; }
         public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
@@ -50,9 +47,6 @@
         public Nullable<decimal> fALPrice { get; set; }
         [Display(Name = "封面")]
         public string fCoverPath { get; set; }
-        [Display(Name = "封面")]
-        [Required(ErrorMessage = "封面需上傳檔案")]
-        public System.Web.HttpPostedFileBase fCoverRealFile { get; set; }
         [Display(Name = "發行人/公司")]
         [Required(ErrorMessage = "發行人/公司必填")]
         public string fPublisher { get; set; }

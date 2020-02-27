@@ -17,7 +17,12 @@ namespace MusicPrj.Controllers
                 ViewBag.ajax = true;
             }
             CSearch cs = new CSearch();
-            return View(cs.allAlbum());
+            return View(cs.allAlbum().ToList());
+        }
+
+        public ActionResult _PlayLists()
+        {
+            return Content("<span>你還沒登入喔<span>");
         }
     }
 }

@@ -1,0 +1,148 @@
+﻿
+@{
+    Layout = null;
+    //if (Session[CDictionary.SK_ACCOUNT] != null || Session[CDictionary.SK_ACCOUNT].ToString()!="")
+    //{
+    //    Response.Redirect("~/Album/Index/");
+    //}
+                int s1 = Int32.Parse(Session["albumid"].ToString());
+                string tA = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == s1).fKinds;
+}
+
+<style>
+
+        /*滑鼠拖曳選擇Kind效果css開始*/
+    .containerDrag ul {
+        width: 260px;
+        padding: 15px;
+        min-height: 300px;
+        background-color: rgb(255,255,240);
+        margin: 20px;
+        display: block;
+        float: left;
+        border-radius: 5px;
+        border: 1px solid #bbb;
+    }
+
+        .containerDrag ul li {
+            display: block;
+            float: left;
+            width: 90px;
+            height: 35px;
+            line-height: 35px;
+            border-radius: 4px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            background-color: #292929;
+            margin-bottom: 10px;
+            -moz-user-select: none;
+            user-select: none;
+            text-indent: 10px;
+            color: whitesmoke;
+            margin-right: 10px
+        }
+
+    .box {
+        font-family: "微軟正黑體";
+        margin: 0 auto;
+        max-width: 800px;
+        text-align: center;
+    }
+
+    .kindReviseBtn {
+        width: 20%;
+        padding: 5px;
+        margin: auto;
+        background-color: #1db954;
+        border-radius: 15px;
+        cursor: pointer;
+        color: white;
+        text-align: center;
+        transition: 0.4s;
+    }
+
+        .loingBtn:hover {
+            background-color: #1dd15d;
+        }
+</style>
+
+<div class="box">
+
+        //防止網站被攻擊的防護，但目前會報錯先註解
+        @*@Html.AntiForgeryToken();*@
+        <h2>類型更改</h2>
+
+        @*使用拖曳填入input的專輯Kind*@
+        <div class="form-group" style="min-height:400px">
+            <div class="col-md-12">
+                <div class="containerDrag">
+                    <ul id="userKindtaginput"></ul>
+                    <ul id="adKindULPageload">
+                        <li>不指定</li>
+                    </ul>
+                </div>
+                <hr />
+                @*input除錯用,平常type設成hide*@
+                <input class="form-control text-box single-line" id="tA_fKinds" name="tAfKinds" type="text" value="">
+            </div>
+        </div>
+        <script>
+            $(function () {
+                drag.init('containerDrag');
+            });
+        </script>
+
+
+        <div class="kindReviseBtn">更改</div>
+
+</div>
+
+<script>
+    $(".kindReviseBtn").click(function () {
+                   let ajax_fKind = $("#tA_fKinds").val();
+                 $.ajax({
+                type: "Post",
+                url: `./kindRevise?tAfKinds=${ajax_fKind}`,
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                },
+                failure: function (errMsg) {
+                }
+                 })
+                            setTimeout(function () {
+                        $("#modal").removeClass("fadein");
+                        $("#modalContent").removeClass("fadein");
+                    }, 10)
+                    setTimeout(function () {
+                        $("#modal").css("display", "none");
+                    }, 500)
+    })
+
+    $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
+        let originKinds = '@tA';
+        $("#tA_fKinds").val(originKinds);
+         $.each(datas, function (name, value) {
+             if (originKinds.indexOf(value.KindName) != -1) {
+                 $("#userKindtaginput").append(`<li value="${value.KindName}">${value.KindName}</li>`)
+             } else {
+                 $("#adKindULPageload").append(`<li value="${value.KindName}">${value.KindName}</li>`)
+             }
+
+     })
+    })
+
+        //滑鼠拖動時取得拖曳內容轉成文字方塊
+        $("#userKindtaginput, #adKindULPageload").mouseout(function () {
+        let kindtag = '';
+        $("#userKindtaginput li").each(function () {
+            kindtag += ""+$(this).text() + ',';
+            console.log($(this).text());
+        })
+        $("#tA_fKinds").val(kindtag);
+        })
+
+</script>

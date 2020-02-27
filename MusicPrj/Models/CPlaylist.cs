@@ -9,11 +9,36 @@ namespace MusicPrj.Models
     public class CPlaylist
     {
         private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        //包月連續撥放
         public List<tProduct> getUserPlaylistSubscribe(string s1)
         {
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
             List<tPlayList> tPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
             int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
+            List<tPlayList> tPLOut = null;
+            if (lastPlayID != 0)
+            {
+                tPLOut = tPL.Where(p => p.fPlayId >= lastPlayID).ToList();
+                tPLOut.AddRange(tPL.Where(p => p.fPlayId < lastPlayID));
+            }
+            else
+            {
+                tPLOut = tPL;
+            }
+            // List<tProduct> tp = null;
+            List<tProduct> tp = new List<tProduct>();
+            foreach (var a in tPLOut)
+            {
+                tp.Add(db.tProducts.FirstOrDefault(p => p.fProductID == a.fProductID));
+            }
+            return tp;
+        }
+        //包月下一首
+        public List<tProduct> getUserPlaylistSubscribeNext(string s1, int amid)
+        {
+            //int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
+            List<tPlayList> tPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
+            int lastPlayID = tPL.FirstOrDefault(p => p.fProductID == amid).fPlayId;
             List<tPlayList> tPLOut = null;
             if (lastPlayID != 0)
             {
@@ -38,6 +63,31 @@ namespace MusicPrj.Models
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
             List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1).ToList();
             tPurchaseItem tPI = tPL.FirstOrDefault(p => p.fPurchaseItemID == fLastPlaySong);
+            List<tPurchaseItem> tPLOut = null;
+            if (tPI != null)
+            {
+                int lastPlayID = tPI.fPurchaseItemID;
+                tPLOut = tPL.Where(p => p.fPurchaseItemID >= lastPlayID).ToList();
+                tPLOut.AddRange(tPL.Where(p => p.fPurchaseItemID < lastPlayID));
+            }
+            else
+            {
+                tPLOut = tPL;
+            }
+            // List<tProduct> tp = null;
+            List<tProduct> tp = new List<tProduct>();
+            foreach (var a in tPLOut)
+            {
+                tp.Add(db.tProducts.FirstOrDefault(p => p.fProductID == a.fProductID));
+            }
+            return tp;
+        }
+
+        public List<tProduct> getUserPlaylistNormalNext(string s1, int amid)
+        {
+            //int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
+            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1).ToList();
+            tPurchaseItem tPI = tPL.FirstOrDefault(p => p.fProductID == amid);
             List<tPurchaseItem> tPLOut = null;
             if (tPI != null)
             {

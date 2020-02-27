@@ -25,7 +25,8 @@ namespace MusicPrj.Models
         //首頁商品項目，選取所有商品
         public IEnumerable<tAlbum> allAlbum()
         {
-            var all = db.tAlbums.Select(a => a);
+            //IEnumerable
+               var all = db.tAlbums.Select(a => a);
             return all;
         }
 

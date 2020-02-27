@@ -14,14 +14,20 @@ namespace MusicPrj
     
     public partial class tShoppingCart
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tShoppingCart()
+        {
+            this.tPurchaseItems = new HashSet<tPurchaseItem>();
+        }
+    
         public int fCartID { get; set; }
-        public Nullable<int> fProductID { get; set; }
-        public Nullable<int> fQuanity { get; set; }
         public string fCustomer { get; set; }
-        public string fDate { get; set; }
+        public Nullable<System.DateTime> fDate { get; set; }
         public Nullable<decimal> fPrice { get; set; }
+        public Nullable<int> fType { get; set; }
     
         public virtual tMember tMember { get; set; }
-        public virtual tProduct tProduct { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
     }
 }

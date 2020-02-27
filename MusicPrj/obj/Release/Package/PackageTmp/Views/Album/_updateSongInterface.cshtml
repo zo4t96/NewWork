@@ -1,0 +1,137 @@
+﻿@model MusicPrj.tProduct
+
+@{
+    Layout = null;
+    //if (Session[CDictionary.SK_ACCOUNT] != null || Session[CDictionary.SK_ACCOUNT].ToString()!="")
+    //{
+    //    Response.Redirect("~/Album/Index/");
+    //}
+
+}
+
+<style>
+
+
+
+    .box {
+        font-family: "微軟正黑體";
+        margin: 0 auto;
+        max-width: 800px;
+        text-align: center;
+    }
+
+    .updateSongBtn {
+        width: 20%;
+        padding: 5px;
+        margin: auto;
+        background-color: #1db954;
+        border-radius: 15px;
+        cursor: pointer;
+        color: white;
+        text-align: center;
+        transition: 0.4s;
+    }
+
+        .updateSongBtn:hover {
+            background-color: #1dd15d;
+        }
+</style>
+
+<div class="box">
+    <form method="post" action="./updateSongt/" name="form2" id="form2" enctype="multipart/form-data">
+        <div class="form-horizontal">
+            <h4>單曲修改</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <input class="form-control" id="tagfProductID" name="fProductID" type="hidden" value="@Model.fProductID">
+
+            <div class="col-xs-6">
+                @Html.LabelFor(model => model.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <input class="form-control" id="tagfProductName" name="fProductName" type="text" value="@Model.fProductName">
+            </div>
+
+            <div class="col-xs-6">
+                @Html.LabelFor(model => model.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
+                <input class="form-control" id="tagfSinger" name="fSinger" type="text" value="@Model.fSinger">
+            </div>
+
+            <div class="col-xs-6">
+                @Html.LabelFor(model => model.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                <input type="file" id="upload" name="fRealFile" accept=".mp3" />
+            </div>
+
+            <div class="updateSongBtn">修改</div>
+
+        </div>
+    </form>
+</div>
+
+<script>
+    $(".updateSongBtn").click(function () {
+        //$("#form2").submit();
+            var formData = new FormData($("#form2")[0]);
+        $.ajax({
+            type: "Post",
+            url: "./updateSong/",
+                       data: formData,
+                       cache: false,
+                       dataType: 'json',
+                       processData: false,
+                       contentType: false,
+                       success: function (data) {
+                           console.log(data)
+                           if (data.Msg == "success") {
+                               Message("儲存成功!");
+                           }
+                           else {
+                               Message("儲存失敗!" + data.Msg);
+                               return false;
+                           }
+                       }
+                   });
+        setTimeout(function () {
+            $("#modal").removeClass("fadein");
+            $("#modalContent").removeClass("fadein");
+        }, 10)
+        setTimeout(function () {
+            $("#modal").css("display", "none");
+        }, 500)
+    })
+
+
+        //讀取檔案，一次只能讀取一個
+    $("#upload").on("change", function () {
+            let file = document.getElementById("upload").files[0];
+                if (file.type != "audio/mp3") {
+                file = null;
+            }
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            //載入時先進行解析mp3檔案名稱,歌手
+            showMetaData(file);
+            reader.onload = function (e) {
+            }
+    });
+
+        //解析mp3檔案名稱,歌手方法
+    function showMetaData(data) {
+      musicmetadata(data, function (err, result) {
+        if (err) throw err;
+          console.log(result);
+          let title = result.title;
+          let artist = result.artist[0];
+
+          //如果檔案內tag找不到資料時,以檔名當參考
+          if (title == "") {
+              let filename = data.name;
+              var filenamearr = new Array();
+              var filenamearr = filename.split(".mp3");;
+              title = filenamearr[0];
+          }
+          $("#tagfProductName").val(title);
+          $("#tagfSinger").val(artist);
+      });
+
+    }
+
+</script>
