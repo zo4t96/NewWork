@@ -18,45 +18,46 @@ namespace MainWork.Controllers
         {
             return View();
         }
-        public ActionResult Index2()
-        {
-            return View();
-        }
-        public ActionResult Index3()
-        {
-            return View();
-        }
-        public ActionResult Index4()
-        {
-            return View();
-        }
-        public ActionResult chart(bool ajax = false)
-        {
-            return View();
-        }
-        public ActionResult table(bool ajax = false)
-        {
-            return View();
-        }
-        public ActionResult form(bool ajax = false)
-        {
-            return View();
-        }
-        public ActionResult calendar(bool ajax = false)
-        {
-            return View();
-        }
-        public ActionResult map(bool ajax = false)
+
+        public ActionResult chart()
         {
             return View();
         }
 
-        public ActionResult login(bool ajax = false)
+        public ActionResult form()
         {
             return View();
         }
 
-        public ActionResult register(bool ajax = false)
+        public ActionResult table()
+        {
+            return View();
+        }
+
+        public ActionResult login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult login(string account,string password)
+        {
+            var admin = db.tMembers.Where(m => m.fAccount == "aaa").FirstOrDefault();
+            if(account != "aaa")
+            {
+                ViewBag.msg = "帳號密碼錯誤";
+                return View();
+            }
+            if(password != admin.fPassword)
+            {
+                ViewBag.msg = "帳號密碼錯誤";
+                return View();
+            }
+            Session[CDictionary.SK_ACCOUNT] = "aaa";
+            return RedirectToAction("Index","Admin");
+        }
+
+        public ActionResult register()
         {
             return View();
         }

@@ -1,11 +1,5 @@
 ﻿@model IEnumerable<MainWork.tAlbum>
 
-@{
-    if (ViewBag.ajax != null)
-    {
-        @(Layout = null);
-    }
-}
 <style>
     .albumPanel {
         display: flex;
@@ -86,6 +80,7 @@
         overflow: hidden;
     }
 </style>
+@*<div class="h2">@Model.First().tActivity.fTitle</div>*@
 <div class="albumPanel">
     <a class="albumBlock">
         <div class="albumCover"></div>
@@ -112,18 +107,30 @@
 <script>
     setTimeout(function () {
         $(".albumBlock").addClass("animation");
-    }, 400)
+    }, 200)
 
     $(".albumBlock").click(function (e) {
         e.preventDefault();
         let amid = $(this).data("album");
         let url = `${$(this).attr("href")}?amid=${amid}`;
-        let stateObj = { amid: amid, ajax: true};
-        $.post(url, stateObj, function (data) {
-            $(".mainbox").html(data);
-            $(window).scrollTop(0);
+        let stateObj = { amid: amid, ajax: true };
+        $.ajax({
+            url: url,
+            data: stateObj,
+            type: "post",
+            beforeSend: function () {
+                $(".mainbox").html(
+                `<div class="loading">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+            },
+            success: function (data) {
+                $(".mainbox").html(data);
+                $(window).scrollTop(0);
+            }
         })
-        history.pushState(stateObj, title, url);
+        history.pushState(stateObj, null, url);
 
         let title = $(this).data("title");
         document.title = title;

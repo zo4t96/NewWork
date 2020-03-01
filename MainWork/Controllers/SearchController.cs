@@ -69,6 +69,20 @@ namespace MainWork.Controllers
             return PartialView(search.byAdvanced(keyObj));
         }
 
+        //活動的商品一覽頁面
+        public ActionResult EventResult(bool ajax = false)
+        {
+            if (ajax)
+            {
+                ViewBag.ajax = true;
+            }
+            return View();
+        }
+        public ActionResult EventResultView(int eventId)
+        {
+            return PartialView(search.byEvent(eventId));
+        }
+
         //以下皆為autocomplete的實作
         CAutoComplete cc = new CAutoComplete();
         public JsonResult AutoCompleteSong(string term)
@@ -107,19 +121,6 @@ namespace MainWork.Controllers
             var result = data.Select(d => new { d.KindName, d.fColor });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
-        //活動的商品一覽頁面
-        public ActionResult EventResult(bool ajax = false)
-        {
-            if (ajax)
-            {
-                ViewBag.ajax = true;
-            }
-            return View();
-        }
-        public ActionResult EventResultView(int eventId)
-        {
-            return PartialView(search.byEvent(eventId));
-        }
+        
     }
 }

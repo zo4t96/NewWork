@@ -12,147 +12,164 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">*@
     @* ↓主要用來讀取一些特殊icon *@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    @* 測試兩版本jquery的共用性，如出意外先刪除下面那行並解除上面那行註解 *@
+    @* 目前已知差別，使用let時下面那個不能重複宣告而上面可以 *@
+    @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <!--原始style-->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: "微軟正黑體";
-            color: white;
-        }
+         * {
+             margin: 0;
+             padding: 0;
+             font-family: "微軟正黑體";
+             color: white;
+         }
 
-        .header {
-            position: fixed;
-            width: 100%;
-            height: 70px;
-            background-color: black;
-            z-index: 100;
-        }
+         .header {
+             position: fixed;
+             width: 100%;
+             height: 70px;
+             background-color: black;
+             z-index: 100;
+         }
 
-        .header-logo {
-            position: relative;
-            top: 10px;
-            left: 10px;
-            width: 180px;
-            padding-left: 40px;
-            font-size: 25px;
-            background: black;
-        }
+         .header-logo {
+             position: relative;
+             top: 10px;
+             left: 10px;
+             width: 180px;
+             padding-left: 40px;
+             font-size: 25px;
+             background: black;
+         }
 
-        .header-logo-text {
-            color: white;
-        }
+         .header-logo-text {
+             color: white;
+         }
 
-        .header-button {
-            position: absolute;
-            top: 15px;
-            right: 16px;
-        }
+         .header-button {
+             position: absolute;
+             top: 15px;
+             right: 20px;
+         }
 
-        /*登入頭像*/
-        .header-Upperrightcorner-img {
-            position:absolute;
-            display:inline-block;
-            margin-right: 5px;
-            width: 45px;
-            height: 45px;
-            top:-5px;
-            right:120px;
-            border-radius: 50%;
-            background-size:100%;
-            background-repeat: no-repeat;
-            background-image: url('Images/4.jpg');
-            cursor:pointer;
-        }
+         /*登入頭像*/
+         .header-Upperrightcorner-img {
+             position: absolute;
+             display: inline-block;
+             margin-right: 5px;
+             width: 45px;
+             height: 45px;
+             top: -5px;
+             right: 120px;
+             border-radius: 50%;
+             background-size: 100%;
+             background-repeat: no-repeat;
+             background-image: url('Images/4.jpg');
+             cursor: pointer;
+         }
 
-        #content {
-            display: flex;
-            position: relative;
-            left: 0; /*將子元素的定位到具體的參照對象*/
-            width: 100%;
-            background-color: #191919;
-        }
+         #content {
+             display: flex;
+             position: relative;
+             left: 0; /*將子元素的定位到具體的參照對象*/
+             width: 100%;
+             background-color: #191919;
+         }
 
-        .sidebox {
-            position: fixed;
-            width: 200px;
-            height: 100vh;
-            background-color: #060606;
-            color: white;
-            margin-top: 70px;
-        }
+         .sidebox {
+             position: fixed;
+             width: 200px;
+             height: 100vh;
+             background-color: #060606;
+             color: white;
+             margin-top: 70px;
+         }
 
-        .mainbox {
-            width: 100%;
-            min-height: calc(100vh - 200px);
-            position: relative;
-            margin-top: 70px;
-            margin-bottom: 110px;
-            margin-left: 200px;
-        }
+         .mainbox {
+             width: 100%;
+             min-height: calc(100vh - 200px);
+             position: relative;
+             margin-top: 70px;
+             margin-bottom: 110px;
+             margin-left: 200px;
+         }
 
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            color: white;
-            background-color: #252525;
-            box-shadow: 0 0 2em black;
-        }
+         #footer {
+             position: fixed;
+             bottom: 0;
+             left: 0;
+             width: 100%;
+             color: white;
+             background-color: #252525;
+             box-shadow: 0 0 2em black;
+         }
 
-        /*額外更新左邊選單*/
-        li {
-            list-style-type: none;
-            margin: 5px;
-        }
+         /*額外更新左邊選單*/
+         li {
+             list-style-type: none;
+             margin: 5px;
+         }
 
-        a {
-            /*要加上!important才能強行刪除底線*/
-            text-decoration: none !important;
-        }
+         a {
+             /*要加上!important才能強行刪除底線*/
+             text-decoration: none !important;
+         }
 
-        .menuItem {
-            width: 190px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.4s;
-        }
-            /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
-            /*透過jQuery改變css會導致此項失效(jQuery的語法會將改變的內容放在標籤內，優先層級較高)
-　　　　　　 /*一樣使用!important可以解決*/
-            .menuItem:hover > span,
-            .menuItem:hover > .fa{
-                color: white!important;
-            }
+         .menuItem {
+             width: 190px;
+             font-weight: 600;
+             font-size: 14px;
+             text-decoration: none;
+             border-radius: 5px;
+             transition: 0.4s;
+         }
+             /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+             /*透過jQuery改變css會導致此項失效(jQuery的語法會將改變的內容放在標籤內，優先層級較高)
+        /*一樣使用!important可以解決*/
+             .menuItem:hover > span,
+             .menuItem:hover > .fa {
+                 color: white !important;
+             }
 
-        .menuItemSelected {
-            background-color: #3a3a3a;
-        }
+         .menuItemSelected {
+             background-color: #3a3a3a;
+         }
 
-        .menuItem .fa {
-            font-size: 20px;
-            margin: 10px 20px;
-            color: #656565;
-            transition: 0.4s;
-        }
+         .menuItem .fa {
+             font-size: 20px;
+             margin: 10px 20px;
+             color: #656565;
+             transition: 0.4s;
+         }
 
-        .menuItem span {
-            display: inline-block;
-            position: relative;
-            bottom: 3px;
-            color: #656565;
-            transition: 0.4s;
-        }
+         .menuItem span {
+             display: inline-block;
+             position: relative;
+             bottom: 3px;
+             color: #656565;
+             transition: 0.4s;
+         }
+
+         /*全介面的scrollBar*/
+         body::-webkit-scrollbar {
+             width: 15px;
+         }
+
+         body::-webkit-scrollbar-track {
+             background-color: #191919;
+         }
+
+         body::-webkit-scrollbar-thumb {
+             border-radius: 4px;
+             background-color: #3a3a3a;
+         }
     </style>
 
     <!--搜尋條style-->
@@ -160,7 +177,7 @@
         .searchBar {
             top: -35px;
             position: relative;
-            left: 250px;
+            left: 185px;
             margin: 15px;
             width: 25%;
             min-width: 200px;
@@ -363,7 +380,7 @@
             position: relative;
             width: 11px;
             height: 11px;
-            background-color:white;
+            background-color: white;
             border-radius: 50%;
             transition: 0.2s;
         }
@@ -448,9 +465,10 @@
             transition: 0.6s;
             opacity: 0;
         }
-        #modal.fadein {
-            opacity: 1;
-        }
+
+            #modal.fadein {
+                opacity: 1;
+            }
 
         #modalContent {
             position: relative;
@@ -463,24 +481,185 @@
             transition: 0.6s;
             opacity: 0;
         }
-        #modalContent.fadein {
-            top: 20%;
-            opacity: 1;
 
-        }
+            #modalContent.fadein {
+                top: 20%;
+                opacity: 1;
+            }
     </style>
 
     <!--通用介面的loading符號-->
     <style>
         .loading {
-            position:relative;
-            text-align:center;
-            top:50%;
+            position: relative;
+            text-align: center;
+            top: 50%;
         }
     </style>
-    
+
+    <!--播放清單介面-->
+    <style>
+        .playListPanel {
+            position: fixed;
+            display: flex;
+            height: calc(100vh - 110px);
+            width: 300px;
+            background-color: #2b2b2b;
+            right: -315px;
+            z-index: 500;
+            transition: 0.4s;
+            box-shadow: -5px -30px 2em 5px #151515;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .open {
+            right: 0px;
+        }
+
+        .playListSwitch.s1 {
+            position: fixed;
+            display: inline-block;
+            width: 30px;
+            /*高度為減掉頁首及播放器*/
+            height: calc(100% - 180px);
+            right: 0px;
+            background-color: transparent;
+            top: 70px;
+            font-size: 24px;
+            text-align: center;
+            padding: 15% 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 499;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .playList {
+            float: left;
+            flex-wrap: wrap;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: auto;
+        }
+
+        .playListSwitch.s2 {
+            position: relative;
+            height: 100%;
+            width: 24px;
+            background-color: transparent;
+            padding: 90% 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 499;
+        }
+
+        .playListSwitch:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .playListItem {
+            display: flex;
+            width: 100%;
+            margin: 5px 0px;
+            padding: 5px 5px 6px 5px;
+            cursor: pointer;
+        }
+
+            .playListItem:hover {
+                background-color: #666666;
+            }
+
+        .plSymbol {
+            position: relative;
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            font-size: 21px;
+            background-color: #cecece;
+            padding: 4.5px 7.5px;
+            border-radius: 50%;
+            margin: 4px 10px 0 5px;
+        }
+
+            .plSymbol i {
+                color: #258ade;
+                transform: rotate(5deg) scaleY(1.1) skewX(10deg);
+            }
+
+        .plDescription {
+            display: inline-block;
+            width: 90%;
+        }
+
+        .hr {
+            border-bottom: 1px solid #cecece;
+            margin: 2px;
+        }
+
+        .mTitle {
+            font-size: 16px;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .mDetail {
+            font-size: 12px;
+            font-style: italic;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .playingItem {
+            background-color: #666666;
+        }
+
+        .playingSymbol i {
+            color: #33b630;
+        }
+        /*清單的scroll條棒*/
+        .playList::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .playList::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-color: #4a4a4a;
+        }
+    </style>
 </head>
 <body>
+    @* 播放清單相關畫面 *@
+    <div class="playListSwitch s1">
+        <i class="fa fa-caret-left"></i>
+    </div>
+    <div class="playListPanel">
+        <div class="playListSwitch s2">
+            <i class="fa fa-caret-right"></i>
+        </div>
+        <div class="playList">
+            <div class="playListItem">
+                <div>包月會員 到期日 : 2020/03/31</div>
+            </div>
+            @for (int i = 0; i < 6; i++)
+            {
+                @* 每一項音樂 *@
+                <div class="playListItem">
+                    <div class="plSymbol">
+                        <i class='fas fa-music symbol'></i>
+                    </div>
+                    <div class="plDescription">
+                        <div class="mTitle">這裡要放音樂名稱</div>
+                        <div class="hr"></div>
+                        <div class="mDetail">專輯 - 歌手 - (xx:xx)</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 
     @* 測試modal *@
     <div id="modal">
@@ -563,30 +742,30 @@
         </div>
 
         @* 登入註冊鍵 *@
-    <div class="header-button">
-        @{
-            //登入後會顯示的會員頭像，待修正
+        <div class="header-button">
+            @{
+                //登入後會顯示的會員頭像，待修正
 
-            if (sk == null)
-            {
-                <div id="logonInterface" class="btn btn-outline-secondary">註冊</div>
-                <div id="loginInterface" class="btn btn-outline-secondary">登入</div>
-            }
-            else
-            {
-                //會員頭像兼會員中心預定
-                <div class="header-Upperrightcorner-img"></div>
+                if (sk == null)
+                {
+                    <div id="logonInterface" class="btn btn-outline-secondary">註冊</div>
+                    <div id="loginInterface" class="btn btn-outline-secondary">登入</div>
+                }
+                else
+                {
+                    //會員頭像兼會員中心預定
+                    <div class="header-Upperrightcorner-img"></div>
 
-                @*@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })*@
-                <a href="@Url.Action("MessageBox","Message")">
-                    <div class="btn btn-outline-secondary">訊息</div>
-                </a>
-                <a href="@Url.Action("Logout","MemberLogin")">
-                    <div id="logoutInterface" class="btn btn-outline-secondary">登出</div>
-                </a>
+                    @*@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })*@
+                    <a href="@Url.Action("MessageBox","Message")">
+                        <div class="btn btn-outline-secondary">訊息</div>
+                    </a>
+                    <a href="@Url.Action("Logout","MemberLogin")">
+                        <div id="logoutInterface" class="btn btn-outline-secondary">登出</div>
+                    </a>
+                }
             }
-        }
-    </div>
+        </div>
     </div>
 
     <div id="content">
@@ -640,14 +819,15 @@
                     </li>
                     if (sk.fAccount == "aaa")
                     {
-                    <li>
-                        <a href="@Url.Action("Index","Admin")">
-                            <div class="menuItem" id="admininterface">
-                                <i class="fa fa-th-list"></i>
-                                <span>後臺管理介面</span>
-                            </div>
-                        </a>
-                    </li>}
+                        <li>
+                            <a class="manage" href="@Url.Action("Index","Admin")" target="_blank">
+                                <div class="menuItem" id="admininterface">
+                                    <i class="fa fa-th-list"></i>
+                                    <span>後臺管理介面</span>
+                                </div>
+                            </a>
+                        </li>
+                    }
                 }
 
             </ul>
@@ -701,13 +881,13 @@
             <audio id="mainPlayer" src="~/Music/紅魔 「Un-demystified Fantasy」.mp3"></audio>
         </div>
     </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     @*<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>*@
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
@@ -720,388 +900,444 @@
         var totalTime;//本次歌曲的秒數總長度
         var nowVolume;//當前音量
 
-        //避免頁面刷新時既有變數被重置或重複給予事件
-        if (player == null) {
-            player = document.getElementById("mainPlayer");
+        player = document.getElementById("mainPlayer");
+        playing = false;
+        $("#pause").css("display", "none");
+        $("#muteImg").css("display", "none");
+        player.volume = 0.5;
+        $("#volumeBar").css({ "background-image": "-webkit-linear-gradient(left , #5599FF 50%,#fff 0px)" });
+
+        nowVolume = player.volume;
+
+        //初始化播放器內音樂的總長度，並將值傳給進度條
+        player.addEventListener("durationchange", function () {
+            totalTime = parseInt(player.duration);
+            $("#progress").prop("max", totalTime);
+
+            let m1 = parseInt(totalTime / 600);
+            let m2 = parseInt(totalTime / 60);
+            let s1 = parseInt(totalTime % 60 / 10);
+            let s2 = parseInt(totalTime % 60 % 10);
+            $("#totalTime").text(`${m1}${m2}:${s1}${s2}`);
+        });
+
+        //播放器的timer
+        player.addEventListener("timeupdate", function () {
+            $("#progress").prop("value", player.currentTime);
+
+            let now = player.currentTime;
+            let m1 = parseInt(now / 600);
+            let m2 = parseInt(now / 60);
+            let s1 = parseInt(now % 60 / 10);
+            let s2 = parseInt(now % 60 % 10);
+            $("#nowTime").text(`${m1}${m2}:${s1}${s2}`);
+
+            //進度條的變化
+            let persent = now / totalTime * 100;
+            let p = parseInt($("#progress").css("width")) / 100;
+            let f = persent * p;
+            $("#progress").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${f}px,#fff 0px)` });
+        });
+
+        //音樂播放鍵
+        $("#play").click(function () {
+            player.play();
+            playing = true;
+            $("#play").css("display", "none");
+            $("#pause").css("display", "inline-block");
+
+            //若有其他播放器則全部暫停
+            $(".dpause").trigger("click");
+        })
+
+        //音樂暫停鍵
+        $("#pause").click(function () {
+            player.pause();
             playing = false;
-            $("#pause").css("display", "none");
-            $("#muteImg").css("display", "none");
-            player.volume = 0.5;
-            $("#volumeBar").css({ "background-image": "-webkit-linear-gradient(left , #5599FF 50%,#fff 0px)" });
+            $("#play").css("display", "inline-block");
+            $("#pause").css("display", "none")
+        })
 
-            nowVolume = player.volume;
+        //調整音量時能立即更動而不用放開滑鼠
+        $("#volumeBar").on('input', function () {
+            $(this).trigger("change");
+        })
+        //音量調節鍵
+        $("#volumeBar").on('change', function () {
+            player.volume = this.value;
+            let v = this.value * 100;
+            $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${v}%,#fff 0px)` });
+            if (player.volume == 0) {
+                $("#volumeImg").css("display", "none");
+                $("#muteImg").css("display", "inline-block");
+            }
+            else {
+                $("#volumeImg").css("display", "inline-block");
+                $("#muteImg").css("display", "none");
+            }
+        });
 
-            //初始化播放器內音樂的總長度，並將值傳給進度條
-            player.addEventListener("durationchange", function () {
-                totalTime = parseInt(player.duration);
-                $("#progress").prop("max", totalTime);
-
-                let m1 = parseInt(totalTime / 600);
-                let m2 = parseInt(totalTime / 60);
-                let s1 = parseInt(totalTime % 60 / 10);
-                let s2 = parseInt(totalTime % 60 % 10);
-                $("#totalTime").text(`${m1}${m2}:${s1}${s2}`);
-            });
-
-            //播放器的timer
-            player.addEventListener("timeupdate", function () {
-                $("#progress").prop("value", player.currentTime);
-
-                let now = player.currentTime;
-                let m1 = parseInt(now / 600);
-                let m2 = parseInt(now / 60);
-                let s1 = parseInt(now % 60 / 10);
-                let s2 = parseInt(now % 60 % 10);
-                $("#nowTime").text(`${m1}${m2}:${s1}${s2}`);
-
-                //進度條的變化
-                let persent = now / totalTime * 100;
-                let p = parseInt($("#progress").css("width")) / 100;
-                let f = persent * p;
-                $("#progress").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${f}px,#fff 0px)` });
-            });
-
-            //音樂播放鍵
-            $("#play").click(function () {
-                player.play();
-                playing = true;
-                $("#play").css("display", "none");
-                $("#pause").css("display", "inline-block");
-
-                //若有其他播放器則全部暫停
-                $(".dpause").trigger("click");
-            })
-
-            //音樂暫停鍵
-            $("#pause").click(function () {
-                player.pause();
-                playing = false;
-                $("#play").css("display", "inline-block");
-                $("#pause").css("display", "none")
-            })
-
-            //調整音量時能立即更動而不用放開滑鼠
-            $("#volumeBar").on('input', function () {
-                $(this).trigger("change");
-            })
-            //音量調節鍵
-            $("#volumeBar").on('change', function () {
-                player.volume = this.value;
-                let v = this.value * 100;
-                $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${v}%,#fff 0px)` });
-                if (player.volume == 0) {
+        //靜音鍵
+        $(".sound").click(function () {
+            let data = $(this).data("sound");
+            switch (data) {
+                case "volumeImg":
+                    nowVolume = player.volume;
+                    player.volume = 0;
+                    $("#volumeBar").prop("value", 0);
+                    $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${0}%,#fff 0px)` });
                     $("#volumeImg").css("display", "none");
                     $("#muteImg").css("display", "inline-block");
-                }
-                else {
+                    break;
+
+                case "muteImg":
+                    player.volume = nowVolume;
+                    $("#volumeBar").prop("value", nowVolume);
+                    $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${nowVolume * 100}%,#fff 0px)` });
                     $("#volumeImg").css("display", "inline-block");
                     $("#muteImg").css("display", "none");
-                }
-            });
+                    break;
+            }
+        });
 
-            //靜音鍵
-            $(".sound").click(function () {
-                let data = $(this).data("sound");
-                switch (data) {
-                    case "volumeImg":
-                        nowVolume = player.volume;
-                        player.volume = 0;
-                        $("#volumeBar").prop("value", 0);
-                        $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${0}%,#fff 0px)` });
-                        $("#volumeImg").css("display", "none");
-                        $("#muteImg").css("display", "inline-block");
-                        break;
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        $("#progress").on('input', function () {
+            player.pause();
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $("#progress").change(function () {
+            player.currentTime = this.value;
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $("#progress").mouseup(function () {
+            if (playing)
+                player.play();
+        });
 
-                    case "muteImg":
-                        player.volume = nowVolume;
-                        $("#volumeBar").prop("value", nowVolume);
-                        $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${nowVolume * 100}%,#fff 0px)` });
-                        $("#volumeImg").css("display", "inline-block");
-                        $("#muteImg").css("display", "none");
-                        break;
-                }
-            });
+        /////////////////////
+        ///AJAX切換頁面相關///
+        /////////////////////
 
-            //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
-            $("#progress").on('input', function () {
-                player.pause();
-                $(this).trigger("change");
-            })
-            //音樂進度條改變
-            $("#progress").change(function () {
-                player.currentTime = this.value;
-            });
-            //拖動進度條直到放開滑鼠才重新開始播放
-            $("#progress").mouseup(function () {
-                if (playing)
-                    player.play();
-            });
+        //$(".mainbox").load(link);
+        //更新老師上課說法
+        //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
+        //意為讀取該網頁id為div1中的img
+        //但是mvc本身有PartailView這個功能，因此應該用不到load
 
-            /////////////////////
-            ///AJAX切換頁面相關///
-            /////////////////////
+        //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
+        $("li > a").on("click", function (e) {
+            //如果按的是後台選項直接跳新的後台視窗
+            if ($(this).hasClass("manage")) {
+                return;
+            }
 
+            e.preventDefault();
+            let link = $(this).attr("href");
+            //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
+            //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
+            history.pushState({ ajax: true, scrollY: null }, null, link);
+            $(window).scrollTop(0);
 
-            //$(".mainbox").load(link);
-            //更新老師上課說法
-            //load可以讀取一個頁面中的部分位置如"controller/avtion #div1>img"這種寫法
-            //意為讀取該網頁id為div1中的img
-            //但是mvc本身有PartailView這個功能，因此應該用不到load
-
-            //下面的data是ajax方法發動後從對定應的action裡取得的html語法，必須事先寫好
-            //$.get(link, function (data) {
-            //    $(".mainbox").html(data);
-            //})
-
-
-            //測試紀錄：history.state雖然可以直接賦值，但一旦切頁就會消失
-            //若要使該頁的history.state不管怎麼切頁都可以確實保存下去，一定得使用replaceState方法才行
-            //可以先利用history.state.xxx的方式賦予新定義的值，再用history.replaceState(history.state,null)的方式更新
-
-            //但!!是!!!該方法不能給值為null的history.state!
-            //最少最少得先建立一個{}空物件給它才能使用上述方式賦值，WTF
-
-            //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
-            $("li > a").on("click", function (e) {
-                e.preventDefault();
-                let link = $(this).attr("href");
-                //第一個參數要帶狀態物件，若點選的連結沒有參數指定就可以給null
-                //反過來說，有參數指定的連結最好額外再寫一個ajax判斷式比較好
-                history.pushState({ ajax: true, scrollY: null }, null, link);
-                $(window).scrollTop(0);
-
-                $.post(link, { ajax: true}, function (data) {
+            $.ajax({
+                beforeSend:function() {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                url: link,
+                data: history.state,
+                type: "post",
+                success: function (data) {
                     $(".mainbox").html(data);
-                })
-            });
+                    $(window).scrollTop(0);
+                }
+            })
+        });
 
-            //每當點選瀏覽器的上一頁下一頁便會發動此事件
-            //location.pathname為動作完成後所得到的該頁url
-            window.addEventListener('popstate', function () {
-                history.state.ajax = true;
-                history.replaceState(history.state, null);
-                let y = history.state.scrollY;
-
-                $.post(location.pathname, history.state, function (data) {
+        //每當點選瀏覽器的上一頁下一頁便會發動此事件
+        //location.pathname為動作完成後所得到的該頁url
+        window.addEventListener('popstate', function () {
+            history.state.ajax = true;
+            history.replaceState(history.state, null);
+            let y = history.state.scrollY;
+            $.ajax({
+                beforeSend:function() {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                url: location.pathname,
+                data: history.state,
+                type: "post",
+                success: function (data) {
                     $(".mainbox").html(data);
                     $(window).scrollTop(y);
-                })
-            })
-
-            $(window).scroll(function () {
-                if (history.state == null) {
-                    history.replaceState({}, null);
                 }
-                history.state.ajax = true;
-                history.state.scrollY = window.scrollY;
-                history.replaceState(history.state, null);
             })
-            /////////////////
-            ///搜尋條棒相關///
-            /////////////////
+            console.log(history.state);
+        })
 
-            //進階搜尋內容的初始化
-            $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
-                $.each(datas, function (name, value) {
-                    $("#adType").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
-                })
+        //測試紀錄：history.state雖然可以直接賦值，但一旦切頁就會消失
+        //若要使該頁的history.state不管怎麼切頁都可以確實保存下去，一定得使用replaceState方法才行
+        //可以先利用history.state.xxx的方式賦予新定義的值，再用history.replaceState(history.state,null)的方式更新
+
+        //但!!是!!!該方法不能給值為null的history.state!
+        //最少最少得先建立一個{}空物件給它才能使用上述方式賦值，WTF
+        if (history.state == null) {
+            history.replaceState({ ajax: true, scrollY: 0 }, null);
+        }
+        $(window).scroll(function () {
+            history.state.scrollY = window.scrollY;
+            history.replaceState(history.state, null);
+        })
+
+        /////////////////
+        ///搜尋條棒相關///
+        /////////////////
+
+        //進階搜尋內容的初始化
+        $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#adType").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
             })
-            $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
-                $.each(datas, function (name, value) {
-                    $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`);
-                    $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`)
-                })
-                $(".advancedBlock").append('<div class="itemAdd"><i class="fa fa-plus"></i></div>');
-
-                $(".itemAdd").click(function () {
-                    $(".selectableItemPanel").toggleClass("adSwitch");
-                })
-
-                //初始化進階面板曲風選項的顏色
-                $(".selectableItemPanel").children(".selectableItem").each(function () {
-                    $(this).css("background-color", $(this).data("color"));
-                    $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
-                })
-                $(".advancedBlock").children(".selectedItem").each(function () {
-                    $(this).css("background-color", $(this).data("color"));
-                    $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
-                })
-
-                //選擇曲風
-                $(".selectableItem").on("click", function () {
-                    let kindName = $(this).data("kind");
-                    $(this).css("display", "none");
-                    $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
-                    $(".selectableItemPanel").toggleClass("adSwitch");
-                })
-                //點擊選擇的曲風即可取消
-                $(".selectedItem").on("click", function () {
-                    let kindName = $(this).data("kind");
-                    $(this).css("display", "none");
-                    $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
-                })
+        })
+        $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
+            $.each(datas, function (name, value) {
+                $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`);
+                $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}" data-color="${value.fColor}">${value.KindName}</div>`)
             })
+            $(".advancedBlock").append('<div class="itemAdd"><i class="fa fa-plus"></i></div>');
 
-            //開啟進階搜尋版面、開啟曲風選擇版面
-            $("#advancedBtn").click(function () {
-                $(".advancedPanel").toggleClass("adSwitch");
-            })
             $(".itemAdd").click(function () {
                 $(".selectableItemPanel").toggleClass("adSwitch");
             })
-            //點選搜尋區域以外的地方會自動關閉進階搜尋版面(很礙眼)
-            $(document).mousedown(function (e) {
-                if ($(e.target).parents(".searchBar").length == 0 &&
-                    $(e.target).parents(".ui-menu-item").length == 0) {
-                    $(".advancedPanel").removeClass("adSwitch");
-                }
-                if ($(e.target).parents(".selectableItemPanel").length == 0) {
-                    $(".selectableItemPanel").removeClass("adSwitch");
-                }
+
+            //初始化進階面板曲風選項的顏色
+            $(".selectableItemPanel").children(".selectableItem").each(function () {
+                $(this).css("background-color", $(this).data("color"));
+                $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
+            })
+            $(".advancedBlock").children(".selectedItem").each(function () {
+                $(this).css("background-color", $(this).data("color"));
+                $(this).css("background-image", `linear-gradient(to bottom,#16161660 100%,${$(this).data("color")})`);
             })
 
-            //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
-            //用trim()除去空白字串
-            $(".searchBtn").click(function () {
-                let keyword = $(".searchtxt").val().trim();
-                if (keyword == "") {
-                    return;
-                }
-                let url = `@Url.Action("Result", "Search")`;
-                let stateObj = { keyword: keyword, ajax: true };
-                $.post(url, stateObj, function (data) {
+            //選擇曲風
+            $(".selectableItem").on("click", function () {
+                let kindName = $(this).data("kind");
+                $(this).css("display", "none");
+                $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+                $(".selectableItemPanel").toggleClass("adSwitch");
+            })
+            //點擊選擇的曲風即可取消
+            $(".selectedItem").on("click", function () {
+                let kindName = $(this).data("kind");
+                $(this).css("display", "none");
+                $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+            })
+        })
+
+        //開啟進階搜尋版面、開啟曲風選擇版面
+        $("#advancedBtn").click(function () {
+            $(".advancedPanel").toggleClass("adSwitch");
+        })
+        $(".itemAdd").click(function () {
+            $(".selectableItemPanel").toggleClass("adSwitch");
+        })
+        //點選搜尋區域以外的地方會自動關閉進階搜尋版面(很礙眼)
+        $(document).mousedown(function (e) {
+            if ($(e.target).parents(".searchBar").length == 0 &&
+                $(e.target).parents(".ui-menu-item").length == 0) {
+                $(".advancedPanel").removeClass("adSwitch");
+            }
+            if ($(e.target).parents(".selectableItemPanel").length == 0) {
+                $(".selectableItemPanel").removeClass("adSwitch");
+            }
+        })
+
+        //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
+        //用trim()除去空白字串
+        $(".searchBtn").click(function () {
+            let keyword = $(".searchtxt").val().trim();
+            if (keyword == "") {
+                return;
+            }
+            let url = `@Url.Action("Result", "Search")`;
+            let stateObj = { keyword: keyword, ajax: true };
+            $.ajax({
+                beforeSend:function() {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                url: url,
+                data: stateObj,
+                type: "post",
+                success: function (data) {
                     $(".mainbox").html(data);
-                });
-                history.pushState(stateObj, null, url);
-            })
-
-            //進階搜尋(找出符合條件的專輯(專輯不重複))
-            $(".adSearchBtn").click(function () {
-                $(".advancedPanel").toggleClass("adSwitch");
-                let adSong = $("#adSong").val().trim();
-                let adSinger = $("#adSinger").val().trim();
-                let adGroup = $("#adGroup").val().trim();
-                let adComposer = $("#adComposer").val().trim();
-                let adAlbum = $("#adAlbum").val().trim();
-                let adType = $("#adType").val();
-                let adKinds = "";
-                $(".advancedBlock").children(".selectedItem").each(function () {
-                    if ($(this).css("display") == "inline-block") {
-                        adKinds += ($(this).data("kind") + ",");
-                    }
-                })
-                let url = `@Url.Action("AdvancedResult", "Search")`
-                let stateObj = {
-                    adSong: adSong,
-                    adSinger: adSinger,
-                    adGroup: adGroup,
-                    adComposer: adComposer,
-                    adAlbum: adAlbum,
-                    adType: adType,
-                    adKinds: adKinds,
-                    ajax: true
                 }
-                $.post(url, stateObj, function (data) {
+            })
+            history.pushState(stateObj, null, url);
+        })
+
+        //進階搜尋(找出符合條件的專輯(專輯不重複))
+        $(".adSearchBtn").click(function () {
+            $(".advancedPanel").toggleClass("adSwitch");
+            let adSong = $("#adSong").val().trim();
+            let adSinger = $("#adSinger").val().trim();
+            let adGroup = $("#adGroup").val().trim();
+            let adComposer = $("#adComposer").val().trim();
+            let adAlbum = $("#adAlbum").val().trim();
+            let adType = $("#adType").val();
+            let adKinds = "";
+            $(".advancedBlock").children(".selectedItem").each(function () {
+                if ($(this).css("display") == "inline-block") {
+                    adKinds += ($(this).data("kind") + ",");
+                }
+            })
+            let url = `@Url.Action("AdvancedResult", "Search")`
+            let stateObj = {
+                adSong: adSong,
+                adSinger: adSinger,
+                adGroup: adGroup,
+                adComposer: adComposer,
+                adAlbum: adAlbum,
+                adType: adType,
+                adKinds: adKinds,
+                ajax: true
+            }
+
+            $.ajax({
+                beforeSend:function() {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                url: url,
+                data: stateObj,
+                type: "post",
+                success: function (data) {
                     $(".mainbox").html(data);
-                });
-                history.pushState(stateObj, null, url);
-            })
-
-            //所有搜尋text實作autocomplete
-            $(".searchtxt,#adSong").autocomplete(
-                {
-                    source: '@Url.Action("AutoCompleteSong", "Search")'
-                });
-            $("#adSinger").autocomplete(
-                {
-                    source: '@Url.Action("AutoCompleteSinger", "Search")'
-                });
-            $("#adGroup").autocomplete(
-                {
-                    source: '@Url.Action("AutoCompleteGroup", "Search")'
-                });
-            $("#adComposer").autocomplete(
-                {
-                    source: '@Url.Action("AutoCompleteComposer", "Search")'
-                });
-            $("#adAlbum").autocomplete(
-                {
-                    source: '@Url.Action("AutoCompleteAlbum", "Search")'
-                });
-
-            //讓左側選單被選擇時有點變化
-            $(".menuItem").click(function () {
-                $(this).parents("li").siblings().find(".menuItemSelected").children().css("color", "#656565");
-                $(this).parents("li").siblings().find(".menuItemSelected").removeClass("menuItemSelected");
-                $(this).addClass("menuItemSelected");
-                $(this).children().css("color", "white");
-            })
-
-            //////////////////////////
-            ///透過modal介面載入資訊///
-            /////////////////////////
-
-            //登入註冊介面與登出
-            $("#loginInterface").on("click", function () {
-
-                $.ajax({
-                    url:"@Url.Action("Login","MemberLogin")",
-                    type: "get",
-                    beforeSend:function() {
-                        $("#modalContent").html(
-                            `<div class="loading">
-                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                            <span class="sr-only">Loading...</span>
-                        </div>`);
-                    },
-                    success: function (data) {
-                        $("#modalContent").html(data);
-                    }
-                })
-                $("#modal").css("display", "block");
-                setTimeout(function () {
-                    $("#modal").addClass("fadein");
-                    $("#modalContent").addClass("fadein");
-                }, 10)
-            })
-            $("#logonInterface").on("click", function () {
-                $.ajax({
-                    url:"@Url.Action("New","MemberLogin")",
-                    type: "get",
-                    beforeSend:function() {
-                        $("#modalContent").html(
-                            `<div class="loading">
-                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                            <span class="sr-only">Loading...</span>
-                        </div>`);
-                    },
-                    success: function (data) {
-                        $("#modalContent").html(data);
-                    }
-                })
-                $("#modal").css("display", "block");
-                setTimeout(function () {
-                    $("#modal").addClass("fadein");
-                    $("#modalContent").addClass("fadein");
-                }, 10)
-            })
-            $("#logoutInterface").on("click", function () {
-                
-            })
-            //點擊主視窗以外的位置會讓介面消失
-            $("#modal").click(function (e) {
-                if ($(e.target).children("#modalContent").length != 0) {
-                    setTimeout(function () {
-                        $("#modal").removeClass("fadein");
-                        $("#modalContent").removeClass("fadein");
-                    }, 10)
-                    setTimeout(function () {
-                        $("#modal").css("display", "none");
-                    }, 500)
                 }
             })
-            
-        }
+            history.pushState(stateObj, null, url);
+        })
+
+        //所有搜尋text實作autocomplete
+        $(".searchtxt,#adSong").autocomplete(
+            {
+                source: '@Url.Action("AutoCompleteSong", "Search")'
+            });
+        $("#adSinger").autocomplete(
+            {
+                source: '@Url.Action("AutoCompleteSinger", "Search")'
+            });
+        $("#adGroup").autocomplete(
+            {
+                source: '@Url.Action("AutoCompleteGroup", "Search")'
+            });
+        $("#adComposer").autocomplete(
+            {
+                source: '@Url.Action("AutoCompleteComposer", "Search")'
+            });
+        $("#adAlbum").autocomplete(
+            {
+                source: '@Url.Action("AutoCompleteAlbum", "Search")'
+            });
+
+        //讓左側選單被選擇時有點變化
+        $(".menuItem").click(function () {
+            $(this).parents("li").siblings().find(".menuItemSelected").children().css("color", "#656565");
+            $(this).parents("li").siblings().find(".menuItemSelected").removeClass("menuItemSelected");
+            $(this).addClass("menuItemSelected");
+            $(this).children().css("color", "white");
+        })
+
+        //////////////////////////
+        ///透過modal介面載入資訊///
+        /////////////////////////
+
+        //登入註冊介面與登出
+        $("#loginInterface").on("click", function () {
+
+            $.ajax({
+                url:"@Url.Action("Login","MemberLogin")",
+                type: "get",
+                beforeSend:function() {
+                    $("#modalContent").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $("#modalContent").html(data);
+                }
+            })
+            $("#modal").css("display", "block");
+            setTimeout(function () {
+                $("#modal").addClass("fadein");
+                $("#modalContent").addClass("fadein");
+            }, 10)
+        })
+        $("#logonInterface").on("click", function () {
+            $.ajax({
+                url:"@Url.Action("New","MemberLogin")",
+                type: "get",
+                beforeSend:function() {
+                    $("#modalContent").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $("#modalContent").html(data);
+                }
+            })
+            $("#modal").css("display", "block");
+            setTimeout(function () {
+                $("#modal").addClass("fadein");
+                $("#modalContent").addClass("fadein");
+            }, 10)
+        })
+
+        //點擊主視窗以外的位置會讓介面消失
+        $("#modal").click(function (e) {
+            if ($(e.target).children("#modalContent").length != 0) {
+                setTimeout(function () {
+                    $("#modal").removeClass("fadein");
+                    $("#modalContent").removeClass("fadein");
+                }, 10)
+                setTimeout(function () {
+                    $("#modal").css("display", "none");
+                }, 500)
+            }
+        })
+
+        //操控播放清單與相關的功能
+        $(".playListSwitch.s1").click(function () {
+            $(".playListPanel").addClass("open");
+        })
+        $(".playListSwitch.s2").click(function () {
+            $(".playListPanel").removeClass("open");
+        })
+        //到時候音樂點擊播放也放這裡
+        $(".playListItem").on('click',function () {
+            $(".playListItem").removeClass("playingItem");
+            $(this).siblings().find(".plSymbol").removeClass("playingSymbol")
+            $(this).addClass("playingItem");
+            $(this).find(".plSymbol").addClass("playingSymbol");
+        })
 
     </script>
 

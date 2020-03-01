@@ -36,7 +36,7 @@ namespace MusicPrj.Controllers
         public ActionResult Loginout()
         {
             Session[CDictionary.SK_ACCOUNT] = "";
-         //   Response.Redirect(Request.Url.ToString());
+            //Response.Redirect(Request.Url.ToString());
             return View();
         }
 

@@ -194,16 +194,28 @@
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
-        }, 100)
+        }, 200)
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = `${$(this).attr("href")}?amid=${amid}`;
             let stateObj = { amid: amid, ajax: true };
-            $.post(url, stateObj, function (data) {
-                $(".mainbox").html(data);
-                $(window).scrollTop(0);
+            $.ajax({
+                url: url,
+                data: stateObj,
+                type: "post",
+                beforeSend: function () {
+                    $(".mainbox").html(
+                    `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $(".mainbox").html(data);
+                    $(window).scrollTop(0);
+                }
             })
             history.pushState(stateObj, null, url);
 

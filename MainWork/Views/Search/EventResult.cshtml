@@ -5,8 +5,27 @@
     }
 }
 <script>
-    console.log(history.state)
-    $.post('@Url.Action("EventResultView", "Search")', history.state, function (data) {
+    var y = history.state.scrollY;
+    console.log(y);
+    //console.log(y);
+
+    $.ajax({
+        beforeSend:function() {
+            $(".mainbox").html(
+                `<div class="loading">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+            </div>`);
+        },
+        url: '@Url.Action("EventResultView", "Search")',
+        data: history.state,
+        type: "post",
+        success: function (data) {
+            $(".mainbox").html(data);
+            $(window).scrollTop(y);
+        }
+    })
+    @*$.post('@Url.Action("EventResultView", "Search")', history.state, function (data) {
         $(".mainbox").html(data);
-    });
+    });*@
 </script>

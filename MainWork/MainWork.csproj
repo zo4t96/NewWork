@@ -406,11 +406,7 @@
     <Content Include="Views\Admin\chart.cshtml" />
     <Content Include="Views\Admin\form.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\Index2.cshtml" />
-    <Content Include="Views\Admin\Index3.cshtml" />
-    <Content Include="Views\Admin\Index4.cshtml" />
     <Content Include="Views\Admin\login.cshtml" />
-    <Content Include="Views\Admin\map.cshtml" />
     <Content Include="Views\Admin\register.cshtml" />
     <Content Include="Views\Admin\table.cshtml" />
     <Content Include="Views\Album\AddAlbum.cshtml" />

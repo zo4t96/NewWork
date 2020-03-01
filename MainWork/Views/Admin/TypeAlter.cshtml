@@ -1,23 +1,52 @@
 ﻿@model IEnumerable<MainWork.tAlbumType>
+@using MainWork.Models;
 
 @{
-    //Layout = "~/Views/Shared/_Layout_admin.cshtml";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
 
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
 }
 <style>
     .title {
         font-weight: 800;
         font-size: 30px;
-        margin: 20px 0px;
+        margin: 20px 60px;
     }
 
     .groupPanel {
-        width: 40%;
-        margin-bottom:40px;
+        width: 50%;
+        margin-bottom: 40px;
+        margin: 10px 60px;
+        background-color: rgba(206, 226, 231, 0.80);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px groove white;
     }
- 
 
+    .readName {
+        color: black;
+        background-color: #a0d1e2;
+    }
+
+    .small {
+        color: black
+    }
 </style>
 <div class="container">
     <div class="title">
@@ -27,13 +56,13 @@
     <div class="groupPanel">
         <div class="h5">新增販賣類別</div>
         <form action="@Url.Action("TypeNew","Admin")" method="post" class="newType">
-            <div class="input-group mb-3">
-                <input type="text" name="typeName" class="form-control newName" placeholder="請輸入要新增的販賣類別名稱">
+            <div class="input-group">
+                <input type="text" name="typeName" maxlength="8" class="form-control newName" placeholder="請輸入要新增的販賣類別名稱">
                 <div class="input-group-append">
                     <button type="button" class="btn btn-primary new">新增</button>
                 </div>
             </div>
-            <small class="form-text text-muted">最多不得超過八個字(目前是說說的)</small>
+            <small class="form-text text-muted small">最多不得超過八個字</small>
         </form>
     </div>
 
@@ -45,7 +74,7 @@
         @foreach (var item in Model)
         {
             //不指定為不得修改的類別項目(配合刪除指令，使被刪除專輯的販售類別可以轉移到這項上)
-            if(item.fTypeName == "不指定")
+            if (item.fTypeName == "不指定")
             {
                 continue;
             }
@@ -62,7 +91,7 @@
                             <button class="btn btn-danger delete" type="button">刪除</button>
                         </div>
                     </div>
-                </form >
+                </form>
                 <form class="fdelete" action="@Url.Action("TypeDelete","Admin")" method="post">
                     <input type="hidden" name="deleteId" value="@item.fTypeID" />
                 </form>
