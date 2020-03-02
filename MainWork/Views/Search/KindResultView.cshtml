@@ -1,11 +1,5 @@
 ﻿@model IEnumerable<MainWork.tAlbum>
 
-@{
-    if (ViewBag.ajax != null)
-    {
-        @(Layout = null);
-    }
-}
 <style>
     .albumPanel {
         display: flex;
@@ -27,7 +21,6 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-
         transition: 0.4s;
         opacity: 0;
     }
@@ -36,10 +29,10 @@
         opacity: 1;
     }
 
-        .albumBlock:hover {
-            background-color: #353535;
-            text-decoration:none;
-        }
+    .albumBlock:hover {
+        background-color: #353535;
+        text-decoration: none;
+    }
 
     .albumCover {
         position: relative;
@@ -86,7 +79,26 @@
         white-space: nowrap;
         overflow: hidden;
     }
+
+    .noResult {
+        position: relative;
+        text-align: center;
+        top: 40%;
+        margin: auto;
+    }
 </style>
+
+@if (Model.FirstOrDefault() == null)
+{
+    <div class="noResult">
+        <div class="h3">查無資料</div>
+        <p>該曲風可能為近期新增內容，目前還沒有相關音樂喔！</p>
+    </div>
+}
+else
+{
+    <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">曲風名稱</div>
+}
 <div class="albumPanel">
     <a class="albumBlock">
         <div class="albumCover"></div>
@@ -113,20 +125,35 @@
 <script>
     setTimeout(function () {
         $(".albumBlock").addClass("animation");
-    }, 100)
+    }, 200)
 
     $(".albumBlock").click(function (e) {
         e.preventDefault();
         let amid = $(this).data("album");
         let url = `${$(this).attr("href")}?amid=${amid}`;
         let stateObj = { amid: amid, ajax: true };
-        $.post(url, stateObj, function (data) {
-            $(".mainbox").html(data);
-            $(window).scrollTop(0);
-        })
         history.pushState(stateObj, null, url);
+        $.ajax({
+            url: url,
+            data: history.state,
+            type: "post",
+            beforeSend: function () {
+                $(".mainbox").html(
+                    `<div class="loading">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+            },
+            success: function (data) {
+                $(".mainbox").html(data);
+            },
+            complete: function () {
+                $(window).scrollTop(0);
+            }
+        })
 
         let title = $(this).data("title");
         document.title = title;
     });
+    $(".searchTitle").text(`${history.state.kindName}`);
 </script>

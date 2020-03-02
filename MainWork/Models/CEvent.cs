@@ -24,8 +24,18 @@ namespace MainWork.Models
         }
 
         //新增活動時查詢音樂用(曲風只要一項有合就會挑出來，所以中間判斷會比較複雜，必須過濾重複)
-        public IEnumerable<tAlbum> eventAlbum(int[] kinds , int type) {
-            var albums = db.tAlbums.Where(a => a.fActivity == null);
+        //有傳進eventid代表是修改時的查詢，「不能將修改活動對象所有的專輯排除在外!!」
+        public IEnumerable<tAlbum> eventAlbum(int[] kinds ,int type ,int eventid = 0)
+        {
+            IEnumerable<tAlbum> albums;
+            if (eventid == 0)
+            {
+                albums = db.tAlbums.Where(a => a.fActivity == null);
+            }
+            else
+            {
+                albums = db.tAlbums.Where(a => a.fActivity == null || a.fActivity == eventid);
+            }
             var kindList = new List<tAlbumKind>();
             if(type != 1)
             {
@@ -102,6 +112,12 @@ namespace MainWork.Models
             if (eventObj.eventImage != null)
             {
                 eventObj.eventImage.SaveAs(target.fPhotoPath);
+            }
+            foreach (int i in eventObj.eventAlbums)
+            {
+                var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
+                album.fDiscount = eventObj.discount;
+                album.fActivity = eventObj.eventId;
             }
             db.SaveChanges();
         }

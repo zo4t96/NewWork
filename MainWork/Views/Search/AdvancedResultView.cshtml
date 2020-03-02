@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<MainWork.tAlbum>
+
 <style>
     .albumPanel {
         display: flex;
@@ -88,18 +89,20 @@
         top: 40%;
         margin:auto;
     }
-    .noResult h3 {
-        font-family: "微軟正黑體"
-    }
+
 </style>
 
 <body>
     @if (Model.FirstOrDefault() == null)
     {
         <div class="noResult">
-            <h3>查無資料</h3>
+            <div class="h3">查無資料</div>
             <p>請確認關鍵字輸入是否正確，或者使用進階搜尋時降低條件數量</p>
         </div>
+    }
+    else
+    {
+        <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">進階搜尋結果</div>
     }
 
     <div class="albumPanel">
@@ -113,7 +116,7 @@
             </div>
         </a>
         @foreach (var item in Model)
-            {
+        {
             <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
@@ -129,18 +132,32 @@
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
-        },100)
-        
+        }, 200)
+
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = `${$(this).attr("href")}?amid=${amid}`;
             let stateObj = { amid: amid, ajax: true };
-            $.post(url, stateObj, function (data) {
-                $(".mainbox").html(data);
-                $(window).scrollTop(0);
-            })
             history.pushState(stateObj, null, url);
+            $.ajax({
+                url: url,
+                data: history.state,
+                type: "post",
+                beforeSend: function () {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $(".mainbox").html(data);
+                },
+                complete: function () {
+                    $(window).scrollTop(0);
+                }
+            })
 
             let title = $(this).data("title");
             document.title = title;

@@ -1,8 +1,31 @@
 ﻿@model IEnumerable<MainWork.tActivity>
+@using MainWork.Models;
 
-@{ 
+@{
     var types = ViewBag.types as IEnumerable<tAlbumType>;
     var kinds = ViewBag.kinds as IEnumerable<tAlbumKind>;
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+
+    ViewBag.Title = "活動管理";
+
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
 }
 <style>
     .title {
@@ -14,66 +37,88 @@
     .tab {
         overflow: hidden;
         border: 1px solid #ccc;
-        border-radius :5px 5px 0px 0px;
-        background-color: #9ae0d760;
+        border-radius: 5px 5px 0px 0px;
+        background-color: #85cee4;
     }
+
         .tab button {
-            background-color: inherit;
+            background-color: #6cbdde;
             float: left;
             border: none;
             outline: none;
             cursor: pointer;
             padding: 14px 16px;
             transition: 0.3s;
+            color: white;
         }
+
             .tab button:hover {
-                background-color: #9ae0d740;
+                background-color: #9ae0d7;
+                color: #487ce6
             }
+
     .tabcontent {
         display: none;
         padding: 6px 12px;
         border: 1px solid #ccc;
         border-top: none;
-        background-color:#9cbfab60;
+        background-color: rgba(206, 226, 231, 0.80);
     }
 
     .eventMenu {
-        text-align:center;
+        text-align: center;
     }
 
     .newPanel {
         padding: 20px 50px;
     }
+
     .kindPanel {
         display: inline-block;
-        position:relative;
+        position: relative;
     }
+
     .preview {
         width: 504px;
         height: 210px;
         border: 1px dashed gray;
-        background-size:cover;
-    }
-    .albumRowPanel{
-        display:inline-block;
-        border:1px solid #282828;
-        width:100%;
-        height:550px;
-        box-shadow:inset 1px 1px 1px #484848;
-        padding:3px;
-        overflow:auto;
-    }
-    .tableTitle{
-        background-color:#76a17e;
-    }
-    .trItem{
-        border-bottom:1px solid white;
-        cursor:pointer;
-    }
-    .trItem:hover{
-        background-color:#657a66;
+        background-size: cover;
     }
 
+    .albumRowPanel {
+        display: inline-block;
+        width: 100%;
+        height: 550px;
+        box-shadow: inset 0px 0px 1px 1px #5f5f5f;
+        padding: 5px;
+        overflow: auto;
+    }
+
+    .table-bordered > thead > tr > th,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tfoot > tr > td {
+        border: 1px solid white;
+    }
+
+    .tableTitle {
+        background-color: #85cee4;
+    }
+
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItem {
+        border-bottom: 1px solid white;
+        cursor: pointer;
+    }
+
+        .trItem:hover {
+            background-color: #aadfef;
+        }
 </style>
 
 <div class="container-fluid py-1 px-5 col-12">
@@ -89,9 +134,9 @@
     @* 現有活動一覽 *@
     <div class="tabcontent eventMenu">
         <div class="h3 m-4 font-weight-bold">活動一覽表</div>
-        <table class="table col-10 m-auto">
+        <table class="table col-10 m-auto table-bordered">
             <thead>
-                <tr>
+                <tr class="tableTitle">
                     <th scope="col">排序</th>
                     <th scope="col">活動名稱</th>
                     @* 暫時先不做 *@
@@ -121,17 +166,7 @@
                         </td>
                     </tr>
                 }
-                    @*<tr>
-                        <td scope="row">1</td>
-                        <td scope="row"><div class="mt-2">範例名稱</div></td>
-                        <td scope="row"><div class="mt-2">活動發起人</div></td>
-                        <td scope="row"><div class="mt-2">02/16</div></td>
-                        <td scope="row"><div class="mt-2">02/28</div></td>
-                        <td scope="row">
-                            <div class="btn btn-success">編輯</div>
-                            <div class="btn btn-danger">刪除</div>
-                        </td>
-                    </tr>*@
+
             </tbody>
         </table>
     </div>
@@ -142,7 +177,7 @@
             <div class="newPanel row">
                 @* 左邊那行(表單輸入) *@
                 <div class="col-4">
-                    <div class="h3 my-3 font-weight-bold">新增活動</div>
+                    <div class="h3 mb-3 font-weight-bold">新增活動</div>
 
                     @* 活動內容的表單 *@
                     <div class="form-group">
@@ -180,13 +215,13 @@
                     <div class="form-group">
                         <label class="col-form-label">上傳活動圖片</label>
                         <div>
-                            <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="eventImage" />
+                            <input type="file" class="w-75 mr-3 mt-1 upload" accept="image/jpg" name="eventImage" />
                         </div>
                     </div>
                     <small class="form-text mb-3">活動圖片僅限jpg檔，並且大小為840x350，否則會發生切圖</small>
 
                     @* 挑選專輯的表單 *@
-                    <div class="h3 mt-5 font-weight-bold">專輯選擇</div>
+                    <div class="h3 mt-4 font-weight-bold">專輯選擇</div>
                     <div class="form-group">
                         <label class="col-form-label">販售類別</label>
                         <div>
@@ -314,12 +349,13 @@
 
     //建立活動．使用ajax實作
     $(".create").click(function () {
-        let eventAlbums = [];
-        $(".trItem").each(function () {
-            if ($(this).find("input").prop("checked")) {
-                eventAlbums.push($(this).find("input").val());
-            }
-        })
+        //用了FormData就不用特地寫checkbox的陣列
+        //let eventAlbums = [];
+        //$(".trItem").each(function () {
+        //    if ($(this).find("input").prop("checked")) {
+        //        eventAlbums.push($(this).find("input").val());
+        //    }
+        //})
         if ($("#eventName").val().trim() == "") {
             alert("還未填寫活動名稱!")
             return;
@@ -332,7 +368,7 @@
             alert("沒有選擇任何專輯!")
             return;
         }
-        $("#eventName").val($("#eventName").val().trim()) 
+        $("#eventName").val($("#eventName").val().trim())
 
         let eventObj = new FormData($("#eventNew")[0]);
 

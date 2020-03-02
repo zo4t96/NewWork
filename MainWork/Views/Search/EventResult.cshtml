@@ -5,8 +5,22 @@
     }
 }
 <script>
-    console.log(history.state)
-    $.post('@Url.Action("EventResultView", "Search")', history.state, function (data) {
-        $(".mainbox").html(data);
-    });
+    $.ajax({
+        beforeSend:function() {
+            $(".mainbox").html(
+                `<div class="loading">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+            </div>`);
+        },
+        url: '@Url.Action("EventResultView", "Search")',
+        data: history.state,
+        type: "post",
+        success: function (data) {
+            $(".mainbox").html(data);
+        },
+        complete: function () {
+            $(window).scrollTop(y);
+        }
+    })
 </script>

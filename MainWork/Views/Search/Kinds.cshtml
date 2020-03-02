@@ -21,15 +21,15 @@
         font-size: 24px;
     }
     .outline {
-        width: 14vw;
-        height: 14vw;
+        width: 13.5vw;
+        height: 13.5vw;
         min-width: 160px;
         min-height: 160px;
     }
     .kindBlock {
         /* 寬高單位同為vw或vx可達成等比例縮放的方形效果 */
-        width: 13vw;
-        height: 13vw;
+        width: 12.5vw;
+        height: 12.5vw;
         min-width: 150px;
         min-height: 150px;
         border-radius: 10px;
@@ -44,8 +44,8 @@
     }
 
         .kindBlock:hover {
-            width: 14vw;
-            height: 14vw;
+            width: 13.5vw;
+            height: 13.5vw;
             min-width: 165px;
             min-height: 165px;
             margin: 2px;
@@ -68,8 +68,9 @@
     .fadein{
         opacity:0.8;
     }
+
 </style>
-<title>BasicSerch</title>
+
 <body>
     <div class="kindPage">
         @foreach (var item in Model)
@@ -96,11 +97,28 @@
             $(this).click(function(){
                 let kindId = $(this).data("kind");
                 let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`
-                let stateObj = { kindId: kindId, ajax: true };
-                $.post(url, stateObj, function (data) {
-                    $(".mainbox").html(data);
-                });
-                history.pushState(stateObj,null,url);
+                let kindName = $(this).find(".kindName").text();
+                let stateObj = { kindId: kindId, ajax: true, kindName: kindName };
+                history.pushState(stateObj, null, url);
+                $.ajax({
+                    beforeSend:function() {
+                        $(".mainbox").html(
+                            `<div class="loading">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Loading...</span>
+                        </div>`);
+                    },
+                    url: '@Url.Action("KindResultView", "Search")',
+                    data: history.state,
+                    type: "post",
+                    success: function (data) {
+                        $(".mainbox").html(data);
+                    },
+                    complete: function () {
+                        $(window).scrollTop(y);
+                    }
+                 })
+                
             })
         })  
     </script>

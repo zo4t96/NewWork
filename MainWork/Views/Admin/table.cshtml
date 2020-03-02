@@ -3,20 +3,19 @@
 @{
     ViewBag.Title = "Index";
 
-
-        Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
     var account = "";
 
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
-        Response.Redirect("~/Album/Index/");
+        Response.Redirect("~/Admin/login/");
     }
     else
     {
         account = Session[CDictionary.SK_ACCOUNT].ToString();
         if (account != "aaa")
         {
-            Response.Redirect("~/Album/Index/");
+            Response.Redirect("~/Admin/login/");
         }
         else
         {

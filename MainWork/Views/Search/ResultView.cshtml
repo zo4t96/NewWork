@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
+
 <style>
     .albumPanel {
         display: flex;
         flex-wrap: wrap;
+        min-width: 600px;
         position: relative;
         padding: 20px;
     }
@@ -19,7 +21,6 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-
         transition: 0.4s;
         opacity: 0;
     }
@@ -27,10 +28,11 @@
     .animation {
         opacity: 1;
     }
-        .albumBlock:hover {
-            background-color: #353535;
-            text-decoration: none;
-        }
+
+    .albumBlock:hover {
+        background-color: #353535;
+        text-decoration: none;
+    }
 
     .albumCover {
         position: relative;
@@ -78,27 +80,28 @@
         overflow: hidden;
     }
 
-        /*查無資料*/
+    /*查無資料*/
     .noResult {
-        position:relative;
+        position: relative;
         text-align: center;
         top: 40%;
-        margin:auto;
-    }
-    .noResult h3 {
-        font-family: "微軟正黑體"
+        margin: auto;
     }
 </style>
 
-@if (Model.FirstOrDefault() == null)
-{
-    <div class="noResult">
-        <h3>查無資料</h3>
-        <p>請確認關鍵字輸入是否正確，或者使用進階搜尋時降低條件數量</p>
-    </div>
-}
-
 <body>
+    @if (Model.FirstOrDefault() == null)
+    {
+        <div class="noResult">
+            <div class="h3">查無資料</div>
+            <p>請確認關鍵字輸入是否正確，或試著減少字數搜尋</p>
+        </div>
+    }
+    else
+    {
+        <div class="h3 mx-5 mt-5 font-weight-bold searchTitle">所有音樂</div>
+    }
+
     <div class="albumPanel">
         <a class="albumBlock" href="">
             <div class="albumCover"></div>
@@ -129,23 +132,38 @@
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
-        }, 100)
+        }, 200)
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = `${$(this).attr("href")}?amid=${amid}`;
             let stateObj = { amid: amid, ajax: true };
-            $.post(url, stateObj, function (data) {
-                $(".mainbox").html(data);
-            })
             history.pushState(stateObj, null, url);
-            $(window).scrollTop(0);
+            $.ajax({
+                url: url,
+                data: history.state,
+                type: "post",
+                beforeSend: function () {
+                    $(".mainbox").html(
+                        `<div class="loading">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+                },
+                success: function (data) {
+                    $(".mainbox").html(data);
+                },
+                complete: function () {
+                    $(window).scrollTop(0);
+                }
+            })
 
             let title = $(this).data("title");
             document.title = title;
         });
 
-        $(".noResult").find("h3").text(`查無 ${history.state.keyword} 的資料`);
+        $(".noResult").find(".h3").text(`查無 ${history.state.keyword} 的資料`);
+        $(".searchTitle").text(`「${history.state.keyword}」的搜尋結果`);
     </script>
 </body>

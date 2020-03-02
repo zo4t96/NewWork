@@ -1,20 +1,45 @@
 ﻿@model IEnumerable<MainWork.tAlbumKind>
+@using MainWork.Models;
 
+@{
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
 <style>
     .outer {
         display: flex;
-        margin:0px 50px;
+        margin: 0px 50px;
     }
 
     .title {
         font-weight: 800;
         font-size: 30px;
-        margin: 20px 0px;
+        margin: 20px 50px;
     }
 
     .groupPanel {
-        margin: 30px 0px;
-        min-width: 500px;
+        min-width: 400px;
+        background-color: rgba(206, 226, 231, 0.80);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px  outset white;
     }
 
     #colorpicker {
@@ -35,11 +60,14 @@
     .kindPanel {
         display: flex;
         flex-wrap: wrap;
+        width: 90%;
         position: relative;
         color: white;
         font-weight: 600;
         font-size: 12px;
-        background-color: #191919;
+        background-color: #2a2a2a;
+        padding: 10px;
+        border-radius: 10px;
     }
 
     .kindBlockBig {
@@ -52,8 +80,12 @@
         padding: 5px;
         background-image: linear-gradient(to bottom,#16161660 15%,#ffffff);
         overflow: hidden;
-        cursor:pointer;
+        cursor: pointer;
     }
+
+        .kindBlockBig span {
+            color: white;
+        }
 
     .photo {
         position: relative;
@@ -65,28 +97,29 @@
         box-shadow: 0px 1px 1px 1px #0000004b;
         transform: rotate(25deg);
     }
-    .selected{
-        box-shadow:0px 0px 10px 7px #0caaef;
+
+    .kindSelected {
+        box-shadow: 0px 0px 10px 7px #0caaef;
     }
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid mx-3">
     <div class="title">
         <p>樂曲風格&介面修改</p>
     </div>
     <div class="outer">
-        <div class="groupPanel col-5">
-            <div class="h5">曲風一覽</div>
-            <div class="mb-5 w-75">
-                @foreach (var item in Model)
-                {
-                    <div class="kindBlockSmall" data-color="@item.fColor">@item.KindName</div>
-                }
-            </div>
+        <div class="groupPanel col-3">
+            @*<div class="h5">曲風一覽</div>
+                <div class="mb-5 w-75">
+                    @foreach (var item in Model)
+                    {
+                        <div class="kindBlockSmall" data-color="@item.fColor">@item.KindName</div>
+                    }
+                </div>*@
 
             @* 選擇曲風id *@
             <div class="h5">曲風選擇</div>
-            <select class="custom-select w-25 mr-3 menu" form="kindForm" name="kindId">
+            <select class="custom-select w-50 mr-3 menu" form="kindForm" name="kindId">
                 <option value="0">新增曲風...</option>
                 @foreach (var item in Model)
                 {
@@ -96,9 +129,9 @@
 
             <form id="kindForm" method="post" enctype="multipart/form-data">
                 @* 輸入名稱 *@
-                <div class="input-group w-75 mr-3 mt-3">
+                <div class="input-group w-100 mr-3 mt-3">
                     <div class="input-group-prepend">
-                        <div class="input-group-text name">名稱</div>
+                        <div class="input-group-text name">新增曲風</div>
                     </div>
                     <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱" name="kindName">
                 </div>
@@ -114,7 +147,7 @@
                 </div>
 
                 @* 上傳圖片 *@
-                <div class="input-group w-50 mr-3 mt-3 ">
+                <div class="input-group w-75 mr-3 mt-3 ">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" id="on" type="radio" name="uploadCheck" value="true" checked />
                         <label class="form-check-label" for="on">上傳圖片</label>
@@ -137,7 +170,7 @@
             </form>
         </div>
 
-        <div class="groupPanel col-6">
+        <div class="groupPanel col-8">
             <div class="h5">預覽介面</div>
             <div class="kindPanel">
                 @foreach (var item in Model)
@@ -147,7 +180,7 @@
                         <div class="photo"></div>
                     </div>
                 }
-                <div class="kindBlockBig newBlock selected" data-kind="0" data-color="#ffffff">
+                <div class="kindBlockBig newBlock kindSelected" data-kind="0" data-color="#ffffff">
                     <span class="kindName">新增曲風</span>
                     <div class="photo"></div>
                 </div>
@@ -160,7 +193,7 @@
     $(".save").css("display", "none")
     $(".delete").css("display", "none")
     initialize()
-    
+
     $(".color").click(function () {
         $("#colorpicker").trigger("click");
     })
@@ -191,7 +224,6 @@
     $(".menu").change(function () {
         initialize();
         $(".forDelete").val($(this).val());
-        
         //選擇現有曲風
         if ($(this).val() != 0) {
             $(".delete").css("display", "inline-block");
@@ -202,9 +234,9 @@
             $(".name").text($(this).find("option:selected").text());
             $(".nameInput").attr("placeholder", "請輸入要變更的名稱");
 
-            $(".newBlock").css("display", "none");
-            $(".kindPanel").children().removeClass("selected");
-            $(".kindPanel").find(`[data-kind = ${$(this).val()}]`).addClass("selected");
+            //$(".newBlock").css("display", "none");
+            $(".kindPanel").children().removeClass("kindSelected");
+            $(".kindPanel").find(`[data-kind = ${$(this).val()}]`).addClass("kindSelected");
         }
         //選擇新增曲風
         else {
@@ -216,9 +248,9 @@
             $(".name").text("名稱");
             $(".nameInput").attr("placeholder", "請輸入要新增的曲風名稱");
 
-            $(".newBlock").css("display", "block");
-            $(".kindPanel").children().removeClass("selected");
-            $(".newBlock").addClass("selected")
+            //$(".newBlock").css("display", "block");
+            $(".kindPanel").children().removeClass("kindSelected");
+            $(".newBlock").addClass("kindSelected")
         }
     })
 
@@ -235,7 +267,7 @@
             var photo = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".photo");
             photo.css("background-image", `url(${e.target.result})`)
         }
-    }) 
+    })
 
     //三種按鍵對應新刪修，直接修改form的action
     $(".new").click(function (e) {

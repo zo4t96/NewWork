@@ -50,7 +50,7 @@
         min-width: 160px;
         min-height: 160px;
         /*測試用圖片*/
-        background-image: url("/Images/4.jpg");
+        /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
     }
 
@@ -176,7 +176,7 @@
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
             <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-                <div class="albumCover"></div>
+                <img src="~/Images/4.jpg" class="albumCover"/>
                 <div class="albumContent">
                     <span class="albumTitle">@item.fAlbumName</span>
                     <span class="albumDescripion">@item.fMaker</span>
@@ -194,18 +194,32 @@
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
-        }, 100)
+        }, 200)
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = `${$(this).attr("href")}?amid=${amid}`;
-            let stateObj = { amid: amid, ajax: true };
-            $.post(url, stateObj, function (data) {
-                $(".mainbox").html(data);
-                $(window).scrollTop(0);
-            })
+            let stateObj = { amid: amid, ajax: true, scrollY: 0 };
             history.pushState(stateObj, null, url);
+            $.ajax({
+                url: url,
+                data: history.state,
+                type: "post",
+                beforeSend: function () {
+                    $(".mainbox").html(
+                    `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $(".mainbox").html(data);
+                },
+                complete: function () {
+                    $(window).scrollTop(0);
+                }
+            })
 
             let title = $(this).data("title");
             document.title = title;
@@ -219,13 +233,13 @@
             e.preventDefault();
             let eventId = $(this).data("event");
             let url = `@Url.Action("EventResult", "Search")/?eventId=${eventId}`;
-            let stateObj = { eventId: eventId, ajax: true };
-
+            let stateObj = { eventId: eventId, ajax: true, scrollY: 0 };
+            y = 0;
             history.pushState(stateObj, null, url);
 
             $.ajax({
                 url: url,
-                data: stateObj,
+                data: history.state,
                 beforeSend: function () {
                     $(".mainbox").html(
                     `<div class="loading">
@@ -235,6 +249,8 @@
                 },
                 success: function (data) {
                     $(".mainbox").html(data);
+                },
+                complete: function () {
                     $(window).scrollTop(0);
                 }
             })
