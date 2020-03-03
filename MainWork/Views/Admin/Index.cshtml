@@ -24,27 +24,177 @@
     }
 }
 
+<style>
+    .panel {
+        padding: 40px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin: 20px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+    }
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 60px;
+    }
+    /*主表單(專輯內容)*/
+    .tableTitle {
+        background-color: #85cee4;
+    }
 
-<div>
-    <div class="h3">待審核的專輯</div>
-    <table>
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItemMain {
+        border-bottom: 1px solid white;
+        cursor: pointer;
+    }
+
+        .trItemMain:hover {
+            background-color: #cde4ea;
+        }
+
+        .trItemMain td {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 110px;
+        }
+
+    .cover {
+        width: 120px;
+        height: 120px;
+    }
+    .all{
+        cursor:pointer;
+    }
+
+    /*次表單(專輯內音樂內容)*/
+    .tableSub {
+        display: none;
+    }
+
+    .tableTitleSub {
+        background-color: #c7e3eb;
+    }
+
+    .trItemSub {
+        border-bottom: 1px solid white;
+    }
+
+        .trItemSub td {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 20px;
+        }
+
+        .trItemSub:hover {
+            background-color: #e6f3f7;
+        }
+
+    audio {
+        height: 30px;
+    }
+</style>
+
+<div class="title">待審核的專輯</div>
+<div class="panel">
+    <div class="my-4">
+        <div class="btn btn-success">將選取的專輯過審</div>
+        <div class="btn btn-danger">將選取的專輯不通過</div>
+    </div>
+    
+    <table class="table table-bordered">
         <thead>
-            <tr>
-                <th>日期</th>
-                <th>音樂名稱</th>
-                <th>歌手</th>
-                <th>作曲</th>
-                <th>編曲</th>
-                <th>作詞</th>
-                <th>曲風</th>
-                <th>時間</th>
+            <tr class="text-center tableTitle">
+                <th></th>
+                <th class="all"><input class="mr-2" type="checkbox"/>選取</th>
+                <th>送審日期</th>
+                <th>封面</th>
+                <th>專輯名稱</th>
+                <th>上傳者</th>
                 <th>價格</th>
+                <th>審核結果</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+            <tr class="trItemMain">
+                <td><div class="btn btn-info open">詳細內容</div></td>
+                <td><input type="checkbox" /></td>
+                <td>2020/03/02</td>
+                <td><img class="cover" src="~/Images/4.jpg" /></td>
+                <td>4456546654446544465444654445444</td>
+                <td>555</td>
+                <td>999</td>
+                <td>
+                    <button class="btn btn-success">過審</button>
+                    <button class="btn btn-danger">審核不通過</button>
+
+                </td>
+            </tr>
+
+            <tr class="tableSub">
+                <td colspan="7">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="text-center tableTitleSub">
+                                <th>編號</th>
+                                <th>音樂名稱</th>
+                                <th>歌手</th>
+                                <th>作曲</th>
+                                <th>單價</th>
+                                <th>音樂</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center trItemSub">
+                                <td>1</td>
+                                <td>音樂名稱</td>
+                                <td>歌手</td>
+                                <td>作曲</td>
+                                <td>價格</td>
+                                <td><audio controls></audio></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
     </table>
+
+
+
+
 </div>
 <div>
     <div class="h3">未讀的訊息</div>
 
 </div>
+<script>
+    $(".open").click(function () {
+        $(this).parents("tr").siblings().slideToggle(1);
+    })
+
+    //表單內checkbox的處理
+    $(".trItemMain").click(function (e) {
+        let target = $(this).find("input[type = checkbox]")[0];
+        let openBtn = $(this).find(".open")[0];
+        if (e.target != target && e.target != openBtn) {
+            target.checked = !target.checked;
+        }
+    })
+    $(".all").click(function () {
+        let target = $(this).find("input[type = checkbox]")[0];
+        target.checked = !target.checked;
+        if (target.checked) {
+            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", true)
+        }
+        else {
+            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", false);
+        }
+    })
+    $(".all").find("input[type = checkbox]").click(function (e) {
+        e.preventDefault();
+        $(".all").trigger("click")
+    })
+    
+</script>

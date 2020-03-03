@@ -103,15 +103,6 @@
     }
 
     <div class="albumPanel">
-        <a class="albumBlock" href="">
-            <div class="albumCover"></div>
-            <div class="albumContent">
-                <span class="albumTitle">音樂名稱</span>
-                <span class="albumDescripion">專輯名稱</span>
-                <span class="albumDescripion">歌手</span>
-                <span class="albumDescripion">作曲者</span>
-            </div>
-        </a>
         @foreach (var item in Model)
         {
             <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName">

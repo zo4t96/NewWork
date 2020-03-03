@@ -116,7 +116,7 @@
                 c++;
             }
             <li data-target="#adCarousel" data-slide-to="@(c)"></li>
-            <li data-target="#adCarousel" data-slide-to="@(c+1)+"></li>
+            <li data-target="#adCarousel" data-slide-to="@(c+1)"></li>
             <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>
         </ol>
         <div class="carousel-inner">
@@ -161,16 +161,6 @@
 
     <div class="h3 mx-5 mt-5 font-weight-bold">所有音樂</div>
     <div class="albumPanel">
-        <a class="albumBlock" href="">
-            <div class="albumCover"></div>
-
-            <div class="albumContent">
-                <span class="albumTitle">專輯名稱</span>
-                <span class="albumDescripion">團體名或歌手</span>
-                <span class="albumDescripion">專輯類型</span>
-                <span class="albumDescripion">曲風放這裡，字數太多會被刪節號取代</span>
-            </div>
-        </a>
         @foreach (var item in Model)
         {
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!

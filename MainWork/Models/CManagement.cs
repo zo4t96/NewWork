@@ -110,5 +110,93 @@ namespace MainWork.Models
             db.tAlbumKinds.Remove(kind);
             db.SaveChanges();
         }
+
+        //音樂審核並寄送通知訊息給送審會員
+        internal void pass(string account, int albumId)
+        {
+            var album = db.tAlbums.Where(a => a.fAlbumID == albumId).FirstOrDefault();
+            album.fStatus = 2;
+            album.fYear = DateTime.Now.ToShortDateString();
+
+            tMessage msg = new tMessage();
+            msg.fAccountFrom = "aaa";
+            msg.fAccountTo = account;
+            msg.fStatus = 1;
+            msg.fTime = DateTime.Now;
+            msg.fContent = $"您送審的專輯「{album.fAlbumName}」已通過審查並成功上架!";
+            db.tMessages.Add(msg);
+            db.SaveChanges();
+        }
+        internal void noPass(string account, int albumId)
+        {
+            var album = db.tAlbums.Where(a => a.fAlbumID == albumId).FirstOrDefault();
+            album.fStatus = 0;
+
+            tMessage msg = new tMessage();
+            msg.fAccountFrom = "aaa";
+            msg.fAccountTo = account;
+            msg.fStatus = 1;
+            msg.fTime = DateTime.Now;
+            msg.fContent = $"您送審的專輯「{album.fAlbumName}」未通過審查!";
+            db.tMessages.Add(msg);
+            db.SaveChanges();
+        }
+
+        internal void multiplePass(string[] accounts, int[] albums)
+        {
+            foreach(var account in accounts)
+            {
+                foreach(var album in albums)
+                {
+                    var target = db.tAlbums.Where(a => a.fAlbumID == album).FirstOrDefault();
+                    target.fStatus = 2;
+                    target.fYear = DateTime.Now.ToShortDateString();
+
+                    tMessage msg = new tMessage();
+                    msg.fAccountFrom = "aaa";
+                    msg.fAccountTo = account;
+                    msg.fStatus = 1;
+                    msg.fTime = DateTime.Now;
+                    msg.fContent = $"您送審的專輯「{target.fAlbumName}」已通過審查並成功上架!";
+                    db.tMessages.Add(msg);
+                }
+            }
+            db.SaveChanges();
+        }
+
+        internal void multipleNoPass(string[] accounts, int[] albums)
+        {
+            foreach (var account in accounts)
+            {
+                foreach (var album in albums)
+                {
+                    var target = db.tAlbums.Where(a => a.fAlbumID == album).FirstOrDefault();
+                    target.fStatus = 0;
+
+                    tMessage msg = new tMessage();
+                    msg.fAccountFrom = "aaa";
+                    msg.fAccountTo = account;
+                    msg.fStatus = 1;
+                    msg.fTime = DateTime.Now;
+                    msg.fContent = $"您送審的專輯「{target.fAlbumName}」未通過審查!";
+                    db.tMessages.Add(msg);
+                }
+            }
+            db.SaveChanges();
+        }
+        internal void recall(string account, int albumId)
+        {
+            var album = db.tAlbums.Where(a => a.fAlbumID == albumId).FirstOrDefault();
+            album.fStatus = 0;
+
+            tMessage msg = new tMessage();
+            msg.fAccountFrom = "aaa";
+            msg.fAccountTo = account;
+            msg.fStatus = 1;
+            msg.fTime = DateTime.Now;
+            msg.fContent = $"您的專輯「{album.fAlbumName}」因有侵權之嫌因此強制下架，造成不便請多見諒";
+            db.tMessages.Add(msg);
+            db.SaveChanges();
+        }
     }
 }

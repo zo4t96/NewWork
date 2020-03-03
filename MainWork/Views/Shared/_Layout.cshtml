@@ -1247,26 +1247,21 @@
         })
 
         //所有搜尋text實作autocomplete
-        $(".searchtxt,#adSong").autocomplete(
-            {
-                source: '@Url.Action("AutoCompleteSong", "Search")'
-            });
-        $("#adSinger").autocomplete(
-            {
-                source: '@Url.Action("AutoCompleteSinger", "Search")'
-            });
-        $("#adGroup").autocomplete(
-            {
-                source: '@Url.Action("AutoCompleteGroup", "Search")'
-            });
-        $("#adComposer").autocomplete(
-            {
-                source: '@Url.Action("AutoCompleteComposer", "Search")'
-            });
-        $("#adAlbum").autocomplete(
-            {
-                source: '@Url.Action("AutoCompleteAlbum", "Search")'
-            });
+        $(".searchtxt,#adSong").autocomplete({
+            source: '@Url.Action("AutoCompleteSong", "Search")'
+        });
+        $("#adSinger").autocomplete({
+             source: '@Url.Action("AutoCompleteSinger", "Search")'
+        });
+        $("#adGroup").autocomplete({
+            source: '@Url.Action("AutoCompleteGroup", "Search")'
+        });
+        $("#adComposer").autocomplete({
+            source: '@Url.Action("AutoCompleteComposer", "Search")'
+        });
+        $("#adAlbum").autocomplete({
+            source: '@Url.Action("AutoCompleteAlbum", "Search")'
+        });
 
         //讓左側選單被選擇時有點變化
         $(".menuItem").click(function () {

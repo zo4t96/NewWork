@@ -430,6 +430,8 @@
     <Content Include="Views\Admin\EventEdit.cshtml" />
     <Content Include="Views\Search\EventResult.cshtml" />
     <Content Include="Views\Search\EventResultView.cshtml" />
+    <Content Include="Views\Admin\MusicReview.cshtml" />
+    <Content Include="Views\Admin\MusicManage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

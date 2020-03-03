@@ -33,7 +33,7 @@
         width: 50%;
         margin-bottom: 40px;
         margin: 10px 60px;
-        background-color: rgba(206, 226, 231, 0.80);
+        background-color: rgba(206, 226, 231, 0.30);
         padding: 20px;
         border-radius: 10px;
         border: 1px outset white;
@@ -102,15 +102,21 @@
 </div>
 <script>
     $(".new").click(function () {
-        var newName = $(this).parent().siblings(".newName").val();
-        if (!nameTwice(newName)) {
+        var newName = $(this).parent().siblings(".newName").val().trim();
+        if (newName == "") {
+            alert("新增欄位不得為空!");
+        }
+        else if (!nameTwice(newName)) {
             $(this).parents(".newType").submit();
         }
     })
 
     $(".edit").click(function () {
-        var changeName = $(this).parent().siblings(".changeName").val();
-        if (!nameTwice(changeName)) {
+        var changeName = $(this).parent().siblings(".changeName").val().trim();
+        if (changeName == "") {
+            alert("修改欄位不得為空!");
+        }
+        else if (!nameTwice(changeName)) {
             if (confirm("這麼做會連帶改變所有使用此類別的專輯，確定要修改嗎?")) {
                 $(this).parents(".fedit").submit();
             }

@@ -43,7 +43,7 @@ namespace MainWork.Models
         public List<string> searchGroup(string term)
         {
             var items = db.tAlbums.Select(p => p);
-            var test = items.Where(p => p.fMaker.StartsWith(term));
+            var test = items.Where(p => p.fMaker.Contains(term));
             foreach (var t in test)
             {
                 if (!result.Contains(t.fMaker))
@@ -79,6 +79,21 @@ namespace MainWork.Models
                 if (!result.Contains(t.fAlbumName))
                 {
                     result.Add(t.fAlbumName);
+                }
+            }
+            result = result.Take(10).ToList();
+            return result;
+        }
+
+        internal object searchAccount(string term)
+        {
+            var items = db.tAlbums.Select(p => p);
+            var test = items.Where(p => p.fAccount.Contains(term));
+            foreach (var t in test)
+            {
+                if (!result.Contains(t.fAccount))
+                {
+                    result.Add(t.fAccount);
                 }
             }
             result = result.Take(10).ToList();

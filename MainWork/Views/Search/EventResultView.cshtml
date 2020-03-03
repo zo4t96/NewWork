@@ -83,15 +83,6 @@
 
 <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">@Model.First().tActivity.fTitle</div>
 <div class="albumPanel">
-    <a class="albumBlock">
-        <div class="albumCover"></div>
-        <div class="albumContent">
-            <span class="albumTitle">測試用專輯名稱</span>
-            <span class="albumDescripion">測試用團體名或歌手</span>
-            <span class="albumDescripion">歌手或作曲者，(進階搜尋用)</span>
-            <span class="albumDescripion">曲風放這裡，字數太多會被刪節號取代</span>
-        </div>
-    </a>
     @foreach (var item in Model)
     {
         <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
