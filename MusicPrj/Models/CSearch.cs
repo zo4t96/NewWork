@@ -1,4 +1,4 @@
-﻿using MusicPrj.ViewModel;
+﻿using MusicPrj.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace MusicPrj.Models
         public IEnumerable<tAlbum> allAlbum()
         {
             //IEnumerable
-               var all = db.tAlbums.Select(a => a);
+               var all = db.tAlbums.Where(a=>a.fStatus==1).Select(a => a);
             return all;
         }
 
@@ -63,10 +63,10 @@ namespace MusicPrj.Models
             {
                 data = data.Where(p => p.product.fSinger.Contains(keyObj.adSinger));
             }
-            if (!string.IsNullOrEmpty(keyObj.adComposer))
-            {
-                data = data.Where(p => p.product.fArranger.Contains(keyObj.adComposer));
-            }
+            //if (!string.IsNullOrEmpty(keyObj.adComposer))
+            //{
+            //    data = data.Where(p => p.product.fArranger.Contains(keyObj.adComposer));
+            //}
             if (!string.IsNullOrEmpty(keyObj.adAlbum))
             {
                 data = data.Where(a => a.album.fAlbumName.Contains(keyObj.adAlbum));
@@ -99,6 +99,13 @@ namespace MusicPrj.Models
                     result.Add(a.album);
                 }
             }
+            return result;
+        }
+
+        //尋找屬於特定活動的專輯
+        public IEnumerable<tAlbum> byEvent(int eventId)
+        {
+            var result = db.tAlbums.Where(a => a.fActivityID == eventId);
             return result;
         }
     }

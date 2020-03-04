@@ -39,7 +39,7 @@
         width: 340px;
         padding: 15px;
         min-height: 300px;
-        background-color: rgb(255,255,240);
+        background-color: #292929;
         margin: 20px;
         display: block;
         float: left;
@@ -57,12 +57,12 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            background-color: #292929;
+            background-color: white;
             margin-bottom: 10px;
             -moz-user-select: none;
             user-select: none;
             text-indent: 10px;
-            color: whitesmoke;
+            color: black;
             margin-right: 10px
         }
 
@@ -100,14 +100,17 @@
         width: 100% /*控制單頁框度使其不超出瀏覽範圍*/
     }
 
-        .tab_contents li {
+    .tab_contents li {
             display: inline-block; /*關鍵-控制第二頁內容*/
             vertical-align: top; /*關鍵-控制第一頁內容*/
             width: 100%; /*控制單頁框度使其不超出瀏覽範圍*/
             padding: 0 5%;
             margin: 0 auto;
             /*box-sizing: border-box;*/
-        }
+    }
+    .tab_btns li a {
+        cursor: pointer;
+    }
     /*Tab換頁效果*/
     /*專輯預覽block*/
 
@@ -184,6 +187,10 @@
         white-space: nowrap;
         overflow: hidden;
     }
+    
+        .animation {
+        opacity: 1;
+    }
     /*專輯預覽block*/
 </style>
 <!-- Main CSS-->
@@ -196,9 +203,11 @@
 <div id="wrapper">
     <div class="container">
         <ul class="tab_btns" style="display:inline-block">
-            <li class="on"><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">發行專輯</a></li>
-            <li><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1"> + 增加專輯</a></li>
-            <li><a class="btn btn-outline-secondary" href="javascript:void(0);" onclick="tab_switch(this);" data-div="#tab_contents1">販售統計</a></li>
+            @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
+            <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">發行專輯</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 增加專輯</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">販售統計</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">單曲總覽</a></li>
         </ul>
     </div>
     @*<div class="container text-center">
@@ -216,14 +225,16 @@
     <div class="tab_container">
         <ul class="tab_contents" id="tab_contents1">
             <li>
+                <div class="section__content section__content--p30">
 
-                @Html.Action("_MyAlbumList")
+                    @Html.Action("_MyAlbumList")
 
+                </div>
             </li>
             <li>
-                <h1 class="headtitle">專輯新增</h1>
+                <div class="headtitle h1">專輯新增</div>
                 @*for start*@
-                @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
                 {
                     <div class="albumCreatePanel row">
                         <div class="col-md-6">
@@ -237,7 +248,7 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        *@Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
                                             @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
@@ -245,20 +256,20 @@
                                     </div>
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        *@Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
                                             @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
                                             <input class="form-control text-box single-line" data-val="true" data-val-required="發行日必填" id="tA_fYear" name="tA.fYear" type="date" value="2020-01-01">
                                             @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
                                         </div>
-                                    </div>
+                                    </div>*@
 
                                     <div class="form-group">
                                         @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -285,20 +296,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        *@Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
                                                 <label class="custom-file-label" for="customFile">點選圖片</label>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tA.fPublisher, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-9">
-                                            @Html.EditorFor(model => tA.fPublisher, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => tA.fPublisher, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
 
@@ -323,7 +326,7 @@
                             <div class="form-group">
                                 <div class="albumBlock">
                                     <div class="albumCover">
-                                        <img id="preview_fCoverRealFile" src="#" />
+                                        <img id="preview_fCoverRealFile" src="" />
                                     </div>
                                     <div class="albumContent">
                                         <span id="previewTitle" class="albumTitle"></span>
@@ -342,7 +345,6 @@
                                     <div class="containerDrag">
                                         <ul id="userKindtaginput"></ul>
                                         <ul id="adKindULPageload">
-                                            <li>不指定</li>
                                         </ul>
                                     </div>
                                     <hr />
@@ -360,7 +362,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-5">
-                                    <input type="submit" value="Create" class="btn btn-warning" />
+                                    <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
                                 </div>
                             </div>
                         </div>
@@ -371,14 +373,81 @@
 
             </li>
             <li>
-
-                <h1>統計資料</h1>
+                <div class="headtitle h1">我的專輯統計資料</div>
                 <div class="section__content section__content--p30">
                     <div class="row">
                         <div class="col-md-5">
+                            <div class="top-campaign">
+                                <h3 class="title-3 m-b-30">本周最多試聽單曲前5</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-top-campaign">
+                                        <tbody id="memberTryWeekTop5SongList">
+                                            <tr>
+                                                <td>單曲名</td>
+                                                <td>筆</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="top-campaign">
+                                <h3 class="title-3 m-b-30">本月最多試聽單曲前5</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-top-campaign">
+                                        <tbody id="memberTryMonthTop5SongList">
+                                            <tr>
+                                                <td>單曲名</td>
+                                                <td>筆</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="top-campaign">
+                                <h3 class="title-3 m-b-30">最暢銷單曲前5</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-top-campaign">
+                                        <tbody id="memberTop5SongList">
+                                            <tr>
+                                                <td>單曲名</td>
+                                                <td>$總收入(筆)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="top-campaign">
+                                <h3 class="title-3 m-b-30">最暢銷專輯前5</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-top-campaign">
+                                        <tbody id="memberTop5AlbumList">
+                                            <tr>
+                                                <td>專輯名</td>
+                                                <td>$總收入(筆)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
                             <div class="au-card m-b-20">
                                 <div class="au-card-inner">
-                                    <h3 class="title-2 m-b-40">By 月銷售專輯/單曲總額</h3>
+                                    <h3 class="title-2 m-b-40">By 月試聽專輯/單曲總數</h3>
+                                    <canvas id="byMonthTry"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="au-card m-b-20">
+                                <div class="au-card-inner">
+                                    <h3 class="title-2 m-b-40">By 月購買專輯/單曲總數</h3>
                                     <canvas id="byMonthSale"></canvas>
                                 </div>
                             </div>
@@ -386,27 +455,55 @@
                         <div class="col-md-5">
                             <div class="au-card m-b-20">
                                 <div class="au-card-inner">
-                                    <h3 class="title-2 m-b-40">試聽/銷售佔比</h3>
-                                    <canvas id="pieChart"></canvas>
+                                    <h3 class="title-2 m-b-40">試聽/銷售百分比</h3>
+                                    <canvas id="pieSaleTryRatio"></canvas>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="au-card m-b-20">
                                 <div class="au-card-inner">
-                                    <h3 class="title-2 m-b-40">Single Bar Chart</h3>
-                                    <canvas id="singelBarChart"></canvas>
+                                    <h3 class="title-2 m-b-40">週間試聽數變化</h3>
+                                    <canvas id="tryWeekOfBarChart"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <span>個月銷量圖</span>
-                <span>最暢銷專輯</span>
-                <span>最暢銷單曲</span>
                 <span>最多試聽</span>
 
+            </li>
+            <li>
+                <div class="headtitle h1">單曲列表</div>
+                <div class="section__content section__content--p30">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="py-3">
+                                <span>搜尋專輯名稱:</span> <input style="color:black"  class="myProductSearchInput" type="text" /> <button class="btn btn-info" id="searchMyProduct">搜尋</button>
+                            </div>
+                            <!-- DATA TABLE-->
+                            <div class="table-responsive m-b-40">
+                                <table class="table table-borderless table-data3">
+                                    <thead>
+                                        <tr>
+                                            <th>單曲名</th>
+                                            <th>專輯名</th>
+                                            <th>歌手</th>
+                                            <th>試聽時間</th>
+                                            <th>售價</th>
+                                            <th>購買數</th>
+                                            <th>動作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="memberSongListTable">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- END DATA TABLE-->
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -419,126 +516,53 @@
             </div>
         </div>
     </div>*@
-<script>
- //Tab頁面控制
-function tab_switch(_this) {
-  now_tab = $(_this).parent().index();
-
-  $(_this).parent().siblings().removeClass('on');
-  $(_this).parent().addClass('on');
-  control_div = $(_this).data('div');
-  $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
-}
-</script>
 <script src="~/vendor/chartjs/Chart.bundle.min.js"></script>
 <script src="~/js/main.js"></script>
+
 <script>
-        //Team chart
-    var ctx = document.getElementById("byMonthSale");
-    if (ctx) {
-        ctx.height = 150;
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: JSON.parse('@Html.Raw(ViewBag.monthSale1)'),
-          type: 'line',
-          defaultFontFamily: 'Poppins',
-          datasets: [{
-            data: [0, 7, 3, 5, 2, 10, 7],
-            label: "售出",
-            backgroundColor: 'rgba(0,103,255,.15)',
-            borderColor: 'rgba(0,103,255,0.5)',
-            borderWidth: 3.5,
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointBorderColor: 'transparent',
-            pointBackgroundColor: 'rgba(0,103,255,0.5)',
-          },]
-        },
-        options: {
-          responsive: true,
-          tooltips: {
-            mode: 'index',
-            titleFontSize: 12,
-            titleFontColor: '#000',
-            bodyFontColor: '#000',
-            backgroundColor: '#fff',
-            titleFontFamily: 'Poppins',
-            bodyFontFamily: 'Poppins',
-            cornerRadius: 3,
-            intersect: false,
-          },
-          legend: {
-            display: false,
-            position: 'top',
-            labels: {
-              usePointStyle: true,
-              fontFamily: 'Poppins',
-            },
 
+        setTimeout(function () {
+        $(".productitem").addClass("animation");
+        }, 200)
 
-          },
-          scales: {
-            xAxes: [{
-              display: true,
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              scaleLabel: {
-                display: false,
-                labelString: 'Month'
-              },
-              ticks: {
-                fontFamily: "Poppins"
-              }
-            }],
-            yAxes: [{
-              display: true,
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              scaleLabel: {
-                display: true,
-                labelString: '購買次數',
-                fontFamily: "Poppins"
-              },
-              ticks: {
-                fontFamily: "Poppins"
-              }
-            }]
-          },
-          title: {
-            display: false,
-          }
-        }
-      });
-    }
+        //Tab頁面控制
+    function tab_switch(_this) {
+   // $(".tabswitch").click(function (_this) {
+        //console.log("ccc")
+        var now_tab = $(_this).parent().index();
+        $(_this).parent().siblings().children().removeClass('active')
+        $(_this).addClass("active");
+        $(_this).parent().siblings().removeClass('on');
+        $(_this).parent().addClass('on');
+        var control_div = $(_this).data('div');
+        $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
 
-</script>
-<script>
+    };
 
     //  $("#preview_fCoverRealFile").css("display", "none");
+    //名稱與創作者跟右邊預覽同步
     $("#tA_fAlbumName").keyup(function () {
     $("#previewTitle").text($("#tA_fAlbumName").val());
     })
     $("#tA_fMaker").keyup(function () {
         $("#previewGroup").text($("#tA_fMaker").val());
     })
+
+    //Type跟右邊預覽同步-->失效
     $("#adTypePageload").change(function () {
         $("#previewType").text($("#adTypePageload option:selected").text());
 //        $("#previewTypes").text("123");
     })
-    $("#userKindtaginput").mouseout(function () {
-        let kindtag = '';
-        $("#userKindtaginput li").each(function () {
-            kindtag += ""+$(this).text() + ',';
-        })
-        $("#previewKinds").text(kindtag);
-    })
-            //摺疊
-            $(function () {
+
+    //$("#userKindtaginput").mouseout(function () {
+    //    let kindtag = '';
+    //    $("#userKindtaginput li").each(function () {
+    //        kindtag += ""+$(this).text() + ',';
+    //    })
+    //    $("#previewKinds").text(kindtag);
+    //})
+      //摺疊
+    $(function () {
             $('h3').click(function () {
                 if ($(this).next('.foldAlbum').hasClass('o') == true) {
                     $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
@@ -548,16 +572,16 @@ function tab_switch(_this) {
                     $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
                     $(this).next('.foldAlbum').addClass('o').slideDown();
                 }
-            });
-            });
+     });
+     });
 
-            //圖片選擇按下時時重新載入
-            $("#preview_fCoverRealFile_source").change(function(){
+      //圖片選擇按下時時重新載入-跳轉
+    $("#preview_fCoverRealFile_source").change(function(){
             readURL(this);
-            });
-            //類別選擇載入
-            function readURL(input){
+     });
 
+      //圖片選擇按下時時重新載入-方法
+    function readURL(input){
             if(input.files && input.files[0]){
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -568,33 +592,468 @@ function tab_switch(_this) {
                 }
             }
 
-                $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
-                $.each(datas, function (name, value) {
-                    $("#adTypePageload").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
-                })
-                })
-                    $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
-                $.each(datas, function (name, value) {
-                    $("#adKindULPageload").append(`<li value="${value.KindName}">${value.KindName}</li>`)
-                })
-                    })
-        //滑鼠拖動時取得拖曳內容轉成文字方塊
-        $("#userKindtaginput, #adKindULPageload").mouseout(function () {
-        let kindtag = '';
+    //類別選擇載入
+    $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
+        $.each(datas, function (name, value) {
+            $("#adTypePageload").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
+        })
+    });
+
+    $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
+        $.each(datas, function (name, value) {
+            $("#adKindULPageload").append(`<li value="${value.KindName}">${value.KindName}</li>`)
+              //          $("#adKindULPageload").append(`<li value="111">111</li>`)
+        })
+    });
+
+    //滑鼠拖動時取得拖曳內容轉成文字方塊
+    $("#userKindtaginput, #adKindULPageload").mouseout(function () {
+       // let kindtag = '';
+        let kindtag = new Array();
         $("#userKindtaginput li").each(function () {
-            kindtag += ""+$(this).text() + ',';
-            console.log($(this).text());
+            //kindtag += "" + $(this).text() + ',';
+            kindtag.push($(this).text());
+          //  console.log($(this).text());
         })
         $("#tA_fKinds").val(kindtag);
         })
 
-        //$("#adKindULPageload").mouseout(function () {
-        //let kindtag = '';
-        //$("#userKindtaginput li").each(function () {
-        //    kindtag += ""+$(this).text() + ',';
-        //})
-        //$("#tA_fKinds").val(kindtag);
-        //})
+    //新增專輯送出時檢查
+    $("#inputFormSubmit").click(function () {
+            if ($("#preview_fCoverRealFile").attr('src') != "") {
+                if ($("#tA_fAlbumName").val() != "") {
+                    if ($("#tA_fMaker").val() != "") {
+                        if ($("#tA_fALPrice").val() > 0) {
+                            $("#formInput").submit();
+                        } else {
+                 alert("價格需填入>0數字");
+                        }
+                    } else {
+                 alert("需填入歌手名稱");
+                    }
+                } else {
+                 alert("需填入單曲名稱");
+                }
+            } else {
+                 alert("需上傳檔案");
+            }
+            });
+
+    //試聽
+    var m_statistDateTry =new Array();
+    var m_statistCntTry =new Array();
+    $.getJSON('@Url.Action("getStatistic_tryNum","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                  m_statistDateTry.push(value.date)
+                  m_statistCntTry.push(value.CNT)
+                  })
+            var ctx = document.getElementById("byMonthTry");
+        if (ctx) {
+            ctx.height = 150;
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: m_statistDateTry,
+                    type: 'line',
+                    defaultFontFamily: 'Poppins',
+                    datasets: [{
+                        data: m_statistCntTry,
+                        label: "Expense",
+                        backgroundColor: 'rgba(0,103,255,.15)',
+                        borderColor: 'rgba(0,103,255,0.5)',
+                        borderWidth: 3.5,
+                        pointStyle: 'circle',
+                        pointRadius: 5,
+                        pointBorderColor: 'transparent',
+                        pointBackgroundColor: 'rgba(0,103,255,0.5)',
+                    },]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        titleFontSize: 12,
+                        titleFontColor: '#000',
+                        bodyFontColor: '#000',
+                        backgroundColor: '#fff',
+                        titleFontFamily: 'Poppins',
+                        bodyFontFamily: 'Poppins',
+                        cornerRadius: 3,
+                        intersect: false,
+                    },
+                    legend: {
+                        display: false,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            fontFamily: 'Poppins',
+                        },
 
 
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: false,
+                                labelString: '年/月'
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '次',
+                                fontFamily: "Poppins"
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            });
+        }
+
+        })
+
+    //購買
+    var m_statistDatePruchase =new Array();
+    var m_statistCntPruchase =new Array();
+    $.getJSON('@Url.Action("getStatistic_purchaseNum","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                  m_statistDatePruchase.push(value.date)
+                  m_statistCntPruchase.push(value.CNT)
+                  })
+            var ctx = document.getElementById("byMonthSale");
+        if (ctx) {
+            ctx.height = 150;
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: m_statistDatePruchase,
+                    type: 'line',
+                    defaultFontFamily: 'Poppins',
+                    datasets: [{
+                        data: m_statistCntPruchase,
+                        label: "Expense",
+                        backgroundColor: 'rgba(0,103,255,.15)',
+                        borderColor: 'rgba(0,103,255,0.5)',
+                        borderWidth: 3.5,
+                        pointStyle: 'circle',
+                        pointRadius: 5,
+                        pointBorderColor: 'transparent',
+                        pointBackgroundColor: 'rgba(0,103,255,0.5)',
+                    },]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        titleFontSize: 12,
+                        titleFontColor: '#000',
+                        bodyFontColor: '#000',
+                        backgroundColor: '#fff',
+                        titleFontFamily: 'Poppins',
+                        bodyFontFamily: 'Poppins',
+                        cornerRadius: 3,
+                        intersect: false,
+                    },
+                    legend: {
+                        display: false,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            fontFamily: 'Poppins',
+                        },
+
+
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: false,
+                                labelString: '年/月'
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '次',
+                                fontFamily: "Poppins"
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            });
+        }
+
+        })
+
+    //購買試聽占比
+    var m_statistNamePie =new Array();
+    var m_statistCntPie =new Array();
+    $.getJSON('@Url.Action("getStatistic_purchaseTry","Statistic")', function (datas) {
+        let m_statistTotal =0;
+        $.each(datas, function (name, value) {
+            m_statistTotal += value.CNT;
+       //     console.log(m_statistTotal);
+        })
+        $.each(datas, function (name, value) {
+            if (value.useType == 1) {
+                m_statistNamePie.push("試聽")
+            } else if (value.useType == 2) {
+                m_statistNamePie.push("單曲購買")
+            } else if (value.useType == 3) {
+                m_statistNamePie.push("專輯購買")
+            }
+            m_statistCntPie.push((value.CNT / m_statistTotal).toFixed(3) * 100);
+          //  console.log(value.CNT);
+        })
+        //pie chart
+        var ctx = document.getElementById("pieSaleTryRatio");
+        if (ctx) {
+            ctx.height = 200;
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: m_statistCntPie,
+                        backgroundColor: [
+                            "rgba(0, 123, 255,0.9)",
+                            "rgba(0, 123, 255,0.7)",
+                            "rgba(0, 123, 255,0.5)",
+                            "rgba(0,0,0,0.07)"
+                        ],
+                        hoverBackgroundColor: [
+                            "rgba(0, 123, 255,0.9)",
+                            "rgba(0, 123, 255,0.7)",
+                            "rgba(0, 123, 255,0.5)",
+                            "rgba(0,0,0,0.07)"
+                        ]
+
+                    }],
+                    labels: m_statistNamePie
+                },
+                options: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            fontFamily: 'Poppins'
+                        }
+
+                    },
+                    responsive: true
+                }
+            });
+        }
+    });
+
+    //星期幾
+    var m_statistWeekTry =new Array();
+    var m_statistWeekCntTry =new Array();
+    $.getJSON('@Url.Action("getStatistic_tryWeek","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                if (value.weekOf == 6) {
+                    m_statistWeekTry.push("Sat");
+                } else if(value.weekOf == 0){
+                    m_statistWeekTry.push("Sun");
+                } else if(value.weekOf == 1){
+                    m_statistWeekTry.push("Mon");
+                } else if(value.weekOf == 2){
+                    m_statistWeekTry.push("Tue");
+                } else if(value.weekOf == 3){
+                    m_statistWeekTry.push("Wed");
+                } else if(value.weekOf == 4){
+                    m_statistWeekTry.push("Thr");
+                } else {
+                    m_statistWeekTry.push("Fri");
+                }
+                m_statistWeekCntTry.push(value.CNT);
+                  })
+    // single bar chart
+    var ctx = document.getElementById("tryWeekOfBarChart");
+    if (ctx) {
+      ctx.height = 150;
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: m_statistWeekTry,
+          datasets: [
+            {
+              label: "試聽次數",
+              data: m_statistWeekCntTry,
+              borderColor: "rgba(0, 123, 255, 0.9)",
+              borderWidth: "0",
+              backgroundColor: "rgba(0, 123, 255, 0.5)"
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'top',
+            labels: {
+              fontFamily: 'Poppins'
+            }
+
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: "Poppins"
+
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontFamily: "Poppins"
+              }
+            }]
+          }
+        }
+      });
+    }
+        })
+
+    //最佳銷售單曲
+    $.getJSON('@Url.Action("getStatistic_memberTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTop5SongList").append(`<tr><td>${value.Song}</td><td>${value.Money}(${value.CNT})</td></tr>`);
+                  })
+    })
+
+    //最佳銷售專輯
+    $.getJSON('@Url.Action("getStatistic_memberTop5Album","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTop5AlbumList").append(`<tr><td>${value.Album}</td><td>${value.Money}(${value.CNT})</td></tr>`);
+                  })
+    })
+
+    //本周最多試聽單曲
+    $.getJSON('@Url.Action("getStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTryWeekTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
+                  })
+    })
+
+    //會員單曲列表
+    $.getJSON('@Url.Action("getStatistic_memberSongListTable","Statistic")', function (datas) {
+        $.each(datas, function (name, value) {
+            let songlen = value.Song.length;
+            let albumlen = value.Album.length;
+            let m_songname ="",m_albumname ="";
+            if (songlen > 10) {
+                m_songname = value.Song;
+                value.Song = value.Song.substring(0,10)+"..."
+            }
+            if (albumlen > 8) {
+                m_albumname = value.Album;
+                value.Album = value.Album.substring(0,8)+"..."
+            }
+            let timespan = getTimeText(value.tryEnd-value.tryStart)
+            let timeStart = getTimeText(value.tryStart)
+            let timeEnd = getTimeText(value.tryEnd)
+            $("#memberSongListTable").append(`<tr><td title="${m_songname}">${value.Song}</td><td title="${m_albumname}">${value.Album}</td>
+            <td title="演奏:${value.Composer},編曲:${value.Arranger},作詞:${value.Lyricist}">${value.Singer}</td>
+            <td title="開始:${timeStart},結束:${timeEnd}">${timespan}</td><td>$${value.Price}</td><td>${value.SongPurchase}</td><td><a href="../AlbumInfo?amid=${value.ID}">編輯</a></td></tr>`);
+                  })
+    })
+    $("#searchMyProduct").click(function () {
+        $.getJSON('@Url.Action("myProductSearch","Statistic")?product=' + $(".myProductSearchInput").val().trim(), function (datas) {
+                     $("#memberSongListTable tr").empty("");
+            $.each(datas, function (name, value) {
+                let songlen = value.Song.length;
+                let albumlen = value.Album.length;
+                let m_songname = "", m_albumname = "";
+                if (songlen > 10) {
+                    m_songname = value.Song;
+                    value.Song = value.Song.substring(0, 10) + "..."
+                }
+                if (albumlen > 8) {
+                    m_albumname = value.Album;
+                    value.Album = value.Album.substring(0, 8) + "..."
+                }
+                let timespan = getTimeText(value.tryEnd - value.tryStart)
+                let timeStart = getTimeText(value.tryStart)
+                let timeEnd = getTimeText(value.tryEnd)
+               
+                $("#memberSongListTable").append(`<tr><td title="${m_songname}">${value.Song}</td><td title="${m_albumname}">${value.Album}</td>
+            <td title="演奏:${value.Composer},編曲:${value.Arranger},作詞:${value.Lyricist}">${value.Singer}</td>
+            <td title="開始:${timeStart},結束:${timeEnd}">${timespan}</td><td>$${value.Price}</td><td>${value.SongPurchase}</td><td><a href="../AlbumInfo?amid=${value.ID}">編輯</a></td></tr>`);
+            })
+        })
+    })
+
+
+    $(".myProductSearchInput").autocomplete({
+
+        source: function (request, response) {
+            $.ajax({
+               // url: "@Url.Action("findProd","Statistic")",
+                url: "@Url.Action("findProd","Statistic")?term="+request.term.trim(),
+             //   data: { term: request.term.trim() },
+                data: {},
+                type: "POST",
+                async: true,
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                     response($.map(result, function (name, val) {
+                     return {
+                        label: name,
+                        value: val
+                     }
+                  }));
+                },
+               error: function (XMLHttpRequest, textStatus, errorThrown) {
+                  console.log("Error.");
+               }
+            });
+        },
+                 minLength: 1
+    });
+
+
+    //取得音樂時間文字的方法(第二個有給到小數後兩位)
+    function getTimeText(num) {
+        let m1 = parseInt(num / 600);
+        let m2 = parseInt(num / 60 % 10);
+        let s1 = parseInt(num % 60 / 10);
+        let s2 = parseInt(num % 60 % 10);
+        return `${m1}${m2}:${s1}${s2}`;
+    }
 </script>

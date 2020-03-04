@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site/test" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\user\\source\\repos\\MusicPrj\\MusicPrj\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\user\\source\\repos\\MusicPrj\\MusicPrj\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="MyShopDBEntities-Web.config Connection String" description="" value="metadata=res://*/MyShopMd.csdl|res://*/MyShopMd.ssdl|res://*/MyShopMd.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.;initial catalog=dbProjectMusicStore;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\user\\source\\repos\\MusicPrj\\MusicPrj\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MyShopDBEntities']/@connectionString" />
+  </parameter>
+  <parameter name="dbProjectMusicStoreEntities-Web.config Connection String" description="" value="metadata=res://*/dbMusicStore.csdl|res://*/dbMusicStore.ssdl|res://*/dbMusicStore.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=.;Initial Catalog=dbProjectMusicStore;Persist Security Info=True;User ID=webuser1;Password=user123My&quot;" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\user\\source\\repos\\MusicPrj\\MusicPrj\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='dbProjectMusicStoreEntities']/@connectionString" />
+  </parameter>
+</parameters>

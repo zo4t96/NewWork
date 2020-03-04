@@ -34,6 +34,7 @@ namespace MusicPrj
             tA.fStatus = 0;
             tA.fCoverRealFile.SaveAs(path);
             tA.fAccount = user;
+            tA.fYear = DateTime.Now.ToShortDateString();
             db.tAlbums.Add(tA);
             try
             {
@@ -48,20 +49,27 @@ namespace MusicPrj
         }
 
         //使用者新增單曲
-        public string userAddsong(tProduct tP, int amid)
+        public string userAddsong(FormCollection formCollection, int amid, HttpPostedFileBase tP_fRealFile)
         {
             string name = Guid.NewGuid().ToString() + ".mp3";
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), name);
+            tProduct tP = new tProduct();
             tP.fFilePath = name;
-            tP.fRealFile.SaveAs(path);
-            tP.fStatus = 1;
-            tP.fKind = "無";
+            tP_fRealFile.SaveAs(path);
             tP.fAlbumID = amid;
+
+            tP.fProductName = formCollection["tP.fProductName"];
+            tP.fSinger = formCollection["tP.fSinger"];
+            tP.fComposer = formCollection["tP.fComposer"];
+            tP.fSIPrice = (decimal)Single.Parse(formCollection["tP.fSIPrice"]);
+            tP.fPlayStart = Double.Parse(formCollection["tP.fPlayStart"]);
+            tP.fPlayEnd = Double.Parse(formCollection["tP.fPlayEnd"]);
+
             db.tProducts.Add(tP);
             try
             {
                 db.SaveChanges();
-                return "";
+                return "上傳單曲成功";
             }
             catch (Exception ex)
             {
@@ -105,11 +113,35 @@ namespace MusicPrj
             tA.fMaker = formCollection["revisefMaker"];
             tA.fYear = formCollection["revisefYear"];
             tA.fType = Int32.Parse(formCollection["revisefType"]);
-            tA.fPublisher = formCollection["revisefPublisher"];
             tA.fALPrice = (decimal)Single.Parse(formCollection["revisefALPrice"]);
             tA.fStatus = Int32.Parse(formCollection["o.fstatus"]);
             db.SaveChanges();
             s2 = "成功";
+            return s2;
+        }
+
+        //使用者下架專輯
+        public string userUpdateAlbumCloseStatus(string albumid)
+        {
+            int intAlbumid = Int32.Parse(albumid);
+            tAlbum tA = db.tAlbums.FirstOrDefault(p => p.fAlbumID == intAlbumid);
+            string s2 = "";
+            if (tA == null)
+            {
+                //          return Redirect(s1);
+                s2 = "失敗";
+                return s2;
+            }
+            tA.fStatus = 0;
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+            s2 = "下架成功";
             return s2;
         }
 
@@ -289,10 +321,10 @@ namespace MusicPrj
         }
 
         //使用者直接更新單曲資料不含檔案
-        public string userUpdateSongInfoDetail(string soid, FormCollection formCollection)
+        public string userUpdateSongInfoDetail(int soid, FormCollection formCollection)
         {
-            int intSongid = Int32.Parse(soid);
-            tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == intSongid);
+       //     int intSongid = Int32.Parse(soid);
+            tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == soid);
             string s2 = "";
             if (tP == null)
             {
@@ -302,9 +334,9 @@ namespace MusicPrj
             tP.fProductName = formCollection["revise_fProductName"];
             tP.fSinger = formCollection["revise_fSinger"];
             tP.fComposer = formCollection["revise_fComposer"];
-            tP.fArranger = formCollection["revise_fArranger"];
-            tP.fLyricist = formCollection["revise_fLyricist"];
             tP.fSIPrice = (decimal)Single.Parse(formCollection["revise_fSIPrice"]);
+            tP.fPlayStart = Double.Parse(formCollection["revise_fPlayStart"]);
+            tP.fPlayEnd = Double.Parse(formCollection["revise_fPlayEnd"]);
             db.SaveChanges();
             s2 = "成功";
             return s2;

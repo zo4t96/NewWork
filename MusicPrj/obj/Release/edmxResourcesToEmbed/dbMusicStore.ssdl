@@ -24,7 +24,6 @@
     <Property Name="fStatus" Type="int" />
     <Property Name="fALPrice" Type="money" />
     <Property Name="fCoverPath" Type="nvarchar(max)" />
-    <Property Name="fPublisher" Type="nvarchar" MaxLength="50" />
     <Property Name="fKinds" Type="nvarchar(max)" />
     <Property Name="fDiscount" Type="real" />
     <Property Name="fActivityID" Type="int" />
@@ -44,8 +43,6 @@
     </Key>
     <Property Name="fTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="fTypeName" Type="nvarchar" MaxLength="50" />
-    <Property Name="fColor" Type="nvarchar" MaxLength="50" />
-    <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tLog">
     <Key>
@@ -71,9 +68,10 @@
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
     <Property Name="fLastPlaySong" Type="int" />
-    <Property Name="fLineId" Type="int" />
+    <Property Name="fLineId" Type="varchar" MaxLength="40" />
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
+    <Property Name="fLineStatus" Type="int" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -85,7 +83,6 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
-    <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tPlayLists">
@@ -106,17 +103,9 @@
     <Property Name="fSinger" Type="nvarchar" MaxLength="50" />
     <Property Name="fSIPrice" Type="money" />
     <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
-    <Property Name="fArranger" Type="nvarchar" MaxLength="50" />
-    <Property Name="fLyricist" Type="nvarchar" MaxLength="50" />
-    <Property Name="fKind" Type="nvarchar(max)" />
-    <Property Name="fMusic" Type="varbinary(max)" />
     <Property Name="fFilePath" Type="nvarchar(max)" />
     <Property Name="fPlayStart" Type="float" />
     <Property Name="fPlayEnd" Type="float" />
-    <Property Name="fStatus" Type="int" />
-    <Property Name="fDownloadCount" Type="int" />
-    <Property Name="fModifiedDate" Type="nvarchar" MaxLength="50" />
-    <Property Name="fPlaybackCount" Type="int" />
   </EntityType>
   <EntityType Name="tPurchaseItem">
     <Key>

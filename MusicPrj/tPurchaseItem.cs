@@ -23,8 +23,8 @@ namespace MusicPrj
         public Nullable<int> fisAlbum { get; set; }
         public Nullable<float> fDiscount { get; set; }
     
-        public virtual tMember tMember { get; set; }
-        public virtual tProduct tProduct { get; set; }
         public virtual tShoppingCart tShoppingCart { get; set; }
+        public virtual tProduct tProduct { get; set; }
+        public virtual tMember tMember { get; set; }
     }
 }

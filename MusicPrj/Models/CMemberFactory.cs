@@ -19,7 +19,7 @@ namespace MusicPrj.Models
         public List<tMember> queryBySql(string sql)
         {
             SqlConnection con = new SqlConnection();
-            con.ConnectionString = @"Data Source=.;Initial Catalog=dbProjectMusicStore; Persist Security Info=True; User ID=webuser1; Password=user123My";
+            con.ConnectionString = @"Server=tcp:sqlserverprj.database.windows.net,1433;Initial Catalog=dbProjectMusicStore;Persist Security Info=False;User ID=webuser1;Password=user123My;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
             con.Open();
 
             SqlDataAdapter adapter = new SqlDataAdapter(sql, con);
@@ -55,7 +55,7 @@ namespace MusicPrj.Models
         private static void executeSql(string sql)
         {
             SqlConnection con = new SqlConnection();
-            con.ConnectionString = @"Data Source=.;Initial Catalog=dbProjectMusicStore; Persist Security Info=True; User ID=webuser1; Password=user123My";
+            con.ConnectionString = @"Server=tcp:sqlserverprj.database.windows.net,1433;Initial Catalog=dbProjectMusicStore;Persist Security Info=False;User ID=webuser1;Password=user123My;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
             con.Open();
             //
             //Integrated Security =True
@@ -63,7 +63,6 @@ namespace MusicPrj.Models
             SqlCommand cmd = new SqlCommand(sql, con);
             cmd.ExecuteNonQuery();
             con.Close();
-            //   private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
         }
 
 

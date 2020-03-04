@@ -75,18 +75,12 @@
             url: "./updateSong/",
                        data: formData,
                        cache: false,
-                       dataType: 'json',
+                       dataType: 'script',
                        processData: false,
                        contentType: false,
                        success: function (data) {
                            console.log(data)
-                           if (data.Msg == "success") {
-                               Message("儲存成功!");
-                           }
-                           else {
-                               Message("儲存失敗!" + data.Msg);
-                               return false;
-                           }
+                            $(".eventNotification").html(data);
                        }
                    });
         setTimeout(function () {
@@ -96,6 +90,11 @@
         setTimeout(function () {
             $("#modal").css("display", "none");
         }, 500)
+                        let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
+                console.log(plink);
+                $.get(plink, { ajax: true }, function (data) {
+                    $(".mainbox").html(data);
+                })
     })
 
 

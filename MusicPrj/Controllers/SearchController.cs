@@ -1,5 +1,5 @@
 ﻿using MusicPrj.Models;
-using MusicPrj.ViewModel;
+using MusicPrj.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,14 +25,16 @@ namespace MusicPrj.Controllers
         }
 
         //進行搜尋時先跳轉到空頁面，並將搜尋資料傳遞，之後再讓該頁面實作搜尋的指令
-        public ActionResult KindResult(bool ajax = false)
+        public ActionResult KindResult(int kindId, bool ajax = false)
         {
             if (ajax)
             {
                 ViewBag.ajax = true;
             }
+            ViewBag.kindId = kindId;
             return View();
         }
+
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
         public ActionResult KindResultView(int kindID)
         {
@@ -67,6 +69,20 @@ namespace MusicPrj.Controllers
             return PartialView(search.byAdvanced(keyObj));
         }
 
+        //活動的商品一覽頁面
+        public ActionResult EventResult(bool ajax = false)
+        {
+            if (ajax)
+            {
+                ViewBag.ajax = true;
+            }
+            return View();
+        }
+        public ActionResult EventResultView(int eventId)
+        {
+            return PartialView(search.byEvent(eventId));
+        }
+
         //以下皆為autocomplete的實作
         CAutoComplete cc = new CAutoComplete();
         public JsonResult AutoCompleteSong(string term)
@@ -93,8 +109,7 @@ namespace MusicPrj.Controllers
         //進階搜尋內容的初始化
         public ActionResult SetTypes()
         {
-            CSearch cs = new CSearch();
-            var data = cs.takeAllType();
+            var data = search.takeAllType();
             //用json直接回傳entity物件時，會產生循環參考的錯誤
             //這邊選擇直接將資料轉為匿名物件回傳
             var result = data.Select(d => new { d.fTypeID, d.fTypeName });
@@ -102,9 +117,8 @@ namespace MusicPrj.Controllers
         }
         public ActionResult SetKinds()
         {
-            CSearch cs = new CSearch();
-            var data = cs.takeAllKind();
-            var result = data.Select(d => new { d.KindName });
+            var data = search.takeAllKind();
+            var result = data.Select(d => new { d.KindName, d.fColor });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

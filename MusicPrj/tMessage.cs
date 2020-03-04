@@ -20,7 +20,6 @@ namespace MusicPrj
         public string fContent { get; set; }
         public Nullable<System.DateTime> fTime { get; set; }
         public Nullable<int> fStatus { get; set; }
-        public Nullable<int> fRead { get; set; }
         public string fTitle { get; set; }
     
         public virtual tMember tMember { get; set; }

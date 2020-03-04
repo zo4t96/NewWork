@@ -11,21 +11,10 @@
         public Nullable<decimal> fSIPrice { get; set; }
         [Display(Name = "演奏")]
         public string fComposer { get; set; }
-        [Display(Name = "編曲")]
-        public string fArranger { get; set; }
-        [Display(Name = "作詞")]
-        public string fLyricist { get; set; }
-        [Display(Name = "單曲類型")]
-        public string fKind { get; set; }
-        public byte[] fMusic { get; set; }
         [Display(Name = "音樂檔(限mp3)")]
         public string fFilePath { get; set; }
         public Nullable<double> fPlayStart { get; set; }
         public Nullable<double> fPlayEnd { get; set; }
-        public Nullable<int> fStatus { get; set; }
-        public Nullable<int> fDownloadCount { get; set; }
-        public string fModifiedDate { get; set; }
-        public Nullable<int> fPlaybackCount { get; set; }
 
 
         public int fAlbumID { get; set; }
@@ -36,19 +25,17 @@
         [Required(ErrorMessage = "發行團體必填")]
         public string fMaker { get; set; }
         public string fAccount { get; set; }
-        [Display(Name = "發行日")]
-        [Required(ErrorMessage = "發行日必填")]
+        [Display(Name = "最後修改時間")]
         public string fYear { get; set; }
         [Display(Name = "風格/類別")]
-        [Required(ErrorMessage = "風格/類別必填")]
         public Nullable<int> fType { get; set; }
         public Nullable<int> fStatus { get; set; }
         [Display(Name = "專輯售價")]
+        [Required(ErrorMessage = "專輯售價必填")]
         public Nullable<decimal> fALPrice { get; set; }
         [Display(Name = "封面")]
         public string fCoverPath { get; set; }
-        [Display(Name = "發行人/公司")]
-        [Required(ErrorMessage = "發行人/公司必填")]
-        public string fPublisher { get; set; }
         [Display(Name = "專輯類型")]
         public string fKinds { get; set; }
+        public Nullable<float> fDiscount { get; set; }
+        public Nullable<int> fActivityID { get; set; }

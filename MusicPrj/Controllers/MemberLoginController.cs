@@ -40,10 +40,11 @@ namespace MusicPrj.Controllers
                 //    }
                 //}
                 //ViewBag.ErrorMessage = "帳號與密碼不符";
-                tMember cust = (new tMemberFactory()).getByAccount(data.txtAccount);
+                //tMember cust = (new tMemberFactory()).getByAccount(data.txtAccount);
                 string account = data.txtAccount;
                 string password = data.txtPassword;
                 Session[CDictionary.SK_ACCOUNT] = account;
+                tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
                 Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
            //     return RedirectToAction("Main", "Homepage");
                 return RedirectToAction("Index", "Album");
@@ -71,6 +72,7 @@ namespace MusicPrj.Controllers
         public ActionResult Logout()
         {
             Session[CDictionary.SK_CURRENT_LOGINED_USER] = null;
+            Session[CDictionary.SK_ACCOUNT] = null;
             return RedirectToAction("Main", "Homepage");
         }
     }

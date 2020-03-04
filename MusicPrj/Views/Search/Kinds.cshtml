@@ -21,16 +21,16 @@
     }
 
     .outline {
-        width: 14vw;
-        height: 14vw;
+        width: 13.5vw;
+        height: 13.5vw;
         min-width: 160px;
         min-height: 160px;
     }
 
     .kindBlock {
         /* 寬高單位同為vw或vx可達成等比例縮放的方形效果 */
-        width: 13vw;
-        height: 13vw;
+        width: 12.5vw;
+        height: 12.5vw;
         min-width: 150px;
         min-height: 150px;
         border-radius: 10px;
@@ -45,8 +45,8 @@
     }
 
         .kindBlock:hover {
-            width: 14vw;
-            height: 14vw;
+            width: 13.5vw;
+            height: 13.5vw;
             min-width: 165px;
             min-height: 165px;
             margin: 2px;
@@ -61,7 +61,7 @@
         /* 設置音樂封面作為背景圖片，使圖片填滿div，添加陰影，斜向旋轉，輕微透明效果 */
         background-image: url("#");
         background-size: cover;
-        box-shadow: 0px 1px 1px 1px #0000004b;
+        box-shadow: 0px 1px 2px 1px #0000004b;
         transform: rotate(25deg);
         transition: 0.4s;
         opacity: 0;
@@ -71,14 +71,14 @@
         opacity: 0.8;
     }
 </style>
-<title>BasicSerch</title>
+
 <body>
     <div class="kindPage">
         @foreach (var item in Model)
         {
             string id = item.KindID.ToString();
             <a class="outline">
-                <div class="kindBlock" data-kind="@id">
+                <div class="kindBlock" data-kind="@id" data-color="@item.fColor" data-image="@item.fPhotoPath">
                     <span class="kindName">@item.KindName</span>
                     <div class="photo"></div>
                 </div>
@@ -88,25 +88,38 @@
     <script>
         setTimeout(function () {
             $(".photo").addClass("fadein");
-        }, 100)
+        }, 300)
         //讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
-        var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
-            , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
-            , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
-        var c = $(".kindBlock");
-        for (let i = 0; i <= c.length; i++) {
-            c.eq(i).css("background-color", color[i]);
-            c.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 15%,${color[i]})`);
-            c.eq(i).find(".photo").css("background-image", `url(/images/${c.eq(i).data("kind")}.jpg)`)
-        }
-        c.on("click", function () {
-            let kindID = $(this).data("kind");
-            let url = `@Url.Action("KindResult", "Search")`
-            let stateObj = { kindID: kindID, ajax: true };
-            $.post(url, stateObj, function (data) {
-                $(".mainbox").html(data);
-            });
-            history.pushState(stateObj,null,url);
+        $(".kindBlock").each(function () {
+            $(this).css("background-color", $(this).data("color"));
+            $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
+            $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("image")})`)
+            $(this).click(function(){
+                let kindId = $(this).data("kind");
+                let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`
+                let kindName = $(this).find(".kindName").text();
+                let stateObj = { kindId: kindId, ajax: true, kindName: kindName };
+                history.pushState(stateObj, null, url);
+                $.ajax({
+                    beforeSend:function() {
+                        $(".mainbox").html(
+                            `<div class="loading">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            <span class="sr-only">Loading...</span>
+                        </div>`);
+                    },
+                    url: '@Url.Action("KindResultView", "Search")',
+                    data: history.state,
+                    type: "post",
+                    success: function (data) {
+                        $(".mainbox").html(data);
+                    },
+                    complete: function () {
+                        $(window).scrollTop(y);
+                    }
+                 })
+
+            })
         })
     </script>
 </body>

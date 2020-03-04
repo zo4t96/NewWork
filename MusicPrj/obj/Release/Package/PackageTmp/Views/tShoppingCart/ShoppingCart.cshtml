@@ -1,0 +1,102 @@
+﻿@model List<MusicPrj.tPurchaseItem>
+
+@{
+    ViewBag.Title = "ShoppingCart";
+
+    int totalprice = (int)Model.Sum(p => (double)p.fPrice *  p.tProduct.tAlbum.fDiscount).Value;
+
+}
+@section styles
+{
+    <script src="https://www.paypal.com/sdk/js?client-id=AQkR_scjhSlBeRrg9DRBwj6ucqCTQcWwhAslnfMYoX7d8P1vgt8syXR7lSwHjWdL6E36RGLoDo5MYD_n&intent=authorize&currency=TWD">
+        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
+
+}
+
+<h2>ShoppingCart</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+
+        @foreach (var x in Model)
+        {
+            <div class="row">
+                <div class="col bg-secondary text-white" data-name="Cid">
+                    <span>@x.fPurchaseItemID</span>
+                </div>
+                <div class="col bg-info text-white" data-name="pName">
+                    <span>@x.tProduct.fProductName</span>
+                </div>
+                <div class="col bg-secondary text-white" data-name="Price">
+                    <span class="price">@((int)((double)x.fPrice.Value * x.tProduct.tAlbum.fDiscount.Value))</span>
+                </div>
+                <div class="col bg-info text-white" data-name="Member">
+                    <span>@x.fCustomer</span>
+                </div>
+                <div class="col ">
+                    <input class="btn btn-primary" type="button" name="deletebtn" value="刪除" data-products="@x.fProductID" data-cartid="@x.fPurchaseItemID" />
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+
+            <div id="paypal-button-container" class="col"></div>
+
+        </div>
+    </div>
+
+}
+
+
+@section scripts
+{
+    <script>
+        var totalPrice = @totalprice;
+        var shopcarid =  @Model[0].fPurchaseItemID;
+        $("input[name='deletebtn']").on("click", function () {
+            if (confirm("確定刪除?")) {
+           $.post("@Url.Action("DelCart", "tShoppingCart")", { "pID": $(this).data("products"),"cID": $(this).data("cartid")},
+               function (data) {
+                   alert(data);
+               })
+                totalPrice = totalPrice - $(this).parents(".row").find(".price").text();
+                console.log($(this).parents(".row").find(".price").text())
+                console.log(totalPrice);
+                $(this).parents(".row").remove();
+            }
+       })
+    @*</script>
+    <script>*@
+      paypal.Buttons({
+          style: {
+              layout: 'vertical',
+              color: 'gold',
+              shape: 'rect',
+              label: 'buynow'
+          },
+            // Set up the transaction
+          createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice
+                        }
+                    }]
+                });
+            },
+            // Finalize the transaction
+          onApprove: function (data, actions) {
+              return actions.order.capture().then(function (details) {
+                  // Show a success message to the buyer
+                  alert('Transaction completed by ' + details.payer.name.given_name + '!');
+              }).then($.post("@Url.Action("BuyCheck", "tShoppingCart")", { "shopcarid": shopcarid },
+                      function (data) { alert(data)}));
+              }
+        }).render('#paypal-button-container');
+    </script>
+}

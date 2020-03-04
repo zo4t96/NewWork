@@ -1,11 +1,5 @@
 ﻿@model IEnumerable<MusicPrj.tAlbum>
 
-@{
-    if (ViewBag.ajax != null)
-    {
-        @(Layout = null);
-    }
-}
 <style>
     .albumPanel {
         display: flex;
@@ -27,13 +21,11 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-        transform: scale(0.8);
         transition: 0.4s;
         opacity: 0;
     }
 
     .animation {
-        transform: scale(1);
         opacity: 1;
     }
 
@@ -87,9 +79,28 @@
         white-space: nowrap;
         overflow: hidden;
     }
+
+    .noResult {
+        position: relative;
+        text-align: center;
+        top: 40%;
+        margin: auto;
+    }
 </style>
+
+@if (Model.FirstOrDefault() == null)
+{
+    <div class="noResult">
+        <div class="h3">查無資料</div>
+        <p>該曲風可能為近期新增內容，目前還沒有相關音樂喔！</p>
+    </div>
+}
+else
+{
+    <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">曲風名稱</div>
+}
 <div class="albumPanel">
-    <a class="albumBlock" href="">
+    <a class="albumBlock">
         <div class="albumCover"></div>
         <div class="albumContent">
             <span class="albumTitle">測試用專輯名稱</span>
@@ -100,7 +111,7 @@
     </a>
     @foreach (var item in Model)
     {
-        <a class="albumBlock" href="">
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
             @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
             <div class="albumCover"></div>
             <div class="albumContent">
@@ -114,9 +125,33 @@
 <script>
     setTimeout(function () {
         $(".albumBlock").addClass("animation");
-    }, 100)
+    }, 200)
     $(".albumBlock").click(function (e) {
-        //連結到商品頁面
         e.preventDefault();
+        let amid = $(this).data("album");
+        let url = `${$(this).attr("href")}?amid=${amid}`;
+        let stateObj = { amid: amid, ajax: true };
+        history.pushState(stateObj, null, url);
+        $.ajax({
+            url: url,
+            data: history.state,
+            type: "post",
+            beforeSend: function () {
+                $(".mainbox").html(
+                    `<div class="loading">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+            },
+            success: function (data) {
+                $(".mainbox").html(data);
+            },
+            complete: function () {
+                $(window).scrollTop(0);
+            }
+        })
+        let title = $(this).data("title");
+        document.title = title;
     });
+    $(".searchTitle").text(`${history.state.kindName}`);
 </script>

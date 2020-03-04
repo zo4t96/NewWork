@@ -13,11 +13,11 @@
 
         /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 260px;
-        padding: 15px;
+        width: 240px;
+        padding: 7px;
         min-height: 300px;
-        background-color: rgb(255,255,240);
-        margin: 20px;
+        background-color: #292929;
+        margin: 10px;
         display: block;
         float: left;
         border-radius: 5px;
@@ -27,19 +27,19 @@
         .containerDrag ul li {
             display: block;
             float: left;
-            width: 90px;
+            width: 80px;
             height: 35px;
             line-height: 35px;
             border-radius: 4px;
             margin: 0;
             padding: 0;
             list-style: none;
-            background-color: #292929;
+            background-color: white;
             margin-bottom: 10px;
             -moz-user-select: none;
             user-select: none;
             text-indent: 10px;
-            color: whitesmoke;
+            color: black;
             margin-right: 10px
         }
 
@@ -69,7 +69,7 @@
 
 <div class="box">
 
-        //防止網站被攻擊的防護，但目前會報錯先註解
+        @*//防止網站被攻擊的防護，但目前會報錯先註解*@
         @*@Html.AntiForgeryToken();*@
         <h2>類型更改</h2>
 
@@ -79,7 +79,6 @@
                 <div class="containerDrag">
                     <ul id="userKindtaginput"></ul>
                     <ul id="adKindULPageload">
-                        <li>不指定</li>
                     </ul>
                 </div>
                 <hr />
@@ -106,11 +105,13 @@
                 url: `./kindRevise?tAfKinds=${ajax_fKind}`,
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                dataType: "script",
                 async: false,
-                success: function (data) {
+                     success: function (data) {
+                   $(".eventNotification").html(data);
                 },
-                failure: function (errMsg) {
+                     failure: function (errMsg) {
+                   $(".eventNotification").html(errMsg);
                 }
                  })
                             setTimeout(function () {
@@ -120,6 +121,11 @@
                     setTimeout(function () {
                         $("#modal").css("display", "none");
                     }, 500)
+                                let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
+                console.log(plink);
+                $.get(plink, { ajax: true }, function (data) {
+                    $(".mainbox").html(data);
+                })
     })
 
     $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
@@ -137,10 +143,12 @@
 
         //滑鼠拖動時取得拖曳內容轉成文字方塊
         $("#userKindtaginput, #adKindULPageload").mouseout(function () {
-        let kindtag = '';
-        $("#userKindtaginput li").each(function () {
-            kindtag += ""+$(this).text() + ',';
-            console.log($(this).text());
+       // let kindtag = '';
+            let kindtag = new Array();
+            $("#userKindtaginput li").each(function () {
+                kindtag.push($(this).text());
+         //   kindtag += ""+$(this).text() + ',';
+         //   console.log($(this).text());
         })
         $("#tA_fKinds").val(kindtag);
         })

@@ -51,6 +51,7 @@ C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\EntityFramework.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\EntityFramework.SqlServer.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Newtonsoft.Json.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Helpers.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Mvc.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Razor.dll
@@ -59,6 +60,7 @@ C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Webpages.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Webpages.Razor.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\EntityFramework.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\EntityFramework.SqlServer.xml
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Newtonsoft.Json.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Razor.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Webpages.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Webpages.Deployment.xml
@@ -67,16 +69,14 @@ C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Helpers.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.Web.Mvc.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\EntityFramework.resources.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\EntityFramework.SqlServer.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Razor.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Webpages.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Webpages.Deployment.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Webpages.Razor.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Helpers.resources.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\System.Web.Mvc.resources.dll
-C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Debug\MusicPrj.csprojAssemblyReference.cache
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Debug\MusicPrj.csproj.CopyComplete
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Debug\MusicPrj.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Debug\MusicPrj.pdb
-C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\zh-Hant\EntityFramework.SqlServer.resources.dll
-C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Newtonsoft.Json.dll
-C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Newtonsoft.Json.xml
+C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Debug\MusicPrj.csprojAssemblyReference.cache

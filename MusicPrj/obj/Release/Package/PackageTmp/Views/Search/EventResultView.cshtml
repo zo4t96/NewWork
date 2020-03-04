@@ -1,0 +1,136 @@
+﻿@model IEnumerable<MusicPrj.tAlbum>
+
+<style>
+    .albumPanel {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 600px;
+        position: relative;
+        padding: 20px;
+    }
+
+    .albumBlock {
+        display: block;
+        width: 15vw;
+        height: 22vw;
+        min-width: 200px;
+        min-height: 293px;
+        text-align: center;
+        background-color: #292929;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        cursor: pointer;
+        transition: 0.4s;
+        opacity: 0;
+    }
+
+    .animation {
+        opacity: 1;
+    }
+
+    .albumBlock:hover {
+        background-color: #353535;
+        text-decoration: none;
+    }
+
+    .albumCover {
+        position: relative;
+        display: inline-block;
+        width: 12vw;
+        height: 12vw;
+        min-width: 160px;
+        min-height: 160px;
+        /*測試用圖片*/
+        background-image: url("/Images/4.jpg");
+        background-size: cover;
+    }
+
+    .albumContent {
+        position: relative;
+        width: 12vw;
+        min-width: 160px;
+        overflow: hidden;
+        text-align: left;
+        margin: 5px 0px;
+    }
+
+    .albumTitle {
+        display: block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        /*使多出的字元變...，下面三個屬性都要設才有效果*/
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .albumDescripion {
+        display: inline-block;
+        width: 12vw;
+        min-width: 160px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #808080;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+</style>
+@*<div class="h2">@Model.First().tActivity.fTitle</div>*@
+<div class="albumPanel">
+    <a class="albumBlock">
+        <div class="albumCover"></div>
+        <div class="albumContent">
+            <span class="albumTitle">測試用專輯名稱</span>
+            <span class="albumDescripion">測試用團體名或歌手</span>
+            <span class="albumDescripion">歌手或作曲者，(進階搜尋用)</span>
+            <span class="albumDescripion">曲風放這裡，字數太多會被刪節號取代</span>
+        </div>
+    </a>
+    @foreach (var item in Model)
+    {
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
+            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+            <div class="albumCover"></div>
+            <div class="albumContent">
+                <span class="albumTitle">@item.fAlbumName</span>
+                <span class="albumDescripion">@item.fMaker</span>
+                <span class="albumDescripion">@item.fKinds</span>
+            </div>
+        </a>
+    }
+</div>
+<script>
+    setTimeout(function () {
+        $(".albumBlock").addClass("animation");
+    }, 200)
+    $(".albumBlock").click(function (e) {
+        e.preventDefault();
+        let amid = $(this).data("album");
+        let url = `${$(this).attr("href")}?amid=${amid}`;
+        let stateObj = { amid: amid, ajax: true };
+        $.ajax({
+            url: url,
+            data: stateObj,
+            type: "post",
+            beforeSend: function () {
+                $(".mainbox").html(
+                `<div class="loading">
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+            },
+            success: function (data) {
+                $(".mainbox").html(data);
+                $(window).scrollTop(0);
+            }
+        })
+        history.pushState(stateObj, null, url);
+        let title = $(this).data("title");
+        document.title = title;
+    });
+</script>

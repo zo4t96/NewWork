@@ -22,8 +22,6 @@
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
     tProduct tP = new tProduct();
-    int demotimeStart = 0, demotimeEnd = 0;
-    string demotimestring, demotimestringstart;
 }
 <!--商品詳細頁-->
 <style>
@@ -52,7 +50,7 @@
         vertical-align: top;
         /*width:70%;*/
         min-width: 700px;
-        margin-left:50px;
+        margin-left: 50px;
     }
 
     .fold-title {
@@ -63,9 +61,9 @@
         width: 100%
     }
 
-    .fold-title * {
-        color: black;
-    }
+        .fold-title * {
+            color: black;
+        }
 
     .fold {
         line-height: 17pt;
@@ -79,13 +77,15 @@
     /*摺疊樣式結束*/
     /*MyAlbumList結束*/
     /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
-    .fold-title:hover > .fa .fas{
-                color: #525252;
+    .fa:hover, .fas:hover {
+        color: #525252;
     }
-    .fa .fas{
-            margin: 10px 20px;
-            color: #000000;
-            transition: 0.4s;
+
+    .fa, .fas {
+        /*margin: 10px 20px;*/
+        /*color: #000000;*/
+        transition: 0.4s;
+        cursor: pointer;
     }
 </style>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -93,9 +93,8 @@
     <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
     <h4 class="albumtext"><b>@AlbInfo.fAlbumName</b></h4>
     <h5 class="albumtext">@AlbInfo.fMaker </h5>
-    <h5 class="albumtext">特價:$ @($"{AlbInfo.fALPrice:#.#}") <a href="@Url.Action("Cart","Shopping", new { amid = "AL"+AlbInfo.fAlbumID})">
-                                                             <i class="fas fa-cart-arrow-down"></i></a></h5>
-    <h5 class="albumtext">風格/類別:@(AlbInfo.fType)</h5>
+    <h5 class="albumtext">特價:$ @($"{AlbInfo.fALPrice:#.#}") <i data-albumid="@AlbInfo.fAlbumID" class="fas fa-cart-arrow-down addThisAlbumToCart"></i></h5>
+    <h5 class="albumtext">風格/類別:@(AlbInfo.tAlbumType.fTypeName)</h5>
     <h5 class="albumtext">類型:@(AlbInfo.fKinds)</h5>
     <h5 class="albumtext">共有@(Model.Count()) 首</h5>
 </div>
@@ -120,14 +119,13 @@
             <h4 style="display:inline-block" class="fold-title">
                 <span>@(count).</span>
                 <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
-                <a href="@Url.Action("Cart","Shopping", new { productid = "SI"+item.fProductID})"><i class="fas fa-cart-arrow-down"></i></a>
-            <span><i class="fa fa-plus"></i></span></h4>
+                <i data-songid="@item.fProductID" class="fas fa-cart-arrow-down addThisSongToCart"></i>
+                <span><i data-songid="@item.fProductID" class="fa fa-plus addThisSongToPlayList"></i></span>
+            </h4>
             <div class="fold">
                 <div class="fold-container">
                     <span style="color:white">主唱:@Html.DisplayFor(modelItem => item.fSinger)</span>
                     <span style="color:white"> / 演奏:@Html.DisplayFor(modelItem => item.fComposer)</span>
-                    <span style="color:white"> / 編曲:@Html.DisplayFor(modelItem => item.fArranger)</span>
-                    <span style="color:white"> / 作詞:@Html.DisplayFor(modelItem => item.fLyricist)</span>
                     <span style="color:white"> / 售價:$ @($"{Html.DisplayFor(modelItem => item.fSIPrice):#.#}")</span>
                     @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
                 </div>
@@ -135,6 +133,8 @@
         </div>
     }
 
+</div>
+<div class="eventNotification">
 </div>
 <script>
     $(".demoAudio").each(function () {
@@ -185,25 +185,6 @@
         $(this).siblings(".demoAudio").data("playing", "true");
         $(this).css("display", "none");
         $(this).siblings(".dpause").css("display", "inline-block");
-                        if (m_soid != $(this).data('soid')) {
-                    m_soid = $(this).data('soid');
-                    //Playlist紀錄
-                    $.ajax({
-                        type: "Post",
-                        url: "@Url.Action("addPlayLists","Album")?amid="+m_soid,
-                        data: '{}',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        async: true,
-                        success: function (data) {
-                        },
-                        failure: function (errMsg) {
-                        }
-                    })
-
-                } else {
-                    m_soid = $(this).data('soid');
-                }
     })
     $(".dpause").click(function () {
         $(this).siblings(".demoAudio")[0].pause();
@@ -234,4 +215,29 @@
         let s2 = parseInt(num % 60 % 10);
         return `${m1}${m2}:${s1}${s2}`;
     }
+
+    $(".addThisSongToCart").click(function () {
+                        console.log("step1");
+        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=si" + $(this).data('songid'), function (data) {
+                                                console.log("step2");
+            $(".eventNotification").html(data);
+                                                            console.log("step3");
+        });
+    })
+    $(".addThisAlbumToCart").click(function () {
+                console.log("step1");
+        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=" + $(this).data('albumid'), function (data) {
+                                    console.log("step2");
+            $(".eventNotification").html(data);
+                                                console.log("step3");
+        });
+    })
+    $(".addThisSongToPlayList").click(function () {
+                console.log("step1");
+        $.get("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
+                                                        console.log("step2");
+            $(".eventNotification").html(data);
+                                                            console.log("step3");
+        });
+    })
 </script>
