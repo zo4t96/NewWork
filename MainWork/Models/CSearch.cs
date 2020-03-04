@@ -109,9 +109,50 @@ namespace MainWork.Models
             return result;
         }
 
-        internal IEnumerable<tAlbum> accountSearch(string keyword)
+        internal object MusicManage(string keyword, string method)
         {
-            var result = db.tAlbums.Where(a => a.fAccount.Contains(keyword));
+            var result = new List<object>();
+            var albums = new List<tAlbum>();
+            if (method == "account")
+            {
+                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword)).ToList();
+            }
+            else if (method == "group")
+            {
+                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword)).ToList();
+            }
+            else if (method == "albumName")
+            {
+                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword)).ToList();
+            }
+
+            foreach (var a in albums)
+            {
+                List<tProduct> musics = new List<tProduct>();
+                foreach (var p in a.tProducts)
+                {
+                    var pro = new tProduct()
+                    {
+                        fProductName = p.fProductName,
+                        fArtist = p.fArtist,
+                        fComposer = p.fComposer,
+                        fSIPrice = p.fSIPrice,
+                        fFilePath = p.fFilePath
+                    };
+                    musics.Add(pro);
+                }
+                tAlbum album = new tAlbum()
+                {
+                    fAlbumID = a.fAlbumID,
+                    fYear = a.fYear,
+                    fCoverPath = a.fCoverPath,
+                    fAccount = a.fAccount,
+                    fMaker = a.fMaker,
+                    fAlbumName = a.fAlbumName,
+                    fALPrice = a.fALPrice
+                };
+                result.Add(new { album, musics });
+            }
             return result;
         }
     }

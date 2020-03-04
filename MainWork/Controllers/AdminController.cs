@@ -207,15 +207,10 @@ namespace MainWork.Controllers
             manage.recall(account, albumId);
             return Content("");
         }
-        public ActionResult MusicList(string keyword)
+        public ActionResult MusicList(string keyword, string method)
         {
             CSearch cs = new CSearch();
-            var result = new Dictionary<tAlbum,IEnumerable<tProduct>>();
-            var albums = cs.accountSearch(keyword).ToList();
-            foreach(var a in albums)
-            {
-                result.Add(a, a.tProducts.ToList());
-            }
+            var result = cs.MusicManage(keyword, method);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

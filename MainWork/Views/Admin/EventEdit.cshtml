@@ -364,7 +364,7 @@
                 success: function (datas) {
                     $(".list").html("");
                     if (datas.length == 0) {
-                        $(".list").append(`<tr><td colspan=4>沒有符合條件的專輯或相關專輯已有所屬活動</td></tr>`);
+                        $(".list").append(`<tr><td colspan='4'>沒有符合條件的專輯或相關專輯已有所屬活動</td></tr>`);
                     }
                     $.each(datas, function (name, value) {
                         let chk = `<td><input type="checkbox" value="${value.fAlbumID}" name="eventAlbums"/></td>`;
