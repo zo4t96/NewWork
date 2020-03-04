@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
+
+@{
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    ViewBag.Title = "AlbumDetail2";
+    var AlbInfo = ViewBag.AlbInfo;
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        //          Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+}
+
+<link href="~/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+<script src="~/vendor/animsition/animsition.min.js"></script>
+
+<div class="container">
+    <div class="headtitle h1">單曲列表</div>
+    <div class="section__content section__content--p30">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- DATA TABLE-->
+                <div class="table-responsive m-b-40">
+                    <table class="table table-borderless table-data3">
+                        <thead>
+                            <tr>
+                                <th>單曲名</th>
+                                <th>專輯名</th>
+                                <th>歌手</th>
+                                <th>音樂下載連結</th>
+                                <th>專輯售價</th>
+                                <th>專輯售價</th>
+                                <th>動作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.fProductName</td>
+                                    <td>@item.tAlbum.fAlbumName</td>
+                                    <td>@item.fSinger</td>
+                                    <td><a class="btn btn-outline-secondary" download href="~/MusicFiles/@item.fFilePath">下載</a></td>
+                                    <td>@item.tAlbum.fALPrice</td>
+                                    <td>@item.fSIPrice</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END DATA TABLE-->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/vendor/chartjs/Chart.bundle.min.js"></script>
+<script src="~/js/main.js"></script>

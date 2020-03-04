@@ -5,134 +5,20 @@
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tActivity">
         <MappingFragment StoreEntitySet="tActivity">
           <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-          <ScalarProperty Name="fId" ColumnName="fId" />
-          <ScalarProperty Name="fLauncher" ColumnName="fLauncher" />
-          <ScalarProperty Name="fStartTime" ColumnName="fStartTime" />
-          <ScalarProperty Name="fEndTime" ColumnName="fEndTime" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tAlbumKinds">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
-        <MappingFragment StoreEntitySet="tAlbumKind">
-          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-          <ScalarProperty Name="fColor" ColumnName="fColor" />
-          <ScalarProperty Name="KindID" ColumnName="KindID" />
-          <ScalarProperty Name="KindName" ColumnName="KindName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tAlbumTypes">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumType">
-        <MappingFragment StoreEntitySet="tAlbumType">
-          <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
-          <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tLogs">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tLog">
-        <MappingFragment StoreEntitySet="tLog">
-          <ScalarProperty Name="fLogId" ColumnName="fLogId" />
-          <ScalarProperty Name="fIssuerFrom" ColumnName="fIssuerFrom" />
-          <ScalarProperty Name="fActionTo" ColumnName="fActionTo" />
-          <ScalarProperty Name="fCategory" ColumnName="fCategory" />
-          <ScalarProperty Name="fMessage" ColumnName="fMessage" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tMembers">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
-        <MappingFragment StoreEntitySet="tMember">
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-          <ScalarProperty Name="fPassword" ColumnName="fPassword" />
-          <ScalarProperty Name="fEmail" ColumnName="fEmail" />
-          <ScalarProperty Name="fPrivilege" ColumnName="fPrivilege" />
-          <ScalarProperty Name="fNickName" ColumnName="fNickName" />
-          <ScalarProperty Name="fMoney" ColumnName="fMoney" />
-          <ScalarProperty Name="fPicPath" ColumnName="fPicPath" />
-          <ScalarProperty Name="fSubscriptStartDate" ColumnName="fSubscriptStartDate" />
-          <ScalarProperty Name="fSubscriptEndDate" ColumnName="fSubscriptEndDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tMessages">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
-        <MappingFragment StoreEntitySet="tMessage">
-          <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
-          <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
-          <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
-          <ScalarProperty Name="fContent" ColumnName="fContent" />
-          <ScalarProperty Name="fTime" ColumnName="fTime" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fRead" ColumnName="fRead" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tPlayLists">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPlayList">
-        <MappingFragment StoreEntitySet="tPlayLists">
-          <ScalarProperty Name="fPlayId" ColumnName="fPlayId" />
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tProducts">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProduct">
-        <MappingFragment StoreEntitySet="tProducts">
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
-          <ScalarProperty Name="fProductName" ColumnName="fProductName" />
-          <ScalarProperty Name="fArtist" ColumnName="fArtist" />
-          <ScalarProperty Name="fSIPrice" ColumnName="fSIPrice" />
-          <ScalarProperty Name="fComposer" ColumnName="fComposer" />
-          <ScalarProperty Name="fArranger" ColumnName="fArranger" />
-          <ScalarProperty Name="fLyricist" ColumnName="fLyricist" />
-          <ScalarProperty Name="fKind" ColumnName="fKind" />
-          <ScalarProperty Name="fMusic" ColumnName="fMusic" />
-          <ScalarProperty Name="fFilePath" ColumnName="fFilePath" />
-          <ScalarProperty Name="fPlayStart" ColumnName="fPlayStart" />
-          <ScalarProperty Name="fPlayEnd" ColumnName="fPlayEnd" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fDownloadCount" ColumnName="fDownloadCount" />
-          <ScalarProperty Name="fModifiedDate" ColumnName="fModifiedDate" />
-          <ScalarProperty Name="fPlaybackCount" ColumnName="fPlaybackCount" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tPurchaseItems">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPurchaseItem">
-        <MappingFragment StoreEntitySet="tPurchaseItem">
-          <ScalarProperty Name="fPurchaseItemID" ColumnName="fPurchaseItemID" />
-          <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-          <ScalarProperty Name="fDate" ColumnName="fDate" />
-          <ScalarProperty Name="fPrice" ColumnName="fPrice" />
-          <ScalarProperty Name="fQuanity" ColumnName="fQuanity" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tShoppingCarts">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tShoppingCart">
-        <MappingFragment StoreEntitySet="tShoppingCart">
-          <ScalarProperty Name="fCartID" ColumnName="fCartID" />
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-          <ScalarProperty Name="fQuanity" ColumnName="fQuanity" />
-          <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
-          <ScalarProperty Name="fDate" ColumnName="fDate" />
-          <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+          <ScalarProperty Name="fEndTime" ColumnName="fEndTime" />
+          <ScalarProperty Name="fStartTime" ColumnName="fStartTime" />
+          <ScalarProperty Name="fLauncher" ColumnName="fLauncher" />
+          <ScalarProperty Name="fId" ColumnName="fId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="tAlbums">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
         <MappingFragment StoreEntitySet="tAlbum">
-          <ScalarProperty Name="fActivity" ColumnName="fActivity" />
+          <ScalarProperty Name="fActivityID" ColumnName="fActivityID" />
           <ScalarProperty Name="fDiscount" ColumnName="fDiscount" />
           <ScalarProperty Name="fKinds" ColumnName="fKinds" />
-          <ScalarProperty Name="fPublisher" ColumnName="fPublisher" />
           <ScalarProperty Name="fCoverPath" ColumnName="fCoverPath" />
           <ScalarProperty Name="fALPrice" ColumnName="fALPrice" />
           <ScalarProperty Name="fStatus" ColumnName="fStatus" />
@@ -142,6 +28,132 @@
           <ScalarProperty Name="fMaker" ColumnName="fMaker" />
           <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
           <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tAlbumKinds">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
+        <MappingFragment StoreEntitySet="tAlbumKind">
+          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
+          <ScalarProperty Name="fColor" ColumnName="fColor" />
+          <ScalarProperty Name="KindName" ColumnName="KindName" />
+          <ScalarProperty Name="KindID" ColumnName="KindID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tAlbumTypes">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumType">
+        <MappingFragment StoreEntitySet="tAlbumType">
+          <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
+          <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tLogs">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tLog">
+        <MappingFragment StoreEntitySet="tLog">
+          <ScalarProperty Name="fMessage" ColumnName="fMessage" />
+          <ScalarProperty Name="fCategory" ColumnName="fCategory" />
+          <ScalarProperty Name="fActionTo" ColumnName="fActionTo" />
+          <ScalarProperty Name="fIssuerFrom" ColumnName="fIssuerFrom" />
+          <ScalarProperty Name="fLogId" ColumnName="fLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tMembers">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
+        <MappingFragment StoreEntitySet="tMember">
+          <ScalarProperty Name="fLineTimeMark" ColumnName="fLineTimeMark" />
+          <ScalarProperty Name="fLineName" ColumnName="fLineName" />
+          <ScalarProperty Name="fLineId" ColumnName="fLineId" />
+          <ScalarProperty Name="fLastPlaySong" ColumnName="fLastPlaySong" />
+          <ScalarProperty Name="fSubscriptEndDate" ColumnName="fSubscriptEndDate" />
+          <ScalarProperty Name="fSubscriptStartDate" ColumnName="fSubscriptStartDate" />
+          <ScalarProperty Name="fPicPath" ColumnName="fPicPath" />
+          <ScalarProperty Name="fMoney" ColumnName="fMoney" />
+          <ScalarProperty Name="fNickName" ColumnName="fNickName" />
+          <ScalarProperty Name="fPrivilege" ColumnName="fPrivilege" />
+          <ScalarProperty Name="fEmail" ColumnName="fEmail" />
+          <ScalarProperty Name="fPassword" ColumnName="fPassword" />
+          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tMessages">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
+        <MappingFragment StoreEntitySet="tMessage">
+          <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+          <ScalarProperty Name="fRead" ColumnName="fRead" />
+          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
+          <ScalarProperty Name="fTime" ColumnName="fTime" />
+          <ScalarProperty Name="fContent" ColumnName="fContent" />
+          <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
+          <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
+          <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tPlayLists">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPlayList">
+        <MappingFragment StoreEntitySet="tPlayLists">
+          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
+          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
+          <ScalarProperty Name="fPlayId" ColumnName="fPlayId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tProducts">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProduct">
+        <MappingFragment StoreEntitySet="tProducts">
+          <ScalarProperty Name="fModifiedDate" ColumnName="fModifiedDate" />
+          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
+          <ScalarProperty Name="fPlayEnd" ColumnName="fPlayEnd" />
+          <ScalarProperty Name="fPlayStart" ColumnName="fPlayStart" />
+          <ScalarProperty Name="fFilePath" ColumnName="fFilePath" />
+          <ScalarProperty Name="fLyricist" ColumnName="fLyricist" />
+          <ScalarProperty Name="fArranger" ColumnName="fArranger" />
+          <ScalarProperty Name="fComposer" ColumnName="fComposer" />
+          <ScalarProperty Name="fSIPrice" ColumnName="fSIPrice" />
+          <ScalarProperty Name="fSinger" ColumnName="fSinger" />
+          <ScalarProperty Name="fProductName" ColumnName="fProductName" />
+          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
+          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tPurchaseItems">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPurchaseItem">
+        <MappingFragment StoreEntitySet="tPurchaseItem">
+          <ScalarProperty Name="fDiscount" ColumnName="fDiscount" />
+          <ScalarProperty Name="fisAlbum" ColumnName="fisAlbum" />
+          <ScalarProperty Name="fQuanity" ColumnName="fQuanity" />
+          <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+          <ScalarProperty Name="fDate" ColumnName="fDate" />
+          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
+          <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
+          <ScalarProperty Name="fPurchaseItemID" ColumnName="fPurchaseItemID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tShoppingCarts">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tShoppingCart">
+        <MappingFragment StoreEntitySet="tShoppingCart">
+          <ScalarProperty Name="fType" ColumnName="fType" />
+          <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+          <ScalarProperty Name="fDate" ColumnName="fDate" />
+          <ScalarProperty Name="fCustomer" ColumnName="fCustomer" />
+          <ScalarProperty Name="fCartID" ColumnName="fCartID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tStatistics">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tStatistic">
+        <MappingFragment StoreEntitySet="tStatistic">
+          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
+          <ScalarProperty Name="fTime" ColumnName="fTime" />
+          <ScalarProperty Name="fType" ColumnName="fType" />
+          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
+          <ScalarProperty Name="fId" ColumnName="fId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

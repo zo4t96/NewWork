@@ -30,11 +30,11 @@ namespace MainWork.Models
             IEnumerable<tAlbum> albums;
             if (eventid == 0)
             {
-                albums = db.tAlbums.Where(a => a.fActivity == null);
+                albums = db.tAlbums.Where(a => a.fActivityID== null);
             }
             else
             {
-                albums = db.tAlbums.Where(a => a.fActivity == null || a.fActivity == eventid);
+                albums = db.tAlbums.Where(a => a.fActivityID == null || a.fActivityID == eventid);
             }
             var kindList = new List<tAlbumKind>();
             if(type != 1)
@@ -91,7 +91,7 @@ namespace MainWork.Models
             {
                 var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
                 album.fDiscount = eventObj.discount;
-                album.fActivity = latest.fId;
+                album.fActivityID = latest.fId;
             }
             db.SaveChanges();
         }
@@ -99,10 +99,10 @@ namespace MainWork.Models
         public void eventAlter(CEventObject eventObj)
         {
             //修改資料時，先把該活動的相關專輯的活動清空
-            var albums = db.tAlbums.Where(a => a.fActivity == eventObj.eventId);
+            var albums = db.tAlbums.Where(a => a.fActivityID == eventObj.eventId);
             foreach (var a in albums)
             {
-                a.fActivity = null;
+                a.fActivityID = null;
             }
             
             var target = db.tActivities.Where(a => a.fId == eventObj.eventId).FirstOrDefault();
@@ -117,17 +117,17 @@ namespace MainWork.Models
             {
                 var album = db.tAlbums.Where(a => a.fAlbumID == i).FirstOrDefault();
                 album.fDiscount = eventObj.discount;
-                album.fActivity = eventObj.eventId;
+                album.fActivityID = eventObj.eventId;
             }
             db.SaveChanges();
         }
 
         public void eventDelete(int eventId)
         {
-            var albums = db.tAlbums.Where(a => a.fActivity == eventId);
+            var albums = db.tAlbums.Where(a => a.fActivityID == eventId);
             foreach (var a in albums)
             {
-                a.fActivity = null;
+                a.fActivityID = null;
             }
             var target = db.tActivities.Where(a => a.fId == eventId).FirstOrDefault();
             db.tActivities.Remove(target);

@@ -10,20 +10,18 @@
     {
         Layout = null;
     }
-
     ViewBag.Title = "AlbumDetail2";
     var AlbInfo = ViewBag.AlbInfo;
     var account = "";
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
-
+        //          Response.Redirect("~/Index/");
     }
     else
     {
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
     tProduct tP = new tProduct();
-
 }
 <!--商品詳細頁-->
 <style>
@@ -34,7 +32,6 @@
         margin-left: 5%;
         margin-top: 3%;
         width: 20%;
-        background-color:aqua;
     }
     /*專輯圖/介紹*/
     /*單曲列表開始*/
@@ -43,7 +40,6 @@
         color: white;
         width: 97%;
         font-family: 微軟正黑體;
-        background-color: darkorange;
     }
     /*單曲列表結束*/
     /*albuminfo結束*/
@@ -54,12 +50,12 @@
         vertical-align: top;
         /*width:70%;*/
         min-width: 700px;
-        background-color: burlywood;
+        margin-left: 50px;
     }
 
     .fold-title {
         background-color: #f3f3f3;
-        padding: 5px;
+        padding: 10px;
         color: #525252;
         margin-bottom: 0;
         width: 100%
@@ -80,13 +76,27 @@
     }
     /*摺疊樣式結束*/
     /*MyAlbumList結束*/
-</style>
+    /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+    .fa:hover, .fas:hover {
+        color: #525252;
+    }
 
+    .fa, .fas {
+        /*margin: 10px 20px;*/
+        /*color: #000000;*/
+        transition: 0.4s;
+        cursor: pointer;
+    }
+</style>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <div class="albumset">
     <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
-    <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
-    <h3 class="albumtext">@AlbInfo.fMaker </h3>
-    <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+    <h4 class="albumtext"><b>@AlbInfo.fAlbumName</b></h4>
+    <h5 class="albumtext">@AlbInfo.fMaker </h5>
+    <h5 class="albumtext">特價:$ @($"{AlbInfo.fALPrice:#.#}") <i data-albumid="@AlbInfo.fAlbumID" class="fas fa-cart-arrow-down addThisAlbumToCart"></i></h5>
+    <h5 class="albumtext">風格/類別:@(AlbInfo.tAlbumType.fTypeName)</h5>
+    <h5 class="albumtext">類型:@(AlbInfo.fKinds)</h5>
+    <h5 class="albumtext">共有@(Model.Count()) 首</h5>
 </div>
 <div class="musicsPanel">
 
@@ -109,10 +119,14 @@
             <h4 style="display:inline-block" class="fold-title">
                 <span>@(count).</span>
                 <span class="foldText">@Html.DisplayFor(modelItem => item.fProductName)</span>
+                <i data-songid="@item.fProductID" class="fas fa-cart-arrow-down addThisSongToCart"></i>
+                <span><i data-songid="@item.fProductID" class="fa fa-plus addThisSongToPlayList"></i></span>
             </h4>
             <div class="fold">
                 <div class="fold-container">
-                    <span style="color:white">@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    <span style="color:white">主唱:@Html.DisplayFor(modelItem => item.fSinger)</span>
+                    <span style="color:white"> / 演奏:@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    <span style="color:white"> / 售價:$ @($"{Html.DisplayFor(modelItem => item.fSIPrice):#.#}")</span>
                     @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
                 </div>
             </div>
@@ -120,27 +134,26 @@
     }
 
 </div>
+<div class="eventNotification">
+</div>
 <script>
     $(".demoAudio").each(function () {
         this.volume = 0.6;
     })
-
     //讀取音樂時會進行初始化
-        $(".demoAudio").on("durationchange", function () {
-            let demostart = $(this).siblings(".dplay").data("start");
-            let demoEnd = $(this).siblings(".dplay").data("end");
-            $(this).siblings(".demoSlider").prop("min", demostart);
-            $(this).siblings(".demoSlider").prop("max", demoEnd);
-            $(this).siblings(".demoSlider").prop("value", demostart);
-            this.currentTime =$(this).siblings(".demoSlider").prop("min");
-        });
-
+    $(".demoAudio").on("durationchange", function () {
+        let demostart = $(this).siblings(".dplay").data("start");
+        let demoEnd = $(this).siblings(".dplay").data("end");
+        $(this).siblings(".demoSlider").prop("min", demostart);
+        $(this).siblings(".demoSlider").prop("max", demoEnd);
+        $(this).siblings(".demoSlider").prop("value", demostart);
+        this.currentTime = $(this).siblings(".demoSlider").prop("min");
+    });
     //播放器的timer
     $(".demoAudio").on("timeupdate", function () {
         $(this).siblings(".demoSlider").prop("value", this.currentTime);
         let now = parseInt(this.currentTime);
         $(this).siblings(".nowTime").text(getTimeText(now));
-
         //假如播完會暫停播放並回到開頭
         if (this.currentTime >= $(this).siblings(".demoSlider").attr("max")) {
             this.pause();
@@ -149,7 +162,6 @@
             $(this).siblings(".dpause").css("display", "none");
             this.currentTime = $(this).siblings(".demoSlider").attr("min");
         }
-
         let start = $(this).siblings(".dplay").data("start");
         let end = $(this).siblings(".dplay").data("end");
         //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
@@ -164,13 +176,11 @@
             this.volume = 0.6;
         }
     });
-
     //音樂播放暫停鍵
     $(".dplay").click(function () {
         //按下播放鍵的同時其他正在放的音樂就會暫停
         $(".dpause").trigger("click");
         $("#pause").trigger("click");
-
         $(this).siblings(".demoAudio")[0].play();
         $(this).siblings(".demoAudio").data("playing", "true");
         $(this).css("display", "none");
@@ -182,23 +192,21 @@
         $(this).css("display", "none");
         $(this).siblings(".dplay").css("display", "inline-block")
     })
-
     //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
     //測試時直接讀取本頁會造成進度條出現bug，從別頁進來則不會，推測是jquery重複讀取的關係，暫無解(但一般使用者也不會直接進入這頁)
-    $(".demoSlider").on("input",function () {
+    $(".demoSlider").on("input", function () {
         $(this).siblings(".demoAudio")[0].pause();
         $(this).trigger("change");
     })
     //音樂進度條改變
-    $(".demoSlider").on("change",function () {
+    $(".demoSlider").on("change", function () {
         $(this).siblings(".demoAudio")[0].currentTime = this.value;
     });
     //拖動進度條直到放開滑鼠才重新開始播放
-    $(".demoSlider").on("mouseup",function () {
+    $(".demoSlider").on("mouseup", function () {
         if ($(this).siblings(".demoAudio").data("playing") == "true")
             $(this).siblings(".demoAudio")[0].play();
     });
-
     //取得音樂時間文字的方法(第二個有給到小數後兩位)
     function getTimeText(num) {
         let m1 = parseInt(num / 600);
@@ -207,4 +215,27 @@
         let s2 = parseInt(num % 60 % 10);
         return `${m1}${m2}:${s1}${s2}`;
     }
+
+    $(".addThisSongToCart").click(function () {
+                        console.log("step1");
+        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=si" + $(this).data('songid'), function (data) {
+                                                console.log("step2");
+            $(".eventNotification").html(data);
+                                                            console.log("step3");
+        });
+    })
+    $(".addThisAlbumToCart").click(function () {
+                console.log("step1");
+        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=" + $(this).data('albumid'), function (data) {
+                                    console.log("step2");
+            $(".eventNotification").html(data);
+                                                console.log("step3");
+        });
+    })
+    $(".addThisSongToPlayList").click(function () {
+                console.log("step1");
+        $.get("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
+            $(".eventNotification").html(data);
+        });
+    })
 </script>

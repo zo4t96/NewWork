@@ -26,6 +26,7 @@ namespace MainWork
         }
     
         public virtual DbSet<tActivity> tActivities { get; set; }
+        public virtual DbSet<tAlbum> tAlbums { get; set; }
         public virtual DbSet<tAlbumKind> tAlbumKinds { get; set; }
         public virtual DbSet<tAlbumType> tAlbumTypes { get; set; }
         public virtual DbSet<tLog> tLogs { get; set; }
@@ -35,6 +36,6 @@ namespace MainWork
         public virtual DbSet<tProduct> tProducts { get; set; }
         public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
         public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
-        public virtual DbSet<tAlbum> tAlbums { get; set; }
+        public virtual DbSet<tStatistic> tStatistics { get; set; }
     }
 }

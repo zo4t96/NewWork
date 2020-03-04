@@ -1,0 +1,842 @@
+﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
+
+@{
+    if (Request.IsAjaxRequest() == false)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+    var AlbInfo = ViewBag.AlbInfo;
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+    tProduct tP = new tProduct();
+    CWebInitailize webInitial = ViewBag.InitialModel;
+}
+
+<style>
+    .demoSlider,
+    .originalSlider {
+        -webkit-appearance: none;
+        display: inline-block;
+        border-radius: 50px;
+        width: 70%;
+        height: 5px;
+        outline: none;
+        margin: 10px;
+    }
+
+        .slider-range::-webkit-slider-thumb,
+        .demoSlider::-webkit-slider-thumb,
+        .originalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 10px;
+            height: 10px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+            .demoSlider::-webkit-slider-thumb:hover,
+            .originalSlider::-webkit-slider-thumb:hover {
+                cursor: pointer;
+                width: 14px;
+                height: 14px;
+            }
+
+    p {
+        font-size: 12px;
+        font-style: italic;
+        color: gray;
+        margin: 5px;
+    }
+
+    .slider {
+        margin: 20px;
+        width: 500px;
+    }
+    /*舊Player結束*/
+
+</style>
+
+<div class="albumset">
+    <img src="~/CoverFiles/@AlbInfo.fCoverPath" width="320" height="320" /><br />
+    <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
+    <h3 class="albumtext">@AlbInfo.fMaker </h3>
+    <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+    <h3 class="albumtext">@Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })</h3>
+</div>
+
+<div style="display: inline-block;vertical-align:top;">
+    <div class="container" style="margin-left:30px">
+
+        <h3 class="fold-title" data-start="0" data-end="0"><i class="fa fa-chevron-right"></i> 單曲上傳</h3>
+        <div class="fold">
+            <div class="fold-container">
+                <div class="container" style="color:white">
+                    @using (Html.BeginForm("AlbumInfo", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <h4>tAlbum</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fProductName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fProductName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fArtist, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fArtist, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fArtist, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fComposer, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fComposer, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fArranger, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fArranger, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fArranger, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fLyricist, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fLyricist, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fLyricist, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tP.fSIPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => tP.fSIPrice, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+
+
+                                    <div class="container playerPanel">
+                                        <input type="file" id="upload" name="tP.fRealFile" />
+                                        <hr>
+                                        <h5>原始檔案</h5>
+                                        <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                                        <div class="py-2 originalPanel">
+
+                                            <audio class="originalAudio"></audio>
+                                            <span class="nowTime">00:00</span>
+                                            <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalSetTime">00:00</span>
+                                            <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                            <div class="vbtn opause"><img src="~/Content/pause.png"></div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+                                        <input type="text" name="tP.fPlays" class="start" value="00:00.00" disabled="false">
+                                        <br>
+                                        <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+                                        <input type="text" name="tP.fPlaye" class="end" value="00:00.00" disabled="false">
+                                        <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                                        <div id="slider-range" class="slider"></div>
+
+                                        <h5>試聽檔案</h5>
+                                        <p>在此確認擷取的範圍</p>
+                                        <div class="py-2 demoPanel">
+                                            <audio class="demoSetAudio"></audio>
+                                            <span class="nowDemo">00:00</span>
+                                            <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalDemo">00:00</span>
+                                            <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                            <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tP.fKind, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <select class="advancedtxt form-control" name="tP.fKind">
+                                        @foreach (var item in webInitial.kinds)
+                                        {
+                                            if (webInitial.kinds == null)
+                                            {
+                                                <option value=''>載入失敗請重試</option>
+                                            }
+                                            else
+                                            {
+                                                <option value='@item.KindName'>@item.KindName</option>
+                                            }
+                                        }
+                                    </select>
+                                    @*@Html.EditorFor(model => tP.fKind, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => tP.fKind, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-warning" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @*for end*@
+                </div>
+            </div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <h3 class="fold-title" data-soid="@item.fProductID" data-start="@Html.DisplayFor(modelItem => item.fPlayStart)" data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)" data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"><i class="fa fa-chevron-right"></i> @Html.DisplayFor(modelItem => item.fProductName)</h3>
+            <div class="fold">
+
+                <div class="fold-container">
+                    <div class="container">
+                        <div class="container playerPanel">
+                            <button class="btn btn-info updatetime">更新試聽時間</button>
+                            <hr>
+                            <h5>原始檔案</h5>
+                            <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                            <div class="py-2 originalPanel">
+
+                                <audio class="originalAudio"></audio>
+                                <span class="nowTime">00:00</span>
+                                <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                <span class="totalSetTime">00:00</span>
+                                <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                <div class="vbtn opause"><img src="~/Content/pause.png"></div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+                            <input type="hidden" class="start" value="00:00.00" disabled="false">
+                            <br>
+                            <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+                            <input type="hidden" class="end" value="00:00.00" disabled="false">
+                            <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                            <div id="slider-range" class="slider"></div>
+
+                            <h5>試聽檔案</h5>
+                            <p>在此確認擷取的範圍</p>
+                            <div class="py-2 demoPanel">
+                                <audio class="demoSetAudio"></audio>
+                                <span class="nowDemo">00:00</span>
+                                <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                <span class="totalDemo">00:00</span>
+                                <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                            </div>
+                            <hr>
+                        </div>
+
+                        @Html.ActionLink("刪除", "DelteSong", new { amid = item.fProductID }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
+                        @Html.ActionLink("編輯", "EditSong", new { amid = item.fProductID }, new { @class = "btn btn-info", onclick = "return confirm('確定要編輯嗎?')" })
+                        @*@Html.ActionLink("更新試聽時間", " updateSongTryLimit2", new { amid = item.fProductID,start = item.fProductID }, new { @class = "btn btn-danger" })*@
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+@*<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>*@
+<script>
+
+
+        //撥放器開始
+        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+        var demoSetStart;
+        var demoSetEnd;
+
+        //新增
+        var m_soid;
+        var oplaying = false;
+        var dplaying = false;
+        var fileName;
+
+        $(".opause").css("display", "none");
+        $(".dpause").css("display", "none");
+        var music = $(".originalAudio")[0];
+        music.volume = 0.6;
+        var demoSetMusic = $(".demoSetAudio")[0];
+        demoSetMusic.volume = 0.6;
+
+        //讀取檔案，一次只能讀取一個
+        $("#upload").on("change", function () {
+            let file = document.getElementById("upload").files[0];
+            if (file.type != "audio/mp3") {
+                file = null;
+            }
+
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                music.src = e.target.result;
+                demoSetMusic.src = e.target.result;
+            }
+        });
+
+        //讀取音樂時會進行初始化
+        $(".originalAudio").on("durationchange", function () {
+            let totalSetTime = parseInt(music.duration);
+            let demoTotal = demoSetEnd - demoSetStart;
+            console.log(demoTotal);
+            console.log(totalSetTime);
+            $(".originalSlider").prop("max", totalSetTime);
+            //       $(".demoSlider").prop("max",totalSetTime);
+            $(".demoSlider").prop("max", demoTotal);
+            $(".totalSetTime").text(getTimeText(totalSetTime));
+            //         $(".totalDemo").text(getTimeText(totalSetTime));
+            $(".totalDemo").text(getTimeText(demoTotal));
+
+            //同時初始化滑動條
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: `${music.duration}`,
+                step: 0.01,
+                values: [0, music.duration],
+                slide: function () {
+                    demoSetStart = $("#slider-range").slider("values", 0)
+                    setTryStart();
+                    demoSetEnd = $("#slider-range").slider("values", 1)
+                    setTryEnd();
+                }
+            });
+            console.log(demoSetStart);
+            console.log(demoSetEnd);
+            $(".start").val(demoSetStart);
+            $(".end").val(demoSetEnd);
+            setTryStart();
+            setTryEnd();
+        });
+
+        //播放器的timer
+        $(".originalAudio").on("timeupdate", function () {
+            $(".originalSlider").prop("value", music.currentTime);
+            let now = parseInt(music.currentTime);
+            $(".nowTime").text(getTimeText(now));
+        });
+        $(".demoSetAudio").on("timeupdate", function () {
+            $(".demoSlider").prop("value", demoSetMusic.currentTime);
+            let now = parseInt(demoSetMusic.currentTime);
+            $(".nowDemo").text(getTimeText(now));
+            if (demoSetMusic.currentTime > $(".demoSlider").attr("max")) {
+                demoSetMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none");
+                demoSetMusic.currentTime = demoSetStart;
+            }
+            //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
+            if (demoSetMusic.currentTime < demoSetStart + 3) {
+                demoSetMusic.volume = (demoSetMusic.currentTime - demoSetStart) * 0.2;
+            }
+            //試聽淡出效果
+            else if (demoSetMusic.currentTime + 4 > demoSetEnd) {
+                demoSetMusic.volume = (demoSetEnd - demoSetMusic.currentTime) * 0.1;
+            }
+            else {
+                demoSetMusic.volume = 0.6;
+            }
+        });
+
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            if ($(this).prop("className") == "vbtn oplay") {
+                music.play();
+                demoSetMusic.pause();
+                oplaying = true;
+                dplaying = false;
+                $(".oplay").css("display", "none");
+                $(".opause").css("display", "inline")
+                $(".dplay").css("display", "inline")
+                $(".dpause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dplay") {
+                demoSetMusic.play();
+                music.pause();
+                dplaying = true;
+                oplaying = false;
+                $(".dplay").css("display", "none");
+                $(".dpause").css("display", "inline")
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn opause") {
+                music.pause();
+                oplaying = false;
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoSetMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+            }
+        })
+
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        $(".originalSlider").on('input', function () {
+            music.pause();
+            $(this).trigger("change");
+        })
+        $(".demoSlider").on('input', function () {
+            demoSetMusic.pause();
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $(".originalSlider").on("change", function () {
+            music.currentTime = this.value;
+        });
+        $(".demoSlider").on("change", function () {
+            demoSetMusic.currentTime = this.value;
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $(".originalSlider").on("mouseup", function () {
+            if (oplaying)
+                music.play();
+        });
+        $(".demoSlider").on("mouseup", function () {
+            if (dplaying)
+                demoSetMusic.play();
+        });
+
+        //製作試聽用
+        //按鍵設置試聽開頭與結尾
+        $(".setStart").on("click", function () {
+            demoSetStart = music.currentTime;
+            setTryStart();
+        });
+        $(".setEnd").on("click", function () {
+            demoSetEnd = music.currentTime;
+            setTryEnd();
+        });
+
+        //取得音樂時間文字的方法(第二個有給到小數後兩位)
+        function getTimeText(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = parseInt(num % 60 % 10);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+        function getTimeText2(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = (num % 60 % 10).toFixed(2);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+
+        //設定範圍初始值與結尾值的方法
+        function setTryStart() {
+            $(".start").val(demoSetStart);
+            if (demoSetStart > demoSetMusic.currentTime) {
+                demoSetMusic.currentTime = demoSetStart;
+                $(".demoSlider").attr("value", `${demoSetStart}`);
+            }
+            $(".demoSlider").attr("min", `${demoSetStart}`);
+
+        }
+        function setTryEnd() {
+            $(".end").val(demoSetEnd);
+            $(".totalDemo").text(getTimeText(demoSetEnd));
+            if (demoSetEnd < demoSetMusic.currentTime) {
+                demoSetMusic.currentTime = demoSetEnd;
+                $(".demoSlider").attr("value", `${demoSetEnd}`);
+            }
+            $(".demoSlider").attr("max", `${demoSetEnd}`);
+        }
+
+
+        //撥放器結束
+        //摺疊樣式開始
+        $(function () {
+            $('h3').click(function () {
+                if ($(this).next('.fold').hasClass('o') == true) {
+                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $(this).next('.fold').removeClass('o').slideUp();
+                }
+                else {
+                    $('h3').find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $('h3').next('.fold').removeClass('o').slideUp();
+                    music.src = $(this).data('playurl');
+                    demoSetMusic.src = $(this).data('playurl');
+                    //                    demoSetStart = $(".start").val();
+                    //                    demoSetEnd = $(".end").val();
+                    demoSetStart = $(this).data('start');
+                    demoSetEnd = $(this).data('end');
+                    m_soid = $(this).data('soid');
+                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                    $(this).next('.fold').addClass('o').slideDown();
+                }
+            });
+
+        });
+        //摺疊樣式結束
+
+           $(function () {
+           $('.updatetime').click(function () {
+               console.log(demoSetStart);
+                                       console.log($(this).data('start'));
+               $(this).closest('.fold-title').data('end', demoSetEnd);
+               $(this).parents('.fold-title').data('start', '123');
+               console.log($(this).parents('.fold-title').data('start'));
+
+            $.ajax({
+                type: "Post",
+                url: `./updateSongTryLimit?amid=${m_soid}&start=${demoSetStart}&end=${demoSetEnd}`,
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //                      var jo = JSON.parse(data);
+                    //                        alert("123");
+
+                },
+                failure: function (errMsg) {
+                    //                       alert("fail");
+                }
+            })
+                                location.href = "./AlbumInfo?amid="+@Session["albumid"].ToString();
+
+                                });
+           });
+
+
+</script>
+
+<title>元素内容拖拽</title>
+<link rel="stylesheet" href="@Url.Content("~/Content/reset.css")" >
+<link rel="stylesheet" href="@Url.Content("~/Content/sweet-alert.css")">
+<link rel="stylesheet" href="@Url.Content("~/Content/select.css")">
+<h2 style="font-size: 18px">请将右边名字拖入到左侧对应输入框中</h2>
+<div class="select-wrapper">
+    <div class="div-group">
+        <div class="width-53 clearfix">
+            <div class="form-content pink-border-color border-2px clearfix" data-bs="lead" id="leading">
+                <div class="form-left">
+                    <div class="form-title pink-bg-color">部门负责人</div>
+                </div>
+                <div class="form-right">
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span blue-bg"></span>
+                            100 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">2</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span qi-bg"></span>
+                            95 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">5</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span green-bg"></span>
+                            90 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span yellow-bg"></span>
+                            90以下 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="width-47 clearfix">
+            <div class="people-list pink-border-color border-2px ">
+                <ul class="list-wrapper clearfix" id="leader-wrapper">
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="div-group">
+        <div class="width-53 clearfix">
+            <div class="form-content qblue-border-color border-2px clearfix" data-bs="own" id="owner">
+                <div class="form-left">
+                    <div class="form-title qblue-bg-color">本部门人员</div>
+                </div>
+                <div class="form-right">
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span blue-bg"></span>
+                            100 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">2</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span qi-bg"></span>
+                            95 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">5</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span green-bg"></span>
+                            90 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span yellow-bg"></span>
+                            90以下 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="width-47 clearfix">
+            <div class="people-list qblue-border-color border-2px ">
+                <ul class="list-wrapper clearfix" id="owner-wrapper">
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="div-group">
+        <div class="width-53 clearfix">
+            <div class="form-content qyellow-border-color border-2px clearfix" data-bs="other" id="other">
+                <div class="form-left" style="margin-top: -70px">
+                    <div class="form-title qyellow-bg-color">其他部门人员</div>
+                </div>
+                <div class="form-right">
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span blue-bg"></span>
+                            100 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">2</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span qi-bg"></span>
+                            95 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz num-xz">
+                            <span class="numSpan">0</span>/<span class="totalNum">5</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper clearfix">
+                        <div class="score-f">
+                            <span class="score-span green-bg"></span>
+                            90 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                    <div class="score-wrapper">
+                        <div class="score-f">
+                            <span class="score-span yellow-bg"></span>
+                            90以下 :
+                        </div>
+                        <div class="top-droppable pink-border-color people-group clearfix">
+
+                        </div>
+                        <div class="score-xz">
+                            <span class="numSpan">0</span>/<span>不限</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="width-47 clearfix">
+            <div class="people-list qyellow-border-color border-2px ">
+                <ul class="list-wrapper clearfix" id="other-wrapper">
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="@Url.Content("~/Scripts/jquery.top-droppable.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts//sweet-alert.min.js")" type="text/javascript"></script>
+
+<script>
+    $(function () {
+
+        changeData(10, $("#leader-wrapper"), 'lead', '张三');
+        changeData(21, $("#owner-wrapper"), 'own', '李四');
+        changeData(31, $("#other-wrapper"), 'other', '王二麻子');
+        // 放在加载人员的函数里
+        changeHeight();
+        $(".list-wrapper>li").draggable({
+            revert: true
+        });
+        // 拖拽追加事件
+        $(".top-droppable").topDroppable({
+            drop: function (e, ui) {
+                var parentNode = $(this).parents(".form-content");
+                var parentNextNode = $(this).parents(".width-53").next().find(".people-list");
+                var jScore = Number($(this).next("div").find(".numSpan").text());
+                var totalScore = Number($(this).next("div").find(".totalNum").text());
+                if ($(ui.draggable[0]).attr("data-bs") == parentNode.attr("data-bs")) {
+                    if ($(this).next(".score-xz").hasClass("num-xz")) {
+                        if ((jScore) < totalScore) {
+                            $(this).next("div").find(".numSpan").html(jScore + 1)
+                        } else {
+                            alert("超出可选人数上限");
+                            return
+                        }
+                    } else {
+                        $(this).next("div").find(".numSpan").html(jScore + 1)
+                    }
+                    $(this).parents(".form-content").height("auto");
+                    $(this).parents(".width-53").next().find(".people-list").height("auto");
+                    $(this).append("<div class='" + $(ui.draggable[0]).attr('id') + "'>" + $(ui.draggable[0]).text() + "<span class='del'></span></div>");
+                    $(ui.draggable[0]).hide();
+                    changeHeight()
+                } else {
+                    alert("不可越界")
+                }
+            }
+        }).droppable({
+            tolerance: "pointer"
+        });
+        $(".score-wrapper").on("click", ".del", function () {
+            var parentNode = $(this).parents(".form-content");
+            var parentNextNode = $(this).parents(".width-53").next().find(".people-list");
+            var jScore = Number($(this).parents(".score-wrapper").find(".score-xz").find(".numSpan").text());
+            var totalScore = Number($(this).parents(".score-wrapper").find(".score-xz").find(".totalNum").text());
+            $("#" + $(this).parent().attr("class")).show();
+            if (jScore > 0) {
+                $(this).parents(".score-wrapper").find(".score-xz").find(".numSpan").html(jScore - 1)
+            }
+            $(this).parent().remove();
+            if (parentNextNode.height() > parentNode.height()) {
+                parentNode.height(parentNextNode.height())
+            }
+        })
+        $(window).resize(function () {
+            changeHeight()
+        })
+    });
+    function changeData(num, parent, bmName, name) {
+        var leadHtml = '';
+        for (var i = 0; i < num; i++) {
+            leadHtml += '<li id="' + bmName + i + '" data-bs="' + bmName + '">' +
+                '<span class="name">' + name + i + '</span>' +
+                '<span class="infor"></span>' +
+                '</li>'
+        }
+        $(parent).html(leadHtml);
+    }
+    // 左右高度相等函数
+    function changeHeight() {
+        var divGroup = $(".div-group");
+        for (var i = 0; i < divGroup.length; i++) {
+            var parentNode = $(divGroup[i]).find(".form-content");
+            var parentNextNode = $(divGroup[i]).find(".people-list");
+            parentNode.height("auto");
+            parentNextNode.height("auto");
+            if (parentNode.height() < parentNextNode.height()) {
+                parentNode.height(parentNextNode.height())
+            } else {
+                parentNextNode.height(parentNode.height())
+            }
+        }
+    }
+</script>

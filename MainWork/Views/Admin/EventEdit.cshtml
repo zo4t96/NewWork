@@ -271,8 +271,7 @@
 
         //讀圖片檔上傳預覽
         $(".upload").change(function (e) {
-            file = this.files[0];
-            f = e.target.files[0];
+            let file = this.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function (e) {

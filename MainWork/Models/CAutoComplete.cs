@@ -28,12 +28,12 @@ namespace MainWork.Models
         public List<string> searchSiger(string term)
         {
             var items = db.tProducts.Select(p => p);
-            var test = items.Where(p => p.fArtist.StartsWith(term));
+            var test = items.Where(p => p.fSinger.StartsWith(term));
             foreach (var t in test)
             {
-                if (!result.Contains(t.fArtist))
+                if (!result.Contains(t.fSinger))
                 {
-                    result.Add(t.fArtist);
+                    result.Add(t.fSinger);
                 }
             }
             result = result.Take(10).ToList();

@@ -1,0 +1,961 @@
+﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
+
+@{
+    Layout = null;
+    var AlbInfo = ViewBag.AlbInfo;
+
+    var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Index/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+    }
+    tProduct tP = new tProduct();
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            position: fixed;
+            width: 100%;
+            height: 70px;
+            background-color: #0b0b0b;
+            z-index: 10;
+        }
+
+        .header-logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 50px;
+            width: 180px;
+            padding-left: 40px;
+            padding-top: 3px;
+            font-size: 25px;
+            background: #0b0b0b;
+        }
+
+        .header-logo-text {
+            color: white;
+        }
+
+        .header-button {
+            position: absolute;
+            top: 15px;
+            right: 16px;
+        }
+
+        #container {
+            position: relative;
+            top: 70px;
+            left: 0; /*將子元素的定位到具體的參照對象*/
+            width: 100%;
+        }
+
+        .sidebox {
+            position: fixed;
+            top: 70;
+            left: 0; /*使元素靠左*/
+            margin-left: 70px;
+            margin-top: 30px;
+            background-color: #040404;
+            color: white;
+        }
+
+        .side-li-home-img {
+            list-style-image: url(image/1-mini.jpg);
+        }
+
+        .side-li-serach-img {
+            list-style-image: url(image/2-mini.jpg);
+        }
+
+        .side-li-mymusiclibiary-img {
+            list-style-image: url(image/3-mini.jpg);
+        }
+
+        .mainbox {
+            width: 100%;
+            height: calc(100%-70px);
+            min-height: 1520px;
+            border-left: 200px solid #040404; /*設置右邊框寬度為XXXpx像素，同等於sidebox的寬度*/
+            background-color: #121212;
+        }
+
+        .albumname {
+            width: 200px;
+            height: 45px;
+            overflow: hidden; /*超出範圍的部分隱藏*/
+            text-overflow: ellipsis; /*出現省略號*/
+            white-space: nowrap;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 130px;
+            background-color: #282828;
+            color: white;
+        }
+        /*舊Player開始*/
+        * {
+            font-family: "微軟正黑體";
+        }
+
+        .originalPanel,
+        .demoPanel {
+            position: relative;
+            width: 600px; /*此行修改過*/
+            height: 50px;
+            /*background: #5c616e;*/ /*此行拿掉過*/
+            margin: 10px;
+            padding: 10px;
+        }
+
+            .demoPanel:hover { /*此class新增*/
+                background-color: darkgray;
+            }
+
+        .demoSlider,
+        .originalSlider {
+            -webkit-appearance: none;
+            display: inline-block;
+            border-radius: 50px;
+            width: 70%;
+            height: 5px;
+            outline: none;
+            margin: 10px;
+        }
+
+            .slider-range::-webkit-slider-thumb,
+            .demoSlider::-webkit-slider-thumb,
+            .originalSlider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                position: relative;
+                width: 10px;
+                height: 10px;
+                background: rgb(201, 201, 201);
+                border-radius: 50%;
+                transition: 0.2s;
+            }
+
+                .demoSlider::-webkit-slider-thumb:hover,
+                .originalSlider::-webkit-slider-thumb:hover {
+                    cursor: pointer;
+                    width: 14px;
+                    height: 14px;
+                }
+
+        .demoSlider,
+        .originalSlider,
+        .vbtn {
+            cursor: pointer;
+        }
+
+        .vbtn {
+            display: inline;
+        }
+
+            .vbtn img {
+                width: 20px;
+                height: 15px;
+                filter: invert();
+            }
+
+        span {
+            color: white;
+        }
+
+        .btn {
+            margin: 5px;
+        }
+
+        p {
+            font-size: 12px;
+            font-style: italic;
+            color: gray;
+            margin: 5px;
+        }
+
+        .slider {
+            margin: 20px;
+            width: 500px;
+        }
+        /*舊Player結束*/
+        /*新Player開始*/
+        #playerPanel {
+            position: relative;
+            width: 100%;
+            min-width: 1200px;
+            height: 130px;
+            background: #5c616e;
+        }
+
+        #titlePanel {
+            position: absolute;
+            left: 100px;
+            width: 200px;
+            height: 100px;
+            margin: 10px;
+            background: none;
+        }
+
+        img.title {
+            width: 90px;
+            height: 90px;
+            margin: 5px 5px 0px 5px;
+        }
+
+        figure {
+            position: absolute;
+            width: 100px;
+            margin: 5px;
+            color: white;
+        }
+
+        figcaption {
+            margin: 5px;
+            text-align: center;
+        }
+
+        .Description {
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        #singer {
+            color: rgb(199, 194, 194);
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        #btnPanel {
+            position: relative;
+            top: 10px;
+            width: 50%;
+            margin: auto;
+            text-align: center;
+            background: #5c616e;
+            ;
+        }
+
+        #progressPanel {
+            position: relative;
+            width: 60%;
+            margin: 20px auto;
+            text-align: center;
+            background: #5c616e;
+        }
+
+        #volumePanel {
+            position: absolute;
+            right: 0px;
+            top: 50px;
+            background: #5c616e;
+            width: 160px;
+        }
+
+        .sound {
+            width: 30px;
+            height: 22px;
+            filter: invert();
+        }
+
+        #volumeBar {
+            -webkit-appearance: none;
+            border-radius: 50px;
+            width: 100px;
+            height: 5px;
+            outline: none;
+        }
+
+            #volumeBar:hover,
+            #progress:hover,
+            .sound:hover {
+                cursor: pointer;
+            }
+
+        #progress {
+            -webkit-appearance: none;
+            border-radius: 50px;
+            top: 50px;
+            width: 80%;
+            height: 5px;
+            /*下面這個不關掉的話選取進度條時會出現藍框*/
+            outline: none;
+            margin: auto;
+            transition: 0.2s;
+        }
+
+        input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 11px;
+            height: 11px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        input::-webkit-slider-runnable-track {
+            transition: 0.5s;
+        }
+
+        input::-webkit-slider-thumb:hover {
+            width: 15px;
+            height: 15px;
+        }
+
+        .btn:hover {
+            background: skyblue;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            background: silver;
+        }
+
+        .btn img {
+            width: 40px;
+            height: 30px;
+            margin: 10px;
+            filter: invert();
+        }
+        /*新Player結束*/
+        /*商品box開始*/
+        .productitem {
+            float: left;
+            color: white;
+            margin-left: 10px;
+            margin-bottom: 0.5%;
+        }
+
+            .productitem:hover {
+                background-color: darkgray;
+            }
+
+        .productitemhy:link {
+            color: white;
+            text-decoration: none;
+            font-family: 微軟正黑體;
+        }
+
+        .productitemhy:visited {
+            color: white;
+        }
+
+        .headtitle {
+            color: white;
+            margin-left: 20px;
+            font-family: 微軟正黑體;
+        }
+        /*商品box結束*/
+        /*albuminfo開始*/
+        /*專輯圖/介紹開始*/
+        .albumset {
+            display: inline-block;
+            margin-left: 120px;
+            margin-top: 30px;
+            width: 20%;
+        }
+        /*專輯圖/介紹*/
+        /*單曲列表開始*/
+        .albumtext {
+            text-align: center;
+            color: white;
+            width: 97%;
+            font-family: 微軟正黑體;
+        }
+        /*單曲列表結束*/
+        /*albuminfo結束*/
+        /*MyAlbumList開始*/
+        /*摺疊樣式開始*/
+        .fold-title {
+            background-color: #f3f3f3;
+            padding: 10px;
+            cursor: pointer;
+            color: #525252;
+            margin-bottom: 0;
+        }
+
+        .fold {
+            display: none;
+            line-height: 17pt;
+        }
+
+        .fold-container {
+            padding: 10px 10px 10px 30px;
+            border: solid #f3f3f3 2px;
+        }
+        /*摺疊樣式結束*/
+        /*MyAlbumList結束*/
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">
+            <a href="#"><img src="image/1-mini.jpg" alt=""></a>
+            <button class="navbar-toggler header-logo-text" type="button">LOGO</button>
+        </div>
+        <div class="header-button">
+            <button type="button">註冊</button>
+            <button type="button">登入</button>
+        </div>
+    </div>
+    <div id="container">
+
+        <div class="sidebox">
+            <ul>
+                <li class="side-li-home-img">@Html.ActionLink("首頁", "Index", null, new { @class = "side-li-home-img" })</li>
+                <li class="side-li-serach-img">搜尋</li>
+                <li class="side-li-mymusiclibiary-img">@Html.ActionLink("back", "MyAlbumList", new { account = Session[CDictionary.SK_ACCOUNT].ToString() }, new { @class = "side-li-home-img" })</li>
+                <li class="side-li-mymusiclibiary-img">@Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })</li>
+            </ul>
+        </div>
+
+        <div class="mainbox">
+            <div class="albumset">
+                <img src="~/CoverFiles/@AlbInfo.fCoverPath" width="320" height="320" /><br />
+                <h2 class="albumtext"><b>@AlbInfo.fAlbumName</b></h2>
+                <h3 class="albumtext">@AlbInfo.fMaker </h3>
+                <h3 class="albumtext">共有@(Model.Count()) 首</h3>
+            </div>
+
+            <div style="display: inline-block;vertical-align:top;">
+                <div class="container" style="margin-left:30px">
+
+                    <h3 class="fold-title" data-start="0" data-end="0"><i class="fa fa-chevron-right"></i> 單曲上傳</h3>
+                    <div class="fold">
+                        <div class="fold-container">
+                            <div class="container" style="color:white">
+                                @using (Html.BeginForm("AlbumInfo", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-horizontal">
+                                        <h4>tAlbum</h4>
+                                        <hr />
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fProductName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fProductName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fArtist, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fArtist, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fArtist, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fComposer, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fComposer, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fArranger, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fArranger, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fArranger, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fLyricist, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fLyricist, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fLyricist, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fSIPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fSIPrice, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+
+
+                                                <div class="container playerPanel">
+                                                    <input type="file" id="upload" name="tP.fRealFile" />
+                                                    <hr>
+                                                    <h5>原始檔案</h5>
+                                                    <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                                                    <div class="py-2 originalPanel">
+
+                                                        <audio class="originalAudio"></audio>
+                                                        <span class="nowTime">00:00</span>
+                                                        <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                                        <span class="totalTime">00:00</span>
+                                                        <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                                        <div class="vbtn opause"><img src="~/Content/pause.png"></div>
+                                                    </div>
+
+                                                    <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+                                                    <input type="text" name="tP.fPlays" class="start" value="00:00.00" disabled="false">
+                                                    <br>
+                                                    <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+                                                    <input type="text" name="tP.fPlaye" class="end" value="00:00.00" disabled="false">
+                                                    <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                                                    <div id="slider-range" class="slider"></div>
+
+                                                    <h5>試聽檔案</h5>
+                                                    <p>在此確認擷取的範圍</p>
+                                                    <div class="py-2 demoPanel">
+                                                        <audio class="demoAudio"></audio>
+                                                        <span class="nowDemo">00:00</span>
+                                                        <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                                        <span class="totalDemo">00:00</span>
+                                                        <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                                        <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fNation, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fNation, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fNation, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => tP.fKind, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => tP.fKind, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => tP.fKind, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <input type="submit" value="Create" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @*for end*@
+                            </div>
+                        </div>
+                    </div>
+
+                    @foreach (var item in Model)
+                    {
+                        <h3 class="fold-title" data-soid="@item.fProductID" data-start="@Html.DisplayFor(modelItem => item.fPlayStart)" data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)" data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"><i class="fa fa-chevron-right"></i> @Html.DisplayFor(modelItem => item.fProductName)</h3>
+                        <div class="fold">
+
+                            <div class="fold-container">
+                                <div class="container">
+                                    <div class="container playerPanel">
+                                        <button class="btn btn-info updatetime">更新試聽時間</button>
+                                        <hr>
+                                        <h5>原始檔案</h5>
+                                        <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                                        <div class="py-2 originalPanel">
+
+                                            <audio class="originalAudio"></audio>
+                                            <span class="nowTime">00:00</span>
+                                            <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalTime">00:00</span>
+                                            <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                            <div class="vbtn opause"><img src="~/Content/pause.png"></div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+                                        <input type="text" class="start" value="00:00.00" disabled="false">
+                                        <br>
+                                        <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+                                        <input type="text" class="end" value="00:00.00" disabled="false">
+                                        <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                                        <div id="slider-range" class="slider"></div>
+
+                                        <h5>試聽檔案</h5>
+                                        <p>在此確認擷取的範圍</p>
+                                        <div class="py-2 demoPanel">
+                                            <audio class="demoAudio"></audio>
+                                            <span class="nowDemo">00:00</span>
+                                            <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalDemo">00:00</span>
+                                            <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                            <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    @Html.ActionLink("刪除", "DelteSong", new { amid = item.fProductID }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
+                                    @Html.ActionLink("編輯", "EditSong", new { amid = item.fProductID }, new { @class = "btn btn-info", onclick = "return confirm('確定要編輯嗎?')" })
+                                    @*@Html.ActionLink("更新試聽時間", " updateSongTryLimit2", new { amid = item.fProductID,start = item.fProductID }, new { @class = "btn btn-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+
+        <!-- 播放器介面div -->
+        <div id="playerPanel">
+
+            <!-- 封面與歌名div -->
+            <figure>
+                <img src="" alt="" class="titleimg">
+                <figcaption class="Description title"></figcaption>
+            </figure>
+            <div id="titlePanel">
+                <span id="Descriptiontwo" class="Description"></span><br>
+                <span id="singer"></span>
+            </div>
+
+
+            <!-- 基本按鍵div -->
+            <div id="btnPanel">
+                <div id="random" class="btn"><img src="~/Content/random.png"></div>
+                <div id="prev" class="btn"><img src="~/Content/prev.png"></div>
+                <div id="play" class="btn"><img src="~/Content/play.png"></div>
+                <div id="pause" class="btn"><img src="~/Content/pause.png"></div>
+                <div id="next" class="btn"><img src="~/Content/next.png"></div>
+                <div id="replay" class="btn"><img src="~/Content/replay.png"></div>
+            </div>
+
+            <!-- 進度條div -->
+            <div id="progressPanel">
+                <span id="nowTime">00:00</span>
+                <input id="progress" class="demoSlider" type="range" min="0" max="100" step="0.01" value="0">
+                <span id="totalTime">00:00</span>
+            </div>
+
+            <!-- 音量條div -->
+            <div id="volumePanel">
+                <img src="~/Content/sound.png" data-sound="volumeImg" id="volumeImg" class="sound">
+                <img src="~/Content/mute.png" data-sound="muteImg" id="muteImg" class="sound">
+                <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.5">
+            </div>
+
+            <!--播放器本體-->
+            @*<audio id="player" src="mp3/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>*@
+            <audio class="originalAudio"></audio>
+            <audio id="player" class="demoAudio"></audio>
+        </div>
+
+
+    </div>
+    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>*@
+    <script>
+
+        //撥放器開始
+        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+        var demoStart;
+        var demoEnd;
+
+        //新增
+        var m_soid;
+        var oplaying = false;
+        var dplaying = false;
+        var fileName;
+
+        $(".opause").css("display", "none");
+        $(".dpause").css("display", "none");
+        var music = $(".originalAudio")[0];
+        music.volume = 0.6;
+        var demoMusic = $(".demoAudio")[0];
+        demoMusic.volume = 0.6;
+
+        //讀取檔案，一次只能讀取一個
+        $("#upload").on("change", function () {
+            let file = document.getElementById("upload").files[0];
+            if (file.type != "audio/mp3") {
+                file = null;
+            }
+
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                music.src = e.target.result;
+                demoMusic.src = e.target.result;
+            }
+        });
+
+        //讀取音樂時會進行初始化
+        $(".originalAudio").on("durationchange", function () {
+            let totalTime = parseInt(music.duration);
+            let demoTotal = demoEnd - demoStart;
+            console.log(demoTotal);
+            console.log(totalTime);
+            $(".originalSlider").prop("max", totalTime);
+            //       $(".demoSlider").prop("max",totalTime);
+            $(".demoSlider").prop("max", demoTotal);
+            $(".totalTime").text(getTimeText(totalTime));
+            //         $(".totalDemo").text(getTimeText(totalTime));
+            $(".totalDemo").text(getTimeText(demoTotal));
+
+            //同時初始化滑動條
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: `${music.duration}`,
+                step: 0.01,
+                values: [0, music.duration],
+                slide: function () {
+                    demoStart = $("#slider-range").slider("values", 0)
+                    setStart();
+                    demoEnd = $("#slider-range").slider("values", 1)
+                    setEnd();
+                }
+            });
+            console.log(demoStart);
+            console.log(demoEnd);
+            $(".start").val(demoStart);
+            $(".end").val(demoEnd);
+            setStart();
+            setEnd();
+        });
+
+        //播放器的timer
+        $(".originalAudio").on("timeupdate", function () {
+            $(".originalSlider").prop("value", music.currentTime);
+            let now = parseInt(music.currentTime);
+            $(".nowTime").text(getTimeText(now));
+        });
+        $(".demoAudio").on("timeupdate", function () {
+            $(".demoSlider").prop("value", demoMusic.currentTime);
+            let now = parseInt(demoMusic.currentTime);
+            $(".nowDemo").text(getTimeText(now));
+            if (demoMusic.currentTime > $(".demoSlider").attr("max")) {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+                demoMusic.currentTime = demoStart;
+            }
+            //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
+            if (demoMusic.currentTime < demoStart + 3) {
+                demoMusic.volume = (demoMusic.currentTime - demoStart) * 0.2;
+            }
+            //試聽淡出效果
+            else if (demoMusic.currentTime + 4 > demoEnd) {
+                demoMusic.volume = (demoEnd - demoMusic.currentTime) * 0.1;
+            }
+            else {
+                demoMusic.volume = 0.6;
+            }
+        });
+
+        //音樂播放暫停鍵
+        $(".vbtn").on("click", function () {
+            console.log($(this).prop("class"));
+            if ($(this).prop("className") == "vbtn oplay") {
+                music.play();
+                demoMusic.pause();
+                oplaying = true;
+                dplaying = false;
+                $(".oplay").css("display", "none");
+                $(".opause").css("display", "inline")
+                $(".dplay").css("display", "inline")
+                $(".dpause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dplay") {
+                demoMusic.play();
+                music.pause();
+                dplaying = true;
+                oplaying = false;
+                $(".dplay").css("display", "none");
+                $(".dpause").css("display", "inline")
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn opause") {
+                music.pause();
+                oplaying = false;
+                $(".oplay").css("display", "inline");
+                $(".opause").css("display", "none")
+            }
+            else if ($(this).prop("class") == "vbtn dpause") {
+                demoMusic.pause();
+                dplaying = false;
+                $(".dplay").css("display", "inline");
+                $(".dpause").css("display", "none")
+            }
+        })
+
+        //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+        $(".originalSlider").on('input', function () {
+            music.pause();
+            $(this).trigger("change");
+        })
+        $(".demoSlider").on('input', function () {
+            demoMusic.pause();
+            $(this).trigger("change");
+        })
+        //音樂進度條改變
+        $(".originalSlider").on("change", function () {
+            music.currentTime = this.value;
+        });
+        $(".demoSlider").on("change", function () {
+            demoMusic.currentTime = this.value;
+        });
+        //拖動進度條直到放開滑鼠才重新開始播放
+        $(".originalSlider").on("mouseup", function () {
+            if (oplaying)
+                music.play();
+        });
+        $(".demoSlider").on("mouseup", function () {
+            if (dplaying)
+                demoMusic.play();
+        });
+
+        //製作試聽用
+        //按鍵設置試聽開頭與結尾
+        $(".setStart").on("click", function () {
+            demoStart = music.currentTime;
+            setStart();
+        });
+        $(".setEnd").on("click", function () {
+            demoEnd = music.currentTime;
+            setEnd();
+        });
+
+        //取得音樂時間文字的方法(第二個有給到小數後兩位)
+        function getTimeText(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = parseInt(num % 60 % 10);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+        function getTimeText2(num) {
+            let m1 = parseInt(num / 600);
+            let m2 = parseInt(num / 60 % 10);
+            let s1 = parseInt(num % 60 / 10);
+            let s2 = (num % 60 % 10).toFixed(2);
+            return `${m1}${m2}:${s1}${s2}`;
+        }
+
+        //設定範圍初始值與結尾值的方法
+        function setStart() {
+            $(".start").val(demoStart);
+            if (demoStart > demoMusic.currentTime) {
+                demoMusic.currentTime = demoStart;
+                $(".demoSlider").attr("value", `${demoStart}`);
+            }
+            $(".demoSlider").attr("min", `${demoStart}`);
+
+        }
+        function setEnd() {
+            $(".end").val(demoEnd);
+            $(".totalDemo").text(getTimeText(demoEnd));
+            if (demoEnd < demoMusic.currentTime) {
+                demoMusic.currentTime = demoEnd;
+                $(".demoSlider").attr("value", `${demoEnd}`);
+            }
+            $(".demoSlider").attr("max", `${demoEnd}`);
+        }
+
+
+        //撥放器結束
+        //摺疊樣式開始
+        $(function () {
+            $('h3').click(function () {
+                if ($(this).next('.fold').hasClass('o') == true) {
+                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $(this).next('.fold').removeClass('o').slideUp();
+                }
+                else {
+                    $('h3').find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                    $('h3').next('.fold').removeClass('o').slideUp();
+                    music.src = $(this).data('playurl');
+                    demoMusic.src = $(this).data('playurl');
+                    //                    demoStart = $(".start").val();
+                    //                    demoEnd = $(".end").val();
+                    demoStart = $(this).data('start');
+                    demoEnd = $(this).data('end');
+                    m_soid = $(this).data('soid');
+                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                    $(this).next('.fold').addClass('o').slideDown();
+                }
+            });
+        });
+        //摺疊樣式結束
+
+           $(function () {
+           $('.updatetime').click(function () {
+               console.log(demoStart);
+                                       console.log($(this).data('start'));
+               $(this).closest('.fold-title').data('end', demoEnd);
+               $(this).parents('.fold-title').data('start', '123');
+               console.log($(this).parents('.fold-title').data('start'));
+
+            $.ajax({
+                type: "Post",
+                url: `./updateSongTryLimit?amid=${m_soid}&start=${demoStart}&end=${demoEnd}`,
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //                      var jo = JSON.parse(data);
+                    //                        alert("123");
+
+                },
+                failure: function (errMsg) {
+                    //                       alert("fail");
+                }
+            })
+                                location.href = "./AlbumInfo?amid="+@Session["albumid"].ToString();
+
+                               });
+                });
+
+    </script>
+
+    @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
+    @*<script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>*@
+</body>
+</html>

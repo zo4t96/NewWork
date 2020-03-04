@@ -24,10 +24,9 @@
     <Property Name="fStatus" Type="int" />
     <Property Name="fALPrice" Type="money" />
     <Property Name="fCoverPath" Type="nvarchar(max)" />
-    <Property Name="fPublisher" Type="nvarchar" MaxLength="50" />
     <Property Name="fKinds" Type="nvarchar(max)" />
     <Property Name="fDiscount" Type="real" />
-    <Property Name="fActivity" Type="int" />
+    <Property Name="fActivityID" Type="int" />
   </EntityType>
   <EntityType Name="tAlbumKind">
     <Key>
@@ -35,7 +34,7 @@
     </Key>
     <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="KindName" Type="nvarchar(max)" />
-    <Property Name="fColor" Type="char" MaxLength="7" />
+    <Property Name="fColor" Type="nchar" MaxLength="10" />
     <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbumType">
@@ -68,6 +67,10 @@
     <Property Name="fPicPath" Type="nvarchar(max)" />
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
+    <Property Name="fLastPlaySong" Type="int" />
+    <Property Name="fLineId" Type="int" />
+    <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fLineTimeMark" Type="datetime" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -80,6 +83,7 @@
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
     <Property Name="fRead" Type="int" />
+    <Property Name="fTitle" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tPlayLists">
     <Key>
@@ -96,42 +100,50 @@
     <Property Name="fProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="fAlbumID" Type="int" />
     <Property Name="fProductName" Type="nvarchar" MaxLength="50" />
-    <Property Name="fArtist" Type="nvarchar" MaxLength="50" />
+    <Property Name="fSinger" Type="nvarchar" MaxLength="50" />
     <Property Name="fSIPrice" Type="money" />
     <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
     <Property Name="fArranger" Type="nvarchar" MaxLength="50" />
     <Property Name="fLyricist" Type="nvarchar" MaxLength="50" />
-    <Property Name="fKind" Type="nvarchar(max)" />
-    <Property Name="fMusic" Type="varbinary(max)" />
     <Property Name="fFilePath" Type="nvarchar(max)" />
     <Property Name="fPlayStart" Type="float" />
     <Property Name="fPlayEnd" Type="float" />
     <Property Name="fStatus" Type="int" />
-    <Property Name="fDownloadCount" Type="int" />
     <Property Name="fModifiedDate" Type="nvarchar" MaxLength="50" />
-    <Property Name="fPlaybackCount" Type="int" />
   </EntityType>
   <EntityType Name="tPurchaseItem">
     <Key>
       <PropertyRef Name="fPurchaseItemID" />
+      <PropertyRef Name="fProductID" />
     </Key>
-    <Property Name="fPurchaseItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fPurchaseItemID" Type="int" Nullable="false" />
     <Property Name="fCustomer" Type="nvarchar" MaxLength="50" />
-    <Property Name="fProductID" Type="int" />
-    <Property Name="fDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="fProductID" Type="int" Nullable="false" />
+    <Property Name="fDate" Type="datetime" />
     <Property Name="fPrice" Type="money" />
     <Property Name="fQuanity" Type="int" />
+    <Property Name="fisAlbum" Type="int" />
+    <Property Name="fDiscount" Type="real" />
   </EntityType>
   <EntityType Name="tShoppingCart">
     <Key>
       <PropertyRef Name="fCartID" />
     </Key>
     <Property Name="fCartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="fProductID" Type="int" />
-    <Property Name="fQuanity" Type="int" />
     <Property Name="fCustomer" Type="nvarchar" MaxLength="50" />
-    <Property Name="fDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="fDate" Type="datetime" />
     <Property Name="fPrice" Type="money" />
+    <Property Name="fType" Type="int" />
+  </EntityType>
+  <EntityType Name="tStatistic">
+    <Key>
+      <PropertyRef Name="fId" />
+    </Key>
+    <Property Name="fId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fProductID" Type="int" />
+    <Property Name="fType" Type="int" />
+    <Property Name="fTime" Type="datetime" />
+    <Property Name="fAccount" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK_tActivity_tMember">
     <End Role="tMember" Type="Self.tMember" Multiplicity="0..1" />
@@ -153,7 +165,7 @@
         <PropertyRef Name="fId" />
       </Principal>
       <Dependent Role="tAlbum">
-        <PropertyRef Name="fActivity" />
+        <PropertyRef Name="fActivityID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -279,10 +291,22 @@
   </Association>
   <Association Name="FK_tPurchaseItem_tProducts1">
     <End Role="tProducts" Type="Self.tProducts" Multiplicity="1" />
-    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="0..1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="tProducts">
         <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tShoppingCart">
+    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="1" />
+    <End Role="tPurchaseItem" Type="Self.tPurchaseItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tShoppingCart">
+        <PropertyRef Name="fCartID" />
       </Principal>
       <Dependent Role="tPurchaseItem">
         <PropertyRef Name="fPurchaseItemID" />
@@ -301,14 +325,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_tShoppingCart_tProducts">
+  <Association Name="FK_tStatistic_tProducts">
     <End Role="tProducts" Type="Self.tProducts" Multiplicity="0..1" />
-    <End Role="tShoppingCart" Type="Self.tShoppingCart" Multiplicity="*" />
+    <End Role="tStatistic" Type="Self.tStatistic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="tProducts">
         <PropertyRef Name="fProductID" />
       </Principal>
-      <Dependent Role="tShoppingCart">
+      <Dependent Role="tStatistic">
         <PropertyRef Name="fProductID" />
       </Dependent>
     </ReferentialConstraint>
@@ -325,6 +349,7 @@
     <EntitySet Name="tProducts" EntityType="Self.tProducts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tPurchaseItem" EntityType="Self.tPurchaseItem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tShoppingCart" EntityType="Self.tShoppingCart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tStatistic" EntityType="Self.tStatistic" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_tActivity_tMember" Association="Self.FK_tActivity_tMember">
       <End Role="tMember" EntitySet="tMember" />
       <End Role="tActivity" EntitySet="tActivity" />
@@ -377,13 +402,17 @@
       <End Role="tProducts" EntitySet="tProducts" />
       <End Role="tPurchaseItem" EntitySet="tPurchaseItem" />
     </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tShoppingCart" Association="Self.FK_tPurchaseItem_tShoppingCart">
+      <End Role="tShoppingCart" EntitySet="tShoppingCart" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItem" />
+    </AssociationSet>
     <AssociationSet Name="FK_tShoppingCart_tMember" Association="Self.FK_tShoppingCart_tMember">
       <End Role="tMember" EntitySet="tMember" />
       <End Role="tShoppingCart" EntitySet="tShoppingCart" />
     </AssociationSet>
-    <AssociationSet Name="FK_tShoppingCart_tProducts" Association="Self.FK_tShoppingCart_tProducts">
+    <AssociationSet Name="FK_tStatistic_tProducts" Association="Self.FK_tStatistic_tProducts">
       <End Role="tProducts" EntitySet="tProducts" />
-      <End Role="tShoppingCart" EntitySet="tShoppingCart" />
+      <End Role="tStatistic" EntitySet="tStatistic" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

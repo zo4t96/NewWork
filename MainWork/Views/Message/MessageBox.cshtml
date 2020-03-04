@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<MainWork.tMessage>
-@using MainWork.Models;
+@using MusicPrj.Models;
 
 @{
     ViewBag.Title = "MessageBox";
@@ -20,26 +20,196 @@
     {
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
+    tMessage tMes = new tMessage();
+    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus==0).ToList();
+    tMesCopy.Reverse();
 }
-
-<h2>MessageBox</h2>
-
-<div class="list-group container py-3 px-3" >
-    @foreach (var item in Model)
-    {
-        <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1"></h5>
-                <small>@Html.DisplayFor(modelItem => item.fTime)</small>
-            </div>
-            <p class="mb-1">@Html.DisplayFor(modelItem => item.fContent)</p>
-            <small>@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
-        </a>
+<style>
+    /*Tab換頁效果*/
+    .tab_btns li {
+        display: inline-block;
     }
-</div>
 
+    .tab_container {
+        overflow: hidden; /*關鍵-控制切第2頁時第一頁畫面消失位置*/
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+        width: 100% /*控制單頁框度使其不超出瀏覽範圍*/
+    }
+
+    .tab_contents {
+        position: relative; /*關鍵-控制切頁動作*/
+        white-space: nowrap; /*關鍵-文字是否換行-控制第二頁內容*/
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+        width: 100% /*控制單頁框度使其不超出瀏覽範圍*/
+    }
+
+        .tab_contents li {
+            display: inline-block; /*關鍵-控制第二頁內容*/
+            vertical-align: top; /*關鍵-控制第一頁內容*/
+            width: 100%; /*控制單頁框度使其不超出瀏覽範圍*/
+            padding: 0 5%;
+            margin: 0 auto;
+            /*box-sizing: border-box;*/
+        }
+
+    .tab_btns li a {
+        cursor: pointer;
+    }
+
+        .tab_btns li a:hover, .active {
+            color: black;
+        }
+
+    .mailTextColor {
+        color: black;
+    }
+</style>
+<div class="container">
+    <ul class="tab_btns nav nav-tabs" style="display:inline-block">
+        @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
+        <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">收件夾</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 寄件</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">寄件備份</a></li>
+    </ul>
+</div>
+<div class="tab_container">
+    <ul class="tab_contents" id="tab_contents1">
+        <li>
+            <div class="list-group container py-3 px-3">
+                @foreach (var item in Model)
+                {
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
+                            <small class="mailTextColor">@Html.DisplayFor(modelItem => item.fTime)
+                            <span>  </span>@Html.ActionLink("刪除", "DelteMail", new { mailid = item.fMessageId }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
+                            </small>
+                        </div>
+                        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
+                        <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
+                    </div>
+                }
+            </div>
+        </li>
+        <li>
+            <div class="list-group container py-3 px-3">
+                @using (Html.BeginForm("sentMessage", "Message", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    @*增加placeholder提醒*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => tMes.fAccountTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => tMes.fAccountTo, new { htmlAttributes = new { @class = "form-control", placeholder = "輸入收件人" } })
+                            @Html.ValidationMessageFor(model => tMes.fAccountTo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*增加placeholder提醒*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => tMes.fTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => tMes.fTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "主旨" } })
+                            @Html.ValidationMessageFor(model => tMes.fTitle, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => tMes.fContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <textarea class="form-control text-box" rows="20" id="tMes_fContent" name="tMes.fContent" placeholder="輸入你想要寫的內容..."></textarea>
+                            @*@Html.EditorFor(model => tMes.fContent, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => tMes.fContent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </li>
+        <li>
+            <div class="list-group container py-3 px-3">
+                @foreach (var item in tMesCopy)
+                {
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
+                            <small class="mailTextColor">@Html.DisplayFor(modelItem => item.fTime)</small>
+                        </div>
+                        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
+                        <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
+                    </div>
+                }
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="eventNotification" hidden>
+</div>
 <script>
 
+    //Tab頁面控制
+    function tab_switch(_this) {
+        // $(".tabswitch").click(function (_this) {
+        //console.log("ccc")
+        var now_tab = $(_this).parent().index();
+        $(_this).parent().siblings().children().removeClass('active')
+        $(_this).addClass("active");
+        $(_this).parent().siblings().removeClass('on');
+        $(_this).parent().addClass('on');
+        var control_div = $(_this).data('div');
+        $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
 
+    };
+            $("#inputFormSubmit").click(function () {
+            if ($("#tMes_fAccountTo").val() != "") {
+                if ($("#tMes_fTitle").val() != "") {
+                    if ($("#tMes_fContent").val() != "") {
 
+                        var formData = new FormData($("#formInput")[0]);
+
+                        @*$.post("@Url.Action("sentMessage","Message")", formData, function (data) {
+                        $(".eventNotification").html(data);
+                        });*@
+
+                   $.ajax({
+                       url: `@Url.Action("sentMessage","Message")`,
+                       type: "POST",
+                       data: formData,
+                       cache: false,
+                       dataType: 'script',
+                       processData: false,
+                       contentType: false,
+                       success: function (data) {
+                           console.log(data)
+
+                            $(".eventNotification").html(data);
+                         let plink = "@Url.Action("MessageBox","Message")";
+                        $.get(plink, { ajax: true }, function (data) {
+                            $(".mainbox").html(data);
+                        });
+                       }
+                   });
+
+                    } else {
+                 alert("需填入內容");
+                    }
+                } else {
+                 alert("需填入主旨");
+                }
+            } else {
+                 alert("需填入對方帳號");
+            }
+        });
 </script>

@@ -60,7 +60,7 @@ namespace MainWork.Models
             }
             if (!string.IsNullOrEmpty(keyObj.adSinger))
             {
-                data = data.Where(p => p.product.fArtist.Contains(keyObj.adSinger));
+                data = data.Where(p => p.product.fSinger.Contains(keyObj.adSinger));
             }
             if (!string.IsNullOrEmpty(keyObj.adComposer))
             {
@@ -105,7 +105,7 @@ namespace MainWork.Models
         //尋找屬於特定活動的專輯
         public IEnumerable<tAlbum> byEvent(int eventId)
         {
-            var result = db.tAlbums.Where(a => a.fActivity == eventId);
+            var result = db.tAlbums.Where(a => a.fActivityID == eventId);
             return result;
         }
 
@@ -134,7 +134,7 @@ namespace MainWork.Models
                     var pro = new tProduct()
                     {
                         fProductName = p.fProductName,
-                        fArtist = p.fArtist,
+                        fSinger = p.fSinger,
                         fComposer = p.fComposer,
                         fSIPrice = p.fSIPrice,
                         fFilePath = p.fFilePath

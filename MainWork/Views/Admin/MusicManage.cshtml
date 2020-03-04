@@ -161,7 +161,7 @@
                                     <tr class="text-center trItemSub">
                                         <td>@count</td>
                                         <td>@music.fProductName</td>
-                                        <td>@music.fArtist</td>
+                                        <td>@music.fSinger</td>
                                         <td>@music.fComposer</td>
                                         <td>@Convert.ToInt32(music.fSIPrice)元</td>
                                         <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
@@ -259,7 +259,7 @@
                 $.each(values.musics, function (idx, music) {
                     let num = `<td>${idx + 1}</td>`;
                     let musicName = `<td>${music.fProductName}</td>`;
-                    let singer = `<td>${music.fArtist}</td>`;
+                    let singer = `<td>${music.fSinger}</td>`;
                     let composer = `<td>${music.fComposer}</td>`;
                     let siPrice = `<td>${music.fSIPrice}</td>`;
                     let musicFile = `<td><audio src="~/Music/${music.fFilePath}" controls></audio></td>`;

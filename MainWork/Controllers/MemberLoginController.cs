@@ -33,11 +33,13 @@ namespace prjSpotifyProject.Controllers
                 return View("Search", "Kind");
             if (data != null)
             {
-                tMember cust = (new tMemberFactory()).getByAccount(data.txtAccount);
+                string account = data.txtAccount;
+                tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
                 if (cust != null)
                 {
                     if (cust.fPassword.Equals(data.txtPassword))
                     {
+                        Session[CDictionary.SK_ACCOUNT] = account;
                         Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
                         return RedirectToAction("Main","Homepage");
                     }
@@ -65,6 +67,7 @@ namespace prjSpotifyProject.Controllers
         public ActionResult Logout()
         {
             Session[CDictionary.SK_CURRENT_LOGINED_USER] = null;
+            Session[CDictionary.SK_ACCOUNT] = null;
             return RedirectToAction("Main", "Homepage");
         }
     }

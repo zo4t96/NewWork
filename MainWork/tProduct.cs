@@ -11,43 +11,37 @@ namespace MainWork
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
-
+    
     public partial class tProduct
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tProduct()
         {
             this.tPlayLists = new HashSet<tPlayList>();
-            this.tShoppingCarts = new HashSet<tShoppingCart>();
+            this.tPurchaseItems = new HashSet<tPurchaseItem>();
+            this.tStatistics = new HashSet<tStatistic>();
         }
     
         public int fProductID { get; set; }
         public Nullable<int> fAlbumID { get; set; }
         public string fProductName { get; set; }
-        public string fArtist { get; set; }
+        public string fSinger { get; set; }
         public Nullable<decimal> fSIPrice { get; set; }
         public string fComposer { get; set; }
         public string fArranger { get; set; }
         public string fLyricist { get; set; }
-        public string fKind { get; set; }
-        public byte[] fMusic { get; set; }
         public string fFilePath { get; set; }
         public Nullable<double> fPlayStart { get; set; }
         public Nullable<double> fPlayEnd { get; set; }
         public Nullable<int> fStatus { get; set; }
-        public Nullable<int> fDownloadCount { get; set; }
         public string fModifiedDate { get; set; }
-        public Nullable<int> fPlaybackCount { get; set; }
-        public HttpPostedFileBase fRealFile { get; set; }
-        public Nullable<double> fPlays { get; set; }
-        public Nullable<double> fPlaye{ get; set; }
-
+    
+        public virtual tAlbum tAlbum { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPlayList> tPlayLists { get; set; }
-        public virtual tPurchaseItem tPurchaseItem { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tShoppingCart> tShoppingCarts { get; set; }
-        public virtual tAlbum tAlbum { get; set; }
+        public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tStatistic> tStatistics { get; set; }
     }
 }

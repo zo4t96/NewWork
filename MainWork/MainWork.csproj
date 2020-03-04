@@ -166,6 +166,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\dragableplugin.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -198,6 +199,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\musicmetadata.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -283,6 +285,8 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\HomepageController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Controllers\tShoppingCartController.cs" />
     <Compile Include="Controllers\UploadTestController.cs" />
     <Compile Include="dbMusicStore.Context.cs">
       <AutoGen>True</AutoGen>
@@ -317,13 +321,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CAlbum.cs" />
     <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
     <Compile Include="Models\CEvent.cs" />
     <Compile Include="Models\CManagement.cs" />
     <Compile Include="Models\CMemberFactory.cs" />
+    <Compile Include="Models\CMessage.cs" />
     <Compile Include="Models\CMusic.cs" />
+    <Compile Include="Models\CPlaylist.cs" />
     <Compile Include="Models\CSearch.cs" />
+    <Compile Include="Models\tShoppingCartFram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tActivity.cs">
       <DependentUpon>dbMusicStore.tt</DependentUpon>
@@ -356,6 +364,9 @@
       <DependentUpon>dbMusicStore.tt</DependentUpon>
     </Compile>
     <Compile Include="tShoppingCart.cs">
+      <DependentUpon>dbMusicStore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tStatistic.cs">
       <DependentUpon>dbMusicStore.tt</DependentUpon>
     </Compile>
     <Compile Include="tUpload.cs">
@@ -417,7 +428,6 @@
     <Content Include="Views\Album\MyAlbumList.cshtml" />
     <Content Include="Views\Album\PlayLists.cshtml" />
     <Content Include="Views\Album\_PlayLists.cshtml" />
-    <Content Include="Views\Common\暫時不用的Login.cshtml" />
     <Content Include="Views\Common\Loginout.cshtml" />
     <Content Include="Views\Message\MessageBox.cshtml" />
     <Content Include="Views\Shared\_Layout_admin.cshtml" />
@@ -432,6 +442,18 @@
     <Content Include="Views\Search\EventResultView.cshtml" />
     <Content Include="Views\Admin\MusicReview.cshtml" />
     <Content Include="Views\Admin\MusicManage.cshtml" />
+    <Content Include="Views\Album\AlbumInfo2.cshtml" />
+    <Content Include="Views\Album\MyMusic.cshtml" />
+    <Content Include="Views\Album\test.cshtml" />
+    <Content Include="Views\Album\updateSongTryLimit.cshtml" />
+    <Content Include="Views\Album\_AIndex.cshtml" />
+    <Content Include="Views\Album\_kindReviseInterface.cshtml" />
+    <Content Include="Views\Album\_MyAlbumList.cshtml" />
+    <Content Include="Views\Album\_updateSongInterface.cshtml" />
+    <Content Include="Views\Common\Login.cshtml" />
+    <Content Include="Views\Shared\_Layout _modifiederror.cshtml" />
+    <Content Include="Views\Shared\_Layout_admin_Backup.cshtml" />
+    <Content Include="Views\tShoppingCart\ShoppingCart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

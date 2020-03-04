@@ -4,14 +4,30 @@
     Layout = null;
 }
 
-<!DOCTYPE html>
+<style>
+    .box {
+        font-family: "微軟正黑體";
+        margin: 0 auto;
+        max-width: 450px;
+        text-align: center;
+    }
+        .addBtn {
+        width: 20%;
+        padding: 5px;
+        margin: auto;
+        background-color: #1db954;
+        border-radius: 15px;
+        cursor: pointer;
+        color: white;
+        text-align: center;
+        transition: 0.4s;
+    }
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddAlbum</title>
-</head>
-<body>
+        .addBtn:hover {
+            background-color: #1dd15d;
+        }
+</style>
+<div class="box">
     @ViewBag.error
     @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -87,14 +103,17 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    @*<input type="submit" value="Create" class="btn btn-default" />*@
+                    <div class="addBtn">登入</div>
                 </div>
             </div>
         </div>
     }
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
-</body>
-</html>
+</div>
+
+<script>
+    $(".addBtn").click(function () {
+        $("form").submit();
+    })
+</script>

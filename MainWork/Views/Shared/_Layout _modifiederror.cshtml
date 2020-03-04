@@ -1,0 +1,1173 @@
+﻿@using MusicPrj.Models;
+@{ 
+
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    @* ↓主要用來讀取一些特殊icon *@
+    @*<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @*<script src="https://kit.fontawesome.com/a076d05399.js"></script>*@
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微軟正黑體";
+            color: white;
+        }
+
+        .header {
+            position: fixed;
+            width: 100%;
+            height: 70px;
+            background-color: #0b0b0b;
+            z-index: 1;
+        }
+
+        .header-logo {
+            position: relative;
+            top: 10px;
+            left: 10px;
+            width: 180px;
+            padding-left: 40px;
+            font-size: 25px;
+            background: #0b0b0b;
+        }
+
+        .header-logo-text {
+            color: white;
+        }
+
+        .header-button {
+            position: absolute;
+            top: 15px;
+            right: 16px;
+        }
+
+        #content {
+            display: flex;
+            position: relative;
+            left: 0; /*將子元素的定位到具體的參照對象*/
+            width: 100%;
+            background-color: #191919;
+        }
+
+        .sidebox {
+            position: fixed;
+            width: 200px;
+            height: 100vh;
+            background-color: #040404;
+            color: white;
+            margin-top: 70px;
+        }
+
+        .side-li-home-img {
+            /*list-style-image: url(image/1-mini.jpg);*/
+        }
+
+        .side-li-serach-img {
+            /*list-style-image: url(image/2-mini.jpg);*/
+        }
+
+        .side-li-mymusiclibiary-img {
+            /*list-style-image: url(image/3-mini.jpg);*/
+        }
+
+        .mainbox {
+            width: 100%;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            margin-top: 70px;
+            margin-bottom: 110px;
+            margin-left: 200px;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            color: white;
+            background-color: #252525;
+            box-shadow: 0 0 2em black;
+        }
+
+        /*額外更新左邊選單*/
+        li {
+            list-style-type: none;
+            margin: 5px;
+        }
+
+        a {
+            /*要加上!important才能強行刪除底線*/
+            text-decoration: none !important;
+        }
+
+        .menuItem {
+            width: 190px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.4s;
+        }
+            /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+            .menuItem:hover > span,
+            .menuItem:hover > .fa {
+                color: white;
+            }
+
+        .menuItemSelected {
+            background-color: #3a3a3a;
+        }
+
+        .menuItem .fa {
+            font-size: 20px;
+            margin: 10px 20px;
+            color: #656565;
+            transition: 0.4s;
+        }
+
+        .menuItem span {
+            display: inline-block;
+            position: relative;
+            bottom: 3px;
+            color: #656565;
+            transition: 0.4s;
+        }
+
+
+        <!-- 搜尋條style-- >
+
+        .searchBar {
+            top: -35px;
+            position: relative;
+            left: 250px;
+            margin: 15px;
+            width: 25%;
+            min-width: 200px;
+        }
+        /*不用id變不了bootstrap的文字顏色*/
+        #advancedBtn {
+            color: whitesmoke;
+        }
+
+        .advancedPanel {
+            display: none;
+            width: 530px;
+            border-radius: 10px;
+            padding: 5px 20px 20px 20px;
+            background-color: #040404;
+            background-image: linear-gradient(#474747,#040404);
+            opacity: 0;
+            transition: 0.1s;
+            box-shadow: 1px 1px 2px #818181;
+        }
+
+        .advancedItem {
+            display: inline-flex;
+            flex-wrap: wrap;
+            width: 140px;
+            margin: 10px;
+        }
+
+        .ui-menu-item-wrapper,
+        option {
+            color: black;
+        }
+
+        .advancedSelect {
+            margin: 10px;
+        }
+
+        .selectedItem,
+        .selectableItem,
+        .itemAdd {
+            display: inline-block;
+            border-radius: 5px;
+            border: 1px solid #212121;
+            padding: 5px;
+            margin: 2px 1px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .selectedItem {
+            display: none;
+        }
+
+        .itemAdd {
+            padding: 5px 10px;
+        }
+
+        .selectableItem,
+        .selectedItem,
+        .itemAdd {
+            cursor: pointer;
+        }
+
+            .itemAdd:hover {
+                background-color: rgba(6, 78, 137, 0.90)
+            }
+
+        .selectableItemPanel {
+            display: none;
+            position: absolute;
+            width: 90%;
+            min-width: 200px;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.8);
+            transition: 0.1s;
+            box-shadow: 1px 1px 2px #525252;
+        }
+
+        .adSwitch {
+            opacity: 1;
+            display: block;
+        }
+
+        .searchPanel {
+            width: 100%;
+            text-align: right;
+        }
+
+        .adSearchBtn {
+            background-image: linear-gradient(to bottom right, #22b7e8,#1347d9);
+            margin-right: 10px;
+        }
+
+
+
+        /*舊Player開始*/
+        .originalPanel,
+        .demoPanel {
+            position: relative;
+            width: 100%; /*此行修改過*/
+            height: 50px;
+            /*background: #5c616e;*/ /*此行拿掉過*/
+            margin: 10px;
+            padding: 10px;
+        }
+
+            .demoPanel:hover { /*此class新增*/
+                background-color: darkgray;
+            }
+
+        /*.demoSlider,
+        .originalSlider {
+        -webkit-appearance: none;
+        display: inline-block;
+        border-radius: 50px;
+        width: 70%;
+        height: 5px;
+        outline: none;
+        margin: 10px;
+        }
+
+        .slider-range::-webkit-slider-thumb,
+        .demoSlider::-webkit-slider-thumb,
+        .originalSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        position: relative;
+        width: 10px;
+        height: 10px;
+        background: rgb(201, 201, 201);
+        border-radius: 50%;
+        transition: 0.2s;
+        }
+
+        .demoSlider::-webkit-slider-thumb:hover,
+        .originalSlider::-webkit-slider-thumb:hover {
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        }*/
+
+        .demoSlider,
+        .originalSlider,
+        .vbtn {
+            cursor: pointer;
+        }
+
+        .vbtn {
+            display: inline;
+        }
+
+            .vbtn img {
+                width: 20px;
+                height: 15px;
+                filter: invert();
+            }
+
+        span {
+            color: white;
+        }
+
+        .btn {
+            margin: 5px;
+        }
+
+        /*p {
+        font-size: 12px;
+        font-style: italic;
+        color: gray;
+        margin: 5px;
+        }
+
+        .slider {
+        margin: 20px;
+        width: 500px;
+        }*/
+        /*舊Player結束*/
+        /*新Player開始*/
+        #playerPanel {
+            position: relative;
+            width: 100%;
+            min-width: 1200px;
+            height: 110px;
+            background: #3c3d41;
+        }
+
+        #titlePanel {
+            position: absolute;
+            left: 100px;
+            width: 200px;
+            height: 80px;
+            margin: 10px;
+            background: none;
+        }
+
+        img.title {
+            width: 80px;
+            height: 80px;
+            margin: 2px 10px;
+        }
+
+        #playerfigure {
+            position: absolute;
+            width: 100px;
+            margin: 2px;
+            color: white;
+        }
+
+        #playerfigcaption {
+            margin: 1px;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        #singer {
+            color: rgb(199, 194, 194);
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        #btnPanel {
+            position: relative;
+            top: 3px;
+            width: 400px;
+            margin: auto;
+            text-align: center;
+            background: #3c3d41;
+        }
+
+        #progressPanel {
+            position: relative;
+            width: 55%;
+            margin: 5px auto;
+            text-align: center;
+            background: #3c3d41;
+        }
+
+        #volumePanel {
+            position: absolute;
+            right: 0px;
+            top: 40px;
+            background: #3c3d41;
+            width: 160px;
+        }
+
+        .sound {
+            width: 30px;
+            height: 22px;
+            filter: invert();
+        }
+
+        #volumeBar {
+            -webkit-appearance: none;
+            border-radius: 50px;
+            width: 100px;
+            height: 5px;
+            outline: none;
+        }
+
+            #volumeBar:hover,
+            #progress:hover,
+            .sound:hover {
+                cursor: pointer;
+            }
+
+        #progress {
+            -webkit-appearance: none;
+            border-radius: 50px;
+            top: 50px;
+            width: 80%;
+            height: 5px;
+            /*下面這個不關掉的話選取進度條時會出現藍框*/
+            outline: none;
+            margin: auto;
+            transition: 0.2s;
+        }
+
+        input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 11px;
+            height: 11px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        input::-webkit-slider-runnable-track {
+            transition: 0.5s;
+        }
+
+        input::-webkit-slider-thumb:hover {
+            width: 15px;
+            height: 15px;
+        }
+
+        .btn:hover {
+            background: skyblue;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            background: silver;
+        }
+
+        .btn img {
+            width: 30px;
+            height: 22.5px;
+            margin: 5px;
+            /*下面是色彩反轉的濾鏡效果(把黑圖片變白)*/
+            filter: invert();
+        }
+        /*新Player結束*/
+        /*商品box開始*/
+
+        .albumname {
+            width: 200px;
+            height: 45px;
+            overflow: hidden; /*超出範圍的部分隱藏*/
+            text-overflow: ellipsis; /*出現省略號*/
+            white-space: nowrap;
+        }
+
+        .productitem {
+            float: left;
+            color: white;
+            margin-left: 10px;
+            margin-bottom: 0.5%;
+            font-family: 微軟正黑體;
+            background-color: #444444;
+            cursor: pointer;
+            border-radius: 10px
+        }
+
+            .productitem:hover {
+                background-color: dimgray;
+            }
+
+        .productitemhy:link {
+            color: white;
+            text-decoration: none;
+        }
+
+        .productitemhy:visited {
+            color: white;
+        }
+
+        .headtitle {
+            color: white;
+            margin-left: 20px;
+            font-family: 微軟正黑體;
+        }
+        /*商品box結束
+        /*albuminfo開始*/
+        /*專輯圖/介紹開始*/
+        .albumset {
+            display: inline-block;
+            margin-left: 5%;
+            margin-top: 3%;
+            width: 20%;
+        }
+        /*專輯圖/介紹*/
+        /*單曲列表開始*/
+        .albumtext {
+            text-align: center;
+            color: white;
+            width: 97%;
+            font-family: 微軟正黑體;
+        }
+        /*/*單曲列表結束*/
+        /*albuminfo結束*/
+        /*MyAlbumList開始*/
+        /*摺疊樣式開始*/
+        /*.fold-title {
+            background-color: #f3f3f3;
+            padding: 10px;
+            cursor: pointer;
+            color: #525252;
+            margin-bottom: 0;
+            width: 100%
+        }
+
+        .fold {
+            display: none;
+            line-height: 17pt;
+            width: 100%
+        }
+
+        .fold-container {
+            padding: 10px 10px 10px 30px;
+            border: solid #f3f3f3 2px;
+        }*/
+        /*摺疊樣式結束*/
+        /*MyAlbumList結束*/
+        /*撥放清單開始*/
+        #playListPanel {
+            position: absolute;
+            right: 90px;
+            top: 0px;
+            background: #3c3d41;
+            width: 160px;
+        }
+
+        .playListDetail {
+            display: none;
+            position: none;
+            width: 1200px;
+            border-radius: 10px;
+            padding: 5px 20px;
+            background-color: #040404;
+            background-image: linear-gradient(#474747,#040404);
+            opacity: 0;
+            transition: 0.1s;
+            box-shadow: 1px 1px 2px #818181;
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .adSwitchP {
+            opacity: 1;
+            display: block;
+        }
+
+        .playBar {
+            position: relative;
+            left: 200px;
+            margin: 15px;
+            width: 100%;
+            min-width: 200px;
+        }
+        /*撥放清單結束*/
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-logo">
+            <a href="#"><img @*src=""*@ alt=""></a>
+            <button class="navbar-toggler header-logo-text" type="button">LOGO</button>
+        </div>
+
+        <div style="width:300px;left:300px;top:20px;position:fixed">
+            @* 搜尋條--套用bootstrap(input-group) *@
+            <div class="searchBar">
+                @* 基本搜尋條(結合進階搜尋鍵) *@
+                <div class="input-group">
+                    <input class="searchtxt form-control" type="text" placeholder="搜尋歌曲..." name="basicSearch">
+                    <div class="input-group-append">
+                        <div class="btn btn-outline-secondary" id="advancedBtn">進階搜尋</div>
+                        <div class="btn btn-outline-secondary searchBtn">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+
+                @* 進階搜尋面板 *@
+                <div class="advancedPanel">
+                    <div class="advancedItemGroup">
+                        <div class="advancedItem">
+                            歌曲名稱
+                            <input type="text" class="advancedtxt form-control" id="adSong" />
+                        </div>
+                        <div class="advancedItem">
+                            專輯名稱
+                            <input type="text" class="advancedtxt form-control" id="adAlbum" />
+                        </div>
+                        <div class="advancedItem">
+                            歌手
+                            <input type="text" class="advancedtxt form-control" id="adSinger" />
+                        </div>
+                        <div class="advancedItem">
+                            團體名稱
+                            <input type="text" class="advancedtxt form-control" id="adGroup" />
+                        </div>
+                        <div class="advancedItem">
+                            作曲者
+                            <input type="text" class="advancedtxt form-control" id="adComposer" />
+                        </div>
+                        <div class="advancedItem">
+                            發行類別
+                            <select class="advancedtxt form-control" id="adType">
+                                <option value="0">不指定</option>
+                                @* 網頁初始化時會在這裡更新搜尋的類別 *@
+                            </select>
+                        </div>
+                    </div>
+
+                    @* 這邊放自選類別 *@
+                    <div class="typeSelectGroup">
+                        @* 選擇想要的類別 *@
+                        <div class="typeSelect advancedSelect">
+                            偏好的曲風
+                            <div class="advancedBlock">
+                                @* 網頁初始化時會在這裡更新曲風與增加鈕 *@
+                            </div>
+
+                            @* 點選+號後會出現的type選擇表，位置應在+號正下方 *@
+                            <div class="selectableItemPanel">
+                                @* 網頁初始化時會在這裡更新曲風 *@
+                            </div>
+                        </div>
+
+                        @* 進階搜尋鍵 *@
+                        <div class="searchPanel">
+                            <button class="btn btn-primary adSearchBtn">搜尋</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="playBar">
+            <div class="playListDetail">
+                <div class="advancedItemGroup">
+                    @Html.Action("_PlayLists")
+                </div>
+            </div>
+        </div>
+
+        <div class="header-button">
+            @{
+                if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+                {
+                    <button type="button">註冊</button>
+                    @*<button type="button">@Html.ActionLink("登入", "Login", "Common", null, new { @class = "side-li-home-img" })</button>*@
+                    <button id="logininterface" type="button">登入</button>
+                }
+                else
+                {
+                    if (Session[CDictionary.SK_ACCOUNT].ToString() == "aaa")
+                    {
+                        <button id="admininterface" type="button">後臺管理介面</button>
+                    }
+                    <span>hi,@Session[CDictionary.SK_ACCOUNT].ToString()</span>
+                    <button type="button">會員中心</button>
+                    <button type="button">@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })</button>
+                    <button id="logoutinterface" type="button">登出</button>
+                    @*<button id="logoutinterface2" type="button">@Html.ActionLink("登出", "Loginout", "Common", null, new { @class = "side-li-home-img" })</button>*@
+
+                }
+            }
+        </div>
+    </div>
+    <div id="content">
+        <!--邊條選項欄-->
+
+        <div class="sidebox">
+
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Album")">
+                        <div class="menuItem">
+                            <i class="fa fa-home"></i>
+                            <span>首頁</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="side-li-serach-img">
+                    <a href="@Url.Action("Kinds", "Search")">
+                        <div class="menuItem">
+                            <i class="fa fa-search"></i>
+                            <span>音樂分類</span>
+                        </div>
+                    </a>
+                </li>
+                @*<li class="side-li-mymusiclibiary-img">@Html.ActionLink(Session[CDictionary.SK_sideboxList1Name].ToString(), Session[CDictionary.SK_sideboxList1Method].ToString(), "Album", new { account = Session[CDictionary.SK_sideboxList1Id].ToString() }, new { @class = "side-li-mymusiclibiary-img" })</li>*@
+                @if (Session[CDictionary.SK_ACCOUNT] != null && !string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+                {
+                    @*<li class="side-li-mymusiclibiary-img">@Html.ActionLink("你的音樂庫", "PlayLists", "Album", null, new { @class = "side-li-home-img" })</li>*@
+                    <li class="side-li-serach-img">
+                        <a href="@Url.Action("MyAlbumList", "Album",new {  account = Session[CDictionary.SK_ACCOUNT].ToString()  })">
+                            <div class="menuItem">
+                                <i class="fa fa-search"></i>
+                                <span>我的發行</span>
+                            </div>
+                        </a>
+                    </li>
+                    @*<li class="side-li-serach-img">@Html.ActionLink("我的發行", "MyAlbumList", "Album", new { account = Session[CDictionary.SK_ACCOUNT].ToString() }, new { @class = "side-li-home-img" })</li>*@
+                }
+            </ul>
+        </div>
+        <div class="mainbox">
+            @RenderBody()
+        </div>
+    </div>
+    <div id="footer">
+        <div id="playerPanel">
+
+            <!-- 封面與歌名div -->
+            <figure id="playerfigure">
+                <img id="playercover" src="" alt="" class="title" width="80" height="80">
+                <figcaption id="playerfigcaption" class="description title"></figcaption>
+            </figure>
+            <div id="titlePanel">
+                <span id="Descriptiontwo" class="album description">這裡放專輯</span><br />
+                <span class="music descriptionSub">這裡放歌名</span><br />
+                <span id="singer" class="singer descriptionSub">這裡放歌手</span>
+            </div>
+
+
+            <!-- 基本按鍵div -->
+            <div id="btnPanel">
+                <div id="random" class="btn"><img src="~/Content/random.png"></div>
+                <div id="prev" class="btn"><img src="~/Content/prev.png"></div>
+                <div id="play" class="btn"><img src="~/Content/play.png"></div>
+                <div id="pause" class="btn"><img src="~/Content/pause.png"></div>
+                <div id="next" class="btn"><img src="~/Content/next.png"></div>
+                <div id="replay" class="btn"><img src="~/Content/replay.png"></div>
+            </div>
+
+            <!-- 進度條div -->
+            <div id="progressPanel">
+                <span id="nowTime">00:00</span>
+                <input id="progress" type="range" min="0" max="100" step="0.01" value="0">@*此處加class與試聽波放器連動*@
+                <span id="totalTime">00:00</span>
+            </div>
+
+            <!-- 撥放清單 -->
+            <div id="playListPanel">
+                <i title="撥放清單" class="fa fa-list-ul btn playListbtn img"></i>
+                @*<button class="btn btn-outline-secondary "></button>*@
+            </div>
+
+            <!-- 音量條div -->
+            <div id="volumePanel">
+                <img src="~/Content/sound.png" data-sound="volumeImg" id="volumeImg" class="sound">
+                <img src="~/Content/mute.png" data-sound="muteImg" id="muteImg" class="sound">
+                <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.5">
+            </div>
+
+            <!--播放器本體-->
+            @*<audio id="player" src="mp3/‪02 紅魔 「Un-demystified Fantasy」.mp3"></audio>*@
+            <audio id="mainPlayer" src=""></audio>
+            @*<audio class="originalAudio"></audio>
+            <audio id="player" class="demoAudio"></audio>*@
+        </div>
+    </div>
+    @*<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">*@
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="@Url.Content("~/Scripts/flushpage.js")" type="text/javascript"></script>
+    <script>
+        //撥放器開始
+        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+        var demoStart;
+        var demoEnd;
+        //新增
+        var m_soid;
+        var m_singer;
+        var m_song;
+            var m_songcover;
+            var playerAjaxExecu = false;
+        //****
+        var oplaying = false;
+        var dplaying = false;
+        var fileName;
+
+        $(".opause").css("display", "none");
+        $(".dpause").css("display", "none");
+        var music = $(".originalAudio")[0];
+        music.volume = 0.6;
+        var demoMusic = $(".demoAudio")[0];
+        demoMusic.volume = 0.6;
+
+        /////////////////
+        ///主播放器相關///
+        /////////////////
+        var player;//主播放器
+        var playing;//是否正在播放中
+        var totalTime;//本次歌曲的秒數總長度
+        var nowVolume;//當前音量
+        //避免頁面刷新時既有變數被重置或重複給予事件
+        if (player == null) {
+            player = document.getElementById("mainPlayer");
+            playing = false;
+            $("#pause").css("display", "none");
+            $("#muteImg").css("display", "none");
+            player.volume = 0.5;
+            $("#volumeBar").css({ "background-image": "-webkit-linear-gradient(left , #5599FF 50%,#fff 0px)" });
+            nowVolume = player.volume;
+            //初始化播放器內音樂的總長度，並將值傳給進度條
+            player.addEventListener("durationchange", function () {
+                totalTime = parseInt(player.duration);
+                $("#progress").prop("max", totalTime);
+                let m1 = parseInt(totalTime / 600);
+                let m2 = parseInt(totalTime / 60);
+                let s1 = parseInt(totalTime % 60 / 10);
+                let s2 = parseInt(totalTime % 60 % 10);
+                $("#totalTime").text(`${m1}${m2}:${s1}${s2}`);
+            });
+            //播放器的timer
+            player.addEventListener("timeupdate", function () {
+                $("#progress").prop("value", player.currentTime);
+                let now = player.currentTime;
+                let m1 = parseInt(now / 600);
+                let m2 = parseInt(now / 60);
+                let s1 = parseInt(now % 60 / 10);
+                let s2 = parseInt(now % 60 % 10);
+                $("#nowTime").text(`${m1}${m2}:${s1}${s2}`);
+                //進度條的變化
+                let persent = now / totalTime * 100;
+                let p = parseInt($("#progress").css("width")) / 100;
+                let f = persent * p;
+                $("#progress").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${f}px,#fff 0px)` });
+
+                if (player.currentTime > $("#progress").attr("max")) {
+                    player.pause();
+                    $("#play").css("display", "inline-block");  //新增,為與舊撥放器同步
+                    $("#pause").css("display", "none")          //新增,為與舊撥放器同步
+                    playing = false;                            //新增,為與舊撥放器同步
+                    if (playerAjaxExecu == false) {
+                        playerAjaxExecu = true;
+                        $.ajax({
+                            url: "@Url.Action("nextPlayLists","Album")?amid=" + m_soid,
+                            //   data: { term: request.term.trim() },
+                            data: {},
+                            type: "POST",
+                            async: true,
+                            cache: false,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (result) {
+                                if (result == '查無此') {
+                                    playerAjaxExecu = false;
+                                }
+                                console.log(result);
+                                player.src = "@Url.Content("~/")MusicFiles/" + result.fFilePath;
+                                demoStart = result.fPlayStart;
+                                demoEnd = result.fPlayEnd;
+                                m_songcover = "@Url.Content("~/")CoverFiles/" + result.fCoversource;
+                                m_soid = result.fProductID;
+                                m_singer = result.fComposer;
+                                m_song = result.fProductName;
+                                $("#Descriptiontwo").text(m_song);
+                                $("#singer").text(m_singer);
+                                $("#playercover").attr("src", m_songcover);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                console.log("Error.");
+                                playerAjaxExecu = false;
+                            }
+                        });
+                    }
+                player.currentTime = demoStart;
+                player.volume = 0.6;
+                let totalTime = demoEnd - demoStart; //為與新player變數一致將demoTotal換成totalTime
+                $("#progress").prop("max", totalTime);
+                setTimeout(function () {
+                    playing = true;
+                    $("#play").css("display", "none");
+                    $("#pause").css("display", "inline-block");
+                    player.play();
+                    playerAjaxExecu = false;
+                }, 1000);
+                let plink = "@Url.Action("_PlayLists","Album")";
+                $.post(plink, { ajax: true }, function (data) {
+                    $(".playListDetail").html(data);
+                })
+
+                }
+
+
+            });
+            //音樂播放鍵
+            $("#play").click(function () {
+                player.play();
+                playing = true;
+                $("#play").css("display", "none");
+                $("#pause").css("display", "inline-block")
+            })
+            //音樂暫停鍵
+            $("#pause").click(function () {
+                player.pause();
+                playing = false;
+                $("#play").css("display", "inline-block");
+                $("#pause").css("display", "none")
+            })
+            //調整音量時能立即更動而不用放開滑鼠
+            $("#volumeBar").on('input', function () {
+                $(this).trigger("change");
+            })
+            //音量調節鍵
+            $("#volumeBar").on('change', function () {
+                player.volume = this.value;
+                let v = this.value * 100;
+                $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${v}%,#fff 0px)` });
+                if (player.volume == 0) {
+                    $("#volumeImg").css("display", "none");
+                    $("#muteImg").css("display", "inline-block");
+                }
+                else {
+                    $("#volumeImg").css("display", "inline-block");
+                    $("#muteImg").css("display", "none");
+                }
+            });
+            //靜音鍵
+            $(".sound").click(function () {
+                let data = $(this).data("sound");
+                switch (data) {
+                    case "volumeImg":
+                        nowVolume = player.volume;
+                        player.volume = 0;
+                        $("#volumeBar").prop("value", 0);
+                        $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${0}%,#fff 0px)` });
+                        $("#volumeImg").css("display", "none");
+                        $("#muteImg").css("display", "inline-block");
+                        break;
+                    case "muteImg":
+                        player.volume = nowVolume;
+                        $("#volumeBar").prop("value", nowVolume);
+                        $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${nowVolume * 100}%,#fff 0px)` });
+                        $("#volumeImg").css("display", "inline-block");
+                        $("#muteImg").css("display", "none");
+                        break;
+                }
+            });
+            //選擇進度條後立刻發動值的change(否則會出現延遲，造成改值失敗)
+            $("#progress").on('input', function () {
+                player.pause();
+                $(this).trigger("change");
+            })
+            //音樂進度條改變
+            $("#progress").change(function () {
+                player.currentTime = this.value;
+            });
+            //拖動進度條直到放開滑鼠才重新開始播放
+            $("#progress").mouseup(function () {
+                if (playing)
+                    player.play();
+            });
+
+            /////////////////
+            ///搜尋條棒相關///
+            /////////////////
+            //進階搜尋內容的初始化
+            $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
+                $.each(datas, function (name, value) {
+                    $("#adType").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
+                })
+            })
+            $.getJSON('@Url.Action("SetKinds","Search")', function (datas) {
+                $.each(datas, function (name, value) {
+                    $(".advancedBlock").append(`<div class="selectedItem" data-kind="${value.KindName}">${value.KindName}</div>`);
+                    $(".selectableItemPanel").append(`<div class="selectableItem" data-kind="${value.KindName}">${value.KindName}</div>`)
+                })
+                $(".advancedBlock").append('<div class="itemAdd"><i class="fa fa-plus"></i></div>');
+                $(".itemAdd").click(function () {
+                    $(".selectableItemPanel").toggleClass("adSwitch");
+                })
+                //初始化進階面板曲風選項的顏色
+                var color = ["#6bc477", "#C158E8", "#6E7AFF", "#58D5E8", "#A6FFB4", "#C7E874", "#FFE98B"
+                  , "#cc9250", "#F587DE", "#FFAB9A", "#FFF56F", "#B5FF5A", "#6796B8", "#7A67B8", "#FFBE50"
+                  , "#61FFAD", "#C6565C", "#58C782", "#B9F0FD", "#B6CC6E", "#6EBBCC"];
+                  var block = $(".selectableItemPanel").children(".selectableItem");
+                  var block2 = $(".advancedBlock").children(".selectedItem");
+                for (let i = 0; i < block.length; i++) {
+                    block.eq(i).css("background-color", color[i]);
+                    block.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+                    block2.eq(i).css("background-color", color[i]);
+                    block2.eq(i).css("background-image", `linear-gradient(to bottom,#16161660 100%,${color[i]})`);
+                }
+                //選擇曲風
+                $(".selectableItem").on("click", function () {
+                    let kindName = $(this).data("kind");
+                    $(this).css("display", "none");
+                    $(".advancedBlock").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+                    $(".selectableItemPanel").toggleClass("adSwitch");
+                })
+                //點擊選擇的曲風即可取消
+                $(".selectedItem").on("click", function () {
+                    let kindName = $(this).data("kind");
+                    $(this).css("display", "none");
+                    $(".selectableItemPanel").find(`[data-kind = '${kindName}']`).css("display", "inline-block");
+                })
+            })
+            //開啟進階搜尋版面、開啟曲風選擇版面
+            $("#advancedBtn").click(function () {
+                $(".advancedPanel").toggleClass("adSwitch");
+            })
+            $(".itemAdd").click(function () {
+                $(".selectableItemPanel").toggleClass("adSwitch");
+            })
+            //點選搜尋區域以外的地方會自動關閉進階搜尋版面(很礙眼)
+            $(document).mousedown(function (e) {
+                if ($(e.target).parents(".searchBar").length == 0 &&
+                    $(e.target).parents(".ui-menu-item").length == 0) {
+                    $(".advancedPanel").removeClass("adSwitch");
+                }
+                if ($(e.target).parents(".selectableItemPanel").length == 0) {
+                    $(".selectableItemPanel").removeClass("adSwitch");
+                }
+            })
+            //關鍵字搜尋(只查找歌名並輸出專輯與歌名(專輯可能重複))
+            //用trim()除去空白字串
+            $(".searchBtn").click(function () {
+                let keyword = $(".searchtxt").val().trim();
+                if (keyword == "") {
+                    return;
+                }
+                let url = `@Url.Action("Result", "Search")`;
+                let stateObj = { keyword: keyword, ajax: true };
+                $.post(url, stateObj, function (data) {
+                    $(".mainbox").html(data);
+                });
+                history.pushState(stateObj, null, url);
+            })
+            //進階搜尋(找出符合條件的專輯(專輯不重複))
+            $(".adSearchBtn").click(function () {
+                $(".advancedPanel").toggleClass("adSwitch");
+                let adSong = $("#adSong").val().trim();
+                let adSinger = $("#adSinger").val().trim();
+                let adGroup = $("#adGroup").val().trim();
+                let adComposer = $("#adComposer").val().trim();
+                let adAlbum = $("#adAlbum").val().trim();
+                let adType = $("#adType").val();
+                let adKinds = "";
+                $(".advancedBlock").children(".selectedItem").each(function () {
+                    if ($(this).css("display") == "inline-block") {
+                        adKinds += ($(this).data("kind") + ",");
+                    }
+                })
+                let url = `@Url.Action("AdvancedResult", "Search")`
+                let stateObj = {
+                    adSong: adSong,
+                    adSinger: adSinger,
+                    adGroup: adGroup,
+                    adComposer: adComposer,
+                    adAlbum: adAlbum,
+                    adType: adType,
+                    adKinds: adKinds,
+                    ajax: true
+                }
+                $.post(url, stateObj, function (data) {
+                    $(".mainbox").html(data);
+                });
+                history.pushState(stateObj,null,url);
+            })
+            //所有搜尋text實作autocomplete
+            $(".searchtxt,#adSong").autocomplete(
+                {
+                    source: '@Url.Action("AutoCompleteSong", "Search")'
+                });
+            $("#adSinger").autocomplete(
+                {
+                    source: '@Url.Action("AutoCompleteSinger", "Search")'
+                });
+            $("#adGroup").autocomplete(
+                {
+                    source: '@Url.Action("AutoCompleteGroup", "Search")'
+                });
+            $("#adComposer").autocomplete(
+                {
+                    source: '@Url.Action("AutoCompleteComposer", "Search")'
+                });
+            $("#adAlbum").autocomplete(
+                {
+                    source: '@Url.Action("AutoCompleteAlbum", "Search")'
+                });
+            //讓左側選單被選擇時有點變化
+            $(".menuItem").click(function () {
+                $(this).parents("li").siblings().find(".menuItem").removeClass("menuItemSelected");
+                $(this).parents("li").siblings().find(".menuItem").children().css("color", "#656565");
+                $(this).addClass("menuItemSelected");
+                $(this).children().css("color", "white");
+            });
+
+
+
+        //     function admininterface() {
+            $("#admininterface").on("click", function () {
+                //     window.location.href = '../Admin/Index/';
+                window.location.href = '@Url.Action("Index","Admin")';
+            });
+            $("#logoutinterface").on("click", function () {
+                //  window.location.href = '../../test/Common/Loginout/';
+                window.location.href = '@Url.Action("Loginout","Common")';
+            });
+            $("#logininterface").on("click", function () {
+                //   window.location.href = '../../test/Common/Login/';
+                window.location.href = '@Url.Action("Login","Common")';
+            });
+            
+        @*$(function () {
+    $(".searchtxt").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+               // url: "@Url.Action("Find","Album")",
+                url: "@Url.Action("Find","Album")?term="+request.term.trim(),
+             //   data: { term: request.term.trim() },
+                data: {},
+                type: "POST",
+                async: true,
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                     response($.map(result, function (name, val) {
+                     return {
+                        label: name,
+                        value: val
+                     }
+                  }));
+                },
+               error: function (XMLHttpRequest, textStatus, errorThrown) {
+                  console.log("Error.");
+               }
+            });
+        },
+                 minLength: 1
+    });
+
+});*@
+    </script>
+    <!-- Optional JavaScript -->
+</body>
+</html>
