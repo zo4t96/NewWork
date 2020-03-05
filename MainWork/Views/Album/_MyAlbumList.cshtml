@@ -41,6 +41,8 @@
             height: 200px;
             display: inline-block;
             background-size: cover;
+            margin-bottom:10px;
+            border-radius:10px;
         }
 
     /*商品box結束*/
@@ -54,7 +56,7 @@
             {
 
                 <td class="productitem">
-                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
+                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
 
                         <fieldset>
                             <table>
@@ -80,7 +82,7 @@
             {
 
                 <td class="productitem">
-                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
+                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
 
                         <fieldset>
                             <table>
@@ -111,7 +113,7 @@
             @foreach (var item in Model.Where(p => p.fStatus == 0))
             {
 
-                <td class="productitem">
+                <td class="productitem" >
                     <a class="productitemhy" href="@Url.Action("AlbumInfo","Album")?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
                         <fieldset >
                             <table>
@@ -150,6 +152,7 @@
         let amid = $(this).data("sid");
         let url = `${$(this).attr("href")}`;
         let stateObj = { amid: amid, ajax: true };
+        history.pushState(stateObj, null, url);
         $.ajax({
             url: url,
             data: stateObj,
@@ -160,13 +163,18 @@
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>`);
+                console.log(history.state)
+
             },
             success: function (data) {
                 $(".mainbox").html(data);
+            },
+            comolete: function () {
                 $(window).scrollTop(0);
+                console.log(history.state)
+
             }
         })
-        history.pushState(stateObj, null, url);
         let title = $(this).data("title");
         document.title = title;
 

@@ -41,6 +41,7 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius: 10px;
         /*測試用圖片*/
         background-image: url("/Images/4.jpg");
         background-size: cover;
@@ -79,6 +80,14 @@
         white-space: nowrap;
         overflow: hidden;
     }
+    /*折扣文字*/
+    .discount {
+        display: inline-block;
+        position: relative;
+        font-size: 12px;
+        font-weight: 600;
+        color: #dc0000;
+    }
 </style>
 
 <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">@Model.First().tActivity.fTitle</div>
@@ -92,6 +101,10 @@
                 <span class="albumTitle">@item.fAlbumName</span>
                 <span class="albumDescripion">@item.fMaker</span>
                 <span class="albumDescripion">@item.fKinds</span>
+                @if (item.fActivityID != null)
+                {
+                    <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+                }
             </div>
         </a>
     }

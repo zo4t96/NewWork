@@ -41,6 +41,7 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius: 10px;
         /*測試用圖片*/
         background-image: url("/Images/4.jpg");
         background-size: cover;
@@ -87,6 +88,14 @@
         top: 40%;
         margin: auto;
     }
+    /*折扣文字*/
+    .discount {
+        display: inline-block;
+        position: relative;
+        font-size: 12px;
+        font-weight: 600;
+        color: #dc0000;
+    }
 </style>
 
 <body>
@@ -111,11 +120,15 @@
                 <div class="albumContent">
                     <span class="albumTitle">@item.product.fProductName</span>
                     <span class="albumDescripion">@item.album.fAlbumName</span>
-                    @if (item.product.fArtist != null)
+                    @if (item.product.fSinger != null)
                     {
-                        <span class="albumDescripion">歌手:@item.product.fArtist</span>
+                        <span class="albumDescripion">歌手:@item.product.fSinger</span>
                     }
                     <span class="albumDescripion">作曲:@item.product.fComposer</span>
+                    @if (item.album.fActivityID != null)
+                    {
+                        <div class="discount">@((1 - item.album.fDiscount) * 100)% off!</div>
+                    }
                 </div>
             </a>
         }

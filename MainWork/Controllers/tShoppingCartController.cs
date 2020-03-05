@@ -13,6 +13,10 @@ namespace MusicPrj.Controllers
         tShoppingCartFram tCart = new tShoppingCartFram();
         public ActionResult ShoppingCart(string cname = "aaa", bool ajax = false)
         {
+            if (ajax)
+            {
+                ViewBag.ajax = true;
+            }
             if (tCart.getShoppingCart(cname).Count != 0)
             {
                 return View(tCart.getShoppingCart(cname));

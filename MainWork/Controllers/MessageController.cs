@@ -18,7 +18,6 @@ namespace MusicPrj.Controllers
         }
         public ActionResult MessageBox()
         {
-            Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
             List<tMessage> tME = db.tMessages.Where(p => p.fAccountTo == s1 &&p.fStatus==1).ToList();

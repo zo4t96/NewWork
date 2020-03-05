@@ -46,12 +46,18 @@
         .header-logo {
             position: relative;
             top: 10px;
-            left: 10px;
             width: 180px;
-            padding-left: 40px;
+            padding-left: 10px;
             font-size: 25px;
             background: black;
+            background-size: cover;
         }
+            .header-logo > img {
+                display: inline-block;
+                width: 170px;
+                height: 60px;
+                background-size: cover;
+            }
 
         .header-logo-text {
             color: white;
@@ -87,6 +93,7 @@
         }
 
         .sidebox {
+            padding-top:40px;
             position: fixed;
             width: 200px;
             height: 100vh;
@@ -179,11 +186,11 @@
     <!--搜尋條style-->
     <style>
         .searchBar {
-            top: -35px;
+            top: -55px;
             position: relative;
             left: 185px;
             margin: 15px;
-            width: 25%;
+            width: 20%;
             min-width: 200px;
         }
         /*不用id變不了bootstrap的文字顏色*/
@@ -477,9 +484,9 @@
         #modalContent {
             position: relative;
             top: 10%;
-            width: 40%;
+            width: 30%;
             padding: 20px;
-            background-color: #191919;
+            background-color: #333333;
             border-radius: 20px;
             margin: auto;
             transition: 0.6s;
@@ -663,8 +670,7 @@
 
     <div class="header">
         <div class="header-logo">
-            <a href="#"><img @*src=""*@ alt=""></a>
-            <button class="navbar-toggler header-logo-text" type="button">LOGO</button>
+            <img src="~/Images/spiderfly.png"></img>
         </div>
 
         @* 搜尋條--套用bootstrap(input-group) *@
@@ -746,14 +752,16 @@
                 }
                 else
                 {
-                    //會員頭像兼會員中心預定
-                    <img src="~/Images/4.jpg" class="header-Upperrightcorner-img" />
+                    //會員頭像兼會員中心
+                    <a class="d-inline-block link" href="@Url.Action("Index", "MemberHome")/">
+                        <img src="~/Images/@sk.fPicPath" class="header-Upperrightcorner-img" />
+                    </a>
 
                     @*@Html.ActionLink("個人短訊息", "MessageBox", "Message", null, new { @class = "side-li-home-img" })*@
-                    <a href="@Url.Action("MessageBox","Message")">
+                    <a class="link" href="@Url.Action("MessageBox", "Message")">
                         <div class="btn btn-outline-secondary">訊息</div>
                     </a>
-                    <a href="@Url.Action("Logout","MemberLogin")">
+                    <a href="@Url.Action("Logout", "MemberLogin")">
                         <div id="logoutInterface" class="btn btn-outline-secondary">登出</div>
                     </a>
                 }
@@ -766,7 +774,7 @@
         <div class="sidebox">
             <ul>
                 <li>
-                    <a href="@Url.Action("Main","Homepage")">
+                    <a href="@Url.Action("Main", "Homepage")">
                         <div class="menuItem">
                             <i class="fa fa-home"></i>
                             <span>首頁</span>
@@ -774,7 +782,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="@Url.Action("Kinds","Search")">
+                    <a href="@Url.Action("Kinds", "Search")">
                         <div class="menuItem">
                             <i class="fa fa-search"></i>
                             <span>音樂分類</span>
@@ -783,7 +791,7 @@
                 </li>
 
                 <li>
-                    <a href="@Url.Action("TwoPlayer","Player")">
+                    <a href="@Url.Action("TwoPlayer", "Player")">
                         <div class="menuItem">
                             <i class="fa fa-headphones"></i>
                             <span>雙重播放器測試</span>
@@ -794,7 +802,7 @@
                 @if (sk != null)
                 {
                     <li>
-                        <a href="@Url.Action("MyAlbumList","Album")/?account=@sk.fAccount">
+                        <a href="@Url.Action("MyAlbumList", "Album")/?account=@sk.fAccount">
                             <div class="menuItem">
                                 <i class="fa fa-headphones"></i>
                                 <span>我的發行(測試用)</span>
@@ -803,7 +811,7 @@
                     </li>
 
                     <li>
-                        <a href="@Url.Action("MyMusic","Album")">
+                        <a href="@Url.Action("MyMusic", "Album")">
                             <div class="menuItem">
                                 <i class="fa fa-music"></i>
                                 <span>我的音樂庫</span>
@@ -812,7 +820,7 @@
                     </li>
 
                     <li>
-                        <a href="@Url.Action("ShoppingCart","tShoppingCart")">
+                        <a href="@Url.Action("ShoppingCart", "tShoppingCart")">
                             <div class="menuItem">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>我的購物車</span>
@@ -823,7 +831,7 @@
                     if (sk.fAccount == "aaa")
                     {
                         <li>
-                            <a class="manage" href="@Url.Action("Index","Admin")" target="_blank">
+                            <a class="manage" href="@Url.Action("Index", "Admin")" target="_blank">
                                 <div class="menuItem" id="admininterface">
                                     <i class="fa fa-th-list"></i>
                                     <span>後臺管理介面</span>
@@ -847,23 +855,22 @@
     <div id="footer">
         <div id="playerPanel">
             <!-- 封面與歌名div -->
-            <figure id="playerfigure">
-                <img id="playercover" src="#" class="playerCover">
-            </figure>
-            <div id="titlePanel">
-                <span class="album description">這裡放專輯</span><br />
-                <span id="Descriptiontwo" class="music descriptionSub">這裡放歌名</span><br />
-                <span id="singer" class="singer descriptionSub">這裡放歌手</span>
-            </div>
-
+              <figure id = "playerfigure" >
+                 <img id = "playercover" class="playerCover">
+              </figure>
+              <div id = "titlePanel" >
+                <span class="album description"></span><br />
+                <span id = "Descriptiontwo" class="music descriptionSub"></span><br />
+                <span id = "singer" class="singer descriptionSub"></span>
+              </div>
             <!-- 基本按鍵div -->
             <div id="btnPanel">
-                <div id="random" class="btn"><img src="/PlayerImg/random.png"></div>
-                <div id="prev" class="btn"><img src="/PlayerImg/prev.png"></div>
-                <div id="play" class="btn"><img src="/PlayerImg/play.png"></div>
-                <div id="pause" class="btn"><img src="/PlayerImg/pause.png"></div>
-                <div id="next" class="btn"><img src="/PlayerImg/next.png"></div>
-                <div id="replay" class="btn"><img src="/PlayerImg/replay.png"></div>
+                <div id="random" class="btn"><img src="~/PlayerImg/random.png"></div>
+                <div id="prev" class="btn"><img src="~/PlayerImg/prev.png"></div>
+                <div id="play" class="btn"><img src="~/PlayerImg/play.png"></div>
+                <div id="pause" class="btn"><img src="~/PlayerImg/pause.png"></div>
+                <div id="next" class="btn"><img src="~/PlayerImg/next.png"></div>
+                <div id="replay" class="btn"><img src="~/PlayerImg/replay.png"></div>
             </div>
 
             <!-- 進度條div -->
@@ -1172,7 +1179,7 @@
         //但是mvc本身有PartailView這個功能，因此應該用不到load
 
         //點連結將主容器切換到新頁面，這個的內容會根據連結的不同有所改變
-        $("li > a").on("click", function (e) {
+        $("li > a , .link").on("click", function (e) {
             //如果按的是後台選項直接跳新的後台視窗
             if ($(this).hasClass("manage")) {
                 return;
@@ -1223,6 +1230,7 @@
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>`);
+                    console.log(history.state)
                 },
                 url: location.pathname,
                 data: history.state,

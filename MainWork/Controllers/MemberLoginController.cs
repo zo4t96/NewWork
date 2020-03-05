@@ -13,6 +13,7 @@ namespace prjSpotifyProject.Controllers
 {
     public class MemberLoginController : Controller
     {
+        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
         // 登入連結畫面
         public ActionResult Index()
         {
@@ -56,12 +57,21 @@ namespace prjSpotifyProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(tMember c)
+        public ActionResult New(tMember m)
         {
-            tMemberFactory factory = new tMemberFactory();
-            factory.create(c);
+            //string fileName = "";
+            //fileName = Guid.NewGuid() + ".jpg";
+            //var path = Path.Combine(Server.MapPath("~/Images"), fileName);
+            //m.SaveAs(path);
 
+            m.fPicPath = "nobody.jpg";
+            db.tMembers.Add(m);
+            db.SaveChanges();
             return RedirectToAction("Main","Homepage");
+            //tMemberFactory factory = new tMemberFactory();
+            //factory.create(c);
+
+            //return RedirectToAction("Main","Homepage");
         }
 
         public ActionResult Logout()
@@ -69,6 +79,25 @@ namespace prjSpotifyProject.Controllers
             Session[CDictionary.SK_CURRENT_LOGINED_USER] = null;
             Session[CDictionary.SK_ACCOUNT] = null;
             return RedirectToAction("Main", "Homepage");
+        }
+
+        public ActionResult LoginCheck(string fAccount)
+        {
+            string account = fAccount;
+            tMember loginUser = db.tMembers.FirstOrDefault(m => m.fAccount == account);
+
+            string  message = "此帳號已被使用";
+
+            if (loginUser == null)
+            {
+                message = "可以使用的帳號";
+            }
+
+            if (account == "")
+            {
+                message = "請輸入帳號";
+            }
+            return Content(message);
         }
     }
 }

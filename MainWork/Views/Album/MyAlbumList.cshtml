@@ -192,6 +192,25 @@
         opacity: 1;
     }
     /*專輯預覽block*/
+
+    /*新增上方選單的樣式*/
+    .myMenu {
+        width: 70%;
+        background-image: linear-gradient(to right, #1587dd,#651ea4, #191919)
+    }
+    .tab_btns{
+        padding:0px 0px;
+    }
+        .tab_btns > li {
+            /*background-color:antiquewhite;*/
+            font-size: 20px;
+            font-weight: 600;
+            padding: 10px 0;
+            margin:0;
+        }
+    .tab_btns > li:hover{
+        background-color:rgba(255, 255, 255, 0.20)
+    }
 </style>
 <!-- Main CSS-->
 <link href="~/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
@@ -201,13 +220,15 @@
 
 
 <div id="wrapper">
-    <div class="container">
-        <ul class="tab_btns" style="display:inline-block">
+    <div class="myMenu">
+        <ul class="tab_btns" >
             @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
             <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">發行專輯</a></li>
             <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 增加專輯</a></li>
             <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">販售統計</a></li>
             <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">單曲總覽</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">會員管理</a></li>
+
         </ul>
     </div>
     @*<div class="container text-center">
@@ -226,9 +247,7 @@
         <ul class="tab_contents" id="tab_contents1">
             <li>
                 <div class="section__content section__content--p30">
-
                     @Html.Action("_MyAlbumList")
-
                 </div>
             </li>
             <li>
@@ -239,14 +258,11 @@
                     <div class="albumCreatePanel row">
                         <div class="col-md-6">
                             <div class="container" style="color:white">
-
                                 @Html.AntiForgeryToken()
-
                                 <div class="form-horizontal">
                                     <h4>請輸入專輯基本資料</h4>
                                     <hr />
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
                                     <div class="form-group">
                                         *@Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
@@ -254,7 +270,6 @@
                                             @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         *@Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
@@ -262,15 +277,13 @@
                                             @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
                                     @*<div class="form-group">
-                                        @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-9">
-                                            <input class="form-control text-box single-line" data-val="true" data-val-required="發行日必填" id="tA_fYear" name="tA.fYear" type="date" value="2020-01-01">
-                                            @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>*@
-
+                                    @Html.LabelFor(model => tA.fYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-9">
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="發行日必填" id="tA_fYear" name="tA.fYear" type="date" value="2020-01-01">
+                                        @Html.ValidationMessageFor(model => tA.fYear, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
                                     <div class="form-group">
                                         @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
@@ -281,7 +294,6 @@
                                             @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
@@ -294,7 +306,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         *@Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div class="col-md-9">
@@ -304,7 +315,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -314,15 +324,15 @@
                                 </div>
                             </div>
                             @*<div class="form-group" style="text-align:center">
-                                    <div  style="display:inline-block">
-                                        <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
-                                    </div>
-                                    <h3 id="previewTitle">Title</h3>
-                                    <h4 id="previewGroup">Group</h4>
-                                    <h4 id="previewPrice">Price</h4>
-                                    <h4 id="previewTitle">Type</h4>
-                                    <h4 id="previewTitle">Kind</h4>
-                                </div>*@
+                            <div  style="display:inline-block">
+                                <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
+                            </div>
+                            <h3 id="previewTitle">Title</h3>
+                            <h4 id="previewGroup">Group</h4>
+                            <h4 id="previewPrice">Price</h4>
+                            <h4 id="previewTitle">Type</h4>
+                            <h4 id="previewTitle">Kind</h4>
+                        </div>*@
                             <div class="form-group">
                                 <div class="albumBlock">
                                     <div class="albumCover">
@@ -344,8 +354,7 @@
                                 <div class="col-md-12">
                                     <div class="containerDrag">
                                         <ul id="userKindtaginput"></ul>
-                                        <ul id="adKindULPageload">
-                                        </ul>
+                                        <ul id="adKindULPageload"></ul>
                                     </div>
                                     <hr />
                                     @*input除錯用,平常type設成hide*@
@@ -366,11 +375,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 }
                 @*for End*@
-
             </li>
             <li>
                 <div class="headtitle h1">我的專輯統計資料</div>
@@ -469,10 +476,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <span>最多試聽</span>
-
             </li>
             <li>
                 <div class="headtitle h1">單曲列表</div>
@@ -480,7 +485,7 @@
                     <div class="row">
                         <div class="col-md-10">
                             <div class="py-3">
-                                <span>搜尋專輯名稱:</span> <input style="color:black"  class="myProductSearchInput" type="text" /> <button class="btn btn-info" id="searchMyProduct">搜尋</button>
+                                <span>搜尋專輯名稱:</span> <input style="color:black" class="myProductSearchInput" type="text" /> <button class="btn btn-info" id="searchMyProduct">搜尋</button>
                             </div>
                             <!-- DATA TABLE-->
                             <div class="table-responsive m-b-40">
@@ -496,13 +501,17 @@
                                             <th>動作</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="memberSongListTable">
-                                    </tbody>
+                                    <tbody id="memberSongListTable"></tbody>
                                 </table>
                             </div>
                             <!-- END DATA TABLE-->
                         </div>
                     </div>
+                </div>
+            </li>
+            <li>
+                <div class="section__content section__content--p30">
+                    @Html.Action("Index","MemberHome")
                 </div>
             </li>
         </ul>
@@ -536,7 +545,7 @@
         $(_this).parent().addClass('on');
         var control_div = $(_this).data('div');
         $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
-
+        var drag = null;
     };
 
     //  $("#preview_fCoverRealFile").css("display", "none");
@@ -572,7 +581,7 @@
                     $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
                     $(this).next('.foldAlbum').addClass('o').slideDown();
                 }
-     });
+             });
      });
 
       //圖片選擇按下時時重新載入-跳轉

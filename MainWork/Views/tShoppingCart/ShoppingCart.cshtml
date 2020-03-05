@@ -1,24 +1,26 @@
 ﻿@model List<MainWork.tPurchaseItem>
-
 @{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
     ViewBag.Title = "ShoppingCart";
 
-    int totalprice = (int)Model.Sum(p => (double)p.fPrice *  p.tProduct.tAlbum.fDiscount).Value;
-
+    int totalprice = (int)Model.Sum(p => (double)p.fPrice * p.tProduct.tAlbum.fDiscount).Value;
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
 }
 
-
 <script src="https://www.paypal.com/sdk/js?client-id=AQkR_scjhSlBeRrg9DRBwj6ucqCTQcWwhAslnfMYoX7d8P1vgt8syXR7lSwHjWdL6E36RGLoDo5MYD_n&intent=authorize&currency=TWD">
-        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    // Required. Replace SB_CLIENT_ID with your sandbox client ID.
 </script>
 
-
 <h2>ShoppingCart</h2>
-
 @using (Html.BeginForm())
 {
     <div class="container">
-
         @foreach (var x in Model)
         {
             <div class="row">
@@ -43,15 +45,12 @@
             <div class="col"></div>
             <div class="col"></div>
             <div class="col"></div>
-
             <div id="paypal-button-container" class="col"></div>
-
         </div>
     </div>
 
 }
-
-    <script>
+<script>
         var totalPrice = @totalprice;
         var shopcarid =  @Model[0].fPurchaseItemID;
         $("input[name='deletebtn']").on("click", function () {
@@ -92,4 +91,4 @@
                       function (data) { alert(data)}));
               }
         }).render('#paypal-button-container');
-    </script>
+</script>

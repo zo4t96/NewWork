@@ -28,7 +28,7 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-
+        overflow: hidden;
         transition: 0.4s;
         opacity: 0;
     }
@@ -49,6 +49,7 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius:10px;
         /*測試用圖片*/
         /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
@@ -96,6 +97,15 @@
     }
     .carousel-item{
         cursor:pointer;
+    }
+
+    /*折扣文字*/
+    .discount{
+        display:inline-block;
+        position:relative;
+        font-size:12px;
+        font-weight:600;
+        color:red;
     }
 </style>
 <link href="~/Content/bootstrap.css" rel="stylesheet" />
@@ -164,19 +174,23 @@
         @foreach (var item in Model)
         {
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
-                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-                <img src="~/Images/4.jpg" class="albumCover"/>
-                <div class="albumContent">
-                    <span class="albumTitle">@item.fAlbumName</span>
-                    <span class="albumDescripion">@item.fMaker</span>
-                    @if (item.tAlbumType.fTypeName != "不指定")
-                    {
-                        <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
-                    }
-                    <span class="albumDescripion">@item.fKinds</span>
-                </div>
-            </a>
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
+            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+            <img src="~/Images/@item.fCoverPath" class="albumCover" />
+            <div class="albumContent">
+                <span class="albumTitle">@item.fAlbumName</span>
+                <span class="albumDescripion">@item.fMaker</span>
+                @if (item.tAlbumType.fTypeName != "不指定")
+                {
+                    <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
+                }
+                <span class="albumDescripion">@item.fKinds</span>
+                @if (item.fActivityID != null)
+                {
+                    <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+                }
+            </div>
+        </a>
         }
     </div>
     @* 建立廣告牆輪播需讀取的js *@

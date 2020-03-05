@@ -41,6 +41,7 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius: 10px;
         /*測試用圖片*/
         background-image: url("/Images/4.jpg");
         background-size: cover;
@@ -86,6 +87,14 @@
         top: 40%;
         margin: auto;
     }
+    /*折扣文字*/
+    .discount {
+        display: inline-block;
+        position: relative;
+        font-size: 12px;
+        font-weight: 600;
+        color: #dc0000;
+    }
 </style>
 
 @if (Model.FirstOrDefault() == null)
@@ -109,6 +118,10 @@ else
                 <span class="albumTitle">@item.fAlbumName</span>
                 <span class="albumDescripion">@item.fMaker</span>
                 <span class="albumDescripion">@item.fKinds</span>
+                @if (item.fActivityID != null)
+                {
+                    <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+                }
             </div>
         </a>
     }

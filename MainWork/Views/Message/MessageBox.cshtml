@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<MainWork.tMessage>
-@using MusicPrj.Models;
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "MessageBox";
@@ -21,10 +21,11 @@
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
     tMessage tMes = new tMessage();
-    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus==0).ToList();
+    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus == 0).ToList();
     tMesCopy.Reverse();
 }
 <style>
+
     /*Tab換頁效果*/
     .tab_btns li {
         display: inline-block;
@@ -83,14 +84,15 @@
                     <div class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
                             <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
-                            <small class="mailTextColor">@Html.DisplayFor(modelItem => item.fTime)
+                            <small class="mailTextColor">
+                                @Html.DisplayFor(modelItem => item.fTime)
                             <span>  </span>@Html.ActionLink("刪除", "DelteMail", new { mailid = item.fMessageId }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
-                            </small>
-                        </div>
-                        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
-                        <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
+                        </small>
                     </div>
-                }
+                    <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
+                    <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
+                </div>
+            }
             </div>
         </li>
         <li>
@@ -99,42 +101,38 @@
                 {
                     @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                    @*增加placeholder提醒*@
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fAccountTo, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tMes.fAccountTo, new { htmlAttributes = new { @class = "form-control", placeholder = "輸入收件人" } })
-                            @Html.ValidationMessageFor(model => tMes.fAccountTo, "", new { @class = "text-danger" })
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @*增加placeholder提醒*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => tMes.fAccountTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tMes.fAccountTo, new { htmlAttributes = new { @class = "form-control", placeholder = "輸入收件人" } })
+                                @Html.ValidationMessageFor(model => tMes.fAccountTo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*增加placeholder提醒*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => tMes.fTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => tMes.fTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "主旨" } })
+                                @Html.ValidationMessageFor(model => tMes.fTitle, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => tMes.fContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <textarea class="form-control text-box" rows="20" id="tMes_fContent" name="tMes.fContent" placeholder="輸入你想要寫的內容..."></textarea>
+                                @*@Html.EditorFor(model => tMes.fContent, new { htmlAttributes = new { @class = "form-control" } })*@
+                                @Html.ValidationMessageFor(model => tMes.fContent, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                            </div>
                         </div>
                     </div>
-
-                    @*增加placeholder提醒*@
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fTitle, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tMes.fTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "主旨" } })
-                            @Html.ValidationMessageFor(model => tMes.fTitle, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fContent, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <textarea class="form-control text-box" rows="20" id="tMes_fContent" name="tMes.fContent" placeholder="輸入你想要寫的內容..."></textarea>
-                            @*@Html.EditorFor(model => tMes.fContent, new { htmlAttributes = new { @class = "form-control" } })*@
-                            @Html.ValidationMessageFor(model => tMes.fContent, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
-                        </div>
-                    </div>
-                </div>
                 }
             </div>
         </li>
