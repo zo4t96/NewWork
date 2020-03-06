@@ -9,11 +9,7 @@ namespace MusicPrj.Controllers
 {
     public class PlayerController : Controller
     {
-        // GET: Player
-        public ActionResult Index()
-        {
-            return View();
-        }
+        // GET: TwoPlayer
 
         public ActionResult TwoPlayer(bool ajax = false)
         {

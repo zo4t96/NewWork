@@ -1,0 +1,204 @@
+﻿
+@{
+    tAlbum tA = new tAlbum();
+}
+
+
+<div class="headtitle h1">專輯新增</div>
+@*for start*@
+@using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
+{
+    <div class="albumCreatePanel row">
+        <div class="col-md-6">
+            <div class="container" style="color:white">
+
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <div class="h4">請輸入專輯基本資料</div>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        *@Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        *@Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            @*@Html.EditorFor(model => tA.fType, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <select class="advancedtxt form-control ustom-select my-1 mr-sm-2" name="tA.fType" id="adTypePageload">
+                                @* 網頁初始化時會在這裡更新搜尋的類別 *@
+                            </select>
+                            @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                @Html.EditorFor(model => tA.fALPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => tA.fALPrice, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        *@Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
+                                <label class="custom-file-label" for="customFile">點選圖片</label>
+                            </div>
+                        </div>
+                    </div>
+
+                        @*使用拖曳填入input的專輯Kind*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                <div>類別: <span id="tA_fKindstext"></span></div>
+                                <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
+                                @*input除錯用,平常type設成hide*@
+                                <input class="form-control text-box single-line" id="tA_fKinds" name="tA.fKinds" type="text" value="">
+                                @Html.ValidationMessageFor(model => tA.fKinds, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-9">
+                </div>
+            </div>
+            @*<div class="form-group" style="text-align:center">
+                    <div  style="display:inline-block">
+                        <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
+                    </div>
+                    <h3 id="previewTitle">Title</h3>
+                    <h4 id="previewGroup">Group</h4>
+                    <h4 id="previewPrice">Price</h4>
+                    <h4 id="previewTitle">Type</h4>
+                    <h4 id="previewTitle">Kind</h4>
+                </div>*@
+            <div class="form-group">
+                <div class="albumBlock">
+                    <div class="albumCover">
+                        <img id="preview_fCoverRealFile" src="" />
+                    </div>
+                    <div class="albumContent">
+                        <span id="previewTitle" class="albumTitle"></span>
+                        <span id="previewGroup" class="albumDescripion"></span>
+                        <span id="previewTypes" class="albumDescripion"></span>
+                        <span id="previewKinds" class="albumDescripion"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-5">
+                    <input type="button" value="建立專輯" id="inputFormSubmit" class="btn btn-warning" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+@*for End*@
+
+<script>
+
+          //圖片選擇按下時時重新載入-跳轉
+    $("#preview_fCoverRealFile_source").change(function(){
+            readURL(this);
+     });
+
+      //圖片選擇按下時時重新載入-方法
+    function readURL(input){
+            if(input.files && input.files[0]){
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#preview_fCoverRealFile").attr('src', e.target.result);
+                $("#preview_fCoverRealFile").css("display", "inline");
+                    }
+                reader.readAsDataURL(input.files[0]);
+                }
+            }
+    $(document).ready(function () {
+
+        //類別選擇載入
+        $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#adTypePageload").append(`<option value="${value.fTypeID}">${value.fTypeName}</option>`)
+            })
+        });
+
+    });
+
+    //  $("#preview_fCoverRealFile").css("display", "none");
+    //名稱與創作者跟右邊預覽同步
+    $("#tA_fAlbumName").keyup(function () {
+    $("#previewTitle").text($("#tA_fAlbumName").val());
+    })
+    $("#tA_fMaker").keyup(function () {
+        $("#previewGroup").text($("#tA_fMaker").val());
+    })
+
+    //Type跟右邊預覽同步-->失效
+    $("#adTypePageload").change(function () {
+        $("#previewType").text($("#adTypePageload option:selected").text());
+    })
+
+    //Kind
+    $("#kindReviseInterface").on("click", function () {
+                $.get("@Url.Action("_kindAddInterface","Album")", function (data) {
+                    $("#modalContent").html(data);
+                });
+                $("#modal").css("display", "block");
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $("#modalContent").addClass("fadein");
+                }, 10)
+    })
+
+    //新增專輯送出時檢查
+    $("#inputFormSubmit").click(function () {
+        if ($("#preview_fCoverRealFile").attr('src') != "") {
+            if ($("#tA_fAlbumName").val() != "") {
+                if ($("#tA_fMaker").val() != "") {
+                    if ($("#tA_fALPrice").val() > 0) {
+                        $("#formInput").submit();
+                    } else {
+                        alert("價格需填入>0數字");
+                    }
+                } else {
+                    alert("需填入歌手名稱");
+                }
+            } else {
+                alert("需填入單曲名稱");
+            }
+        } else {
+            alert("需上傳檔案");
+        }
+    });
+
+</script>

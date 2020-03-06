@@ -120,19 +120,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tMessages">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
-        <MappingFragment StoreEntitySet="tMessage">
-          <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fTime" ColumnName="fTime" />
-          <ScalarProperty Name="fContent" ColumnName="fContent" />
-          <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
-          <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
-          <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tMembers">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
         <MappingFragment StoreEntitySet="tMember">
@@ -150,6 +137,20 @@
           <ScalarProperty Name="fEmail" ColumnName="fEmail" />
           <ScalarProperty Name="fPassword" ColumnName="fPassword" />
           <ScalarProperty Name="fAccount" ColumnName="fAccount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tMessages">
+      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
+        <MappingFragment StoreEntitySet="tMessage">
+          <ScalarProperty Name="fReaded" ColumnName="fReaded" />
+          <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
+          <ScalarProperty Name="fTime" ColumnName="fTime" />
+          <ScalarProperty Name="fContent" ColumnName="fContent" />
+          <ScalarProperty Name="fAccountTo" ColumnName="fAccountTo" />
+          <ScalarProperty Name="fAccountFrom" ColumnName="fAccountFrom" />
+          <ScalarProperty Name="fMessageId" ColumnName="fMessageId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

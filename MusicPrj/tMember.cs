@@ -21,11 +21,11 @@ namespace MusicPrj
             this.tAlbums = new HashSet<tAlbum>();
             this.tLogs = new HashSet<tLog>();
             this.tLogs1 = new HashSet<tLog>();
-            this.tMessages = new HashSet<tMessage>();
-            this.tMessages1 = new HashSet<tMessage>();
             this.tPlayLists = new HashSet<tPlayList>();
             this.tPurchaseItems = new HashSet<tPurchaseItem>();
             this.tShoppingCarts = new HashSet<tShoppingCart>();
+            this.tMessages = new HashSet<tMessage>();
+            this.tMessages1 = new HashSet<tMessage>();
         }
     
         public string fAccount { get; set; }
@@ -52,14 +52,14 @@ namespace MusicPrj
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tLog> tLogs1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tMessage> tMessages { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tMessage> tMessages1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPlayList> tPlayLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tShoppingCart> tShoppingCarts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tMessage> tMessages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tMessage> tMessages1 { get; set; }
     }
 }

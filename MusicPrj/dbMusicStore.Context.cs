@@ -35,7 +35,7 @@ namespace MusicPrj
         public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
         public virtual DbSet<tStatistic> tStatistics { get; set; }
         public virtual DbSet<tProduct> tProducts { get; set; }
-        public virtual DbSet<tMessage> tMessages { get; set; }
         public virtual DbSet<tMember> tMembers { get; set; }
+        public virtual DbSet<tMessage> tMessages { get; set; }
     }
 }

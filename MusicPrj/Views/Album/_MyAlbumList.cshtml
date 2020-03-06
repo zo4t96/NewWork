@@ -4,9 +4,7 @@
     Layout = null;
 }
 <style>
-
     /*商品box開始*/
-
     .albumname {
         width: 200px;
         height: 45px;
@@ -16,12 +14,9 @@
     }
 
     .productitem {
-        float: left;
-        color: white;
-        margin-left: 10px;
-        margin-bottom: 0.5%;
-        font-family: 微軟正黑體;
-        background-color: #444444;
+        margin: 15px 15px 0px 0px;
+        padding: 15px 15px 25px 15px;
+        background-color: #3e3b3b;
         cursor: pointer;
         border-radius: 10px;
         transition: 0.4s;
@@ -32,24 +27,19 @@
             background-color: dimgray;
         }
 
-    .productitemhy:link {
-        color: white;
-        text-decoration: none;
-    }
-
-    .productitemhy:visited {
-        color: white;
-    }
-
     .headtitle {
-        color: white;
-        margin-left: 20px;
-        padding-bottom: 20px;
-        font-family: 微軟正黑體;
+        margin: 45px 0px 10px 10px;
     }
 
     .animation {
         opacity: 1;
+    }
+
+    .cover > img {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        background-size: cover;
     }
     /*商品box結束*/
 </style>
@@ -64,9 +54,9 @@
                 <td class="productitem">
                     <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
 
-                        <fieldset style="height:300px;border-radius:10px;padding:5px;">
+                        <fieldset>
                             <table>
-                                <tr><td><div style="width:200px;height:200px"><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></div></td></tr>
+                                <tr><td><div class="cover"><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></div></td></tr>
                                 <tr>
                                     <td>
                                         <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
@@ -90,9 +80,15 @@
                 <td class="productitem">
                     <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
 
-                        <fieldset style="height:300px;border-radius:10px;padding:5px;">
+                        <fieldset>
                             <table>
-                                <tr><td><div style="width:200px;height:200px"><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></div></td></tr>
+                                <tr>
+                                    <td>
+                                        <div class="cover">
+                                            <img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" />
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
@@ -114,11 +110,16 @@
             {
 
                 <td class="productitem">
-
                     <a class="productitemhy" href="@Url.Action("AlbumInfo","Album")?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
-                        <fieldset style="border:1px solid;height:300px;border-radius:5px;padding:5px;">
+                        <fieldset>
                             <table>
-                                <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
+                                <tr>
+                                    <td>
+                                        <div class="cover">
+                                            <img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" />
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
@@ -135,41 +136,10 @@
     </table>
 </div>
 
-
-@*<div class="h1 headtitle">所有專輯</div>
-<table>
-    <tr>
-
-        @foreach (var item in Model)
-        {
-
-            <td class="productitem">
-                <a class="productitemhy" href="@Url.Action("AlbumDetail","Album")?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-singid="@Html.DisplayFor(modelItem => item.fAlbumID)">
-
-                    <fieldset style="height:300px;border-radius:10px;padding:5px;">
-                        <table>
-                            <tr><td><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></td></tr>
-                            <tr>
-                                <td>
-                                    <div class="albumname" title="@Html.DisplayFor(modelItem => item.fAlbumName)">@Html.DisplayFor(modelItem => item.fAlbumName)</div>
-                                </td>
-                            </tr>
-                            <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
-                        </table>
-                    </fieldset>
-                </a>
-
-            </td>
-        }
-    </tr>
-</table>*@
-
 <script>
-
     setTimeout(function () {
         $(".productitem").addClass("animation");
     }, 200)
-
     //?amid=${amid}
     $(".productitemhy").on("click", function (e) {
         e.preventDefault();
@@ -195,7 +165,5 @@
         history.pushState(stateObj, null, url);
         let title = $(this).data("title");
         document.title = title;
-
-
     })
 </script>

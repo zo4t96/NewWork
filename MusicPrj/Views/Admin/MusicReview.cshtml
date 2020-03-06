@@ -1,0 +1,256 @@
+﻿@model List<MusicPrj.tAlbum>
+@using MusicPrj.Models;
+
+@{
+    ViewBag.Title = "Index";
+
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
+
+<style>
+    .panel {
+        padding: 40px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin: 20px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+    }
+
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 60px;
+    }
+    /*主表單(專輯內容)*/
+    .tableTitle {
+        background-color: #85cee4;
+    }
+
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItemMain {
+        cursor: pointer;
+    }
+
+        .trItemMain:nth-child(2n+1) {
+            background-color: #c9e1e5;
+        }
+
+        .trItemMain:hover {
+            background-color: #cde4ea;
+        }
+
+        .trItemMain td {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 110px;
+        }
+
+    .cover {
+        width: 120px;
+        height: 120px;
+    }
+
+    .all {
+        cursor: pointer;
+    }
+    /*次表單(專輯內音樂內容)*/
+    .tableSub {
+        display: none;
+    }
+
+    .tableTitleSub {
+        background-color: #c7e3eb;
+    }
+
+    .trItemSub td {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 20px;
+    }
+
+    .trItemSub:hover {
+        background-color: #e6f3f7;
+    }
+
+    audio {
+        height: 30px;
+    }
+</style>
+
+<div class="title">音樂審核</div>
+<div class="panel">
+    <div class="my-4">
+        <button class="btn btn-success multiplePass">將選取的專輯過審</button>
+        <button class="btn btn-danger multipleNoPass">將選取的專輯不通過</button>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-center tableTitle">
+                <th></th>
+                <th class="all"><input class="mr-2" type="checkbox" />選取</th>
+                <th>送審日期</th>
+                <th>封面</th>
+                <th>上傳者</th>
+                <th>專輯名稱</th>
+                <th>價格</th>
+                <th>審核結果</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.FirstOrDefault() == null)
+            {
+                <tr>
+                    <td colspan="8" class="text-center">目前沒有待審核的專輯</td>
+                </tr>
+            }
+            @foreach (var item in Model)
+            {
+                <tr class="trItemMain">
+                    <td><div class="btn btn-info open">詳細內容</div></td>
+                    <td><input type="checkbox" data-account="@item.fAccount" data-album="@item.fAlbumID" /></td>
+                    <td>@item.fYear</td>
+                    <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
+                    <td>@item.fAccount</td>
+                    <td>@item.fAlbumName</td>
+                    <td>@Convert.ToInt32(item.fALPrice)元</td>
+                    <td>
+                        <button class="btn btn-success pass" data-account="@item.fAccount" data-album="@item.fAlbumID">過審</button>
+                        <button class="btn btn-danger noPass" data-account="@item.fAccount" data-album="@item.fAlbumID">審核不通過</button>
+                    </td>
+                </tr>
+
+                <tr class="tableSub">
+                    <td colspan="7">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="text-center tableTitleSub">
+                                    <th>編號</th>
+                                    <th>音樂名稱</th>
+                                    <th>歌手</th>
+                                    <th>作曲</th>
+                                    <th>單價</th>
+                                    <th>音樂</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int count = 0;}
+                                @foreach (var music in item.tProducts)
+                                {
+                                    count++;
+                                    <tr class="text-center trItemSub">
+                                        <td>@count</td>
+                                        <td>@music.fProductName</td>
+                                        <td>@music.fSinger</td>
+                                        <td>@music.fComposer</td>
+                                        <td>@Convert.ToInt32(music.fSIPrice)元</td>
+                                        <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(".open").click(function () {
+        $(this).parents("tr").next().slideToggle(1);
+    })
+    //表單內checkbox的處理
+    $(".trItemMain").click(function (e) {
+        let target = $(this).find("input[type = checkbox]")[0];
+        let openBtn = $(this).find(".open")[0];
+        if (e.target != target && e.target != openBtn) {
+            target.checked = !target.checked;
+        }
+    })
+    $(".all").click(function () {
+        let target = $(this).find("input[type = checkbox]")[0];
+        target.checked = !target.checked;
+        if (target.checked) {
+            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", true)
+        }
+        else {
+            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", false);
+        }
+    })
+    $(".all").find("input[type = checkbox]").click(function (e) {
+        e.preventDefault();
+        $(".all").trigger("click")
+    })
+    $(".pass").click(function () {
+        $(this).prop("disabled", true);
+        $(this).siblings().prop("disabled", true);
+        let account = $(this).data("account");
+        let albumId = $(this).data("album");
+        $.post('@Url.Action("Pass","Admin")', { account: account, albumId: albumId }, function () {
+            alert("審核完成");
+        })
+        $(this).parents("tr").next().html("");
+        $(this).parents("tr").html("");
+    })
+    $(".noPass").click(function () {
+        $(this).prop("disabled", true);
+        $(this).siblings().prop("disabled", true);
+        let account = $(this).data("account");
+        let albumId = $(this).data("album");
+        $.post('@Url.Action("noPass","Admin")', { account: account, albumId: albumId }, function () {
+            alert("審核完成");
+        })
+        $(this).parents("tr").next().html("");
+        $(this).parents("tr").html("");
+    })
+    $(".multiplePass,.multipleNoPass").click(function () {
+        $(this).prop("disabled", true);
+        let accounts = [];
+        let albums = [];
+        $(".trItemMain").find("input[type = checkbox]:checked").each(function () {
+            accounts.push($(this).data("account"));
+            albums.push($(this).data("album"))
+        })
+        if (accounts[0] == null || albums[0] == null) {
+            alert("還未選取任何專輯");
+            return
+        }
+        let url;
+        if ($(this).hasClass("multiplePass")) {
+            url = '@Url.Action("MultiplePass", "Admin")';
+        }
+        else {
+            url = '@Url.Action("MultipleNoPass", "Admin")';
+        }
+        $.post(url, { accounts: accounts, albums: albums }, function () {
+            alert("審核完成");
+            $(".trItemMain").find("input[type = checkbox]:checked").each(function () {
+                $(this).parents(".trItemMain").next().html("");
+                $(this).parents(".trItemMain").html("");
+            })
+        })
+        $(this).prop("disabled", false);
+    })
+</script>

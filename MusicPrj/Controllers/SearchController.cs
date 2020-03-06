@@ -105,6 +105,11 @@ namespace MusicPrj.Controllers
         {
             return Json(cc.searchAlbum(term), JsonRequestBehavior.AllowGet);
         }
+        //後臺才會用到的
+        public JsonResult AutoCompleteAccount(string term)
+        {
+            return Json(cc.searchAccount(term), JsonRequestBehavior.AllowGet);
+        }
 
         //進階搜尋內容的初始化
         public ActionResult SetTypes()

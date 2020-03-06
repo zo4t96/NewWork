@@ -1,0 +1,273 @@
+﻿@model List<MusicPrj.tAlbum>
+@using MusicPrj.Models;
+
+@{
+    ViewBag.Title = "Index";
+
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
+
+<style>
+    .panel {
+        padding: 0 40px 40px 40px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin: 20px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+    }
+
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 60px;
+    }
+    /*主表單(專輯內容)*/
+    .tableTitle {
+        background-color: #85cee4;
+    }
+
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItemMain:nth-child(2n+1) {
+        background-color: #c9e1e5;
+    }
+
+    .trItemMain:hover {
+        background-color: #cde4ea;
+    }
+
+    .trItemMain td {
+        text-align: center;
+        vertical-align: middle;
+        /*line-height: 110px;*/
+    }
+
+    .cover {
+        width: 120px;
+        height: 120px;
+    }
+    /*次表單(專輯內音樂內容)*/
+    .tableSub {
+        display: none;
+    }
+
+    .tableTitleSub {
+        background-color: #c7e3eb;
+    }
+
+    .trItemSub td {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 20px;
+    }
+
+    .trItemSub:hover {
+        background-color: #e6f3f7;
+    }
+
+    audio {
+        height: 30px;
+    }
+
+    .inputSearch {
+        width: 250px;
+    }
+</style>
+
+<div class="title">上架音樂管理</div>
+<div class="panel">
+    <div class="my-4 d-flex">
+        <div class="form-group inputSearch mr-3">
+            <label for="account" class="col-form-label ">上傳者查詢</label>
+            <input type="text" id="account" class="form-control" placeholder="請輸入要查詢的帳號" name="account">
+        </div>
+        <div class="form-group inputSearch mr-3">
+            <label for="group" class="col-form-label">團體查詢</label>
+            <input type="text" id="group" class="form-control" placeholder="請輸入要查詢的團體" name="group">
+        </div>
+        <div class="form-group inputSearch mr-3">
+            <label for="albumName" class="col-form-label">專輯查詢</label>
+            <input type="text" id="albumName" class="form-control" placeholder="請輸入要查詢的專輯" name="albumName">
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-center tableTitle">
+                <th></th>
+                <th>上架時間</th>
+                <th>封面</th>
+                <th>上傳者</th>
+                <th>團體名稱</th>
+                <th>專輯名稱</th>
+                <th>價格</th>
+                <th>強制下架</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+            @foreach (var item in Model)
+            {
+                <tr class="trItemMain">
+                    <td><div class="btn btn-info open">詳細內容</div></td>
+                    <td>@item.fYear</td>
+                    <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
+                    <td>@item.fAccount</td>
+                    <td>@item.fMaker</td>
+                    <td>@item.fAlbumName</td>
+                    <td>@Convert.ToInt32(item.fALPrice)元</td>
+                    <td>
+                        <button class="btn btn-danger recall" data-account="@item.fAccount" data-album="@item.fAlbumID">強制下架</button>
+                    </td>
+                </tr>
+
+                <tr class="tableSub">
+                    <td colspan="7">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="text-center tableTitleSub">
+                                    <th>編號</th>
+                                    <th>音樂名稱</th>
+                                    <th>歌手</th>
+                                    <th>作曲</th>
+                                    <th>單價</th>
+                                    <th>音樂</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int count = 0;}
+                                @foreach (var music in item.tProducts)
+                                {
+                                    count++;
+                                    <tr class="text-center trItemSub">
+                                        <td>@count</td>
+                                        <td>@music.fProductName</td>
+                                        <td>@music.fSinger</td>
+                                        <td>@music.fComposer</td>
+                                        <td>@Convert.ToInt32(music.fSIPrice)元</td>
+                                        <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function initialize() {
+        $(".open").click(function () {
+        $(this).parents("tr").next().slideToggle(1);
+    })
+    $(".recall").click(function () {
+        if (!confirm("你確定要將這張專輯強制下架嗎?")) {
+            return;
+        }
+        $(this).prop("disabled", true);
+        let account = $(this).data("account");
+        let albumId = $(this).data("album");
+        $.post('@Url.Action("Recall","Admin")', { account: account, albumId: albumId }, function () {
+            alert("已將專輯強制下架");
+        })
+        $(this).parents("tr").next().html("");
+        $(this).parents("tr").html("");
+    })
+    }
+    initialize();
+    $("#account").autocomplete({
+        source: '@Url.Action("AutoCompleteAccount", "Search")'
+    });
+    $("#group").autocomplete({
+        source: '@Url.Action("AutoCompleteGroup", "Search")'
+    });
+    $("#albumName").autocomplete({
+        source: '@Url.Action("AutoCompleteAlbum", "Search")'
+    });
+    $("#account,#group,#albumName").keyup(function () {
+        //不同的text採用不同的搜尋方法
+        let method;
+        if ($(this).attr("name") == "account") {
+            method = "account";
+        }
+        else if ($(this).attr("name") == "group") {
+            method = "group";
+        }
+        else if ($(this).attr("name") == "albumName") {
+            method = "albumName";
+        }
+        let keyword = $(this).val().trim();
+        if (keyword == "") {
+            return;
+        }
+        $.getJSON('@Url.Action("MusicList","Admin")', { keyword: keyword, method: method}, function (datas) {
+            $(".list").html("");
+            if (datas.length == 0) {
+                $(".list").append(`<tr><td colspan='8'>查無相關資訊</td></tr>`);
+            }
+            //以下全都是加ajax出來的額外table寫法......有點智障
+            $.each(datas, function (index, values) {
+                let album = values.album;
+                let open = `<td><div class="btn btn-info open">詳細內容</div></td>`
+                let year = `<td>${album.fYear}</td>`;
+                let cover = `<td><img class="cover" src="~/Images/${album.fCoverPath}" /></td>`;
+                let account = `<td>${album.fAccount}</td>`;
+                let maker = `<td>${album.fMaker}</td>`;
+                let albumName = `<td>${album.fAlbumName}</td>`;
+                let price = `<td>${album.fALPrice}</td>`;
+                let btn = `<td>
+                                <button class="btn btn-danger recall" data-account="${album.fAccount}" data-album="${album.fAlbumID}">強制下架</button>
+                           </td>`;
+                $(".list").append(`<tr class="trItemMain">
+                    ${open + album + year + cover + account + maker + albumName + price + btn}
+                </tr>`);
+                let subTable = `<tr class="tableSub">
+                                    <td colspan="7">
+                                     <table class="table table-bordered">
+                                      <thead>
+                                        <tr class="text-center tableTitleSub">
+                                          <th>編號</th><th>音樂名稱</th><th>歌手</th>
+                                          <th>作曲</th><th>單價</th><th>音樂</th>
+                                        </tr>
+                                      </thead>
+                                     <tbody>`
+                $.each(values.musics, function (idx, music) {
+                    let num = `<td>${idx + 1}</td>`;
+                    let musicName = `<td>${music.fProductName}</td>`;
+                    let singer = `<td>${music.fSinger}</td>`;
+                    let composer = `<td>${music.fComposer}</td>`;
+                    let siPrice = `<td>${music.fSIPrice}</td>`;
+                    let musicFile = `<td><audio src="~/Music/${music.fFilePath}" controls></audio></td>`;
+                    let subRow = `<tr class="text-center trItemSub">${num + musicName + singer + composer +
+                                    siPrice + musicFile}</tr>`
+                    subTable = subTable + subRow;
+                })
+                subTable = subTable + `</tbody></table></td></tr>`;
+                $(".list").append(subTable);
+                console.log(subTable)
+            })
+            initialize();
+        })
+    })
+</script>

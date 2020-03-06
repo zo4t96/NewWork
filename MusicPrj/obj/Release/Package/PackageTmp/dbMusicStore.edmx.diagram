@@ -22,17 +22,17 @@
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tStatistic_tProducts" />
-        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMessage" Width="1.5" PointX="3" PointY="14.625" />
         <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMember" Width="1.5" PointX="0.75" PointY="8.375" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tActivity_tMember" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tMember" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tLog_tMember" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tLog_tMember1" />
-        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember" />
-        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember1" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPlayLists_tMember" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" />
         <AssociationConnector Association="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMessage" Width="1.5" PointX="3" PointY="14.625" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

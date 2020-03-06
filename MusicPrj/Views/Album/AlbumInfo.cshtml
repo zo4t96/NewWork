@@ -33,6 +33,37 @@
 }
 
 <style>
+            /*舊Player開始*/
+    .originalPanel,
+    .demoPanel {
+    position: relative;
+    width: 100%; /*此行修改過*/
+    height: 50px;
+    /*background: #5c616e;*/ /*此行拿掉過*/
+    margin: 10px;
+    padding: 10px;
+    }
+
+    .demoPanel:hover { /*此class新增*/
+        background-color: darkgray;
+    }
+
+            .demoSlider,
+        .originalSlider,
+        .vbtn {
+            cursor: pointer;
+        }
+
+        .vbtn {
+            display: inline;
+        }
+
+            .vbtn img {
+                width: 20px;
+                height: 15px;
+                filter: invert();
+            }
+
     .demoSlider,
     .originalSlider {
         -webkit-appearance: none;
@@ -44,24 +75,24 @@
         margin: 10px;
     }
 
-     .slider-range::-webkit-slider-thumb,
-     .demoSlider::-webkit-slider-thumb,
-     .originalSlider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        position: relative;
-        width: 10px;
-        height: 10px;
-        background: rgb(201, 201, 201);
-        border-radius: 50%;
-        transition: 0.2s;
-     }
+        .slider-range::-webkit-slider-thumb,
+        .demoSlider::-webkit-slider-thumb,
+        .originalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            position: relative;
+            width: 10px;
+            height: 10px;
+            background: rgb(201, 201, 201);
+            border-radius: 50%;
+            transition: 0.2s;
+        }
 
-     .demoSlider::-webkit-slider-thumb:hover,
-     .originalSlider::-webkit-slider-thumb:hover {
-        cursor: pointer;
-        width: 14px;
-        height: 14px;
-     }
+            .demoSlider::-webkit-slider-thumb:hover,
+            .originalSlider::-webkit-slider-thumb:hover {
+                cursor: pointer;
+                width: 14px;
+                height: 14px;
+            }
 
     p {
         font-size: 12px;
@@ -74,9 +105,34 @@
         margin: 20px;
         width: 500px;
     }
-    /*舊Player結束*/
+    /*albuminfo開始*/
+    /*專輯圖/介紹開始*/
+    .albumset {
+        display: inline-block;
+        margin-left: 5%;
+        margin-top: 3%;
+        width: 20%;
+        background-color: saddlebrown;
+    }
+    /*專輯圖/介紹*/
+    /*單曲列表開始*/
+    .albumtext {
+        text-align: center;
+        width: 97%;
+    }
+    /*單曲列表結束*/
+    /*albuminfo結束*/
+    /*MyAlbumList開始*/
+    /*摺疊樣式開始*/
+    .musicsPanel {
+        display: inline-block;
+        vertical-align: top;
+        min-width: 700px;
+        margin: 50px;
+        background-color: #257042
+    }
     /*摺疊效果預設摺起來*/
-        .fold-title {
+    .fold-title {
         background-color: #f3f3f3;
         padding: 10px;
         color: #525252;
@@ -84,18 +140,27 @@
         width: 100%;
         border-top-left-radius: 10px;
     }
+
     .foldAlbum {
         display: none;
         line-height: 17pt;
         width: 100%
     }
-        .fold-container {
+
+    .fold-container {
         padding: 10px 10px 10px 30px;
         border: solid #f3f3f3 2px;
     }
-    .albumtextbox{
-        color:black;
-        margin: 10px 0px;
+    /*摺疊樣式結束*/
+    /*MyAlbumList結束*/
+    /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
+    .fa:hover, .fas:hover {
+        color: #525252;
+    }
+
+    .fa, .fas {
+        transition: 0.4s;
+        cursor: pointer;
     }
 </style>
 
@@ -103,153 +168,144 @@
 <script src="@Url.Content("~/Scripts/musicmetadata.js")" type="text/javascript"></script>
 
 
-<div class="albumset" style="text-align:center">
-    <div class="row">
-
-        <img id="fCoverPathUploadimg" src="~/CoverFiles/@tAl.fCoverPath" width="320" height="320" />
-
-        <form name="form1" id="form1" enctype="multipart/form-data">
-
-            <div class="form-group">
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <span>更換專輯封面圖:</span> <input type="file" name="fCoverPathUpload" id="fCoverPathUpload" />
-                        }
+<div class="albumset">
+    <img id="fCoverPathUploadimg" src="~/CoverFiles/@tAl.fCoverPath" width="320" height="320" />
+    <form name="form1" id="form1" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="col-md-12">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <span>更換專輯封面圖:</span> <input type="file" name="fCoverPathUpload" id="fCoverPathUpload" />
                     }
-                </div>
+                }
             </div>
-            <div class="form-group">
-                <div class="h5">專輯名稱</div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <input name="revisefAlbumName" class="form-control albumtextbox" type="text" value="@tAl.fAlbumName" />
-                        }
-                        else
-                        {
-                            <div class="h5">@tAl.fAlbumName</div>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="h5">發行團體</div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <input name="revisefMaker" class="form-control albumtextbox" type="text" value="@tAl.fMaker" />
-                        }
-                        else
-                        {
-                            <div class="h5">@tAl.fMaker</div>
-                        }
-                    }
-                </div>
-                <div class="h5">會員: </div>
-                <div class="col-md-12">
-                    <div class="h5">@tAl.fAccount</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="h5">最後修改時間</div>
-                <div class="col-md-12">
-                    <div class="h5">@tAl.fYear</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="h5">風格/類別</div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload"></select>
-                        }
-                        else
-                        {
-                            <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload" disabled></select>
-                        }
-                    }
-                </div>
-            </div>
-            @* 網頁初始化時會在這裡載入的類別以talTypeload抓取 *@
-            <div class="form-group">
-                <div class="h5">專輯類型</div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
-                        }
-                        else
-                        {
-                            <button class="btn btn-outline-secondary" disabled>修改</button>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="h5">專輯售價</div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            <input name="revisefALPrice" class="form-control albumtextbox" type="text" value="@tAl.fALPrice" />
-                        }
-                        else
-                        {
-                            <div class="h5">@tAl.fALPrice</div>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="h5">狀態: </div>
-                <div class="col-md-12">
-                    @{ if (tAl.fStatus == 0)
-                        {
-                            @:<input type="radio" name="o.fstatus" id="o_status_yes" value="1" />送審 <input type="radio" name="o.fstatus" id="o_status_no" checked value="0" />繼續修改
-                        }
-                        else if (tAl.fStatus == 1)
-                        {
-                            @:<span>專輯送審中...</span>
-                        }
-                        else if (tAl.fStatus == 2)
-                        {
-                            @:<span>正常販售</span>
-                        }
-                    }
-                </div>
-            </div>
-
-        </form>
-
-        <h5 class="albumtext">共有@(Model.Count()) 首</h5>
-        @{ if (tAl.fStatus == 0)
-            {
-                <div class="col-md-12">
-                    <button class="btn btn-info editAlbumInfo">修改專輯內容</button>
-                </div>
-            }
-            else if (tAl.fStatus == 1)
-            {
-                <div class="col-md-12">
-                    <button class="btn btn-info editAlbumInfoClose">撤回重新修改內容</button>
-                </div>
-            }
-            else if (tAl.fStatus == 2)
-            {
-                <div class="col-md-12">
-                    <button class="btn btn-info editAlbumInfoClose">下架</button>
-                </div>
-            }
-        }
-        <div class="col-md-12">
-            <h5 class="albumtext">@Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })</h5>
         </div>
+        <div class="form-group">
+            <div class="h5">專輯名稱</div>
+            <div class="col-md-12">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <input name="revisefAlbumName" class="form-control albumtextbox" type="text" value="@tAl.fAlbumName" />
+                    }
+                    else
+                    {
+                        <div class="h5">@tAl.fAlbumName</div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="h5">發行團體</div>
+            <div class="col-md-12">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <input name="revisefMaker" class="form-control albumtextbox" type="text" value="@tAl.fMaker" />
+                    }
+                    else
+                    {
+                        <div class="h5">@tAl.fMaker</div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="h5">最後修改時間</div>
+            <div class="col-md-12">
+                <div class="h5">@tAl.fYear</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="h5">風格/類別</div>
+            <div class="col-md-8">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload"></select>
+                    }
+                    else
+                    {
+                        <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload" disabled></select>
+                    }
+                }
+            </div>
+        </div>
+        @* 網頁初始化時會在這裡載入的類別以talTypeload抓取 *@
+        <div class="form-group">
+            <div class="h5">專輯類型</div>
+            <div class="col-md-12">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
+                    }
+                    else
+                    {
+                        <div class="h5">@tAl.fKinds</div>
+                        <button class="btn btn-outline-secondary" disabled>修改</button>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="h5">專輯售價</div>
+            <div class="col-md-12 albumtextbox">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        <input name="revisefALPrice" class="form-control " type="text" value="@tAl.fALPrice" />
+                    }
+                    else
+                    {
+                        <div class="h5">@tAl.fALPrice</div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="h5">狀態: </div>
+            <div class="col-md-12">
+                @{ if (tAl.fStatus == 0)
+                    {
+                        @:<input type="radio" name="o.fstatus" id="o_status_yes" value="1" />送審 <input type="radio" name="o.fstatus" id="o_status_no" checked value="0" />繼續修改
+                    }
+                    else if (tAl.fStatus == 1)
+                    {
+                        @:<span>專輯送審中...</span>
+                    }
+                    else if (tAl.fStatus == 2)
+                    {
+                        @:<span>正常販售</span>
+                    }
+                }
+            </div>
+        </div>
+    </form>
+    <h5 class="albumtext">共有@(Model.Count()) 首</h5>
+    @{ if (tAl.fStatus == 0)
+        {
+            <div class="col-md-12">
+                <button class="btn btn-info editAlbumInfo">修改專輯內容</button>
+            </div>
+        }
+        else if (tAl.fStatus == 1)
+        {
+            <div class="col-md-12">
+                <button class="btn btn-info editAlbumInfoClose">撤回重新修改內容</button>
+            </div>
+        }
+        else if (tAl.fStatus == 2)
+        {
+            <div class="col-md-12">
+                <button class="btn btn-info editAlbumInfoClose">下架</button>
+            </div>
+        }
+    }
+    <div class="col-md-12">
+        <h5 class="albumtext">@Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })</h5>
     </div>
 </div>
 
 
-    <div style="display: inline-block;vertical-align:top;">
-        <div class="container" style="margin-left:30px">
+    <div class="musicsPanel">
+        <div class="container">
             @if (tAl.fStatus == 0)
             {
                 <div class="h3fold h3 fold-title" data-start="input" data-end="input"><i class="fa fa-chevron-right"></i> 單曲上傳</div>
@@ -429,10 +485,10 @@
                                     </div>
 
                                     <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
-                                    <input type="time" class="start" value="00:00.00" disabled="false">
+                                    <input type="hidden" class="start" value="00:00.00" disabled="false">
                                     <br>
                                     <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
-                                    <input type="time" class="end" value="00:00.00" disabled="false">
+                                    <input type="hidden" class="end" value="00:00.00" disabled="false">
                                     <p>也可以直接拉動滑條直接選取試聽範圍</p>
                                     <div id="slider-range" class="slider"></div>
 
@@ -463,9 +519,9 @@
     </div>
     <div class="eventNotification" hidden>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>*@
     <script>
 
     $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
@@ -970,7 +1026,7 @@
             if (confirm("真的要刪除嗎?")) {
                  @*@Html.ActionLink("刪除", "DelteSong", new { amid = item.fProductID }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })*@
                 $.get("@Url.Action("DelteSong","Album")?amid="+$(this).data("songid"), function (data) {
-                    $("#modalContent").html(data);
+                    $(".eventNotification").html(data);
                     let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
                     $.get(plink, { ajax: true }, function (data) {
                     $(".mainbox").html(data);

@@ -1,0 +1,341 @@
+﻿@model IEnumerable<MusicPrj.tAlbumKind>
+@using MusicPrj.Models;
+
+@{
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
+<style>
+    .outer {
+        display: flex;
+        margin: 0px 50px;
+    }
+
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 50px;
+    }
+
+    .groupPanel {
+        min-width: 400px;
+        background-color: rgba(206, 226, 231, 0.30);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px outset white;
+    }
+
+    #colorpicker {
+        height: 36px;
+        padding: 2px 3px;
+    }
+
+    .kindBlockSmall {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 2px 1px;
+        color: white;
+        font-weight: 600;
+    }
+    /*以下為預覽介面*/
+    .kindPanel {
+        display: flex;
+        flex-wrap: wrap;
+        width: 90%;
+        position: relative;
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+        background-color: #2a2a2a;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .kindBlockBig {
+        width: 6vw;
+        height: 6vw;
+        min-width: 70px;
+        min-height: 70px;
+        border-radius: 10px;
+        margin: 4px;
+        padding: 5px;
+        background-image: linear-gradient(to bottom,#16161660 15%,#ffffff);
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+        .kindBlockBig span {
+            color: white;
+        }
+
+    .photo {
+        position: relative;
+        width: 70%;
+        height: 70%;
+        bottom: -25%;
+        right: -50%;
+        background-size: cover;
+        box-shadow: 0px 1px 1px 1px #0000004b;
+        transform: rotate(25deg);
+    }
+
+    .kindSelected {
+        box-shadow: 0px 0px 10px 7px #0caaef;
+    }
+</style>
+
+<div class="container-fluid mx-3">
+    <div class="title">
+        <p>樂曲風格&介面修改</p>
+    </div>
+    <div class="outer">
+        <div class="groupPanel col-3">
+            @*<div class="h5">曲風一覽</div>
+                <div class="mb-5 w-75">
+                    @foreach (var item in Model)
+                    {
+                        <div class="kindBlockSmall" data-color="@item.fColor">@item.KindName</div>
+                    }
+                </div>*@
+
+            @* 選擇曲風id *@
+            <div class="h5">曲風選擇</div>
+            <select class="custom-select w-50 mr-3 menu" form="kindForm" name="kindId">
+                <option value="0">新增曲風...</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.KindID" data-color="@item.fColor" data-path="/Images/@item.fPhotoPath">@item.KindName</option>
+                }
+            </select>
+
+            <form id="kindForm" method="post" enctype="multipart/form-data">
+                @* 輸入名稱 *@
+                <div class="input-group w-100 mr-3 mt-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text name">新增曲風</div>
+                    </div>
+                    <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱" name="kindName">
+                </div>
+                <small class="form-text text-muted">修改狀態下，不填寫名稱欄位視同不做修改</small>
+
+                @* 改變顏色 *@
+                <div class="input-group w-75 mr-3 mt-3 ">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text color">色碼</div>
+                    </div>
+                    <input type="color" id="colorpicker" value="#ffffff" name="kindColor">
+                    <input type="text" readonly class="form-control color colortxt" value="#ffffff">
+                </div>
+
+                @* 上傳圖片 *@
+                <div class="input-group w-75 mr-3 mt-3 ">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="on" type="radio" name="uploadCheck" value="true" checked />
+                        <label class="form-check-label" for="on">上傳圖片</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="off" type="radio" name="uploadCheck" value="false" />
+                        <label class="form-check-label" for="off">不上傳圖片</label>
+                    </div>
+                </div>
+                <div>
+                    <input type="file" class="w-50 mr-3 mt-1 upload" accept="image/jpg" name="kindImage">
+                </div>
+
+                <input type="hidden" class="forDelete" name="deleteId" value="0" />
+
+                <button type="submit" class="btn btn-primary mr-3 mt-3 save">儲存變更</button>
+                <button type="submit" class="btn btn-primary mr-3 mt-3 new">新增</button>
+                <button type="submit" class="btn btn-danger mt-3 delete">刪除此曲風</button>
+                <small class="form-text text-muted">注意，每次儲存僅會修改當前選擇的曲風</small>
+            </form>
+        </div>
+
+        <div class="groupPanel col-8">
+            <div class="h5">預覽介面</div>
+            <div class="kindPanel">
+                @foreach (var item in Model)
+                {
+                    <div class="kindBlockBig" data-name="@item.KindName" data-kind="@item.KindID" data-color="@item.fColor" data-path="@item.fPhotoPath">
+                        <span class="kindName">@item.KindName</span>
+                        <div class="photo"></div>
+                    </div>
+                }
+                <div class="kindBlockBig newBlock kindSelected" data-kind="0" data-color="#ffffff">
+                    <span class="kindName">新增曲風</span>
+                    <div class="photo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".save").css("display", "none")
+    $(".delete").css("display", "none")
+    initialize()
+    $(".color").click(function () {
+        $("#colorpicker").trigger("click");
+    })
+    $("#colorpicker").change(function () {
+        $(".colortxt").val($(this).val());
+        var target = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`);
+        $(this).css("background-color", $(this).data("color"))
+        target.css("background-color", $(this).val());
+        target.css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).val()})`)
+    })
+    $(".nameInput").keyup(function () {
+        $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text($(this).val().trim());
+        if (this.value == "") {
+            var name = $(this).siblings().find(".name").text();
+            $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text(name);
+        }
+    })
+    $('input[type = "radio"]').on("input", function () {
+        if ($(this).attr("id") == "on") {
+            $(".upload").css("display", "block")
+        }
+        else {
+            $(".upload").css("display", "none")
+        }
+    })
+    $(".menu").change(function () {
+        initialize();
+        $(".forDelete").val($(this).val());
+        //選擇現有曲風
+        if ($(this).val() != 0) {
+            $(".delete").css("display", "inline-block");
+            $(".save").css("display", "inline-block");
+            $(".new").css("display", "none");
+            $(".colortxt").val($(this).find("option:selected").data("color"));
+            $("#colorpicker").val($(this).find("option:selected").data("color"));
+            $(".name").text($(this).find("option:selected").text());
+            $(".nameInput").attr("placeholder", "請輸入要變更的名稱");
+            //$(".newBlock").css("display", "none");
+            $(".kindPanel").children().removeClass("kindSelected");
+            $(".kindPanel").find(`[data-kind = ${$(this).val()}]`).addClass("kindSelected");
+        }
+        //選擇新增曲風
+        else {
+            $(".delete").css("display", "none");
+            $(".save").css("display", "none");
+            $(".new").css("display", "inline-block");
+            $(".colortxt").val("#ffffff");
+            $("#colorpicker").val("#ffffff");
+            $(".name").text("名稱");
+            $(".nameInput").attr("placeholder", "請輸入要新增的曲風名稱");
+            //$(".newBlock").css("display", "block");
+            $(".kindPanel").children().removeClass("kindSelected");
+            $(".newBlock").addClass("kindSelected")
+        }
+    })
+    $(".kindBlockBig").click(function () {
+        $(".menu").val($(this).data("kind"));
+        $(".menu").trigger("change");
+    })
+    $(".upload").change(function () {
+        let file = this.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            var photo = $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".photo");
+            photo.css("background-image", `url(${e.target.result})`)
+        }
+    })
+    //三種按鍵對應新刪修，直接修改form的action
+    $(".new").click(function (e) {
+        e.preventDefault();
+        let radio = $("input[type = radio]:checked").val();
+        let nameInput = $(".nameInput").val().trim();
+        if (nameInput == "") {
+            alert("還未填寫新曲風的名稱!")
+            return;
+        }
+        if (radio == "true" && fileIsNull()) {
+            alert("還未上傳圖片檔!");
+            return;
+        }
+        if (!nameTwice(nameInput)) {
+            $(".nameInput").val(nameInput);
+            $("#kindForm").attr("action", "@Url.Action("KindNew","Admin")")
+            $("#kindForm").submit();
+        }
+    })
+    $(".save").click(function (e) {
+        e.preventDefault();
+        let radio = $("input[type = radio]:checked").val();
+        let nameInput = $(".nameInput").val().trim();
+        if (radio == "true" && fileIsNull()) {
+            alert("還未上傳圖片檔!");
+            return;
+        }
+        if (!nameTwice($(".nameInput").val())) {
+            if (confirm("假如修改曲風名稱，原本擁有此項的專輯的同曲風會被刪除，確定要修改嗎?")) {
+                if (nameInput == "") {
+                $(".nameInput").val($(".name").text());
+            }
+                $("#kindForm").attr("action", "@Url.Action("KindEdit","Admin")")
+                $("#kindForm").submit();
+            }
+        }
+    })
+    $(".delete").click(function (e) {
+        e.preventDefault();
+        if (confirm("這會讓跟本曲風相關聯的專輯資料也刪去相同的曲風，確定要這麼做嗎?")) {
+            $("#kindForm").attr("action", "@Url.Action("KindDelete","Admin")")
+            $("#kindForm").submit();
+        }
+    })
+    //判斷是否有重名的方法
+    function nameTwice(name) {
+        let cancel = false;
+        $(".kindBlockSmall").each(function () {
+            if ($(this).text() == name) {
+                alert("資料庫裡已有同名的樂曲風格!")
+                cancel = true;
+            }
+        })
+        return cancel;
+    }
+    //假如勾選上傳圖片，則上傳檔案不該為空值
+    function fileIsNull() {
+        let cancel = false;
+        if ($(".upload").val() == "") {
+            cancel = true;
+        }
+        return cancel;
+    }
+    //初始化方法(把顏色都弄回正常什麼的，初次進入與選單換曲風的時候會發動)
+    function initialize() {
+        $(".kindBlockSmall").each(function () {
+            $(this).css("background-color", $(this).data("color"))
+            $(this).css("background-image", `linear-gradient(to bottom,#26262660 100%,${$(this).data("color")})`);
+        })
+        $(".kindBlockBig").each(function () {
+            $(this).css("background-color", $(this).data("color"))
+            $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
+            $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("path")}`)
+            $(this).find("span").text($(this).data("name"));
+        })
+        //把上傳檔案資料清空
+        $(".upload").val("");
+    }
+</script>

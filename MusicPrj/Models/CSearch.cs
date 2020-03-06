@@ -25,8 +25,7 @@ namespace MusicPrj.Models
         //首頁商品項目，選取所有商品
         public IEnumerable<tAlbum> allAlbum()
         {
-            //IEnumerable
-               var all = db.tAlbums.Where(a=>a.fStatus==1).Select(a => a);
+            var all = db.tAlbums.Select(a => a);
             return all;
         }
 
@@ -75,7 +74,7 @@ namespace MusicPrj.Models
             {
                 data = data.Where(a => a.album.fMaker.Contains(keyObj.adGroup));
             }
-            if (keyObj.adType != 0)
+            if (keyObj.adType != 1)//不指定的id為1，資料庫若有更改得做修正
             {
                 data = data.Where(a => a.album.fType == keyObj.adType);
             }
@@ -102,10 +101,58 @@ namespace MusicPrj.Models
             return result;
         }
 
+        //以下後臺用
         //尋找屬於特定活動的專輯
         public IEnumerable<tAlbum> byEvent(int eventId)
         {
             var result = db.tAlbums.Where(a => a.fActivityID == eventId);
+            return result;
+        }
+
+        internal object MusicManage(string keyword, string method)
+        {
+            var result = new List<object>();
+            var albums = new List<tAlbum>();
+            if (method == "account")
+            {
+                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword)).ToList();
+            }
+            else if (method == "group")
+            {
+                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword)).ToList();
+            }
+            else if (method == "albumName")
+            {
+                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword)).ToList();
+            }
+
+            foreach (var a in albums)
+            {
+                List<tProduct> musics = new List<tProduct>();
+                foreach (var p in a.tProducts)
+                {
+                    var pro = new tProduct()
+                    {
+                        fProductName = p.fProductName,
+                        fSinger = p.fSinger,
+                        fComposer = p.fComposer,
+                        fSIPrice = p.fSIPrice,
+                        fFilePath = p.fFilePath
+                    };
+                    musics.Add(pro);
+                }
+                tAlbum album = new tAlbum()
+                {
+                    fAlbumID = a.fAlbumID,
+                    fYear = a.fYear,
+                    fCoverPath = a.fCoverPath,
+                    fAccount = a.fAccount,
+                    fMaker = a.fMaker,
+                    fAlbumName = a.fAlbumName,
+                    fALPrice = a.fALPrice
+                };
+                result.Add(new { album, musics });
+            }
             return result;
         }
     }

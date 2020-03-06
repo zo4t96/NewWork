@@ -505,6 +505,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\CManagementController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomepageController.cs" />
     <Compile Include="Controllers\MemberLoginController.cs" />
@@ -535,6 +536,7 @@
     <Compile Include="Models\CAutoComplete.cs" />
     <Compile Include="Models\CDictionary.cs" />
     <Compile Include="Models\CEvent.cs" />
+    <Compile Include="Models\CManagement.cs" />
     <Compile Include="Models\CMemberFactory.cs" />
     <Compile Include="Models\CMessage.cs" />
     <Compile Include="Models\CMusic.cs" />
@@ -580,6 +582,7 @@
     </Compile>
     <Compile Include="ViewModels\CAdvancedSearchObject.cs" />
     <Compile Include="ViewModels\CEventObject.cs" />
+    <Compile Include="ViewModels\CKindEditObject.cs" />
     <Compile Include="ViewModels\CLoginData.cs" />
     <Compile Include="ViewModels\CLoginViewModel.cs" />
     <Compile Include="ViewModels\CSearchResult.cs" />
@@ -673,6 +676,18 @@
     <Content Include="Views\tShoppingCart\ShoppingCart.cshtml" />
     <Content Include="Views\Search\EventResult.cshtml" />
     <Content Include="Views\Search\EventResultView.cshtml" />
+    <Content Include="Views\Admin\EventEdit.cshtml" />
+    <Content Include="Views\Admin\EventPage.cshtml" />
+    <Content Include="Views\Admin\KindAlter.cshtml" />
+    <Content Include="Views\Admin\MusicReview.cshtml" />
+    <Content Include="Views\Admin\MusicManage.cshtml" />
+    <Content Include="Views\Album\_LinePlayer.cshtml" />
+    <Content Include="Views\Album\_LineLogin.cshtml" />
+    <Content Include="Views\Album\_MyAlbumAddAlbum.cshtml" />
+    <Content Include="Views\Album\_MyAlbumAnalysis.cshtml" />
+    <Content Include="Views\Album\_MyAlbumProductList.cshtml" />
+    <Content Include="Views\Album\_kindAddInterface.cshtml" />
+    <Content Include="Views\Message\_MessageListView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -689,6 +704,7 @@
     <Folder Include="vendor\progressbar\" />
     <Folder Include="vendor\smk-accordion\" />
     <Folder Include="vendor\sweetalert\" />
+    <Folder Include="Views\CManagement\" />
     <Folder Include="Views\pages\" />
     <Folder Include="Views\Statistic\" />
   </ItemGroup>

@@ -30,26 +30,18 @@ namespace MusicPrj.Controllers
                 return View("Search", "Kind");
             if (data != null)
             {
-                //tMember cust = (new tMemberFactory()).getByAccount(data.txtAccount);
-                //if (cust != null)
-                //{
-                //    if (cust.fPassword.Equals(data.txtPassword))
-                //    {
-                //        Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
-                //        return RedirectToAction("Main", "Homepage");
-                //    }
-                //}
-                //ViewBag.ErrorMessage = "帳號與密碼不符";
-                //tMember cust = (new tMemberFactory()).getByAccount(data.txtAccount);
                 string account = data.txtAccount;
-                string password = data.txtPassword;
-                Session[CDictionary.SK_ACCOUNT] = account;
                 tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
-                Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
-           //     return RedirectToAction("Main", "Homepage");
-                return RedirectToAction("Index", "Album");
-                //Response.Redirect("~/Album/Index/");
-                //return View();
+                if (cust != null)
+                {
+                    if (cust.fPassword.Equals(data.txtPassword))
+                    {
+                        Session[CDictionary.SK_ACCOUNT] = account;
+                        Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
+                        return RedirectToAction("Main", "Homepage");
+                    }
+                }
+                ViewBag.ErrorMessage = "帳號與密碼不符";
             }
             return View();
         }

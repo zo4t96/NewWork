@@ -1,5 +1,4 @@
-﻿@model IEnumerable<MusicPrj.tMessage>
-@using MusicPrj.Models;
+﻿@using MusicPrj.Models;
 
 @{
     ViewBag.Title = "MessageBox";
@@ -21,8 +20,11 @@
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
     tMessage tMes = new tMessage();
-    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus==0).ToList();
+    //撈取寄件備份
+    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus == 0).ToList();
     tMesCopy.Reverse();
+    int totalPage = ViewBag.totalPage;
+
 }
 <style>
     /*Tab換頁效果*/
@@ -65,107 +67,123 @@
     .mailTextColor {
         color: black;
     }
+
+    li .page-item {
+        width: 2%;
+        padding: 0;
+        margin: 0;
+    }
 </style>
-<div class="container">
-    <ul class="tab_btns nav nav-tabs" style="display:inline-block">
-        @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
-        <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">收件夾</a></li>
-        <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 寄件</a></li>
-        <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">寄件備份</a></li>
-    </ul>
-</div>
-<div class="tab_container">
-    <ul class="tab_contents" id="tab_contents1">
-        <li>
-            <div class="list-group container py-3 px-3">
-                @foreach (var item in Model)
-                {
-                    <div class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
-                            <small class="mailTextColor">@Html.DisplayFor(modelItem => item.fTime)
-                            <span>  </span>@Html.ActionLink("刪除", "DelteMail", new { mailid = item.fMessageId }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
-                            </small>
-                        </div>
-                        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
-                        <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
-                    </div>
-                }
-            </div>
-        </li>
-        <li>
-            <div class="list-group container py-3 px-3">
-                @using (Html.BeginForm("sentMessage", "Message", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
-                {
-                    @Html.AntiForgeryToken()
-
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                    @*增加placeholder提醒*@
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fAccountTo, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tMes.fAccountTo, new { htmlAttributes = new { @class = "form-control", placeholder = "輸入收件人" } })
-                            @Html.ValidationMessageFor(model => tMes.fAccountTo, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    @*增加placeholder提醒*@
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fTitle, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => tMes.fTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "主旨" } })
-                            @Html.ValidationMessageFor(model => tMes.fTitle, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => tMes.fContent, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <textarea class="form-control text-box" rows="20" id="tMes_fContent" name="tMes.fContent" placeholder="輸入你想要寫的內容..."></textarea>
-                            @*@Html.EditorFor(model => tMes.fContent, new { htmlAttributes = new { @class = "form-control" } })*@
-                            @Html.ValidationMessageFor(model => tMes.fContent, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
-                        </div>
-                    </div>
+<div id="wrapper">
+    <div class="container">
+        <ul class="tab_btns" style="display:inline-block">
+            @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
+            <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">收件夾</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 寄件</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">寄件備份</a></li>
+        </ul>
+    </div>
+    <div class="tab_container">
+        <ul class="tab_contents" id="tab_contents1">
+            <li>
+                <div class="list-group container py-3 px-3">
+                    <div class="align-self-end"><button class="btn btn-danger deleteAllmail">全部刪除</button></div>
+                    <div class="py-3" id="messageList"> @Html.Action("_MessageListView")</div>
                 </div>
-                }
-            </div>
-        </li>
-        <li>
-            <div class="list-group container py-3 px-3">
-                @foreach (var item in tMesCopy)
-                {
-                    <div class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
-                            <small class="mailTextColor">@Html.DisplayFor(modelItem => item.fTime)</small>
+                @*頁籤*@
+                <nav class="py-3" aria-label="...">
+                    <ul class="pagination pagination-sm">
+                        @{
+                            for (int i = 1; i < totalPage; i++)
+                            {
+                                if (i == 1)
+                                {
+                                    <li data-page="@i" class="page-item active pageBtn"><a class="page-link">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li data-page="@i" class="page-item pageBtn"><a class="page-link">@i</a></li>
+                                }
+                            }
+
+                        }
+                    </ul>
+                </nav>
+
+            </li>
+            <li>
+                <div class="list-group container py-3 px-3">
+                    @using (Html.BeginForm("sentMessage", "Message", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            @*增加placeholder提醒*@
+                            <div class="form-group">
+                                @Html.LabelFor(model => tMes.fAccountTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tMes.fAccountTo, new { htmlAttributes = new { @class = "form-control", placeholder = "輸入收件人" } })
+                                    @Html.ValidationMessageFor(model => tMes.fAccountTo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*增加placeholder提醒*@
+                            <div class="form-group">
+                                @Html.LabelFor(model => tMes.fTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => tMes.fTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "主旨" } })
+                                    @Html.ValidationMessageFor(model => tMes.fTitle, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => tMes.fContent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <textarea class="form-control text-box" rows="20" id="tMes_fContent" name="tMes.fContent" placeholder="輸入你想要寫的內容..."></textarea>
+                                    @*@Html.EditorFor(model => tMes.fContent, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => tMes.fContent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                                </div>
+                            </div>
                         </div>
-                        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
-                        <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
-                    </div>
-                }
-            </div>
-        </li>
-    </ul>
+                    }
+                </div>
+            </li>
+            <li>
+                <div class="list-group container py-3 px-3">
+                    @foreach (var item in tMesCopy)
+                    {
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
+                                <small class="mailTextColor">
+                                    @Html.DisplayFor(modelItem => item.fTime)
+                                    <span>  <button data-mailid="@Html.DisplayFor(modelItem => item.fMessageId)" class="btn btn-danger deletemail">刪除</button></span>
+                                </small>
+                            </div>
+                            <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
+                            <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
+                        </div>
+                    }
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
-<div class="eventNotification" hidden>
-</div>
+    <div class="eventNotification" hidden>
+    </div>
 <script>
 
     //Tab頁面控制
     function tab_switch(_this) {
-        // $(".tabswitch").click(function (_this) {
-        //console.log("ccc")
         var now_tab = $(_this).parent().index();
-        $(_this).parent().siblings().children().removeClass('active')
-        $(_this).addClass("active");
         $(_this).parent().siblings().removeClass('on');
         $(_this).parent().addClass('on');
         var control_div = $(_this).data('div');
@@ -211,5 +229,27 @@
             } else {
                  alert("需填入對方帳號");
             }
-        });
-</script>
+            });
+
+            $(".deletemail").click(function () {
+            if (confirm("真的要刪除嗎?")) {
+                $.get("@Url.Action("DelteMail","Message")?mailid="+$(this).data("mailid"), function (data) {
+                    $(".eventNotification").html(data);
+                    let plink = "@Url.Action("MessageBox","Message")";
+                    $.get(plink, { ajax: true }, function (data) {
+                    $(".mainbox").html(data);
+                })
+                });
+            } else {
+                }
+            })
+
+
+    $(".pageBtn").click(function () {
+        console.log($(this).data("page"));
+        $.get("@Url.Action("_MessageListView","Message")?page=" + $(this).data("page"), function (data) {
+             $("#messageList").html(data);
+        })
+    })
+
+    </script>

@@ -93,7 +93,7 @@
         $(".kindBlock").each(function () {
             $(this).css("background-color", $(this).data("color"));
             $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
-            $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("image")})`)
+            $(this).find(".photo").css("background-image", `url(@Url.Content("~")Images/${$(this).data("image")})`)
             $(this).click(function(){
                 let kindId = $(this).data("kind");
                 let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`

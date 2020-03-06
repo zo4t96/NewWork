@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Web.Script.Services;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
+using MusicPrj.ViewModels;
 
 namespace MusicPrj.Controllers
 {
@@ -24,6 +25,44 @@ namespace MusicPrj.Controllers
         CAlbum album = new CAlbum();
         // GET: Album
 
+        //測試用網頁
+        public ActionResult test()
+        {
+            int amid = 5;
+            //test 測試框內框外對連結影響0129
+            ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
+            var list = db.tProducts.Where(p => p.fAlbumID == amid);
+            //         Session["account"] = "aaa";
+            if (list != null)
+            {
+                Session["albumid"] = amid;
+                return View(list);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        public ActionResult Ordertest()
+        {
+            List<testO> ls = new List<testO> { };
+            ls.Add(new testO { num = 1 });
+            ls.Add(new testO { num = 2 });
+            ls.Add(new testO { num = 3 });
+            ls.Add(new testO { num = 4 });
+            ls.Add(new testO { num = 5 });
+            ls.Add(new testO { num = 6 });
+            var lss = ls.Where(p => p.num >= 3).ToList();
+            lss.AddRange(ls.Where(p => p.num < 3).ToList());
+            string a = "從:";
+            foreach (var c in lss)
+            {
+                a += "," + c.num;
+            }
+            return Content(a); ;
+        }
+
         public ActionResult Index(bool ajax = false)
         {
             //      Session[CDictionary.SK_ACCOUNT] = "aaa";
@@ -37,6 +76,24 @@ namespace MusicPrj.Controllers
             return View(album.ToList());
         }
 
+        //商品頁面
+        public ActionResult AlbumDetail(int amid, bool ajax = false)
+        {
+            ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
+            var list = db.tProducts.Where(p => p.fAlbumID == amid);
+            //         Session["account"] = "aaa";
+            if (list != null)
+            {
+                Session["albumid"] = amid;
+                return View(list);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        //播放器相關
         public ActionResult PlayLists()
         {
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
@@ -51,25 +108,6 @@ namespace MusicPrj.Controllers
                 return Content("<span>撥放清單是空的喔<span>");
             }
 
-        }
-
-        public ActionResult Ordertest()
-        {
-            List<testO> ls = new List<testO> { };
-            ls.Add(new testO { num = 1 });
-            ls.Add(new testO { num = 2 });
-            ls.Add(new testO { num = 3 });
-            ls.Add(new testO { num = 4 });
-            ls.Add(new testO { num = 5 });
-            ls.Add(new testO { num = 6 });
-            var lss = ls.Where(p=>p.num>=3).ToList();
-            lss.AddRange(ls.Where(p => p.num < 3).ToList());
-            string a="從:";
-            foreach (var c in lss)
-            {
-                a += ","+c.num;
-            }
-            return Content(a); ;
         }
 
         public ActionResult _PlayLists()
@@ -118,7 +156,6 @@ namespace MusicPrj.Controllers
             return JavaScript("alert('"+playlist.userAddPlayLists(s1,amid)+ "');");
         }
 
-        //未完成,先不包成模組
         public ActionResult nextPlayLists(int amid, int playmode)
         {
 
@@ -219,15 +256,51 @@ namespace MusicPrj.Controllers
             }
         }
 
-        public ActionResult test()
+        //創作者相關
+        public ActionResult MyAlbumList(string account, bool ajax = false)
         {
-            int amid = 5;
-            //test 測試框內框外對連結影響0129
-            ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
+            //Session[CDictionary.SK_ACCOUNT] = "aaa";
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            var list = db.tAlbums.Where(p => p.fAccount == s1);
+            return View(list) ;
+        }
+
+        //創作者所有專輯
+        public ActionResult _MyAlbumList()
+        {
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            var list = db.tAlbums.Where(p => p.fAccount == s1);
+            return View(list);
+        }
+
+        public ActionResult _MyAlbumAddAlbum()
+        {
+            return PartialView();
+        }
+
+        public ActionResult _MyAlbumAnalysis()
+        {
+            return PartialView();
+        }
+
+        public ActionResult _MyAlbumProductList()
+        {
+            return PartialView();
+        }
+
+        public ActionResult AlbumInfo(int amid, bool ajax = false)
+        {
+            //   Session[CDictionary.SK_ACCOUNT] = "aaa";
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             var list = db.tProducts.Where(p => p.fAlbumID == amid);
-            //         Session["account"] = "aaa";
             if (list != null)
             {
+                //非創作者或管理員
+                int? priviageClass = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fPrivilege;
+                if (list.FirstOrDefault(p => p.tAlbum.fAccount == s1) == null && priviageClass < 2)
+                {
+                    Response.Redirect("~/Index/");
+                }
                 Session["albumid"] = amid;
                 return View(list);
             }
@@ -237,21 +310,68 @@ namespace MusicPrj.Controllers
             }
         }
 
-        public ActionResult MyAlbumList(string account, bool ajax = false)
+        public ActionResult _LinePlayer()
         {
-            //        Session[CDictionary.SK_ACCOUNT] = "aaa";
+            //if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+            //{
+            //    return Content("<span>你還沒登入喔<span>");
+            //}
+            //Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
-            var list = db.tAlbums.Where(p => p.fAccount == s1);
-            return View(list) ;
+            tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
+            List<tProduct> tp = null;
+            if (DateTime.Now < tM.fSubscriptEndDate)
+            {
+                ViewBag.memberUseType = "包月會員";
+                ViewBag.memberSubscribeEnd = tM.fSubscriptEndDate.Value.ToShortDateString();
+                tp = playlist.getUserPlaylistSubscribe(s1);
+            }
+            else
+            {
+                ViewBag.memberUseType = "一般會員";
+                ViewBag.memberSubscribeEnd = "";
+                tp = playlist.getUserPlaylistNormal(s1);
+            }
+            if (tp.Count != 0)
+            {
+                return PartialView("_LinePlayer", tp);
+            }
+            else
+            {
+                //    return View();
+                return Content("<span>撥放清單是空的喔<span>");
+            }
         }
 
-        public ActionResult _MyAlbumList()
+        public ActionResult _LineLogin()
         {
-            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
-            var list = db.tAlbums.Where(p => p.fAccount == s1);
-            return View(list);
+            return View();
         }
 
+        [HttpPost]
+        public ActionResult _LineLogin(CLoginData data)
+        {
+            if (string.IsNullOrEmpty(data.txtAccount))
+                return View("Search", "Kind");
+            if (data != null)
+            {
+                string account = data.txtAccount;
+                tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
+                if (cust != null)
+                {
+                    if (cust.fPassword.Equals(data.txtPassword))
+                    {
+                        Session[CDictionary.SK_ACCOUNT] = account;
+                        Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
+                        return RedirectToAction("_LinePlayer", "Album");
+                    }
+                }
+                ViewBag.ErrorMessage = "帳號與密碼不符";
+            }
+            return View();
+        }
+
+        //已購買音樂
         public ActionResult MyMusic()
         {
             if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
@@ -272,44 +392,6 @@ namespace MusicPrj.Controllers
             }
         }
 
-        public ActionResult AlbumInfo(int amid , bool ajax = false)
-        {
-          //   Session[CDictionary.SK_ACCOUNT] = "aaa";
-            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
-            var list = db.tProducts.Where(p => p.fAlbumID == amid);
-            if (list != null)
-            {
-                //非創作者或管理員
-                int? priviageClass = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fPrivilege;
-                 if (list.FirstOrDefault(p=>p.tAlbum.fAccount==s1) == null && priviageClass < 2)
-                {
-                    Response.Redirect("~/Index/");
-                }
-                Session["albumid"] = amid;
-                return View(list);
-            }
-            else
-            {
-                return View();
-            }
-        }
-
-        public ActionResult AlbumDetail(int amid, bool ajax = false)
-        {
-            ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
-            var list = db.tProducts.Where(p => p.fAlbumID == amid);
-            //         Session["account"] = "aaa";
-            if (list != null)
-            {
-                Session["albumid"] = amid;
-                return View(list);
-            }
-            else
-            {
-                return View();
-            }
-        }
-
         public ActionResult AddAlbum(string account)
         {
             tAlbum tA = new tAlbum();
@@ -317,6 +399,7 @@ namespace MusicPrj.Controllers
             return View(tA);
         }
 
+        //##################################新增刪除修改子程式###################################################
         //上傳專輯
         [HttpPost]
         public ActionResult AddAlbum(tAlbum tA)
@@ -452,5 +535,12 @@ namespace MusicPrj.Controllers
             //TempData["message"] = ViewBag.Msg;
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
+
+        //更新專輯Kind畫面開啟
+        public ActionResult _kindAddInterface()
+        {
+            return PartialView("_kindAddInterface");
+        }
+
     }
 }
