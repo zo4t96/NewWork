@@ -151,10 +151,15 @@
                 music.src = e.target.result;
                 demoMusic.src = e.target.result;
             }
+
         });
 
+        //正確的斜線用法
+        //music.src = "/MusicFile/aaa.mp3";
         //讀取音樂時會進行初始化
         $(".originalAudio").on("durationchange", function () {
+            console.log(this.duration)
+
             let totalTime = parseInt(music.duration);
 
             //如果是讀取資料庫時用這段

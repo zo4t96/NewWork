@@ -155,5 +155,26 @@ namespace MainWork.Models
             }
             return result;
         }
+
+        internal object accountManage(string keyword)
+        {
+            List<object> result = new List<object>();
+            var members = db.tMembers.Where(m => m.fAccount.Contains(keyword)).ToList();
+            foreach(var m in members)
+            {
+                var member = new
+                {
+                    m.fAccount,
+                    m.fNickName,
+                    m.fEmail,
+                    m.fPrivilege,
+                    m.fSubscriptStartDate,
+                    m.fSubscriptEndDate,
+                    m.fMoney
+                };
+                result.Add(member);
+            }
+            return result;
+        }
     }
 }

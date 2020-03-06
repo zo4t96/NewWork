@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<MainWork.tProduct>
-@using MainWork.Models;
+@using MainWork.Models;3
+
 @{
     if (Request.IsAjaxRequest() == false)
     {
@@ -378,7 +379,7 @@
                  data-soid="@item.fProductID"
                  data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
                  data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
-                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"
+                 data-playurl="@(Url.Content("~/MusicFile/") + Html.DisplayFor(modelItem => item.fFilePath))"
                  data-revfproductname="@item.fProductName"
                  data-revfsinger="@item.fSinger"
                  data-revfcomposer="@item.fComposer"
@@ -464,9 +465,6 @@
 <div class="eventNotification" hidden>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script>
 <script>
 
     $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
@@ -590,6 +588,7 @@
 
     //讀取檔案，一次只能讀取一個
     $("#upload").on("change", function () {
+        music = $(".originalAudio")[0];
         let file = document.getElementById("upload").files[0];
         if (file.type != "audio/mp3") {
             file = null;
@@ -634,52 +633,54 @@
 
     }
 
+    //讀取音樂時會進行初始化
+    $(".originalAudio").on("durationchange", function () {
+        music = this;
+        let totalSetTime = parseInt(music.duration);
+        let demoTotal = demoSetEnd - demoSetStart;
+        // console.log(demoTotal);
+        //console.log(totalSetTime);
+        $(".originalSlider").prop("max", totalSetTime);
+        //       $(".demoSlider").prop("max",totalSetTime);
+        $(".demoSlider").prop("max", demoSetEnd);//demoTotal-->demoSetEnd 0302
+        $(".totalSetTime").text(getTimeText(totalSetTime));
+        //         $(".totalDemo").text(getTimeText(totalSetTime));
+        $(".totalDemo").text(getTimeText(demoSetEnd));//demoTotal-->demoSetEnd 0302
 
-        //讀取音樂時會進行初始化
-        $(".originalAudio").on("durationchange", function () {
-            let totalSetTime = parseInt(music.duration);
-            let demoTotal = demoSetEnd - demoSetStart;
-           // console.log(demoTotal);
-            //console.log(totalSetTime);
-            $(".originalSlider").prop("max", totalSetTime);
-            //       $(".demoSlider").prop("max",totalSetTime);
-            $(".demoSlider").prop("max", demoSetEnd);//demoTotal-->demoSetEnd 0302
-            $(".totalSetTime").text(getTimeText(totalSetTime));
-            //         $(".totalDemo").text(getTimeText(totalSetTime));
-            $(".totalDemo").text(getTimeText(demoSetEnd));//demoTotal-->demoSetEnd 0302
-
-            //同時初始化滑動條
-            $("#slider-range").slider({
-                range: true,
-                min: 0,
-                max: `${music.duration}`,
-                step: 0.01,
-                values: [0, music.duration],
-                slide: function () {
-                    demoSetStart = $("#slider-range").slider("values", 0)
-                    setTryStart();
-                    demoSetEnd = $("#slider-range").slider("values", 1)
-                    setTryEnd();
-                }
-            });
-            $(".slider-range").slider({
-                range: true,
-                min: 0,
-                max: `${music.duration}`,
-                step: 0.01,
-                values: [0, music.duration],
-                slide: function () {
-                    setTryStart();
-                    setTryEnd();
-                }
-            });
-            console.log(demoSetStart);
-            console.log(demoSetEnd);
-            $(".start").val(demoSetStart);
-            $(".end").val(demoSetEnd);
-            setTryStart();
-            setTryEnd();
+        //同時初始化滑動條
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: `${music.duration}`,
+            step: 0.01,
+            values: [0, music.duration],
+            slide: function () {
+                demoSetStart = $("#slider-range").slider("values", 0)
+                setTryStart();
+                demoSetEnd = $("#slider-range").slider("values", 1)
+                setTryEnd();
+            }
         });
+        $(this).parent().siblings(".slider").slider({
+            range: true,
+            min: 0,
+            max: `${music.duration}`,
+            step: 0.01,
+            values: [0, music.duration],
+            slide: function () {
+                demoSetStart = $(this).slider("values", 0)
+                demoSetEnd = $(this).slider("values", 1)
+                setTryStart();
+                setTryEnd();
+            }
+        });
+        console.log(demoSetStart);
+        console.log(demoSetEnd);
+        $(".start").val(demoSetStart);
+        $(".end").val(demoSetEnd);
+        setTryStart();
+        setTryEnd();
+    });
 
         //播放器的timer
         $(".originalAudio").on("timeupdate", function () {
@@ -806,7 +807,7 @@
             $(".start").val(demoSetStart);
             console.log($("#fPlaye").val());
             $("#tP_fPlayStart").val($(".start").val())
-        console.log($("#tP_fPlayEnd").val());
+            console.log($("#tP_fPlayEnd").val());
             if (demoSetStart > demoSetMusic.currentTime) {
                 demoSetMusic.currentTime = demoSetStart;
                 $(".demoSlider").attr("value", `${demoSetStart}`);
@@ -830,6 +831,10 @@
         //摺疊樣式開始
         $(function () {
             $('.h3fold').click(function () {
+
+                music = $(this).next().find('.originalAudio')[0];
+                demoSetMusic = $(this).next().find('.demoSetAudio')[0];
+
                 if ($(this).next('.foldAlbum').hasClass('o') == true) {
                     $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
                     $(this).next('.foldAlbum').removeClass('o').slideUp();
@@ -859,7 +864,7 @@
                         $(".revise_fComposer").val(revfcomposer);
                         revfsiprice = $(this).data('revfsiprice');
                         $(".revise_fSIPrice").val(revfsiprice);
-                         setTryStart(); //處裡更新單曲時間 之前設定跑掉問題0302
+                        setTryStart(); //處裡更新單曲時間 之前設定跑掉問題0302
                         setTryEnd(); //處裡更新單曲時間 之前設定跑掉問題0302
                     }
 

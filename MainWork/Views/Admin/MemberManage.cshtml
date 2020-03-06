@@ -1,0 +1,178 @@
+﻿@model IEnumerable<MainWork.tMember>
+@using MainWork.Models;
+
+@{
+    ViewBag.Title = "Index";
+
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
+
+<style>
+    .panel {
+        padding: 0 40px 40px 40px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin: 20px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+    }
+
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 60px;
+    }
+    .tableTitle {
+        background-color: #85cee4;
+    }
+
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItemMain:nth-child(2n+1) {
+        background-color: #c9e1e5;
+    }
+
+    .trItemMain:hover {
+        background-color: #cde4ea;
+    }
+
+    .trItemMain td {
+        text-align: center;
+        vertical-align: middle;
+        /*line-height: 110px;*/
+    }
+
+</style>
+
+<div class="title">會員管理</div>
+<div class="panel">
+    <div class="my-4 d-flex">
+        <div class="form-group inputSearch mr-3">
+            <label for="account" class="col-form-label ">帳號查詢</label>
+            <input type="text" id="account" class="form-control" placeholder="請輸入要查詢的帳號" name="account">
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-center tableTitle">
+                <th>編號</th>
+                <th>會員帳號</th>
+                <th>會員暱稱</th>
+                <th>會員信箱</th>
+                <th>會員狀態</th>
+                <th>包月開始日</th>
+                <th>包月結束日</th>
+                <th>剩餘點數</th>
+                <th>刪除帳號</th>
+            </tr>
+        </thead>
+        <tbody class="list">
+            @{ int count = 0;}
+            @foreach (var item in Model)
+            {
+                count++;
+                <tr class="trItemMain">
+                    <td>@count</td>
+                    <td>@item.fAccount</td>
+                    <td>@item.fNickName</td>
+                    <td>@item.fEmail</td>
+                    @if(item.fPrivilege == 0)
+                    {
+                        <td>一般會員</td>
+                    }
+                    else if(item.fPrivilege == 1)
+                    {
+                        <td>包月會員</td>
+                    }
+                    <td>@item.fSubscriptStartDate</td>
+                    <td>@item.fSubscriptEndDate</td>
+                    <td>@Convert.ToInt32(item.fMoney)</td>
+                    <td>
+                        <button class="btn btn-danger delete" data-account="@item.fAccount">刪除帳號</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(".delete").click(function () {
+        if (!confirm("刪除帳號將造成會員權益受損，你確定真的要刪除嗎？")) {
+            return;
+        }
+        if (!confirm("你確定真的要刪除該帳號?")) {
+            return;
+        }
+        $(this).prop("disabled", true);
+        let account = $(this).data("account");
+        $.post('@Url.Action("AccountDelete","Admin")', { account: account}, function () {
+            alert("已將專輯強制下架");
+        })
+        $(this).parents("tr").html("");
+    })
+
+    $("#account").autocomplete({
+        source: '@Url.Action("AutoCompleteAccount", "Search")'
+    });
+
+    $("#account").keyup(function () {
+        let keyword = $(this).val().trim();
+        if (keyword == "") {
+            return;
+        }
+
+        $.getJSON('@Url.Action("AccountList","Admin")', { keyword: keyword}, function (datas) {
+            $(".list").html("");
+            if (datas.length == 0) {
+                $(".list").append(`<tr><td colspan='8'>查無相關資訊</td></tr>`);
+            }
+            //以下全都是加ajax出來的額外table寫法......有點智障
+            let count = 0;
+            $.each(datas, function (index, value) {
+                count++;
+                let num = `<td>${count}</td>`
+                let account = `<td>${value.fAccount}</td>`;
+                let nickname = `<td>${value.fNickName}</td>`;
+                let email = `<td>${value.fEmail}</td>`;
+                let statusName = "";
+                if (value.fPrivilege == 0) {
+                    statusName = "一般會員";
+                }
+                else if (value.fPrivilege == 1) {
+                    statusName = "包月會員";
+                }
+                let status = `<td>${statusName}</td>`;
+                let start = `<td>${value.fSubscriptStartDate}</td>`;
+                let end = `<td>${value.fSubscriptEndDate}</td>`;
+                let money = `<td>${value.fMoney}</td>`
+                let btn = `<td>
+                                <button class="btn btn-danger delete" data-account="${value.fAccount}">刪除帳號</button>
+                           </td>`;
+                $(".list").append(`<tr class="trItemMain">
+                    ${num + account + nickname + email + status + start + end + money + btn}
+                </tr>`);
+            })
+        })
+    })
+</script>

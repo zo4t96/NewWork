@@ -19,6 +19,11 @@ namespace MainWork.Controllers
             return View();
         }
 
+        public ActionResult calendar()
+        {
+            return View();
+        }
+
         public ActionResult chart()
         {
             return View();
@@ -212,6 +217,26 @@ namespace MainWork.Controllers
             CSearch cs = new CSearch();
             var result = cs.MusicManage(keyword, method);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        //會員管理
+        public ActionResult MemberManage()
+        {
+            var members = db.tMembers.Where(m=>m.fAccount != "aaa");
+            return View(members);
+        }
+        public ActionResult AccountList(string keyword)
+        {
+            CSearch cs = new CSearch();
+            var result = cs.accountManage(keyword);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AccountDelete(string account)
+        {
+            var target = db.tMembers.FirstOrDefault(m => m.fAccount == account);
+            db.tMembers.Remove(target);
+            db.SaveChanges();
+            return Content("");
         }
 
     }

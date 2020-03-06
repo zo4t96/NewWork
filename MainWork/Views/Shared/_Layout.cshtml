@@ -9,7 +9,6 @@
 <head>
     <title>SpiderFly</title>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">*@
@@ -670,7 +669,7 @@
 
     <div class="header">
         <div class="header-logo">
-            <img src="~/Images/spiderfly.png"></img>
+            <img src="~/Images/spiderfly.png">
         </div>
 
         @* 搜尋條--套用bootstrap(input-group) *@
@@ -876,7 +875,7 @@
             <!-- 進度條div -->
             <div id="progressPanel">
                 <span id="nowTime">00:00</span>
-                <input id="progress" class="demoSlider" type="range" min="0" max="100" step="0.01" value="0">
+                <input id="progress" type="range" min="0" max="100" step="0.01" value="0">
                 <span id="totalTime">00:00</span>
             </div>
 
