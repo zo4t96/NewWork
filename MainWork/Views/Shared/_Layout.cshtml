@@ -118,7 +118,7 @@
             color: white;
             background-color: #252525;
             box-shadow: 0 0 2em black;
-            z-index: 1000
+            z-index: 500;
         }
 
         /*額外更新左邊選單*/
@@ -668,9 +668,11 @@
     </div>
 
     <div class="header">
-        <div class="header-logo">
-            <img src="~/Images/spiderfly.png">
-        </div>
+        <a class="link" href="@Url.Action("Main","Homepage")">
+            <div class="header-logo">
+                <img src="~/Images/spiderfly.png">
+            </div>
+        </a>
 
         @* 搜尋條--套用bootstrap(input-group) *@
         <div class="searchBar">

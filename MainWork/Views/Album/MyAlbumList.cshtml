@@ -221,12 +221,13 @@
 
 <div id="wrapper">
     <div class="myMenu">
-        <ul class="tab_btns" >
+        <ul class="tab_btns">
             @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
-            <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">發行專輯</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 增加專輯</a></li>
+            <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">我的專輯</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">新增專輯</a></li>
             <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">販售統計</a></li>
             <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">單曲總覽</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">建立活動</a></li>
         </ul>
     </div>
     @*<div class="container text-center">
@@ -505,6 +506,12 @@
                             <!-- END DATA TABLE-->
                         </div>
                     </div>
+                </div>
+            </li>
+            @* 03/08/2020新增使用自訂活動頁面 *@
+            <li>
+                <div class="section__content section__content--p30">
+                    @Html.Action("_userEvent")
                 </div>
             </li>
         </ul>
@@ -1020,29 +1027,29 @@
         })
     })
 
-
-    $(".myProductSearchInput").autocomplete({
-        @*source: function (request, response) {
-            "@Url.Action("findProd","Statistic")?term=" + request.term.trim()
-            }*@
-        source: function (request, response) {
-            $.ajax({
-                url: "@Url.Action("findProd","Statistic")?term="+request.term.trim(),
-             //   data: { term: request.term.trim() },
-                data: {},
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-                     response($.map(result, function (name, val) {
-                     return {
-                        label: name,
-                        value: val
-                     }
-                  }));
-                }
-            });
-        },
-                 minLength: 1
-    });
+        $(".myProductSearchInput").autocomplete({
+            @*source: function (request, response) {
+                "@Url.Action("findProd","Statistic")?term=" + request.term.trim()
+                }*@
+            source: function (request, response) {
+                $.ajax({
+                    url: "@Url.Action("findProd","Statistic")?term="+request.term.trim(),
+                    //   data: { term: request.term.trim() },
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                            response($.map(result, function (name, val) {
+                            return {
+                            label: name,
+                            value: val
+                            }
+                        }));
+                    }
+                });
+            },
+            minLength: 1
+        });
+    
 
 
     //取得音樂時間文字的方法(第二個有給到小數後兩位)

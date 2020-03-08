@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<MainWork.tProduct>
-@using MainWork.Models;3
+@using MainWork.Models;
 
 @{
     if (Request.IsAjaxRequest() == false)
@@ -33,6 +33,33 @@
 }
 
 <style>
+    /*額外補上的*/
+    .originalPanel,
+    .demoPanel {
+    position: relative;
+    width: 100%; /*此行修改過*/
+    height: 50px;
+    /*background: #5c616e;*/ /*此行拿掉過*/
+    margin: 10px;
+    padding: 10px;
+    }
+    .demoPanel:hover { /*此class新增*/
+        background-color: darkgray;
+    }
+            .demoSlider,
+        .originalSlider,
+        .vbtn {
+            cursor: pointer;
+        }
+        .vbtn {
+            display: inline;
+        }
+            .vbtn img {
+                width: 20px;
+                height: 15px;
+                filter: invert();
+            }
+    /*額外補上的*/
 
     .demoSlider,
     .originalSlider {
@@ -64,13 +91,6 @@
                 height: 14px;
             }
 
-    p {
-        font-size: 12px;
-        font-style: italic;
-        color: gray;
-        margin: 5px;
-    }
-
     .slider {
         margin: 20px;
         width: 500px;
@@ -79,11 +99,12 @@
     /*albuminfo開始*/
     /*專輯圖/介紹開始*/
     .albumset {
+        width: 30%;
         display: inline-block;
         margin-left: 5%;
         margin-top: 3%;
-        width: 20%;
-        background-color: saddlebrown;
+        text-align:center;
+        /*background-color: saddlebrown;*/
     }
     /*專輯圖/介紹*/
     /*單曲列表開始*/
@@ -96,11 +117,12 @@
     /*MyAlbumList開始*/
     /*摺疊樣式開始*/
     .musicsPanel {
+        width: 30%;
         display: inline-block;
         vertical-align: top;
         min-width: 700px;
-        margin: 50px;
-        background-color: #257042
+        margin: 50px 80px;
+        /*background-color: #257042*/
     }
 
     /*摺疊效果預設摺起來*/
@@ -135,141 +157,170 @@
         transition: 0.4s;
         cursor: pointer;
     }
+
+    /*額外新增03/07/2020*/
+    .albumCover{
+        width:360px;
+        height:360px;
+        margin:0 auto;
+    }
+    .albumCover > img{
+        width:100%;
+        height:100%;
+        display: inline-block;
+        background-size:cover;
+    }
+    .form-group{
+        display:inline-block;
+        width:70%;
+    }
+    .form-group > .h5{
+        font-weight:600;
+    }
+    .form-group > .kind{
+        display: inline-block;
+    }
+    .formBox{
+        text-align:center;
+    }
+    .file{
+        display:inline-block;
+        width:200px;
+    }
 </style>
 @*抓取抓音樂檔檔案名稱歌手js檔*@
 <script src="@Url.Content("~/Scripts/musicmetadata.js")" type="text/javascript"></script>
 
 <div class="albumset">
-    <img id="fCoverPathUploadimg" src="~/CoverFiles/@tAl.fCoverPath" width="320" height="320" />
-    <form name="form1" id="form1" enctype="multipart/form-data">
-        <div class="form-group">
-            <div class="col-md-12">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <span>更換專輯封面圖:</span> <input type="file" name="fCoverPathUpload" id="fCoverPathUpload" />
-                    }
-                }
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="h5">專輯名稱</div>
-            <div class="col-md-12">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <input name="revisefAlbumName" class="form-control albumtextbox" type="text" value="@tAl.fAlbumName" />
-                    }
-                    else
-                    {
-                        <div class="h5">@tAl.fAlbumName</div>
-                    }
-                }
-            </div>
-        </div>
+    <div class="albumCover"><img id="fCoverPathUploadimg" src="~/CoverFiles/@tAl.fCoverPath" /></div>
+    <div class="formBox">
+        <form name="form1" id="form1" enctype="multipart/form-data" class="mt-4">
 
-        <div class="form-group">
-            <div class="h5">發行團體</div>
-            <div class="col-md-12">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <input name="revisefMaker" class="form-control albumtextbox" type="text" value="@tAl.fMaker" />
-                    }
-                    else
-                    {
-                        <div class="h5">@tAl.fMaker</div>
-                    }
+            @{ if (tAl.fStatus == 0)
+                {
+                    <div class="form-group mb-4">
+                        <span class="h5">更換封面：　</span>
+                        <input class="file" type="file" name="fCoverPathUpload" id="fCoverPathUpload" />
+                    </div>
                 }
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="h5">最後修改時間</div>
-            <div class="col-md-12">
-                <div class="h5">@tAl.fYear</div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="h5">風格/類別</div>
-            <div class="col-md-8">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload"></select>
-                    }
-                    else
-                    {
-                        <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload" disabled></select>
-                    }
+            }
+
+            @{ if (tAl.fStatus == 0)
+                {
+                    <div class="form-group">
+                        <div class="h5">專輯名稱</div>
+                        <div class="col-md-12">
+                            <input name="revisefAlbumName" class="form-control albumtextbox" type="text" value="@tAl.fAlbumName" />
+                        </div>
+                    </div>
                 }
-            </div>
-        </div>
-        @* 網頁初始化時會在這裡載入的類別以talTypeload抓取 *@
-        <div class="form-group">
-            <div class="h5">專輯類型</div>
-            <div class="col-md-12">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
-                    }
-                    else
-                    {
-                        <button class="btn btn-outline-secondary" disabled>修改</button>
-                    }
+                else
+                {
+                    <div class="form-group">
+                        <div class="h5">@tAl.fAlbumName</div>
+                    </div>
                 }
+            }
+
+
+            <div class="form-group">
+                <div class="h5">發行團體</div>
+                <div class="col-md-12">
+                    @{ if (tAl.fStatus == 0)
+                        {
+                            <input name="revisefMaker" class="form-control albumtextbox" type="text" value="@tAl.fMaker" />
+                        }
+                        else
+                        {
+                            <div class="h5">@tAl.fMaker</div>
+                        }
+                    }
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="h5">專輯售價</div>
-            <div class="col-md-12 albumtextbox">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        <input name="revisefALPrice" class="form-control " type="text" value="@tAl.fALPrice" />
+
+            <div class="form-group">
+                <div class="h5">販售分類</div>
+                <div class="col-md-8 kind">
+                    @{ if (tAl.fStatus == 0)
+                        {
+                            <select class="form-control ustom-select my-1 mr-sm-1" name="revisefType" id="talTypeload"></select>
+                        }
+                        else
+                        {
+                            <div class="h5">@tAl.tAlbumType.fTypeName</div>
+                        }
                     }
-                    else
-                    {
-                        <div class="h5">@tAl.fALPrice</div>
-                    }
-                }
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="h5">狀態: </div>
-            <div class="col-md-12">
-                @{ if (tAl.fStatus == 0)
-                    {
-                        @:<input type="radio" name="o.fstatus" id="o_status_yes" value="1" />送審 <input type="radio" name="o.fstatus" id="o_status_no" checked value="0" />繼續修改
+            @* 網頁初始化時會在這裡載入的類別以talTypeload抓取 *@
+            <div class="form-group">
+                <div class="h5">音樂曲風</div>
+                <div class="col-md-12">
+                    @{ if (tAl.fStatus == 0)
+                        {
+                            <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
+                        }
+                        else
+                        {
+                            <div class="h5">@((tAl.fKinds).Replace(",","、"))</div>
+                        }
                     }
-                    else if (tAl.fStatus == 1)
-                    {
-                        @:<span>專輯送審中...</span>
-                    }
-                    else if (tAl.fStatus == 2)
-                    {
-                        @:<span>正常販售</span>
-                    }
-                }
+                </div>
             </div>
-        </div>
-    </form>
-    <h5 class="albumtext">共有@(Model.Count()) 首</h5>
-    @{ if (tAl.fStatus == 0)
-        {
-            <div class="col-md-12">
-                <button class="btn btn-info editAlbumInfo">修改專輯內容</button>
+            <div class="form-group">
+                <div class="h5">專輯售價</div>
+                <div class="col-md-12 albumtextbox">
+                    @{ if (tAl.fStatus == 0)
+                        {
+                            <input name="revisefALPrice" class="form-control " type="text" value="@((int)tAl.fALPrice)" />
+                        }
+                        else
+                        {
+                            <div class="h5">$@((int)tAl.fALPrice)</div>
+                        }
+                    }
+                </div>
             </div>
+            <div class="form-group">
+                <div class="h5">狀態 </div>
+                <div class="col-md-12">
+                    @{ if (tAl.fStatus == 0)
+                        {
+                            @:<input class="ml-4" type="radio" name="o.fstatus" id="o_status_yes" value="1" />
+                            <label for="o_status_yes">送審 </label>
+                            @:<input class="ml-5" type="radio" name="o.fstatus" id="o_status_no" checked value="0" />
+                            <label for="o_status_no">繼續修改</label>
+                        }
+                        else if (tAl.fStatus == 1)
+                        {
+                            @:<span>專輯送審中...</span>
+                        }
+                        else if (tAl.fStatus == 2)
+                        {
+                            @:<span>正常販售</span>
+                        }
+                    }
+                </div>
+            </div>
+
+        </form>
+        <h5 class="albumtext">共有 @(Model.Count()) 首 </h5>
+        @{ if (tAl.fStatus == 0)
+            {
+                    <button class="btn btn-info editAlbumInfo mr-3">修改專輯內容</button>
+            }
+            else if (tAl.fStatus == 1)
+            {
+                    <button class="btn btn-info editAlbumInfoClose mr-3">撤回重新修改內容</button>
+            }
+            else if (tAl.fStatus == 2)
+            {
+                    <button class="btn btn-info editAlbumInfoClose mr-3">下架</button>
+            }
         }
-        else if (tAl.fStatus == 1)
-        {
-            <div class="col-md-12">
-                <button class="btn btn-info editAlbumInfoClose">撤回重新修改內容</button>
-            </div>
-        }
-        else if (tAl.fStatus == 2)
-        {
-            <div class="col-md-12">
-                <button class="btn btn-info editAlbumInfoClose">下架</button>
-            </div>
-        }
-    }
-    <div class="col-md-12">
-        <h5 class="albumtext">@Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })</h5>
+            @Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
+
+            <div class="mt-3 mb-5 small">最後修改時間 @tAl.fYear</div>
     </div>
 </div>
 
@@ -289,45 +340,42 @@
                                 <div class="h4">請輸入單曲基本資料</div>
                                 <hr />
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                <div class="form-group">
                                     @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
-                                    <div class="col-md-10">
-
-                                        <div class="container playerPanel">
-                                            <input type="file" id="upload" name="tP_fRealFile" accept=".mp3" />
-                                            <hr>
-                                            <h5>原始檔案</h5>
-                                            <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
-                                            <div class="py-2 originalPanel">
-                                                <audio class="originalAudio"></audio>
-                                                <span class="nowTime">00:00</span>
-                                                <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
-                                                <span class="totalSetTime">00:00</span>
-                                                <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
-                                                <div class="vbtn opause"><img src="~/Content/pause.png"></div>
-                                            </div>
-                                            @*這邊input留下為了使調整的值藉由轉換至text的Name:tP_fPlayStart and tP_fPlayEnd傳至DB*@
-                                            @*<button type="button" class="btn btn-primary setStart">設定開頭時間</button>*@
-                                            <input type="hidden" id="fPlays" name="tP.fPlays" class="start" value="00:00.00" disabled="false">
-                                            <br>
-                                            @*<button type="button" class="btn btn-primary setEnd">設定結束時間</button>*@
-                                            <input type="hidden" id="fPlaye" name="tP.fPlaye" class="end" value="00:00.00" disabled="false">
-                                            <input class="form-control text-box single-line" id="tP_fPlayStart" name="tP.fPlayStart" type="hidden" value="0">
-                                            <input class="form-control text-box single-line" id="tP_fPlayEnd" name="tP.fPlayEnd" type="hidden" value="30">
-                                            <p>也可以直接拉動滑條直接選取試聽範圍</p>
-                                            <div id="slider-range" class="slider"></div>
-                                            <h5>試聽檔案</h5>
-                                            <p>在此確認擷取的範圍</p>
-                                            <div class="py-2 demoPanel">
-                                                <audio class="demoSetAudio"></audio>
-                                                <span class="nowDemo">00:00</span>
-                                                <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
-                                                <span class="totalDemo">00:00</span>
-                                                <div class="vbtn dplay"><img src="~/Content/play.png"></div>
-                                                <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
-                                            </div>
-                                            <hr>
+                                <div class="col-md-12">
+                                    <div class="container playerPanel">
+                                        <input type="file" id="upload" name="tP_fRealFile" accept=".mp3" />
+                                        <hr>
+                                        <div class="h4 font-weight-bold">原始檔案</div>
+                                        <small>請確認上傳檔案是否有誤</small>
+                                        <div class="py-2 originalPanel">
+                                            <audio class="originalAudio"></audio>
+                                            <span class="nowTime">00:00</span>
+                                            <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalSetTime">00:00</span>
+                                            <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                            <div class="vbtn opause"><img src="~/Content/pause.png"></div>
                                         </div>
+                                        @*這邊input留下為了使調整的值藉由轉換至text的Name:tP_fPlayStart and tP_fPlayEnd傳至DB*@
+                                        @*<button type="button" class="btn btn-primary setStart">設定開頭時間</button>*@
+                                        <input type="hidden" id="fPlays" name="tP.fPlays" class="start" value="00:00.00" disabled>
+                                        <br>
+                                        @*<button type="button" class="btn btn-primary setEnd">設定結束時間</button>*@
+                                        <input type="hidden" id="fPlaye" name="tP.fPlaye" class="end" value="00:00.00" disabled>
+                                        <input class="form-control text-box single-line" id="tP_fPlayStart" name="tP.fPlayStart" type="hidden" value="0">
+                                        <input class="form-control text-box single-line" id="tP_fPlayEnd" name="tP.fPlayEnd" type="hidden" value="30">
+                                        <p>※拉動滑條來選取可供人免費試聽的範圍(若不選取，預設試聽範圍0~30秒)</p>
+                                        <div id="slider-range" class="slider"></div>
+                                        <div  class="h4 font-weight-bold">試聽檔案</div>
+                                        <small>在此確認擷取的試聽範圍</small>
+                                        <div class="py-2 demoPanel">
+                                            <audio class="demoSetAudio"></audio>
+                                            <span class="nowDemo">00:00</span>
+                                            <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                            <span class="totalDemo">00:00</span>
+                                            <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                            <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                                        </div>
+                                        <hr>
                                     </div>
                                 </div>
                                 @*增加placeholder提醒會自動更新*@
@@ -422,8 +470,8 @@
                                 @*<input type="file" id="upload" accept=".mp3" />*@
                             </div>
                             <hr>
-                            <h5>原始檔案</h5>
-                            <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                            <div class="h4 font-weight-bold">原始檔案</div>
+                            <small>請確認上傳檔案是否有誤</small>
                             <div class="py-2 originalPanel">
                                 <audio class="originalAudio"></audio>
                                 <span class="nowTime">00:00</span>
@@ -432,15 +480,12 @@
                                 <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
                                 <div class="vbtn opause"><img src="~/Content/pause.png"></div>
                             </div>
-                            <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
-                            <input type="time" class="start" value="00:00.00" disabled="false">
-                            <br>
-                            <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
-                            <input type="time" class="end" value="00:00.00" disabled="false">
-                            <p>也可以直接拉動滑條直接選取試聽範圍</p>
+
+                            <p>※拉動滑條來選取可供人免費試聽的範圍(若不選取，預設試聽範圍0~30秒)</p>
                             <div id="slider-range" class="slider"></div>
-                            <h5>試聽檔案</h5>
-                            <p>在此確認擷取的範圍</p>
+
+                            <div class="h4 font-weight-bold">試聽檔案</div>
+                            <small>在此確認擷取的試聽範圍</small>
                             <div class="py-2 demoPanel">
                                 <audio class="demoSetAudio"></audio>
                                 <span class="nowDemo">00:00</span>
@@ -452,9 +497,11 @@
                             <hr>
                         </div>
 
-                        <button data-songid="@item.fProductID" class="btn btn-danger deletesong">刪除此首單曲</button>
-                        <button class="btn btn-info updatetime">更新此首單曲資料</button>
-                        <button class="btn btn-info updateSongInfo">重新上傳音樂檔</button>
+                        <div class="mb-3">
+                            <button data-songid="@item.fProductID" class="btn btn-danger deletesong">刪除此首單曲</button>
+                            <button class="btn btn-info updatetime">更新此首單曲資料</button>
+                            <button class="btn btn-info updateSongInfo">重新上傳音樂檔</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -648,19 +695,19 @@
         $(".totalDemo").text(getTimeText(demoSetEnd));//demoTotal-->demoSetEnd 0302
 
         //同時初始化滑動條
-        $("#slider-range").slider({
-            range: true,
-            min: 0,
-            max: `${music.duration}`,
-            step: 0.01,
-            values: [0, music.duration],
-            slide: function () {
-                demoSetStart = $("#slider-range").slider("values", 0)
-                setTryStart();
-                demoSetEnd = $("#slider-range").slider("values", 1)
-                setTryEnd();
-            }
-        });
+        //$("#slider-range").slider({
+        //    range: true,
+        //    min: 0,
+        //    max: `${music.duration}`,
+        //    step: 0.01,
+        //    values: [0, music.duration],
+        //    slide: function () {
+        //        demoSetStart = $("#slider-range").slider("values", 0)
+        //        setTryStart();
+        //        demoSetEnd = $("#slider-range").slider("values", 1)
+        //        setTryEnd();
+        //    }
+        //});
         $(this).parent().siblings(".slider").slider({
             range: true,
             min: 0,
@@ -775,17 +822,6 @@
                 demoSetMusic.play();
         });
 
-        //製作試聽用
-        //按鍵設置試聽開頭與結尾
-        $(".setStart").on("click", function () {
-            demoSetStart = music.currentTime;
-            setTryStart();
-        });
-        $(".setEnd").on("click", function () {
-            demoSetEnd = music.currentTime;
-            setTryEnd();
-        });
-
         //取得音樂時間文字的方法(第二個有給到小數後兩位)
         function getTimeText(num) {
             let m1 = parseInt(num / 600);
@@ -834,6 +870,10 @@
 
                 music = $(this).next().find('.originalAudio')[0];
                 demoSetMusic = $(this).next().find('.demoSetAudio')[0];
+                music.volume = 0.6;
+                demoSetMusic.volume = 0.6;
+                setTryStart();
+                setTryEnd();
 
                 if ($(this).next('.foldAlbum').hasClass('o') == true) {
                     $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');

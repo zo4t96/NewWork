@@ -22,76 +22,158 @@
 
         }
     }
+    var albums = ViewBag.albums as IEnumerable<tAlbum>;
+    var eventNow = ViewBag.eventNow as IEnumerable<tActivity>;
+    var eventLater = ViewBag.eventLater as IEnumerable<tActivity>;
+
 }
 
 <style>
+    .bigBox{
+    }
+    .smallbox{
+        display:inline-block;
+        margin-right:20px;
+    }
     .panel {
-        width: 40%;
-        height: 90%;
+        width: 100%;
         padding: 40px;
         border: 1px solid #ccc;
         border-radius: 20px;
-        margin: 20px 60px;
+        margin: 20px 0px 0px 60px;
         background-color: rgba(206, 226, 231, 0.30);
     }
 
     .title {
         font-weight: 800;
-        font-size: 30px;
+        font-size: 24px;
         margin: 20px 60px;
+    }
+
+    .tableTitle {
+        background-color: #85cee4;
+    }
+
+        .tableTitle > th {
+            color: #2976cc;
+        }
+
+    .trItem {
+        border-bottom: 1px solid white;
+        cursor: pointer;
+    }
+    tr{
+        background-color: #c9e1e5;
     }
 </style>
 
-<div class="title">舉辦中的活動</div>
-<div class="panel">
+<div class="bigBox row">
+    <div class="smallbox col-6">
+        <div class="title">待審查的音樂</div>
+        <div class="panel">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr class="tableTitle">
+                        <th scope="col">送審日期</th>
+                        <th scope="col">專輯名稱</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (albums.FirstOrDefault() == null)
+                    {
+                        <tr><td colspan="3">目前沒有待審中的專輯</td></tr>
+                    }
+                    else
+                    {
+
+                    }
+                    @foreach (var item in albums)
+                    {
+                        <tr>
+                            <td>@item.fYear</td>
+                            <td>@item.fAlbumName</td>
+                        </tr>
+                    }
+                    @if (albums.Count() >= 5)
+                    {
+                        <tr><td colspan="3" class="text-right">......更多</td></tr>
+                    }
+
+                </tbody>
+            </table>
+            <div class="text-right mt-3">
+                <a href="@Url.Action("MusicReview","Admin")">前往音樂審核頁面</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="smallbox ">
+        <div class="title">舉辦中的活動</div>
+        <div class="panel">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr class="tableTitle">
+                        <th scope="col">活動名稱</th>
+                        <th scope="col">結束日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (eventLater == null)
+                    {
+                        <tr><td colspan="3">目前沒有進行中的活動</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var item in eventLater)
+                        {
+                            <tr>
+                                <td>@item.fTitle</td>
+                                <td>@(((DateTime)item.fEndTime).ToShortDateString())</td>
+                            </tr>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="title">即將舉辦的活動</div>
+        <div class="panel">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr class="tableTitle">
+                        <th scope="col">活動名稱</th>
+                        <th scope="col">開始日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (eventNow == null)
+                    {
+                        <tr><td colspan="3">一週內沒有即將舉行的活動</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var item in eventNow)
+                        {
+                            <tr>
+                                <td>@item.fTitle</td>
+                                <td>@(((DateTime)item.fStartTime).ToShortDateString())</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
 
 
 
 
-
+        </div>
+    </div>
 </div>
-<div class="title">進行中的活動</div>
-<div class="panel">
 
 
 
-
-
-</div>
-<div class="title">待審查的音樂</div>
-<div class="panel">
-
-
-
-
-
-</div>
 <script>
-    $(".open").click(function () {
-        $(this).parents("tr").siblings().slideToggle(1);
-    })
-
-    //表單內checkbox的處理
-    $(".trItemMain").click(function (e) {
-        let target = $(this).find("input[type = checkbox]")[0];
-        let openBtn = $(this).find(".open")[0];
-        if (e.target != target && e.target != openBtn) {
-            target.checked = !target.checked;
-        }
-    })
-    $(".all").click(function () {
-        let target = $(this).find("input[type = checkbox]")[0];
-        target.checked = !target.checked;
-        if (target.checked) {
-            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", true)
-        }
-        else {
-            $(this).parents("thead").siblings("tbody").find("input[type = checkbox]").prop("checked", false);
-        }
-    })
-    $(".all").find("input[type = checkbox]").click(function (e) {
-        e.preventDefault();
-        $(".all").trigger("click")
-    })
 
 </script>

@@ -22,6 +22,7 @@ namespace MainWork
         public Nullable<int> fStatus { get; set; }
         public Nullable<int> fRead { get; set; }
         public string fTitle { get; set; }
+        public Nullable<int> fReaded { get; set; }
     
         public virtual tMember tMember { get; set; }
         public virtual tMember tMember1 { get; set; }

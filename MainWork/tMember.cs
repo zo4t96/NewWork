@@ -41,6 +41,7 @@ namespace MainWork
         public Nullable<int> fLineId { get; set; }
         public string fLineName { get; set; }
         public Nullable<System.DateTime> fLineTimeMark { get; set; }
+        public string fPayPalAccount { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tActivity> tActivities { get; set; }

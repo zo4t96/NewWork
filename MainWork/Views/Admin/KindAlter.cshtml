@@ -123,7 +123,7 @@
                 <option value="0">新增曲風...</option>
                 @foreach (var item in Model)
                 {
-                    <option value="@item.KindID" data-color="@item.fColor" data-path="/Images/@item.fPhotoPath">@item.KindName</option>
+                    <option value="@item.KindID" data-color="@item.fColor" data-path="/CoverFiles/@item.fPhotoPath">@item.KindName</option>
                 }
             </select>
 
@@ -131,7 +131,7 @@
                 @* 輸入名稱 *@
                 <div class="input-group w-100 mr-3 mt-3">
                     <div class="input-group-prepend">
-                        <div class="input-group-text name">新增曲風</div>
+                        <div class="input-group-text nowName">新增曲風</div>
                     </div>
                     <input type="text" class="form-control nameInput" placeholder="請輸入要新增的曲風名稱" name="kindName">
                 </div>
@@ -208,7 +208,7 @@
     $(".nameInput").keyup(function () {
         $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text($(this).val().trim());
         if (this.value == "") {
-            var name = $(this).siblings().find(".name").text();
+            var name = $(this).siblings().find(".nowName").text();
             $(".kindPanel").find(`[data-kind = ${$(".menu").val()}]`).find(".kindName").text(name);
         }
     })
@@ -231,7 +231,7 @@
             $(".new").css("display", "none");
             $(".colortxt").val($(this).find("option:selected").data("color"));
             $("#colorpicker").val($(this).find("option:selected").data("color"));
-            $(".name").text($(this).find("option:selected").text());
+            $(".nowName").text($(this).find("option:selected").text());
             $(".nameInput").attr("placeholder", "請輸入要變更的名稱");
 
             //$(".newBlock").css("display", "none");
@@ -245,7 +245,7 @@
             $(".new").css("display", "inline-block");
             $(".colortxt").val("#ffffff");
             $("#colorpicker").val("#ffffff");
-            $(".name").text("名稱");
+            $(".nowName").text("名稱");
             $(".nameInput").attr("placeholder", "請輸入要新增的曲風名稱");
 
             //$(".newBlock").css("display", "block");
@@ -303,7 +303,7 @@
         if (!nameTwice($(".nameInput").val())) {
             if (confirm("假如修改曲風名稱，原本擁有此項的專輯的同曲風會被刪除，確定要修改嗎?")) {
                 if (nameInput == "") {
-                $(".nameInput").val($(".name").text());
+                    $(".nameInput").val($(".nowName").text());
             }
                 $("#kindForm").attr("action", "@Url.Action("KindEdit","Admin")")
                 $("#kindForm").submit();

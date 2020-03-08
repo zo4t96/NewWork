@@ -25,7 +25,7 @@ namespace MainWork.Models
         //首頁商品項目，選取所有商品
         public IEnumerable<tAlbum> allAlbum()
         {
-            var all = db.tAlbums.Select(a => a);
+            var all = db.tAlbums.Where(a => a.fStatus == 2);
             return all;
         }
 
@@ -33,7 +33,7 @@ namespace MainWork.Models
         public IEnumerable<tAlbum> byKindPage(int kindID)
         {
             string kind = db.tAlbumKinds.Where(s => s.KindID == kindID).First().KindName;
-            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind));
+            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind) && a.fStatus ==2);
             return result;
         }
 
@@ -41,7 +41,7 @@ namespace MainWork.Models
         public IEnumerable<CSearchResult> byKeyword(string keyword)
         {
             var result = from p in db.tProducts
-                         where p.fProductName.Contains(keyword)
+                         where p.fProductName.Contains(keyword) && p.tAlbum.fStatus == 2
                          select new CSearchResult { album = p.tAlbum, product = p };
             return result;
         }
@@ -51,6 +51,7 @@ namespace MainWork.Models
         {
             //因為此處作法是先挑音樂再過濾出專輯，所以沒有加入音樂的專輯也不會被找到
             var data = from p in db.tProducts
+                       where p.tAlbum.fStatus == 2
                        select new CSearchResult { album = p.tAlbum, product = p };
 
             //比對專輯裡的音樂名稱是否符合
@@ -105,7 +106,7 @@ namespace MainWork.Models
         //尋找屬於特定活動的專輯
         public IEnumerable<tAlbum> byEvent(int eventId)
         {
-            var result = db.tAlbums.Where(a => a.fActivityID == eventId);
+            var result = db.tAlbums.Where(a => a.fActivityID == eventId && a.fStatus == 2);
             return result;
         }
 
@@ -115,16 +116,17 @@ namespace MainWork.Models
             var albums = new List<tAlbum>();
             if (method == "account")
             {
-                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword) && a.fStatus == 2).ToList();
             }
             else if (method == "group")
             {
-                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword) && a.fStatus == 2).ToList();
             }
             else if (method == "albumName")
             {
-                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword) && a.fStatus == 2).ToList();
             }
+            albums.OrderBy(a => a.fYear);
 
             foreach (var a in albums)
             {

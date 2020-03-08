@@ -31,6 +31,8 @@
         overflow: hidden;
         transition: 0.4s;
         opacity: 0;
+        /*避免廣告輪播過程中網頁中的字串突然出現的閃動效果*/
+        -webkit-transform: translateZ(0px);
     }
 
     .animation {
@@ -57,7 +59,7 @@
 
     .albumContent {
         position: relative;
-        width: 12vw;
+        width: 100%;
         min-width: 160px;
         overflow: hidden;
         text-align: left;
@@ -66,9 +68,8 @@
 
     .albumTitle {
         display:block;
-        width: 12vw;
         min-width: 160px;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         margin-bottom: 8px;
         /*使多出的字元變...，下面三個屬性都要設才有效果*/
@@ -78,13 +79,12 @@
     }
 
     .albumDescripion {
-        display: inline-block;
-        width: 12vw;
+        display: block;
         min-width: 160px;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         color: #808080;
-
+        margin-bottom:5px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -101,10 +101,9 @@
 
     /*折扣文字*/
     .discount{
-        display:inline-block;
         position:relative;
         font-size:12px;
-        font-weight:600;
+        font-weight:800;
         color:red;
     }
 </style>
@@ -174,8 +173,7 @@
         @foreach (var item in Model)
         {
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
-        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID">
-            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID"  title="@item.fAlbumName">
             <img src="~/Images/@item.fCoverPath" class="albumCover" />
             <div class="albumContent">
                 <span class="albumTitle">@item.fAlbumName</span>

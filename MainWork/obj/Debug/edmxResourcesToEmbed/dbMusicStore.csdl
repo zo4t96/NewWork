@@ -118,7 +118,7 @@
     </Key>
     <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="fColor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="fColor" Type="String" MaxLength="7" FixedLength="true" Unicode="true" />
     <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tAlbumType">
@@ -167,6 +167,7 @@
     <NavigationProperty Name="tPlayLists" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tMember" FromRole="tMember" ToRole="tPlayList" />
     <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
     <NavigationProperty Name="tShoppingCarts" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
+    <Property Name="fPayPalAccount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -182,6 +183,7 @@
     <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
     <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
+    <Property Name="fReaded" Type="Int32" />
   </EntityType>
   <EntityType Name="tPlayList">
     <Key>

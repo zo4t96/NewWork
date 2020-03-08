@@ -11,7 +11,7 @@
         Layout = null;
     }
     ViewBag.Title = "AlbumDetail2";
-    var AlbInfo = ViewBag.AlbInfo;
+    var AlbInfo = ViewBag.AlbInfo as tAlbum;
     var account = "";
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
@@ -30,16 +30,18 @@
     .albumset {
         display: inline-block;
         margin-left: 5%;
-        margin-top: 3%;
-        width: 20%;
+        margin-top: 1%;
+        width: 30%;
     }
     /*專輯圖/介紹*/
     /*單曲列表開始*/
     .albumtext {
         text-align: center;
         color: white;
-        width: 97%;
         font-family: 微軟正黑體;
+        margin-top:3%;
+        font-weight:600;
+
     }
     /*單曲列表結束*/
     /*albuminfo結束*/
@@ -54,7 +56,7 @@
     }
 
     .fold-title {
-        background-color: #f3f3f3;
+        background-color: #eaeaea;
         padding: 10px;
         color: #525252;
         margin-bottom: 0;
@@ -87,16 +89,68 @@
         transition: 0.4s;
         cursor: pointer;
     }
+
+    /*額外新增03/07/2020*/
+    .albumCover{
+        width:350px;
+        height:350px;
+        margin:0 auto;
+    }
+    .albumCover > img{
+        width:100%;
+        height:100%;
+        display: inline-block;
+        background-size:cover;
+    }
+    .textBox{
+        width:350px;
+        margin:10px auto;
+        text-align:center;
+        font-size:20px;
+        line-height:30px;
+        font-weight:600;
+        letter-spacing:1px;
+     }
+    .discount{
+        color:red;
+    }
 </style>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <div class="albumset">
-    <div style="width: 320px; height: 320px;"><img src="~/CoverFiles/@AlbInfo.fCoverPath" style="max-height:100%;max-width:100%" /></div>
-    <h4 class="albumtext"><b>@AlbInfo.fAlbumName</b></h4>
-    <h5 class="albumtext">@AlbInfo.fMaker </h5>
-    <h5 class="albumtext">特價:$ @($"{AlbInfo.fALPrice:#.#}") <i data-albumid="@AlbInfo.fAlbumID" class="fas fa-cart-arrow-down addThisAlbumToCart"></i></h5>
-    <h5 class="albumtext">風格/類別:@(AlbInfo.tAlbumType.fTypeName)</h5>
-    <h5 class="albumtext">類型:@(AlbInfo.fKinds)</h5>
-    <h5 class="albumtext">共有@(Model.Count()) 首</h5>
+    <div class="albumCover"><img src="~/CoverFiles/@AlbInfo.fCoverPath" /></div>
+    <h3 class="albumtext"><b>@AlbInfo.fAlbumName</b></h3>
+    @*<h4 class="albumtext"><b>@AlbInfo.fMaker</b> </h4>*@
+    @*<div><h4 class="albumtext">共 @(Model.Count()) 首</h4></div>*@
+
+    @* 新增:如有折扣顯示紅字折扣價03/07/2020 *@
+    <div class="textBox">
+        @if (AlbInfo.fDiscount != 1)
+        {
+            <div class="mb-4">
+                專輯售價：
+                <del>$@($"{AlbInfo.fALPrice:#}") </del>
+                <span class="discount"> $@($"{(float)AlbInfo.fALPrice * AlbInfo.fDiscount:#}") Now!</span>
+                <i data-albumid="@AlbInfo.fAlbumID" class="fas fa-cart-arrow-down addThisAlbumToCart fa-2x"></i>
+            </div>
+        }
+        else
+        {
+            <div class="mb-4">
+                專輯售價：$@($"{AlbInfo.fALPrice:#}")
+                <i data-albumid="@AlbInfo.fAlbumID" class="fas fa-cart-arrow-down addThisAlbumToCart  fa-2x"></i>
+            </div>
+        }
+        @if (@AlbInfo.fMaker != null)
+        {
+            <div>— 社團 —</div>
+            <div class="mb-4"><b>@AlbInfo.fMaker</b> </div>
+        }
+        <div>— 分類 —</div>
+        <div class="mb-4">@(AlbInfo.tAlbumType.fTypeName)</div>
+        <div>— 音樂風格 —</div>
+        <div>@(AlbInfo.fKinds.Replace(",", "、"))</div>
+    </div>
+
 </div>
 <div class="musicsPanel">
 
@@ -124,9 +178,20 @@
             </h4>
             <div class="fold">
                 <div class="fold-container">
-                    <span style="color:white">主唱:@Html.DisplayFor(modelItem => item.fSinger)</span>
-                    <span style="color:white"> / 演奏:@Html.DisplayFor(modelItem => item.fComposer)</span>
-                    <span style="color:white"> / 售價:$ @($"{Html.DisplayFor(modelItem => item.fSIPrice):#.#}")</span>
+                    <span style="color:white">演唱:@Html.DisplayFor(modelItem => item.fSinger)</span>
+                    <span style="color:white">  /  作曲:@Html.DisplayFor(modelItem => item.fComposer)</span>
+                    @* 新增:如有折扣顯示紅字折扣價03/07/2020 *@
+                    @if (AlbInfo.fDiscount != 1)
+                    {
+                        <span>  /  單曲售價: 
+                            <del>$@($"{(int)item.fSIPrice}")</del>
+                            <span class="discount">$@($"{(float)item.fSIPrice * AlbInfo.fDiscount :#}")</span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span>  /  單曲售價:$@($"{(int)item.fSIPrice}")</span>
+                    }
                     @Html.Action("DemoPlayer", "Player", new { musicId = item.fProductID })
                 </div>
             </div>

@@ -1,0 +1,441 @@
+﻿﻿
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="top-campaign">
+            <h3 class="title-3 m-b-30">本周最多試聽單曲前5</h3>
+            <div class="table-responsive">
+                <table class="table table-top-campaign">
+                    <tbody id="memberTryWeekTop5SongList">
+                        <tr>
+                            <td>單曲名</td>
+                            <td>筆</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="top-campaign">
+            <h3 class="title-3 m-b-30">本月最多試聽單曲前5</h3>
+            <div class="table-responsive">
+                <table class="table table-top-campaign">
+                    <tbody id="memberTryMonthTop5SongList">
+                        <tr>
+                            <td>單曲名</td>
+                            <td>筆</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="top-campaign">
+            <h3 class="title-3 m-b-30">最暢銷單曲前5</h3>
+            <div class="table-responsive">
+                <table class="table table-top-campaign">
+                    <tbody id="memberTop5SongList">
+                        <tr>
+                            <td>單曲名</td>
+                            <td>$總收入(筆)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="top-campaign">
+            <h3 class="title-3 m-b-30">最暢銷專輯前5</h3>
+            <div class="table-responsive">
+                <table class="table table-top-campaign">
+                    <tbody id="memberTop5AlbumList">
+                        <tr>
+                            <td>專輯名</td>
+                            <td>$總收入(筆)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="au-card m-b-20">
+            <div class="au-card-inner">
+                <h3 class="title-2 m-b-40">By 月試聽專輯/單曲總數</h3>
+                <canvas id="byMonthTry"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="au-card m-b-20">
+            <div class="au-card-inner">
+                <h3 class="title-2 m-b-40">By 月購買專輯/單曲總數</h3>
+                <canvas id="byMonthSale"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="au-card m-b-20">
+            <div class="au-card-inner">
+                <h3 class="title-2 m-b-40">試聽/銷售百分比</h3>
+                <canvas id="pieSaleTryRatio"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="au-card m-b-20">
+            <div class="au-card-inner">
+                <h3 class="title-2 m-b-40">週間試聽數變化</h3>
+                <canvas id="tryWeekOfBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<span>最多試聽</span>
+
+<script src="~/vendor/chartjs/Chart.bundle.min.js"></script>
+@*<script src="~/js/main.js"></script>*@@*圖表假數據*@
+<script src="~/vendor/animsition/animsition.min.js"></script>
+<script>
+
+        $(document).ready(function () {
+
+            //試聽
+    var m_statistDateTry =new Array();
+    var m_statistCntTry =new Array();
+    $.getJSON('@Url.Action("getStatistic_tryNum","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                  m_statistDateTry.push(value.date)
+                  m_statistCntTry.push(value.CNT)
+                  })
+            var ctx = document.getElementById("byMonthTry");
+        if (ctx) {
+            ctx.height = 150;
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: m_statistDateTry,
+                    type: 'line',
+                    defaultFontFamily: 'Poppins',
+                    datasets: [{
+                        data: m_statistCntTry,
+                        label: "Expense",
+                        backgroundColor: 'rgba(0,103,255,.15)',
+                        borderColor: 'rgba(0,103,255,0.5)',
+                        borderWidth: 3.5,
+                        pointStyle: 'circle',
+                        pointRadius: 5,
+                        pointBorderColor: 'transparent',
+                        pointBackgroundColor: 'rgba(0,103,255,0.5)',
+                    },]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        titleFontSize: 12,
+                        titleFontColor: '#000',
+                        bodyFontColor: '#000',
+                        backgroundColor: '#fff',
+                        titleFontFamily: 'Poppins',
+                        bodyFontFamily: 'Poppins',
+                        cornerRadius: 3,
+                        intersect: false,
+                    },
+                    legend: {
+                        display: false,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            fontFamily: 'Poppins',
+                        },
+
+
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: false,
+                                labelString: '年/月'
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '次',
+                                fontFamily: "Poppins"
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            });
+        }
+
+        })
+
+    //購買
+    var m_statistDatePruchase =new Array();
+    var m_statistCntPruchase =new Array();
+    $.getJSON('@Url.Action("getStatistic_purchaseNum","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                  m_statistDatePruchase.push(value.date)
+                  m_statistCntPruchase.push(value.CNT)
+                  })
+            var ctx = document.getElementById("byMonthSale");
+        if (ctx) {
+            ctx.height = 150;
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: m_statistDatePruchase,
+                    type: 'line',
+                    defaultFontFamily: 'Poppins',
+                    datasets: [{
+                        data: m_statistCntPruchase,
+                        label: "Expense",
+                        backgroundColor: 'rgba(0,103,255,.15)',
+                        borderColor: 'rgba(0,103,255,0.5)',
+                        borderWidth: 3.5,
+                        pointStyle: 'circle',
+                        pointRadius: 5,
+                        pointBorderColor: 'transparent',
+                        pointBackgroundColor: 'rgba(0,103,255,0.5)',
+                    },]
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        titleFontSize: 12,
+                        titleFontColor: '#000',
+                        bodyFontColor: '#000',
+                        backgroundColor: '#fff',
+                        titleFontFamily: 'Poppins',
+                        bodyFontFamily: 'Poppins',
+                        cornerRadius: 3,
+                        intersect: false,
+                    },
+                    legend: {
+                        display: false,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            fontFamily: 'Poppins',
+                        },
+
+
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: false,
+                                labelString: '年/月'
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '次',
+                                fontFamily: "Poppins"
+                            },
+                            ticks: {
+                                fontFamily: "Poppins"
+                            }
+                        }]
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            });
+        }
+
+        })
+
+    //購買試聽占比
+    var m_statistNamePie =new Array();
+    var m_statistCntPie =new Array();
+    $.getJSON('@Url.Action("getStatistic_purchaseTry","Statistic")', function (datas) {
+        let m_statistTotal =0;
+        $.each(datas, function (name, value) {
+            m_statistTotal += value.CNT;
+       //     console.log(m_statistTotal);
+        })
+        $.each(datas, function (name, value) {
+            if (value.useType == 1) {
+                m_statistNamePie.push("試聽")
+            } else if (value.useType == 2) {
+                m_statistNamePie.push("單曲購買")
+            } else if (value.useType == 3) {
+                m_statistNamePie.push("專輯購買")
+            }
+            m_statistCntPie.push((value.CNT / m_statistTotal).toFixed(3) * 100);
+          //  console.log(value.CNT);
+        })
+        //pie chart
+        var ctx = document.getElementById("pieSaleTryRatio");
+        if (ctx) {
+            ctx.height = 200;
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: m_statistCntPie,
+                        backgroundColor: [
+                            "rgba(0, 123, 255,0.9)",
+                            "rgba(0, 123, 255,0.7)",
+                            "rgba(0, 123, 255,0.5)",
+                            "rgba(0,0,0,0.07)"
+                        ],
+                        hoverBackgroundColor: [
+                            "rgba(0, 123, 255,0.9)",
+                            "rgba(0, 123, 255,0.7)",
+                            "rgba(0, 123, 255,0.5)",
+                            "rgba(0,0,0,0.07)"
+                        ]
+
+                    }],
+                    labels: m_statistNamePie
+                },
+                options: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            fontFamily: 'Poppins'
+                        }
+
+                    },
+                    responsive: true
+                }
+            });
+        }
+    });
+
+    //星期幾
+    var m_statistWeekTry =new Array();
+    var m_statistWeekCntTry =new Array();
+    $.getJSON('@Url.Action("getStatistic_tryWeek","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                if (value.weekOf == 6) {
+                    m_statistWeekTry.push("Sat");
+                } else if(value.weekOf == 0){
+                    m_statistWeekTry.push("Sun");
+                } else if(value.weekOf == 1){
+                    m_statistWeekTry.push("Mon");
+                } else if(value.weekOf == 2){
+                    m_statistWeekTry.push("Tue");
+                } else if(value.weekOf == 3){
+                    m_statistWeekTry.push("Wed");
+                } else if(value.weekOf == 4){
+                    m_statistWeekTry.push("Thr");
+                } else {
+                    m_statistWeekTry.push("Fri");
+                }
+                m_statistWeekCntTry.push(value.CNT);
+                  })
+    // single bar chart
+    var ctx = document.getElementById("tryWeekOfBarChart");
+    if (ctx) {
+      ctx.height = 150;
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: m_statistWeekTry,
+          datasets: [
+            {
+              label: "試聽次數",
+              data: m_statistWeekCntTry,
+              borderColor: "rgba(0, 123, 255, 0.9)",
+              borderWidth: "0",
+              backgroundColor: "rgba(0, 123, 255, 0.5)"
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'top',
+            labels: {
+              fontFamily: 'Poppins'
+            }
+
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: "Poppins"
+
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontFamily: "Poppins"
+              }
+            }]
+          }
+        }
+      });
+    }
+        })
+
+    //最佳銷售單曲
+    $.getJSON('@Url.Action("getStatistic_memberTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTop5SongList").append(`<tr><td>${value.Song}</td><td>${value.Money}(${value.CNT})</td></tr>`);
+                  })
+    })
+
+    //最佳銷售專輯
+    $.getJSON('@Url.Action("getStatistic_memberTop5Album","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTop5AlbumList").append(`<tr><td>${value.Album}</td><td>${value.Money}(${value.CNT})</td></tr>`);
+                  })
+    })
+
+    //本周最多試聽單曲
+    $.getJSON('@Url.Action("getStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTryWeekTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
+                  })
+    })
+
+
+   });
+
+</script>

@@ -34,7 +34,7 @@
     </Key>
     <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="KindName" Type="nvarchar(max)" />
-    <Property Name="fColor" Type="nchar" MaxLength="10" />
+    <Property Name="fColor" Type="nchar" MaxLength="7" />
     <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbumType">
@@ -71,6 +71,7 @@
     <Property Name="fLineId" Type="int" />
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
+    <Property Name="fPayPalAccount" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -84,6 +85,7 @@
     <Property Name="fStatus" Type="int" />
     <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
+    <Property Name="fReaded" Type="int" />
   </EntityType>
   <EntityType Name="tPlayLists">
     <Key>

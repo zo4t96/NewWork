@@ -16,6 +16,13 @@ namespace MainWork.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+            //首頁放待審音樂、進行中活動七天內將舉辦的活動資訊
+            ViewBag.albums = db.tAlbums.Where(a => a.fStatus == 1).OrderBy(m => m.fYear).Take(5).ToList();
+            ViewBag.eventNow = db.tActivities.Where
+                (e => DateTime.Compare((DateTime)e.fStartTime,DateTime.Now) < 0 && DateTime.Compare((DateTime)e.fEndTime,DateTime.Now) > 0).ToList();
+            DateTime later = DateTime.Now.AddDays(7);
+            ViewBag.eventLater = db.tActivities.Where
+                (e => DateTime.Compare((DateTime)e.fStartTime,later) < 0 && DateTime.Compare((DateTime)e.fStartTime, DateTime.Now) > 0).ToList();
             return View();
         }
 
@@ -177,7 +184,7 @@ namespace MainWork.Controllers
         {
             //把所有狀態為送審中(1)的音樂挑出來
             //下架:0　送審中:1　上架:2　強制下架(不得送審):3
-            var result = db.tAlbums.Where(a => a.fStatus == 1).ToList();
+            var result = db.tAlbums.Where(a => a.fStatus == 1).OrderBy(m=>m.fYear).ToList();
             return View(result);
         }
         public ActionResult Pass(string account, int albumId)
@@ -204,7 +211,7 @@ namespace MainWork.Controllers
         //上架音樂管理(含查詢&強制下架)
         public ActionResult MusicManage()
         {
-            var result = db.tAlbums.Where(a => a.fStatus == 2).ToList();
+            var result = db.tAlbums.Where(a => a.fStatus == 2).OrderBy(m=>m.fYear).ToList();
             return View(result);
         }
         public ActionResult Recall(string account, int albumId)

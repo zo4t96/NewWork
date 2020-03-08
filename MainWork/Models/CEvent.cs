@@ -11,9 +11,19 @@ namespace MainWork.Models
     {
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
         //全活動查詢
-        public IEnumerable<tActivity> eventQuery()
+        public IEnumerable<tActivity> eventQuery(string account = "")
         {
-            var result = db.tActivities.Select(a => a);
+            List<tActivity> result = new List<tActivity>();
+            //如果有帳號代表只搜索該帳號所上傳的活動
+            if (account != "")
+            {
+                result = db.tActivities.Where(a=>a.fLauncher == account).ToList();
+            }
+            //沒有代表查全部
+            else
+            {
+                result = db.tActivities.Select(a => a).ToList();
+            }
             return result;
         }
         //單一活動查詢
@@ -30,11 +40,11 @@ namespace MainWork.Models
             IEnumerable<tAlbum> albums;
             if (eventid == 0)
             {
-                albums = db.tAlbums.Where(a => a.fActivityID== null);
+                albums = db.tAlbums.Where(a => a.fActivityID == null && a.fStatus == 2);
             }
             else
             {
-                albums = db.tAlbums.Where(a => a.fActivityID == null || a.fActivityID == eventid);
+                albums = db.tAlbums.Where(a => (a.fActivityID == null || a.fActivityID == eventid) && a.fStatus == 2);
             }
             var kindList = new List<tAlbumKind>();
             if(type != 1)

@@ -23,6 +23,8 @@
         cursor: pointer;
         transition: 0.4s;
         opacity: 0;
+
+        overflow:hidden;
     }
 
     .animation {
@@ -60,7 +62,7 @@
         display: block;
         width: 12vw;
         min-width: 160px;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         margin-bottom: 8px;
         /*使多出的字元變...，下面三個屬性都要設才有效果*/
@@ -70,12 +72,13 @@
     }
 
     .albumDescripion {
-        display: inline-block;
+        display:block;
         width: 12vw;
         min-width: 160px;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         color: #808080;
+        margin-bottom:5px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -114,7 +117,7 @@
     <div class="albumPanel">
         @foreach (var item in Model)
         {
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName">
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
                 <div class="albumContent">

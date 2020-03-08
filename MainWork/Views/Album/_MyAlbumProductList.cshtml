@@ -1,0 +1,112 @@
+﻿﻿
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="py-3">
+            <span>搜尋專輯名稱:</span> <input style="color:black" class="myProductSearchInput" type="text" /> <button class="btn btn-info" id="searchMyProduct">搜尋</button>
+        </div>
+        <!-- DATA TABLE-->
+        <div class="table-responsive m-b-40">
+            <table class="table table-borderless table-data3">
+                <thead>
+                    <tr>
+                        <th>單曲名</th>
+                        <th>專輯名</th>
+                        <th>歌手</th>
+                        <th>試聽時間</th>
+                        <th>售價</th>
+                        <th>購買數</th>
+                        <th>動作</th>
+                    </tr>
+                </thead>
+                <tbody id="memberSongListTable">
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE-->
+    </div>
+</div>
+
+<script>
+
+        $(document).ready(function () {
+
+    //會員單曲列表
+    $.getJSON('@Url.Action("getStatistic_memberSongListTable","Statistic")', function (datas) {
+        $.each(datas, function (name, value) {
+            let songlen = value.Song.length;
+            let albumlen = value.Album.length;
+            let m_songname ="",m_albumname ="";
+            if (songlen > 10) {
+                m_songname = value.Song;
+                value.Song = value.Song.substring(0,10)+"..."
+            }
+            if (albumlen > 8) {
+                m_albumname = value.Album;
+                value.Album = value.Album.substring(0,8)+"..."
+            }
+            let timespan = getTimeText(value.tryEnd-value.tryStart)
+            let timeStart = getTimeText(value.tryStart)
+            let timeEnd = getTimeText(value.tryEnd)
+            $("#memberSongListTable").append(`<tr><td title="${m_songname}">${value.Song}</td><td title="${m_albumname}">${value.Album}</td>
+            <td title="演奏:${value.Composer},編曲:${value.Arranger},作詞:${value.Lyricist}">${value.Singer}</td>
+            <td title="開始:${timeStart},結束:${timeEnd}">${timespan}</td><td>$${value.Price}</td><td>${value.SongPurchase}</td><td><a href="../AlbumInfo?amid=${value.ID}">編輯</a></td></tr>`);
+                  })
+    })
+
+    $("#searchMyProduct").click(function () {
+        $.getJSON('@Url.Action("myProductSearch","Statistic")?product=' + $(".myProductSearchInput").val().trim(), function (datas) {
+                     $("#memberSongListTable tr").empty("");
+            $.each(datas, function (name, value) {
+                let songlen = value.Song.length;
+                let albumlen = value.Album.length;
+                let m_songname = "", m_albumname = "";
+                if (songlen > 10) {
+                    m_songname = value.Song;
+                    value.Song = value.Song.substring(0, 10) + "..."
+                }
+                if (albumlen > 8) {
+                    m_albumname = value.Album;
+                    value.Album = value.Album.substring(0, 8) + "..."
+                }
+                let timespan = getTimeText(value.tryEnd - value.tryStart)
+                let timeStart = getTimeText(value.tryStart)
+                let timeEnd = getTimeText(value.tryEnd)
+
+                $("#memberSongListTable").append(`<tr><td title="${m_songname}">${value.Song}</td><td title="${m_albumname}">${value.Album}</td>
+            <td title="演奏:${value.Composer}">${value.Singer}</td>
+            <td title="開始:${timeStart},結束:${timeEnd}">${timespan}</td><td>$${value.Price}</td><td>${value.SongPurchase}</td><td><a href="../AlbumInfo?amid=${value.ID}">編輯</a></td></tr>`);
+            })
+        })
+    })
+
+  $(function(){
+      $(".myProductSearchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "@Url.Action("findProd","Statistic")?term="+request.term.trim(),
+                success: function (result) {
+                     response($.map(result, function (name, val) {
+                     return {
+                        label: name,
+                        value: val
+                     }
+                  }));
+                }
+            });
+        }
+    });
+          });
+   });
+
+
+    //取得音樂時間文字的方法(第二個有給到小數後兩位)
+    function getTimeText(num) {
+        let m1 = parseInt(num / 600);
+        let m2 = parseInt(num / 60 % 10);
+        let s1 = parseInt(num % 60 / 10);
+        let s2 = parseInt(num % 60 % 10);
+        return `${m1}${m2}:${s1}${s2}`;
+    }
+
+</script>

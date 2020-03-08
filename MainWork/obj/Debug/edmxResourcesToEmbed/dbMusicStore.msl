@@ -63,6 +63,7 @@
     <EntitySetMapping Name="tMembers">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
         <MappingFragment StoreEntitySet="tMember">
+          <ScalarProperty Name="fPayPalAccount" ColumnName="fPayPalAccount" />
           <ScalarProperty Name="fLineTimeMark" ColumnName="fLineTimeMark" />
           <ScalarProperty Name="fLineName" ColumnName="fLineName" />
           <ScalarProperty Name="fLineId" ColumnName="fLineId" />
@@ -82,6 +83,7 @@
     <EntitySetMapping Name="tMessages">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
         <MappingFragment StoreEntitySet="tMessage">
+          <ScalarProperty Name="fReaded" ColumnName="fReaded" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
           <ScalarProperty Name="fRead" ColumnName="fRead" />
           <ScalarProperty Name="fStatus" ColumnName="fStatus" />

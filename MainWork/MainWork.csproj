@@ -862,6 +862,11 @@
     <Content Include="vendor\slick\slick-theme.scss" />
     <Content Include="vendor\slick\slick.less" />
     <Content Include="vendor\slick\slick.scss" />
+    <Content Include="Views\Album\_kindAddInterface.cshtml" />
+    <Content Include="Views\Album\_MyAlbumAddAlbum.cshtml" />
+    <Content Include="Views\Album\_MyAlbumAnalysis.cshtml" />
+    <Content Include="Views\Album\_MyAlbumProductList.cshtml" />
+    <Content Include="Views\Album\_userEvent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
