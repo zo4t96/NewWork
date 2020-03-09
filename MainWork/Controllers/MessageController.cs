@@ -33,7 +33,7 @@ namespace MusicPrj.Controllers
             ViewBag.index = page;
             foreach (var a in tME.Skip(5 * (page - 1)).Take(5))
             {
-                if (a.fReaded == 0)
+                if (a.fReaded == 0 || a.fReaded == null)
                 {
                     a.fReaded = 1;
                 }

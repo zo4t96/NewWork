@@ -246,5 +246,11 @@ namespace MainWork.Controllers
             return Content("");
         }
 
+        public ActionResult SaleStatistic()
+        {
+            return View();
+        }
+        
+
     }
 }

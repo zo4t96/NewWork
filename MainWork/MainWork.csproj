@@ -687,6 +687,7 @@
     <Compile Include="Models\CMusic.cs" />
     <Compile Include="Models\CPlaylist.cs" />
     <Compile Include="Models\CSearch.cs" />
+    <Compile Include="Models\CStatistic.cs" />
     <Compile Include="Models\tShoppingCartFram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tActivity.cs">
@@ -848,6 +849,8 @@
     <Content Include="Views\Album\_userEvent.cshtml" />
     <Content Include="Views\tShoppingCart\CheckCart.cshtml" />
     <Content Include="Views\Homepage\_MonthlyPage.cshtml" />
+    <Content Include="Views\Admin\SaleStatistic.cshtml" />
+    <Content Include="Views\Message\_MessageListView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

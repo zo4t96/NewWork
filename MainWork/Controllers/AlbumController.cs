@@ -10,7 +10,6 @@ using System.Web.Script.Services;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using MainWork.ViewModels;
-using Mainwork.Models;
 using prjSpotifyProject.ViewModels;
 
 namespace MainWork.Controllers
@@ -256,6 +255,20 @@ namespace MainWork.Controllers
                 s2 = "查無此2";
                 return Json(s2, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult deletePlayLists(int amid)
+        {
+            string s1 = "";
+            try
+            {
+                s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            }
+            catch
+            {
+                s1 = "";
+            }
+            return JavaScript("alert('" + playlist.userDeletePlayLists(s1, amid) + "');");
         }
 
         //創作者相關

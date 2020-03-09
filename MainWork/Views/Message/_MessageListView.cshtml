@@ -1,0 +1,34 @@
+﻿﻿@model IEnumerable<MainWork.tMessage>
+@using MainWork.Models;
+@{
+
+}
+<style>
+
+</style>
+
+@foreach (var item in Model)
+{
+    <div class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
+            <small class="mailTextColor">
+                @if (item.fReaded == 3)
+                {
+                    <span class="mailTextColor">  已讀</span>
+
+                }
+                else
+                {
+                    <span class="mailTextColor">  未讀</span>
+                }
+                <span class="mailTextColor">  @Html.DisplayFor(modelItem => item.fTime)</span>
+                <span>  <button data-mailid="@item.fMessageId" class="btn btn-danger deletemail">刪除</button></span>
+            </small>
+        </div>
+        <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
+        <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
+    </div>
+}
+
+

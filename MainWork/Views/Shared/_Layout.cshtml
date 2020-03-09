@@ -52,14 +52,12 @@
             padding-left: 10px;
             font-size: 25px;
             background: black;
-            background-size: cover;
         }
 
             .header-logo > img {
                 display: inline-block;
                 width: 170px;
                 height: 60px;
-                background-size: cover;
             }
 
         .header-logo-text {
@@ -1500,9 +1498,10 @@
             $("#loginInterface").trigger("click");
         })
         
-        //點擊主視窗以外的位置會讓介面消失
+        //點擊主視窗以外的位置會讓介面消失(03/09/2020新增對包月廣告頁面的反應)
         $("#modal").click(function (e) {
-            if ($(e.target).children("#modalContent").length != 0) {
+            if ($(e.target).children("#modalContent").length != 0
+                || $(e.target).children(".modalMonthly").length != 0) {
                 setTimeout(function () {
                     $("#modal").removeClass("fadein");
                     $("#modalContent").removeClass("fadein");
@@ -1510,6 +1509,7 @@
                 setTimeout(function () {
                     $("#modal").css("display", "none");
                 }, 500)
+
             }
         })
 

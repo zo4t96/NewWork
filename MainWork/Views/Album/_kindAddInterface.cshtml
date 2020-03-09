@@ -65,7 +65,9 @@
         background-color: #1dd15d;
     }
 </style>
-
+<script>
+    dragReflash();
+</script>
 <div class="box">
 
     @*//防止網站被攻擊的防護，但目前會報錯先註解*@
@@ -98,8 +100,6 @@
 
 <script>
     $(".kindReviseBtn").click(function () {
-        drag.init = null;
-        //drag = null;
                             let kindtag = new Array();
                   setTimeout(function () {
                         $("#modal").removeClass("fadein");
@@ -114,7 +114,7 @@
         })
         $("#tA_fKindstext").text(kindtag);
         $("#tA_fKinds").val(kindtag);
-        dragReflash();
+        drag = null;
     })
 
     //重新載入drag
@@ -132,18 +132,21 @@ tmp_elm: null,
 new_elm: null,
 init: function (className) {
 drag.class_name = className;
-    $('.' + drag.class_name).on('mousedown', 'ul li', function (event) {
+    $('.' + drag.class_name).on('mousedown', 'ul > li', function (event) {
                 drag.permitDrag = true;
                 drag.old_elm = $(this);
                 drag.mousedown(event);
                 return false;
-});
+    });
+
     $(document).mousemove(function (event) {
+  //  $('.' + drag.class_name).on('mousemove', 'ul > li', function (event) {
                 if (!drag.permitDrag) return false;
                 drag.mousemove(event);
                 return false;
 });
     $(document).mouseup(function (event) {
+  //  $('.' + drag.class_name).on('mouseup', 'ul > li', function (event) {
                 if (!drag.permitDrag) return false;
                 drag.permitDrag = false;
                 drag.mouseup(event);
@@ -178,7 +181,7 @@ drag.class_name = className;
 
         mousemove: function (event) {
 
-          //  console.log('我被mousemove了');
+            console.log('我被mousemove了');
 
             var e = event || window.event;
             var x = e.pageX - drag._left;
@@ -220,7 +223,7 @@ drag.class_name = className;
 
         mouseup: function (event) {
 
-          //  console.log('我被mouseup了');
+            console.log('我被mouseup了');
             $(drag.tmp_elm).remove();
 
             var e = event || window.event;
@@ -259,7 +262,7 @@ drag.class_name = className;
                  $("#adKindULPageload").append(`<li value="${value.KindName}">${value.KindName}</li>`)
              }
 
-     })
+         })
     })
 
         //滑鼠拖動時取得拖曳內容轉成文字方塊
@@ -275,5 +278,4 @@ drag.class_name = className;
         })
 
 </script>
-
 

@@ -61,7 +61,7 @@ namespace MainWork.Models
         public List<tProduct> getUserPlaylistNormal(string s1)
         {
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
-            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1 && p.tShoppingCart.fType ==1).ToList();
+            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1 && p.tShoppingCart.fType == 1).ToList();
             tPurchaseItem tPI = tPL.FirstOrDefault(p => p.fProductID == fLastPlaySong);
             List<tPurchaseItem> tPLOut = null;
             if (tPI != null)
@@ -84,7 +84,7 @@ namespace MainWork.Models
                     tp.AddRange(db.tProducts.Where(p => p.fAlbumID == a.tProduct.fAlbumID));
                 }
                 //如果是買單曲則只列該單曲
-                else 
+                else
                 {
                     tp.Add(db.tProducts.FirstOrDefault(p => p.fProductID == a.fProductID));
                 }
@@ -121,14 +121,14 @@ namespace MainWork.Models
         {
             string s2 = "";
             //有無此人
-            if(db.tMembers.FirstOrDefault(p=>p.fAccount == s1) == null)
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == s1) == null)
             {
-                s2 = "此功能需登入才能使用";
+                s2 = "撥放清單需登入才能使用";
                 return s2;
             }
             //是否過期
             DateTime? dt = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fSubscriptEndDate;
-            if (dt ==null || dt<DateTime.Now)
+            if (dt == null || dt < DateTime.Now)
             {
                 s2 = "此帳號包月已過期無法加入單曲";
                 return s2;
@@ -145,7 +145,7 @@ namespace MainWork.Models
             List<tPlayList> tnowPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
             if (tnowPL.FirstOrDefault(p => p.fProductID == amid) != null)
             {
-                s2 = "資料已存在";
+                s2 = "撥放清單已經有此首音樂了";
                 return s2;
             }
             db.tPlayLists.Add(tPL);
@@ -159,6 +159,51 @@ namespace MainWork.Models
                 return s2;
             }
             s2 = "成功";
+            return s2;
+        }
+
+        public string userDeletePlayLists(string s1, int amid)
+        {
+            string s2 = "";
+            //有無此人
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == s1) == null)
+            {
+                s2 = "撥放清單需登入才能使用";
+                return s2;
+            }
+            //是否過期
+            DateTime? dt = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fSubscriptEndDate;
+            if (dt == null || dt < DateTime.Now)
+            {
+                s2 = "此帳號包月已過期無法刪除單曲";
+                return s2;
+            }
+            //有無此單曲
+            if (db.tProducts.FirstOrDefault(p => p.fProductID == amid) == null)
+            {
+                s2 = "查無此單曲";
+                return s2;
+            }
+            tPlayList tPL = new tPlayList();
+            tPL.fAccount = s1;
+            tPL.fProductID = amid;
+            List<tPlayList> tnowPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
+            if (tnowPL.FirstOrDefault(p => p.fProductID == amid) == null)
+            {
+                s2 = "你的撥放清單找不到此首音樂";
+                return s2;
+            }
+            db.tPlayLists.Remove(tPL);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                s2 = ex.ToString();
+                return s2;
+            }
+            s2 = "成功刪除: " + tPL.tProduct.fProductName;
             return s2;
         }
     }

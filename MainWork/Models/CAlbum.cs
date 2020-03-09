@@ -1,6 +1,4 @@
-﻿using MainWork;
-using MusicPrj;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +19,7 @@ namespace MainWork
     }
 }
 
-    namespace Mainwork.Models
+namespace MainWork.Models
 {
     public class CAlbum
     {
@@ -101,7 +99,7 @@ namespace MainWork
 
         //使用者更新專輯資料不含封面
         public string userUpdateAlbumInfo(string albumid, FormCollection formCollection)
-         {
+        {
             int intAlbumid = Int32.Parse(albumid);
             tAlbum tA = db.tAlbums.FirstOrDefault(p => p.fAlbumID == intAlbumid);
             string s2 = "";
@@ -217,11 +215,11 @@ namespace MainWork
             }
             //1.關聯資料移除,2.Entity db的產生物件不能在另一個Entity db使用
             List<tPlayList> tPL = db.tPlayLists.Where(p => p.fProductID == amid).ToList();
-            List <tPurchaseItem> tPI = db.tPurchaseItems.Where(p => p.fProductID == amid).ToList();
-         //   List <tShoppingCart> tSC = db.tShoppingCarts.Where(p => p.fProductID == amid).ToList();
+            List<tPurchaseItem> tPI = db.tPurchaseItems.Where(p => p.fProductID == amid).ToList();
+            //   List <tShoppingCart> tSC = db.tShoppingCarts.Where(p => p.fProductID == amid).ToList();
             db.tPlayLists.RemoveRange(tPL);
             db.tPurchaseItems.RemoveRange(tPI);
-        //    db.tShoppingCarts.RemoveRange(tSC);
+            //    db.tShoppingCarts.RemoveRange(tSC);
             db.tProducts.Remove(tP);
             try
             {
@@ -280,7 +278,7 @@ namespace MainWork
             {
                 //return "檔案不存在或在使用中";
             }
-            string errorFile= "檔案不存在或在使用中:";
+            string errorFile = "檔案不存在或在使用中:";
             foreach (var prod in tP)
             {
                 var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), prod.fFilePath);
@@ -294,13 +292,13 @@ namespace MainWork
                     errorFile += path;
                 }
             }
-            if(errorFile!= "檔案不存在或在使用中:")
+            if (errorFile != "檔案不存在或在使用中:")
             {
                 return errorFile;
             }
             else
             {
-            return "成功";
+                return "成功";
             }
         }
 
@@ -325,7 +323,7 @@ namespace MainWork
         //使用者直接更新單曲資料不含檔案
         public string userUpdateSongInfoDetail(int soid, FormCollection formCollection)
         {
-       //     int intSongid = Int32.Parse(soid);
+            //     int intSongid = Int32.Parse(soid);
             tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == soid);
             string s2 = "";
             if (tP == null)

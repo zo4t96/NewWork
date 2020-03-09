@@ -54,10 +54,43 @@
         </div>
         <div class="loingBtn">登入</div>
     }
+    <div>
+        <a onclick="openPopupWindow()">
+            點我Line Login
+        </a>
+    </div>
+    <div id="LineLoginresult"></div>
 </div>
 
 <script>
     $(".loingBtn").click(function () {
         $("form").submit();
     })
+</script>
+<script type="text/javascript">
+    let LineLoginUrl = "@Url.Action("GetLineLoginUrl","MemberLogin")";
+    let RevokeLineLoginUrl = "@Url.Action("RevokeLineLoginUrl","MemberLogin")";
+    $("body").on('DOMSubtreeModified', "#LineLoginresult", function () {
+        setTimeout(function () {
+            $("#modal").removeClass("fadein");
+            $("#modalContent").removeClass("fadein");
+        }, 10)
+        setTimeout(function () {
+            $("#modal").css("display", "none");
+        }, 500)
+        window.location.href = "@Url.Action("Main","Homepage")"
+    });
+    function openPopupWindow() {
+        $("#result").html("");//清空顯示結果
+        //另開popup window前，每次都取得新的LineLoginUrl(每次Url的state參數都不一樣)
+        $.ajax({
+            url: LineLoginUrl,
+            method: "get",
+            success: function (url) {
+                window.open(url, "_blank", "width=800px,height=600px");
+            }, error: function (xhr) {
+                console.log(xhr);
+            }
+        });
+    }
 </script>
