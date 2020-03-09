@@ -8,7 +8,7 @@ namespace MainWork.Models
     public class tShoppingCartFram
     {
         dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
-        public List<tPurchaseItem> getShoppingCart(string cname )
+        public List<tPurchaseItem> getShoppingCart(string cname)
         {
             var q = from x in db.tPurchaseItems
                     where x.fCustomer == cname && x.tShoppingCart.fType == 0
@@ -94,7 +94,9 @@ namespace MainWork.Models
             {
                 foreach (var k in pd)
                 {
-                    var dpi = db.tPurchaseItems.Add(
+                    if (!q.Any(p => p.tPurchaseItems.Any(s => s.fProductID == k.fProductID)))
+                    {
+                        db.tPurchaseItems.Add(
                     new tPurchaseItem
                     {
                         fPurchaseItemID = q.ToList()[0].fCartID,
@@ -104,6 +106,7 @@ namespace MainWork.Models
                         fDate = DateTime.Now,
                         fisAlbum = isAlbum
                     });
+                    }
                 }
                 db.SaveChanges();
             }
@@ -115,7 +118,13 @@ namespace MainWork.Models
             db.tPurchaseItems.Remove(tpit);
             db.SaveChanges();
         }
-
+        public string Dsc(string cname)
+        {
+            var q = from x in db.tMembers
+                    where x.fAccount == cname
+                    select x.fMoney.ToString();
+            return q.ToList()[0];
+        }
 
     }
 }

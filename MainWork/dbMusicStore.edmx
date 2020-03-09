@@ -24,7 +24,7 @@
           <Property Name="fAlbumName" Type="nvarchar" MaxLength="50" />
           <Property Name="fMaker" Type="nvarchar" MaxLength="50" />
           <Property Name="fAccount" Type="nvarchar" MaxLength="50" />
-          <Property Name="fYear" Type="nvarchar" MaxLength="50" />
+          <Property Name="fYear" Type="date" />
           <Property Name="fType" Type="int" />
           <Property Name="fStatus" Type="int" />
           <Property Name="fALPrice" Type="money" />
@@ -88,7 +88,6 @@
           <Property Name="fContent" Type="nvarchar(max)" />
           <Property Name="fTime" Type="datetime" />
           <Property Name="fStatus" Type="int" />
-          <Property Name="fRead" Type="int" />
           <Property Name="fTitle" Type="nvarchar(max)" />
           <Property Name="fReaded" Type="int" />
         </EntityType>
@@ -525,7 +524,7 @@
           <Property Name="fAlbumName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fMaker" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fYear" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fYear" Type="DateTime" Precision="0" />
           <Property Name="fType" Type="Int32" />
           <Property Name="fStatus" Type="Int32" />
           <Property Name="fALPrice" Type="Decimal" Precision="19" Scale="4" />
@@ -605,7 +604,6 @@
           <Property Name="fContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="fTime" Type="DateTime" Precision="3" />
           <Property Name="fStatus" Type="Int32" />
-          <Property Name="fRead" Type="Int32" />
           <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
           <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
@@ -965,7 +963,6 @@
               <MappingFragment StoreEntitySet="tMessage">
                 <ScalarProperty Name="fReaded" ColumnName="fReaded" />
                 <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-                <ScalarProperty Name="fRead" ColumnName="fRead" />
                 <ScalarProperty Name="fStatus" ColumnName="fStatus" />
                 <ScalarProperty Name="fTime" ColumnName="fTime" />
                 <ScalarProperty Name="fContent" ColumnName="fContent" />

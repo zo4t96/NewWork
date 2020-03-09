@@ -74,17 +74,15 @@
         <h2>類型更改</h2>
 
         @*使用拖曳填入input的專輯Kind*@
-        <div class="form-group" style="min-height:400px">
-            <div class="col-md-12">
-                <div class="containerDrag">
-                    <ul id="userKindtaginput"></ul>
-                    <ul id="adKindULPageload">
-                    </ul>
-                </div>
-                <hr />
-                @*input除錯用,平常type設成hide*@
-                <input class="form-control text-box single-line" id="tA_fKinds" name="tAfKinds" type="text" value="">
+
+        <div class="col-md-12">
+            <div class="containerDrag row d-flex">
+                <ul id="userKindtaginput"></ul>
+                <ul id="adKindULPageload"></ul>
             </div>
+            <hr />
+            @*input除錯用,平常type設成hide*@
+            <input class="form-control text-box single-line" id="tA_fKinds" name="tAfKinds" type="text" value="">
         </div>
         <script>
             $(function () {
@@ -93,7 +91,7 @@
         </script>
 
 
-        <div class="kindReviseBtn">更改</div>
+        <div class="kindReviseBtn mt-3">更改</div>
 
 </div>
 

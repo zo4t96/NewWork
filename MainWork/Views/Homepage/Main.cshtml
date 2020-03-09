@@ -203,7 +203,9 @@
             let amid = $(this).data("album");
             let url = `${$(this).attr("href")}?amid=${amid}`;
             let stateObj = { amid: amid, ajax: true, scrollY: 0 };
+
             history.pushState(stateObj, null, url);
+
             $.ajax({
                 url: url,
                 data: history.state,

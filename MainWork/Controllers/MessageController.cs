@@ -19,7 +19,6 @@ namespace MusicPrj.Controllers
         }
         public ActionResult MessageBox()
         {
-            Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             int tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1).Count(); ;
             ViewBag.totalPage = tME % 5 == 0 ? (tME / 5) + 1 : (tME / 5) + 2;

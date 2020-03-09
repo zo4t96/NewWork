@@ -19,7 +19,7 @@
     <Property Name="fAlbumName" Type="nvarchar" MaxLength="50" />
     <Property Name="fMaker" Type="nvarchar" MaxLength="50" />
     <Property Name="fAccount" Type="nvarchar" MaxLength="50" />
-    <Property Name="fYear" Type="nvarchar" MaxLength="50" />
+    <Property Name="fYear" Type="date" />
     <Property Name="fType" Type="int" />
     <Property Name="fStatus" Type="int" />
     <Property Name="fALPrice" Type="money" />
@@ -83,7 +83,6 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
-    <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
     <Property Name="fReaded" Type="int" />
   </EntityType>

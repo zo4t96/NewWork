@@ -26,5 +26,10 @@ namespace MainWork.Controllers
             //目前先將傳過去的資料轉換成List<>形式，可以確保頁面正常運作
             return View(cs.allAlbum().ToList());
         }
+
+        public ActionResult _MonthlyPage()
+        {
+            return PartialView();
+        }
     }
 }

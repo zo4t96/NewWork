@@ -113,15 +113,11 @@
   <ItemGroup>
     <Content Include="bin\EntityFramework.dll" />
     <Content Include="bin\EntityFramework.SqlServer.dll" />
-    <Content Include="bin\EntityFramework.SqlServer.xml" />
-    <Content Include="bin\EntityFramework.xml" />
     <Content Include="bin\MainWork.dll" />
     <Content Include="bin\MainWork.pdb" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
     <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
     <Content Include="bin\roslyn\csc.exe" />
     <Content Include="bin\roslyn\csi.exe" />
     <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
@@ -159,31 +155,14 @@
     <Content Include="bin\roslyn\vbc.exe" />
     <Content Include="bin\roslyn\VBCSCompiler.exe" />
     <Content Include="bin\System.Net.Http.Formatting.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.xml" />
     <Content Include="bin\System.Web.Helpers.dll" />
-    <Content Include="bin\System.Web.Helpers.xml" />
     <Content Include="bin\System.Web.Http.dll" />
     <Content Include="bin\System.Web.Http.WebHost.dll" />
-    <Content Include="bin\System.Web.Http.WebHost.xml" />
-    <Content Include="bin\System.Web.Http.xml" />
     <Content Include="bin\System.Web.Mvc.dll" />
-    <Content Include="bin\System.Web.Mvc.xml" />
     <Content Include="bin\System.Web.Razor.dll" />
-    <Content Include="bin\System.Web.Razor.xml" />
     <Content Include="bin\System.Web.Webpages.Deployment.dll" />
-    <Content Include="bin\System.Web.Webpages.Deployment.xml" />
     <Content Include="bin\System.Web.Webpages.dll" />
     <Content Include="bin\System.Web.Webpages.Razor.dll" />
-    <Content Include="bin\System.Web.Webpages.Razor.xml" />
-    <Content Include="bin\System.Web.Webpages.xml" />
-    <Content Include="bin\zh-Hant\EntityFramework.resources.dll" />
-    <Content Include="bin\zh-Hant\EntityFramework.SqlServer.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Helpers.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Mvc.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Razor.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Webpages.Deployment.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Webpages.Razor.resources.dll" />
-    <Content Include="bin\zh-Hant\System.Web.Webpages.resources.dll" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -301,7 +280,6 @@
     <Content Include="js\bootstrap-datetimepicker.js" />
     <Content Include="js\main.js" />
     <Content Include="js\moment.js" />
-    <Content Include="Music\紅魔 「Un-demystified Fantasy」.mp3" />
     <Content Include="PlayerImg\20161011105030_75260.jpg" />
     <Content Include="PlayerImg\328561-130Z320494069.jpg" />
     <Content Include="PlayerImg\999.jpg" />
@@ -426,6 +404,7 @@
     <Content Include="fonts\poppins\poppins-v5-latin-regular.ttf" />
     <Content Include="fonts\poppins\poppins-v5-latin-regular.woff" />
     <Content Include="fonts\poppins\poppins-v5-latin-regular.woff2" />
+    <None Include="Properties\PublishProfiles\MainWork0309 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\SpiderFly - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\SpiderFly - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -867,6 +846,8 @@
     <Content Include="Views\Album\_MyAlbumAnalysis.cshtml" />
     <Content Include="Views\Album\_MyAlbumProductList.cshtml" />
     <Content Include="Views\Album\_userEvent.cshtml" />
+    <Content Include="Views\tShoppingCart\CheckCart.cshtml" />
+    <Content Include="Views\Homepage\_MonthlyPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -877,6 +858,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="MusicFile\" />
+    <Folder Include="Music\" />
     <Folder Include="Views\App_LocalResources\NewFolder1\" />
     <Folder Include="Views\testrazor\" />
   </ItemGroup>

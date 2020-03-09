@@ -11,7 +11,7 @@ namespace MusicPrj.Controllers
     {
         // GET: tShoppingCart
         tShoppingCartFram tCart = new tShoppingCartFram();
-        public ActionResult ShoppingCart(string cname = "aaa", bool ajax = false)
+        public ActionResult ShoppingCart(string cname, bool ajax = false)
         {
             if (ajax)
             {
@@ -44,6 +44,10 @@ namespace MusicPrj.Controllers
         {
             tCart.CarType(shopcarid);
             return Content("test");
+        }
+        public ActionResult CheckDis(string cname)
+        {
+            return Content(tCart.Dsc(cname));
         }
     }
 }

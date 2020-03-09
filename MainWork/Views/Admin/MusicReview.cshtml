@@ -131,7 +131,7 @@
                 <tr class="trItemMain">
                     <td><div class="btn btn-info open">詳細內容</div></td>
                     <td><input type="checkbox" data-account="@item.fAccount" data-album="@item.fAlbumID" /></td>
-                    <td>@item.fYear</td>
+                    <td>@(((DateTime)item.fYear).ToLongDateString())</td>
                     <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
                     <td>@item.fAccount</td>
                     <td>@item.fAlbumName</td>

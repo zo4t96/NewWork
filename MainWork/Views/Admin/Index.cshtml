@@ -90,7 +90,7 @@
                     @foreach (var item in albums)
                     {
                         <tr>
-                            <td>@item.fYear</td>
+                            <td>@(((DateTime)item.fYear).ToLongDateString())</td>
                             <td>@item.fAlbumName</td>
                         </tr>
                     }
@@ -118,7 +118,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (eventLater == null)
+                    @if (eventLater.FirstOrDefault() == null)
                     {
                         <tr><td colspan="3">目前沒有進行中的活動</td></tr>
                     }
@@ -147,7 +147,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (eventNow == null)
+                    @if (eventNow.FirstOrDefault() == null)
                     {
                         <tr><td colspan="3">一週內沒有即將舉行的活動</td></tr>
                     }

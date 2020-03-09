@@ -282,7 +282,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="h5">狀態 </div>
+                <div class="h5">狀態</div>
                 <div class="col-md-12">
                     @{ if (tAl.fStatus == 0)
                         {
@@ -307,20 +307,20 @@
         <h5 class="albumtext">共有 @(Model.Count()) 首 </h5>
         @{ if (tAl.fStatus == 0)
             {
-                    <button class="btn btn-info editAlbumInfo mr-3">修改專輯內容</button>
+                    <button class="btn btn-info editAlbumInfo mr-3 mt-2">修改專輯內容</button>
             }
             else if (tAl.fStatus == 1)
             {
-                    <button class="btn btn-info editAlbumInfoClose mr-3">撤回重新修改內容</button>
+                    <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">撤回重新修改內容</button>
             }
             else if (tAl.fStatus == 2)
             {
-                    <button class="btn btn-info editAlbumInfoClose mr-3">下架</button>
+                    <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">下架</button>
             }
         }
-            @Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })
+            @Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger mr-3 mt-2", onclick = "return confirm('確定要刪除嗎?')" })
 
-            <div class="mt-3 mb-5 small">最後修改時間 @tAl.fYear</div>
+            <div class="mt-3 mb-5 small">最後修改日期 @(((DateTime)(tAl.fYear)).ToShortDateString())</div>
     </div>
 </div>
 
@@ -427,7 +427,7 @@
                  data-soid="@item.fProductID"
                  data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
                  data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
-                 data-playurl="@(Url.Content("~/MusicFile/") + Html.DisplayFor(modelItem => item.fFilePath))"
+                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"
                  data-revfproductname="@item.fProductName"
                  data-revfsinger="@item.fSinger"
                  data-revfcomposer="@item.fComposer"
@@ -497,11 +497,14 @@
                             <hr>
                         </div>
 
-                        <div class="mb-3">
-                            <button data-songid="@item.fProductID" class="btn btn-danger deletesong">刪除此首單曲</button>
-                            <button class="btn btn-info updatetime">更新此首單曲資料</button>
-                            <button class="btn btn-info updateSongInfo">重新上傳音樂檔</button>
-                        </div>
+                        @if (tAl.fStatus == 0)
+                        {
+                            <div class="mb-3">
+                                <button data-songid="@item.fProductID" class="btn btn-danger deletesong">刪除此首單曲</button>
+                                <button class="btn btn-info updatetime">更新此首單曲資料</button>
+                                <button class="btn btn-info updateSongInfo">重新上傳音樂檔</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -1016,7 +1019,7 @@
             if (confirm("真的要刪除嗎?")) {
                  @*@Html.ActionLink("刪除", "DelteSong", new { amid = item.fProductID }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })*@
                 $.get("@Url.Action("DelteSong","Album")?amid="+$(this).data("songid"), function (data) {
-                    $("#modalContent").html(data);
+                    $("#eventNotification").html(data);
                     let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
                     $.get(plink, { ajax: true }, function (data) {
                     $(".mainbox").html(data);

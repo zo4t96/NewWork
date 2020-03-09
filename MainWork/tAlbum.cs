@@ -24,7 +24,7 @@ namespace MainWork
         public string fAlbumName { get; set; }
         public string fMaker { get; set; }
         public string fAccount { get; set; }
-        public string fYear { get; set; }
+        public Nullable<System.DateTime> fYear { get; set; }
         public Nullable<int> fType { get; set; }
         public Nullable<int> fStatus { get; set; }
         public Nullable<decimal> fALPrice { get; set; }

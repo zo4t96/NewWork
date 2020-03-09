@@ -116,7 +116,7 @@ namespace MainWork.Controllers
         {
             if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
             {
-                return Content("<span>你還沒登入喔<span>");
+                return Content("");
             }
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
@@ -140,7 +140,7 @@ namespace MainWork.Controllers
             else
             {
                 //    return View();
-                return Content("<span>撥放清單是空的喔<span>");
+                return PartialView("_PlayLists", tp);
             }
         }
 
@@ -546,7 +546,7 @@ namespace MainWork.Controllers
 
 
 
-        //03/08/2020新增使用自訂活動頁面
+        //03/08/2020新增使用自訂活動頁面(先放棄實作)
         public ActionResult _userEvent()
         {
             return PartialView();

@@ -85,7 +85,6 @@
         <MappingFragment StoreEntitySet="tMessage">
           <ScalarProperty Name="fReaded" ColumnName="fReaded" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-          <ScalarProperty Name="fRead" ColumnName="fRead" />
           <ScalarProperty Name="fStatus" ColumnName="fStatus" />
           <ScalarProperty Name="fTime" ColumnName="fTime" />
           <ScalarProperty Name="fContent" ColumnName="fContent" />

@@ -21,9 +21,12 @@
     @* 目前已知差別，使用let時下面那個不能重複宣告而上面可以 *@
     @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    
+
     @* 聖開的 *@
     @RenderSection("styles", required: false)
+    <script src="https://www.paypal.com/sdk/js?client-id=AQkR_scjhSlBeRrg9DRBwj6ucqCTQcWwhAslnfMYoX7d8P1vgt8syXR7lSwHjWdL6E36RGLoDo5MYD_n&intent=authorize&currency=TWD">
+        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
 
     <!--原始style-->
     <style>
@@ -51,6 +54,7 @@
             background: black;
             background-size: cover;
         }
+
             .header-logo > img {
                 display: inline-block;
                 width: 170px;
@@ -92,7 +96,7 @@
         }
 
         .sidebox {
-            padding-top:40px;
+            padding-top: 40px;
             position: fixed;
             width: 200px;
             height: 100vh;
@@ -641,6 +645,18 @@
             border-radius: 4px;
             background-color: #4a4a4a;
         }
+
+        .noLogin {
+            position: relative;
+            top: 40%;
+            text-align: center;
+        }
+
+        .playlistLogon,
+        .playlistLogin {
+            color: #1ca4e9;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -654,6 +670,13 @@
             <i class="fa fa-caret-right"></i>
         </div>
         <div class="playList">
+            @if (sk == null)
+            {
+                <div class="noLogin">
+                    <div class="h5">您尚未<span class="playlistLogin">登入</span>喔</div>
+                    <div><span class="playlistLogon">點我註冊</span>以享受SpyderFly的音樂服務!</div>
+                </div>
+            }
             <div class="playListPartialView">
                 @Html.Action("_PlayLists", "Album")
             </div>
@@ -821,7 +844,7 @@
                     </li>
 
                     <li>
-                        <a href="@Url.Action("ShoppingCart", "tShoppingCart")">
+                        <a href="@Url.Action("ShoppingCart", "tShoppingCart",new { cname=sk.fAccount})">
                             <div class="menuItem">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>我的購物車</span>
@@ -1429,7 +1452,6 @@
 
         //登入註冊介面與登出
         $("#loginInterface").on("click", function () {
-
             $.ajax({
                 url:"@Url.Action("Login","MemberLogin")",
                 type: "get",
@@ -1471,7 +1493,13 @@
                 $("#modalContent").addClass("fadein");
             }, 10)
         })
-
+        $(".playlistLogon").click(function () {
+            $("#logonInterface").trigger("click");
+        })
+        $(".playlistLogin").click(function () {
+            $("#loginInterface").trigger("click");
+        })
+        
         //點擊主視窗以外的位置會讓介面消失
         $("#modal").click(function (e) {
             if ($(e.target).children("#modalContent").length != 0) {

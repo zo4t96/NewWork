@@ -1,0 +1,43 @@
+﻿@model List<MainWork.tPurchaseItem>
+@{
+    ViewBag.Title = "CheckCart";
+    if (ViewBag.ajax)
+    {
+        Layout = null;
+    }
+}
+<style>
+    .row {
+        height: 40px
+    }
+</style>
+<h2>CheckCart</h2>
+@if (Model.Count != 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col bg-dark">訂單編號</div>
+            <div class="col bg-danger">音樂名稱</div>
+            <div class="col bg-dark">金額</div>
+            <div class="col bg-danger">訂購日期</div>
+        </div>
+
+        @foreach (var x in Model)
+        {
+            <div class="row">
+                <div class="col bg-danger" data-name="Cid">
+                    <span>@(x.fPurchaseItemID)@(x.fProductID)</span>
+                </div>
+                <div class="col bg-dark" data-name="pName">
+                    <span>@x.tProduct.fProductName</span>
+                </div>
+                <div class="col bg-danger" data-name="Price">
+                    <span class="price">@((int)((double)x.fPrice.Value * x.fDiscount.Value))</span>
+                </div>
+                <div class="col bg-dark" data-name="Member">
+                    <span>@x.fDate</span>
+                </div>
+            </div>
+        }
+    </div>
+}

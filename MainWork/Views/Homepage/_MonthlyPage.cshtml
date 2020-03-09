@@ -1,0 +1,54 @@
+﻿
+<style>
+    .modalMonthly {
+        display:inline-block;
+        position: relative;
+        top: 10%;
+        padding: 20px;
+        background-image: linear-gradient(to right, #1587dd,#651ea4, #191919);
+        border-radius: 20px;
+        margin: auto;
+        transition: 0.6s;
+        opacity: 0;
+    }
+        .modalMonthly.fadein {
+            top: 20%;
+            opacity: 1;
+        }
+</style>
+
+<div class="modalMonthly">
+    <div><img src="~/Images/sp3.png"/></div>
+    <div>喜歡這裡的音樂嗎?</div>
+    <div>只要月付NT$299就能無限暢聽SpiderFly的所有音樂!</div>
+    <div id="paypalMonthlyPay"></div>
+</div>
+
+<script>
+    paypal.Buttons({
+        style: {
+            layout: 'horizontal',
+            color: 'blue',
+            shape: 'pill',
+            label: 'buynow'
+        },
+        // Set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: 199
+                    }
+                }]
+            });
+        },
+        // Finalize the transaction
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                // Show a success message to the buyer
+                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+            }).then($.post("@Url.Action("BuyCheck", "tShoppingCart")", { "shopcarid": shopcarid ,"ajax":true},
+                    function (data) { console.log(data)}));
+        }
+    }).render('#paypalMonthlyPay')
+</script>
