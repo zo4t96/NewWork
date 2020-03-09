@@ -27,8 +27,8 @@ namespace MusicPrj
         public string fTitle { get; set; }
         public string fPhotoPath { get; set; }
     
+        public virtual tMember tMember { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tAlbum> tAlbums { get; set; }
-        public virtual tMember tMember { get; set; }
     }
 }

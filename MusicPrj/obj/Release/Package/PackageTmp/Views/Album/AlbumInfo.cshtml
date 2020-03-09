@@ -33,7 +33,7 @@
 }
 
 <style>
-            /*舊Player開始*/
+                /*舊Player開始*/
     .originalPanel,
     .demoPanel {
     position: relative;
@@ -163,10 +163,8 @@
         cursor: pointer;
     }
 </style>
-
 @*抓取抓音樂檔檔案名稱歌手js檔*@
 <script src="@Url.Content("~/Scripts/musicmetadata.js")" type="text/javascript"></script>
-
 
 <div class="albumset">
     <img id="fCoverPathUploadimg" src="~/CoverFiles/@tAl.fCoverPath" width="320" height="320" />
@@ -239,7 +237,6 @@
                     }
                     else
                     {
-                        <div class="h5">@tAl.fKinds</div>
                         <button class="btn btn-outline-secondary" disabled>修改</button>
                     }
                 }
@@ -303,226 +300,237 @@
     </div>
 </div>
 
+<div class="musicsPanel">
+    <div class="container">
+        @if (tAl.fStatus == 0)
+        {
+            <div class="h3fold h3 fold-title" data-start="input" data-end="input"><i class="fa fa-chevron-right"></i> 單曲上傳</div>
+            <div class="foldAlbum">
+                <div class="fold-container">
+                    <div class="container" style="color:white">
+                        @using (Html.BeginForm("AlbumInfo", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
+                        {
+                            @Html.AntiForgeryToken()
 
-    <div class="musicsPanel">
-        <div class="container">
-            @if (tAl.fStatus == 0)
-            {
-                <div class="h3fold h3 fold-title" data-start="input" data-end="input"><i class="fa fa-chevron-right"></i> 單曲上傳</div>
-                <div class="foldAlbum">
-                    <div class="fold-container">
-                        <div class="container" style="color:white">
-                            @using (Html.BeginForm("AlbumInfo", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
-                            {
-                                @Html.AntiForgeryToken()
+                            <div class="form-horizontal">
+                                <div class="h4">請輸入單曲基本資料</div>
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
 
-                                <div class="form-horizontal">
-                                    <div class="h4">請輸入單曲基本資料</div>
-                                    <hr />
-                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-
-
-                                            <div class="container playerPanel">
-                                                <input type="file" id="upload" name="tP_fRealFile" accept=".mp3" />
-                                                <hr>
-                                                <h5>原始檔案</h5>
-                                                <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
-                                                <div class="py-2 originalPanel">
-
-                                                    <audio class="originalAudio"></audio>
-                                                    <span class="nowTime">00:00</span>
-                                                    <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
-                                                    <span class="totalSetTime">00:00</span>
-                                                    <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
-                                                    <div class="vbtn opause"><img src="~/Content/pause.png"></div>
-                                                </div>
-
-                                                @*這邊input留下為了使調整的值藉由轉換至text的Name:tP_fPlayStart and tP_fPlayEnd傳至DB*@
-                                                @*<button type="button" class="btn btn-primary setStart">設定開頭時間</button>*@
-                                                <input type="hidden" id="fPlays" name="tP.fPlays" class="start" value="00:00.00" disabled="false">
-                                                <br>
-                                                @*<button type="button" class="btn btn-primary setEnd">設定結束時間</button>*@
-                                                <input type="hidden" id="fPlaye" name="tP.fPlaye" class="end" value="00:00.00" disabled="false">
-                                                <input class="form-control text-box single-line" id="tP_fPlayStart" name="tP.fPlayStart" type="hidden" value="0">
-                                                <input class="form-control text-box single-line" id="tP_fPlayEnd" name="tP.fPlayEnd" type="hidden" value="30">
-
-                                                <p>也可以直接拉動滑條直接選取試聽範圍</p>
-                                                <div id="slider-range" class="slider"></div>
-
-                                                <h5>試聽檔案</h5>
-                                                <p>在此確認擷取的範圍</p>
-                                                <div class="py-2 demoPanel">
-                                                    <audio class="demoSetAudio"></audio>
-                                                    <span class="nowDemo">00:00</span>
-                                                    <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
-                                                    <span class="totalDemo">00:00</span>
-                                                    <div class="vbtn dplay"><img src="~/Content/play.png"></div>
-                                                    <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
-                                                </div>
-                                                <hr>
+                                        <div class="container playerPanel">
+                                            <input type="file" id="upload" name="tP_fRealFile" accept=".mp3" />
+                                            <hr>
+                                            <h5>原始檔案</h5>
+                                            <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                                            <div class="py-2 originalPanel">
+                                                <audio class="originalAudio"></audio>
+                                                <span class="nowTime">00:00</span>
+                                                <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                                <span class="totalSetTime">00:00</span>
+                                                <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                                <div class="vbtn opause"><img src="~/Content/pause.png"></div>
                                             </div>
-
-                                        </div>
-                                    </div>
-
-                                    @*增加placeholder提醒會自動更新*@
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tP.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => tP.fProductName, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
-                                            @Html.ValidationMessageFor(model => tP.fProductName, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    @*增加placeholder提醒會自動更新*@
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tP.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => tP.fSinger, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
-                                            @Html.ValidationMessageFor(model => tP.fSinger, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tP.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => tP.fComposer, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => tP.fComposer, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => tP.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => tP.fSIPrice, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => tP.fSIPrice, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="col-md-offset-2 col-md-10">
-                                            <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                                            @*這邊input留下為了使調整的值藉由轉換至text的Name:tP_fPlayStart and tP_fPlayEnd傳至DB*@
+                                            @*<button type="button" class="btn btn-primary setStart">設定開頭時間</button>*@
+                                            <input type="hidden" id="fPlays" name="tP.fPlays" class="start" value="00:00.00" disabled="false">
+                                            <br>
+                                            @*<button type="button" class="btn btn-primary setEnd">設定結束時間</button>*@
+                                            <input type="hidden" id="fPlaye" name="tP.fPlaye" class="end" value="00:00.00" disabled="false">
+                                            <input class="form-control text-box single-line" id="tP_fPlayStart" name="tP.fPlayStart" type="hidden" value="0">
+                                            <input class="form-control text-box single-line" id="tP_fPlayEnd" name="tP.fPlayEnd" type="hidden" value="30">
+                                            <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                                            <div id="slider-range" class="slider"></div>
+                                            <h5>試聽檔案</h5>
+                                            <p>在此確認擷取的範圍</p>
+                                            <div class="py-2 demoPanel">
+                                                <audio class="demoSetAudio"></audio>
+                                                <span class="nowDemo">00:00</span>
+                                                <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                                <span class="totalDemo">00:00</span>
+                                                <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                                <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                                            </div>
+                                            <hr>
                                         </div>
                                     </div>
                                 </div>
-                            }
-                            @*for end*@
-                        </div>
+                                @*增加placeholder提醒會自動更新*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => tP.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => tP.fProductName, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
+                                        @Html.ValidationMessageFor(model => tP.fProductName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*增加placeholder提醒會自動更新*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => tP.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => tP.fSinger, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
+                                        @Html.ValidationMessageFor(model => tP.fSinger, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => tP.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => tP.fComposer, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => tP.fComposer, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => tP.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => tP.fSIPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => tP.fSIPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @*for end*@
                     </div>
                 </div>
-            }
+            </div>
+        }
+        @foreach (var item in Model)
+        {
 
-                @foreach (var item in Model)
-                {
-
-                    <div class="h3fold h3 fold-title"
-                         data-soid="@item.fProductID"
-                         data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
-                         data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
-                         data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"
-                         data-revfproductname="@item.fProductName"
-                         data-revfsinger="@item.fSinger"
-                         data-revfcomposer="@item.fComposer"
-                         data-revfsiprice="@item.fSIPrice">
-                        @Html.DisplayFor(modelItem => item.fProductName)
-                    </div>
-                    <div class="foldAlbum">
-                        <div class="fold-container">
-
-                            <div class="container">
-                                <div class="container playerPanel">
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(modelItem => item.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
+            <div class="h3fold h3 fold-title"
+                 data-soid="@item.fProductID"
+                 data-start="@Html.DisplayFor(modelItem => item.fPlayStart)"
+                 data-end="@Html.DisplayFor(modelItem => item.fPlayEnd)"
+                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))"
+                 data-revfproductname="@item.fProductName"
+                 data-revfsinger="@item.fSinger"
+                 data-revfcomposer="@item.fComposer"
+                 data-revfsiprice="@item.fSIPrice">
+                @Html.DisplayFor(modelItem => item.fProductName)
+            </div>
+            <div class="foldAlbum">
+                <div class="fold-container">
+                    <div class="container">
+                        <div class="container playerPanel">
+                            <div class="form-group">
+                                @Html.LabelFor(modelItem => item.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
                                             <input class="form-control text-box single-line revise_fProductName" type="text" value="">
-                                            @Html.ValidationMessageFor(modelItem => item.fProductName, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(modelItem => item.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            <input class="form-control text-box single-line revise_fSinger" type="text" value="">
-                                            @Html.ValidationMessageFor(modelItem => item.fSinger, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(modelItem => item.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            <input class="form-control text-box single-line revise_fComposer" type="text" value="">
-                                            @Html.ValidationMessageFor(modelItem => item.fComposer, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(modelItem => item.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
-                                        <div class="col-md-10">
-                                            <input class="form-control text-box single-line revise_fSIPrice" type="text" value="">
-                                            @Html.ValidationMessageFor(modelItem => item.fSIPrice, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @*<input type="file" id="upload" accept=".mp3" />*@
-                                    </div>
-
-                                    <hr>
-                                    <h5>原始檔案</h5>
-                                    <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
-                                    <div class="py-2 originalPanel">
-                                        <audio class="originalAudio"></audio>
-                                        <span class="nowTime">00:00</span>
-                                        <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
-                                        <span class="totalSetTime">00:00</span>
-                                        <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
-                                        <div class="vbtn opause"><img src="~/Content/pause.png"></div>
-                                    </div>
-
-                                    <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
-                                    <input type="hidden" class="start" value="00:00.00" disabled="false">
-                                    <br>
-                                    <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
-                                    <input type="hidden" class="end" value="00:00.00" disabled="false">
-                                    <p>也可以直接拉動滑條直接選取試聽範圍</p>
-                                    <div id="slider-range" class="slider"></div>
-
-                                    <h5>試聽檔案</h5>
-                                    <p>在此確認擷取的範圍</p>
-                                    <div class="py-2 demoPanel">
-                                        <audio class="demoSetAudio"></audio>
-                                        <span class="nowDemo">00:00</span>
-                                        <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
-                                        <span class="totalDemo">00:00</span>
-                                        <div class="vbtn dplay"><img src="~/Content/play.png"></div>
-                                        <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
-                                    </div>
-                                    <hr>
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fProductName" type="text" disabled value="">
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(modelItem => item.fProductName, "", new { @class = "text-danger" })
                                 </div>
-
-
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(modelItem => item.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fSinger" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fSinger" type="text" disabled value="">
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(modelItem => item.fSinger, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(modelItem => item.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fComposer" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fComposer" type="text" disabled value="">
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(modelItem => item.fComposer, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(modelItem => item.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fSIPrice" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fSIPrice" type="text" disabled value="">
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(modelItem => item.fSIPrice, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @*<input type="file" id="upload" accept=".mp3" />*@
+                            </div>
+                            <hr>
+                            <h5>原始檔案</h5>
+                            <p>設定按鍵擷取原始檔案的當下時間，即可改變試聽檔案的試聽範圍</p>
+                            <div class="py-2 originalPanel">
+                                <audio class="originalAudio"></audio>
+                                <span class="nowTime">00:00</span>
+                                <input type="range" class="originalSlider" min="0" max="100" step="0.01" value="0">
+                                <span class="totalSetTime">00:00</span>
+                                <div class="vbtn oplay" data-><img src="~/Content/play.png"></div>
+                                <div class="vbtn opause"><img src="~/Content/pause.png"></div>
+                            </div>
+                            <button type="button" class="btn btn-primary setStart">設定開頭時間</button>
+                            <input type="time" class="start" value="00:00.00" disabled="false">
+                            <br>
+                            <button type="button" class="btn btn-primary setEnd">設定結束時間</button>
+                            <input type="time" class="end" value="00:00.00" disabled="false">
+                            <p>也可以直接拉動滑條直接選取試聽範圍</p>
+                            <div id="slider-range" class="slider"></div>
+                            <h5>試聽檔案</h5>
+                            <p>在此確認擷取的範圍</p>
+                            <div class="py-2 demoPanel">
+                                <audio class="demoSetAudio"></audio>
+                                <span class="nowDemo">00:00</span>
+                                <input type="range" class="demoSlider" min="0" max="100" step="0.01" value="0">
+                                <span class="totalDemo">00:00</span>
+                                <div class="vbtn dplay"><img src="~/Content/play.png"></div>
+                                <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+                            </div>
+                            <hr>
+                        </div>
+                        @{ if (tAl.fStatus == 0)
+                            {
                                 <button data-songid="@item.fProductID" class="btn btn-danger deletesong">刪除此首單曲</button>
                                 <button class="btn btn-info updatetime">更新此首單曲資料</button>
                                 <button class="btn btn-info updateSongInfo">重新上傳音樂檔</button>
-                            </div>
-                        </div>
+                            }
+                            else 
+                            { }
+                        }
+
                     </div>
-
-                }
-
+                </div>
             </div>
+
+        }
     </div>
-    <div class="eventNotification" hidden>
-    </div>
-    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"></script>*@
-    <script>
+</div>
+<div class="eventNotification" hidden>
+</div>
+
+<script>
 
     $.getJSON('@Url.Action("SetTypes","Search")', function (datas) {
         $.each(datas, function (name, value) {
@@ -541,32 +549,32 @@
         //}
     })
 
-            //圖片選擇按下時時重新載入
-            $("#fCoverPathUpload").change(function(){
-            readURL(this);
-            });
-            //類別選擇載入
-            function readURL(input){
+    //圖片選擇按下時時重新載入
+    $("#fCoverPathUpload").change(function(){
+    readURL(this);
+    });
+    //類別選擇載入
+    function readURL(input){
 
-            if(input.files && input.files[0]){
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $("#fCoverPathUploadimg").attr('src', e.target.result);
-                    }
-                reader.readAsDataURL(input.files[0]);
-                }
-        };
+    if(input.files && input.files[0]){
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        $("#fCoverPathUploadimg").attr('src', e.target.result);
+            }
+        reader.readAsDataURL(input.files[0]);
+        }
+    };
 
-        $("#kindReviseInterface").on("click", function () {
-                $.get("@Url.Action("_kindReviseInterface","Album")", function (data) {
-                    $("#modalContent").html(data);
-                });
-                $("#modal").css("display", "block");
-                setTimeout(function () {
-                    $("#modal").addClass("fadein");
-                    $("#modalContent").addClass("fadein");
-                }, 10)
-            })
+    $("#kindReviseInterface").on("click", function () {
+        $.get("@Url.Action("_kindReviseInterface","Album")", function (data) {
+            $("#modalContent").html(data);
+        });
+        $("#modal").css("display", "block");
+        setTimeout(function () {
+            $("#modal").addClass("fadein");
+            $("#modalContent").addClass("fadein");
+        }, 10)
+    })
 
     $("#fPlaye").change(function () {
         console.log($("#fPlaye").val());
@@ -578,86 +586,87 @@
         $("#tP_fPlayStart").val($("#fPlays").val())
     })
 
-        $("#inputFormSubmit").click(function () {
-            if (music.error == null) {
-                if ($("#tP_fProductName").val() != "") {
-                    if ($("#tP_fSinger").val() != "") {
-                        if ($("#tP_fSIPrice").val() > 0 && $("#tP_fSIPrice").val() % 1 ==0) {
+    $("#inputFormSubmit").click(function () {
+        if (music.error == null) {
+            if ($("#tP_fProductName").val() != "") {
+                if ($("#tP_fSinger").val() != "") {
+                    if ($("#tP_fSIPrice").val() > 0 && $("#tP_fSIPrice").val() % 1 ==0) {
 
 
-                            var formData = new FormData($("#formInput")[0]);
+                        var formData = new FormData($("#formInput")[0]);
 
-                            $.ajax({
-                              url: `./AlbumInfoUpload/`,
-                              type: "POST",
-                              data: formData,
-                              cache: false,
-                              dataType: 'script',
-                              processData: false,
-                              contentType: false,
-                              success: function (data) {
-                              $(".eventNotification").html(data);
-                              let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
-                              $.get(plink, { ajax: true }, function (data) {
-                              $(".mainbox").html(data);
-                            })
-                              }
-                           });
+                        $.ajax({
+                            url: `./AlbumInfoUpload/`,
+                            type: "POST",
+                            data: formData,
+                            cache: false,
+                            dataType: 'script',
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                            $(".eventNotification").html(data);
+                            let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
+                            $.get(plink, { ajax: true }, function (data) {
+                            $(".mainbox").html(data);
+                        })
+                            }
+                        });
 
-                        } else {
-                 alert("需填入正整數單曲價格");
-                        }
                     } else {
-                 alert("需填入歌手名稱");
+                alert("需填入正整數單曲價格");
                     }
                 } else {
-                 alert("需填入單曲名稱");
+                alert("需填入歌手名稱");
                 }
             } else {
-                 alert("需上傳檔案");
+                alert("需填入單曲名稱");
             }
-        });
+        } else {
+                alert("需上傳檔案");
+        }
+    });
 
-        //撥放器開始
-        //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
-        var demoSetStart;
-        var demoSetEnd;
-        //編輯單曲所讀取到的資料
-        var revfproductname;
-        var revfsinger;
-        var revfcomposer;
-        var revfarranger;
-        var revflyricist;
-        var revfsiprice;
+    //撥放器開始
+    //這兩個是最終會存回資料庫的試聽開頭與結尾的秒數，浮點數類型
+    var demoSetStart;
+    var demoSetEnd;
+    //編輯單曲所讀取到的資料
+    var revfproductname;
+    var revfsinger;
+    var revfcomposer;
+    var revfarranger;
+    var revflyricist;
+    var revfsiprice;
 
-        //新增
-        var m_soid;
-        var oplaying = false;
-        var dplaying = false;
-        var fileName;
+    //新增
+    var m_soid;
+    var oplaying = false;
+    var dplaying = false;
+    var fileName;
 
-        $(".opause").css("display", "none");
-        $(".dpause").css("display", "none");
-        var music = $(".originalAudio")[0];
-        music.volume = 0.6;
-        var demoSetMusic = $(".demoSetAudio")[0];
-        demoSetMusic.volume = 0.6;
+    $(".opause").css("display", "none");
+    $(".dpause").css("display", "none");
+    var music = $(".originalAudio")[0];
+    music.volume = 0.6;
+    var demoSetMusic = $(".demoSetAudio")[0];
+    demoSetMusic.volume = 0.6;
 
-        //讀取檔案，一次只能讀取一個
-        $("#upload").on("change", function () {
-            let file = document.getElementById("upload").files[0];
-            if (file.type != "audio/mp3") {
-                file = null;
-            }
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            //載入時先進行解析mp3檔案名稱,歌手
-            showMetaData(file);
-            reader.onload = function (e) {
-            music.src = e.target.result;
-            demoSetMusic.src = e.target.result;
-            }
-        });
+    //讀取檔案，一次只能讀取一個
+    $("#upload").on("change", function () {
+        music = $(".originalAudio")[0];
+        let file = document.getElementById("upload").files[0];
+        if (file.type != "audio/mp3") {
+            file = null;
+        }
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        //載入時先進行解析mp3檔案名稱,歌手
+        showMetaData(file);
+        reader.onload = function (e) {
+        music.src = e.target.result;
+        demoSetMusic.src = e.target.result;
+        }
+    });
 
     //解析mp3檔案名稱,歌手方法
     function showMetaData(data) {
@@ -689,52 +698,54 @@
 
     }
 
+    //讀取音樂時會進行初始化
+    $(".originalAudio").on("durationchange", function () {
+        music = this;
+        let totalSetTime = parseInt(music.duration);
+        let demoTotal = demoSetEnd - demoSetStart;
+        // console.log(demoTotal);
+        //console.log(totalSetTime);
+        $(".originalSlider").prop("max", totalSetTime);
+        //       $(".demoSlider").prop("max",totalSetTime);
+        $(".demoSlider").prop("max", demoSetEnd);//demoTotal-->demoSetEnd 0302
+        $(".totalSetTime").text(getTimeText(totalSetTime));
+        //         $(".totalDemo").text(getTimeText(totalSetTime));
+        $(".totalDemo").text(getTimeText(demoSetEnd));//demoTotal-->demoSetEnd 0302
 
-        //讀取音樂時會進行初始化
-        $(".originalAudio").on("durationchange", function () {
-            let totalSetTime = parseInt(music.duration);
-            let demoTotal = demoSetEnd - demoSetStart;
-           // console.log(demoTotal);
-            //console.log(totalSetTime);
-            $(".originalSlider").prop("max", totalSetTime);
-            //       $(".demoSlider").prop("max",totalSetTime);
-            $(".demoSlider").prop("max", demoSetEnd);//demoTotal-->demoSetEnd 0302
-            $(".totalSetTime").text(getTimeText(totalSetTime));
-            //         $(".totalDemo").text(getTimeText(totalSetTime));
-            $(".totalDemo").text(getTimeText(demoSetEnd));//demoTotal-->demoSetEnd 0302
-
-            //同時初始化滑動條
-            $("#slider-range").slider({
-                range: true,
-                min: 0,
-                max: `${music.duration}`,
-                step: 0.01,
-                values: [0, music.duration],
-                slide: function () {
-                    demoSetStart = $("#slider-range").slider("values", 0)
-                    setTryStart();
-                    demoSetEnd = $("#slider-range").slider("values", 1)
-                    setTryEnd();
-                }
-            });
-            $(".slider-range").slider({
-                range: true,
-                min: 0,
-                max: `${music.duration}`,
-                step: 0.01,
-                values: [0, music.duration],
-                slide: function () {
-                    setTryStart();
-                    setTryEnd();
-                }
-            });
-            console.log(demoSetStart);
-            console.log(demoSetEnd);
-            $(".start").val(demoSetStart);
-            $(".end").val(demoSetEnd);
-            setTryStart();
-            setTryEnd();
+        //同時初始化滑動條
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: `${music.duration}`,
+            step: 0.01,
+            values: [0, music.duration],
+            slide: function () {
+                demoSetStart = $("#slider-range").slider("values", 0)
+                setTryStart();
+                demoSetEnd = $("#slider-range").slider("values", 1)
+                setTryEnd();
+            }
         });
+        $(this).parent().siblings(".slider").slider({
+            range: true,
+            min: 0,
+            max: `${music.duration}`,
+            step: 0.01,
+            values: [0, music.duration],
+            slide: function () {
+                demoSetStart = $(this).slider("values", 0)
+                demoSetEnd = $(this).slider("values", 1)
+                setTryStart();
+                setTryEnd();
+            }
+        });
+        console.log(demoSetStart);
+        console.log(demoSetEnd);
+        $(".start").val(demoSetStart);
+        $(".end").val(demoSetEnd);
+        setTryStart();
+        setTryEnd();
+    });
 
         //播放器的timer
         $(".originalAudio").on("timeupdate", function () {
@@ -861,7 +872,7 @@
             $(".start").val(demoSetStart);
             console.log($("#fPlaye").val());
             $("#tP_fPlayStart").val($(".start").val())
-        console.log($("#tP_fPlayEnd").val());
+            console.log($("#tP_fPlayEnd").val());
             if (demoSetStart > demoSetMusic.currentTime) {
                 demoSetMusic.currentTime = demoSetStart;
                 $(".demoSlider").attr("value", `${demoSetStart}`);
@@ -885,6 +896,10 @@
         //摺疊樣式開始
         $(function () {
             $('.h3fold').click(function () {
+
+                music = $(this).next().find('.originalAudio')[0];
+                demoSetMusic = $(this).next().find('.demoSetAudio')[0];
+
                 if ($(this).next('.foldAlbum').hasClass('o') == true) {
                     $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
                     $(this).next('.foldAlbum').removeClass('o').slideUp();
@@ -914,7 +929,7 @@
                         $(".revise_fComposer").val(revfcomposer);
                         revfsiprice = $(this).data('revfsiprice');
                         $(".revise_fSIPrice").val(revfsiprice);
-                         setTryStart(); //處裡更新單曲時間 之前設定跑掉問題0302
+                        setTryStart(); //處裡更新單曲時間 之前設定跑掉問題0302
                         setTryEnd(); //處裡更新單曲時間 之前設定跑掉問題0302
                     }
 
@@ -1026,7 +1041,7 @@
             if (confirm("真的要刪除嗎?")) {
                  @*@Html.ActionLink("刪除", "DelteSong", new { amid = item.fProductID }, new { @class = "btn btn-danger", onclick = "return confirm('確定要刪除嗎?')" })*@
                 $.get("@Url.Action("DelteSong","Album")?amid="+$(this).data("songid"), function (data) {
-                    $(".eventNotification").html(data);
+                    $("#eventNotification").html(data);
                     let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
                     $.get(plink, { ajax: true }, function (data) {
                     $(".mainbox").html(data);
@@ -1036,4 +1051,4 @@
             }
         })
 
-    </script>
+</script>

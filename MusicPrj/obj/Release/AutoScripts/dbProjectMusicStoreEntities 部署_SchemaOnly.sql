@@ -32,7 +32,6 @@ CREATE TABLE [dbo].[tAlbum](
 	[fStatus] [int] NULL,
 	[fALPrice] [money] NULL,
 	[fCoverPath] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fPublisher] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fKinds] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fDiscount] [real] NULL,
 	[fActivityID] [int] NULL,
@@ -50,7 +49,7 @@ GO
 CREATE TABLE [dbo].[tAlbumKind](
 	[KindID] [int] IDENTITY(1,1) NOT NULL,
 	[KindName] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fColor] [nchar](10) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
+	[fColor] [nchar](7) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fPhotoPath] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
  CONSTRAINT [PK_tProductKind] PRIMARY KEY CLUSTERED 
 (
@@ -66,8 +65,6 @@ GO
 CREATE TABLE [dbo].[tAlbumType](
 	[fTypeID] [int] IDENTITY(1,1) NOT NULL,
 	[fTypeName] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fColor] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fPhotoPath] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
  CONSTRAINT [PK_tAlbumType] PRIMARY KEY CLUSTERED 
 (
 	[fTypeID] ASC
@@ -107,9 +104,11 @@ CREATE TABLE [dbo].[tMember](
 	[fSubscriptStartDate] [datetime] NULL,
 	[fSubscriptEndDate] [datetime] NULL,
 	[fLastPlaySong] [int] NULL,
-	[fLineId] [int] NULL,
+	[fLineId] [varchar](40) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fLineName] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fLineTimeMark] [datetime] NULL,
+	[fLineStatus] [int] NULL,
+	[fPayPalAccount] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
  CONSTRAINT [PK_tMember] PRIMARY KEY CLUSTERED 
 (
 	[fAccount] ASC
@@ -128,8 +127,8 @@ CREATE TABLE [dbo].[tMessage](
 	[fContent] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fTime] [datetime] NULL,
 	[fStatus] [int] NULL,
-	[fRead] [int] NULL,
 	[fTitle] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
+	[fReaded] [int] NULL,
  CONSTRAINT [PK_tMessage] PRIMARY KEY CLUSTERED 
 (
 	[fMessageId] ASC
@@ -163,17 +162,9 @@ CREATE TABLE [dbo].[tProducts](
 	[fSinger] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fSIPrice] [money] NULL,
 	[fComposer] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fArranger] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fLyricist] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fKind] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fMusic] [varbinary](max) NULL,
 	[fFilePath] [nvarchar](max) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
 	[fPlayStart] [float] NULL,
 	[fPlayEnd] [float] NULL,
-	[fStatus] [int] NULL,
-	[fDownloadCount] [int] NULL,
-	[fModifiedDate] [nvarchar](50) COLLATE Chinese_Taiwan_Stroke_CI_AS NULL,
-	[fPlaybackCount] [int] NULL,
  CONSTRAINT [PK_tProducts] PRIMARY KEY CLUSTERED 
 (
 	[fProductID] ASC
@@ -242,7 +233,9 @@ ALTER TABLE [dbo].[tAlbum] ADD  CONSTRAINT [DF_tAlbum_fDiscount]  DEFAULT ((1)) 
 GO
 ALTER TABLE [dbo].[tMember] ADD  CONSTRAINT [DF_tMember_fPrivilege]  DEFAULT ((0)) FOR [fPrivilege]
 GO
-ALTER TABLE [dbo].[tProducts] ADD  CONSTRAINT [DF_tProducts_fDownloadCount]  DEFAULT ((0)) FOR [fDownloadCount]
+ALTER TABLE [dbo].[tMember] ADD  CONSTRAINT [DF_tMember_fLineStatus]  DEFAULT ((0)) FOR [fLineStatus]
+GO
+ALTER TABLE [dbo].[tMessage] ADD  CONSTRAINT [DF_tMessage_fReaded]  DEFAULT ((0)) FOR [fReaded]
 GO
 ALTER TABLE [dbo].[tPurchaseItem] ADD  CONSTRAINT [DF_tPurchaseItem_fPrice]  DEFAULT ((0)) FOR [fPrice]
 GO

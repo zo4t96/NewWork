@@ -18,7 +18,6 @@ namespace MusicPrj
         public tMember()
         {
             this.tActivities = new HashSet<tActivity>();
-            this.tAlbums = new HashSet<tAlbum>();
             this.tLogs = new HashSet<tLog>();
             this.tLogs1 = new HashSet<tLog>();
             this.tPlayLists = new HashSet<tPlayList>();
@@ -26,6 +25,7 @@ namespace MusicPrj
             this.tShoppingCarts = new HashSet<tShoppingCart>();
             this.tMessages = new HashSet<tMessage>();
             this.tMessages1 = new HashSet<tMessage>();
+            this.tAlbums = new HashSet<tAlbum>();
         }
     
         public string fAccount { get; set; }
@@ -42,11 +42,10 @@ namespace MusicPrj
         public string fLineName { get; set; }
         public Nullable<System.DateTime> fLineTimeMark { get; set; }
         public Nullable<int> fLineStatus { get; set; }
+        public string fPayPalAccount { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tActivity> tActivities { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tAlbum> tAlbums { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tLog> tLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -61,5 +60,7 @@ namespace MusicPrj
         public virtual ICollection<tMessage> tMessages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tMessage> tMessages1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tAlbum> tAlbums { get; set; }
     }
 }

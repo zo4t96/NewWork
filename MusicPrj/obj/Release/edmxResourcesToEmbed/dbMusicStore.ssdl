@@ -19,7 +19,7 @@
     <Property Name="fAlbumName" Type="nvarchar" MaxLength="50" />
     <Property Name="fMaker" Type="nvarchar" MaxLength="50" />
     <Property Name="fAccount" Type="nvarchar" MaxLength="50" />
-    <Property Name="fYear" Type="nvarchar" MaxLength="50" />
+    <Property Name="fYear" Type="date" />
     <Property Name="fType" Type="int" />
     <Property Name="fStatus" Type="int" />
     <Property Name="fALPrice" Type="money" />
@@ -72,6 +72,7 @@
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
     <Property Name="fLineStatus" Type="int" />
+    <Property Name="fPayPalAccount" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>

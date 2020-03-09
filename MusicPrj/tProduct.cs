@@ -32,12 +32,12 @@ namespace MusicPrj
         public Nullable<double> fPlayStart { get; set; }
         public Nullable<double> fPlayEnd { get; set; }
     
-        public virtual tAlbum tAlbum { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPlayList> tPlayLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tStatistic> tStatistics { get; set; }
+        public virtual tAlbum tAlbum { get; set; }
     }
 }

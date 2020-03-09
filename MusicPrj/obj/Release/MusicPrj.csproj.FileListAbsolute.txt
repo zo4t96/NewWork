@@ -80,3 +80,11 @@ C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Release\MusicPrj.csproj.CopyCom
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Release\MusicPrj.dll
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Release\MusicPrj.pdb
 C:\Users\user\source\repos\MusicPrj\MusicPrj\obj\Release\MusicPrj.csprojAssemblyReference.cache
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\user\source\repos\MusicPrj\MusicPrj\bin\System.IdentityModel.Tokens.Jwt.xml

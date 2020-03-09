@@ -18,7 +18,6 @@ namespace MusicPrj.Controllers
         }
         public ActionResult MessageBox()
         {
-            Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             int tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1).Count(); ;
             ViewBag.totalPage = tME % 5 == 0 ? (tME / 5) + 1 : (tME / 5) + 2;
@@ -33,7 +32,7 @@ namespace MusicPrj.Controllers
             ViewBag.index = page;
             foreach (var a in tME.Skip(5 * (page - 1)).Take(5))
             {
-                if (a.fReaded  ==0)
+                if (a.fReaded  ==0 ||a.fReaded ==null)
                 {
                     a.fReaded = 1;
                 }else if(a.fReaded == 1)

@@ -117,7 +117,7 @@ namespace MusicPrj.Controllers
         {
             var album = db.tAlbums.Where(a => a.fAlbumID == albumId).FirstOrDefault();
             album.fStatus = 2;
-            album.fYear = DateTime.Now.ToShortDateString();
+            album.fYear = DateTime.Now;
 
             tMessage msg = new tMessage();
             msg.fAccountFrom = "aaa";
@@ -151,7 +151,7 @@ namespace MusicPrj.Controllers
                 {
                     var target = db.tAlbums.Where(a => a.fAlbumID == album).FirstOrDefault();
                     target.fStatus = 2;
-                    target.fYear = DateTime.Now.ToShortDateString();
+                    target.fYear = DateTime.Now;
 
                     tMessage msg = new tMessage();
                     msg.fAccountFrom = "aaa";

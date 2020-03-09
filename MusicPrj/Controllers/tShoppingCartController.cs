@@ -11,17 +11,9 @@ namespace MusicPrj.Controllers
     {
         // GET: tShoppingCart
         tShoppingCartFram tCart = new tShoppingCartFram();
-        public ActionResult ShoppingCart(string cname = "aaa")
+        public ActionResult ShoppingCart(string cname)
         {
-            if (tCart.getShoppingCart(cname).Count != 0)
-            {
                 return View(tCart.getShoppingCart(cname));
-            }
-            else
-            {
-                return RedirectToAction("MyMusic", "Album");
-            }
-
         }
         public ActionResult AddCart(string cname, string pdid)
         {

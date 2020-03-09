@@ -34,7 +34,7 @@ namespace MusicPrj
             tA.fStatus = 0;
             tA.fCoverRealFile.SaveAs(path);
             tA.fAccount = user;
-            tA.fYear = DateTime.Now.ToShortDateString();
+            tA.fYear = DateTime.Now;
             db.tAlbums.Add(tA);
             try
             {
@@ -111,7 +111,7 @@ namespace MusicPrj
             }
             tA.fAlbumName = formCollection["revisefAlbumName"];
             tA.fMaker = formCollection["revisefMaker"];
-            tA.fYear = formCollection["revisefYear"];
+            tA.fYear = DateTime.Now;
             tA.fType = Int32.Parse(formCollection["revisefType"]);
             tA.fALPrice = (decimal)Single.Parse(formCollection["revisefALPrice"]);
             tA.fStatus = Int32.Parse(formCollection["o.fstatus"]);

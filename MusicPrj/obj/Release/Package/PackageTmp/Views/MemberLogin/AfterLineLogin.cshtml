@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "AfterLineLogin";
+    Layout = null;
+}
+
+@if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.error)))
+{
+    <h1>@ViewBag.error</h1>
+    <h2>@ViewBag.error_description</h2>
+}
+
+
+@if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.user)))
+{
+<script type="text/javascript">
+    window.onload = function () {
+        //   console.log("ok");
+        //     let userObj  = Html.Raw(Convert.ToString(ViewBag.user));
+        // window.opener.document.getElementById("result").innerHTML = JSON.stringify(userObj);
+
+        window.opener.document.getElementById("LineLoginresult").innerHTML = "success";
+
+          //      window.opener.access_token = "Html.Raw(ViewBag.access_token)";
+                window.close();
+        }
+    </script>
+}

@@ -24,7 +24,7 @@ namespace MusicPrj
         public string fAlbumName { get; set; }
         public string fMaker { get; set; }
         public string fAccount { get; set; }
-        public string fYear { get; set; }
+        public Nullable<System.DateTime> fYear { get; set; }
         public Nullable<int> fType { get; set; }
         public Nullable<int> fStatus { get; set; }
         public Nullable<decimal> fALPrice { get; set; }
@@ -35,8 +35,8 @@ namespace MusicPrj
     
         public virtual tActivity tActivity { get; set; }
         public virtual tAlbumType tAlbumType { get; set; }
+        public virtual tMember tMember { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tProduct> tProducts { get; set; }
-        public virtual tMember tMember { get; set; }
     }
 }

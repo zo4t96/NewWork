@@ -1,102 +1,133 @@
 ﻿
-    <link href="~/css/theme.css" rel="stylesheet" media="all">
+@using MusicPrj.Models;
+@{
+    ViewBag.Title = "MyAlbumList2";
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+        var account = "";
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
 
-<div class="row">
-    <div class="col-md-5">
-        <div class="top-campaign">
-            <h3 class="title-3 m-b-30">本周最多試聽單曲前5</h3>
-            <div class="table-responsive">
-                <table class="table table-top-campaign">
-                    <tbody id="memberTryWeekTop5SongList">
-                        <tr>
-                            <td>單曲名</td>
-                            <td>筆</td>
-                        </tr>
-                    </tbody>
-                </table>
+        }
+    }
+}
+<style>
+        .panel {
+        padding: 0 40px 40px 40px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin: 20px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+    }
+</style>
+
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+<div class="panel">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="top-campaign">
+                <h3 class="title-3 m-b-30">本周最多試聽單曲前5</h3>
+                <div class="table-responsive">
+                    <table class="table table-top-campaign">
+                        <tbody id="memberTryWeekTop5SongList">
+                            <tr>
+                                <td>單曲名</td>
+                                <td>筆</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="top-campaign">
-            <h3 class="title-3 m-b-30">本月最多試聽單曲前5</h3>
-            <div class="table-responsive">
-                <table class="table table-top-campaign">
-                    <tbody id="memberTryMonthTop5SongList">
-                        <tr>
-                            <td>單曲名</td>
-                            <td>筆</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="col-md-5">
+            <div class="top-campaign">
+                <h3 class="title-3 m-b-30">本月最多試聽單曲前5</h3>
+                <div class="table-responsive">
+                    <table class="table table-top-campaign">
+                        <tbody id="memberTryMonthTop5SongList">
+                            <tr>
+                                <td>單曲名</td>
+                                <td>筆</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="top-campaign">
-            <h3 class="title-3 m-b-30">最暢銷單曲前5</h3>
-            <div class="table-responsive">
-                <table class="table table-top-campaign">
-                    <tbody id="memberTop5SongList">
-                        <tr>
-                            <td>單曲名</td>
-                            <td>$總收入(筆)</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="col-md-5">
+            <div class="top-campaign">
+                <h3 class="title-3 m-b-30">最暢銷單曲前5</h3>
+                <div class="table-responsive">
+                    <table class="table table-top-campaign">
+                        <tbody id="memberTop5SongList">
+                            <tr>
+                                <td>單曲名</td>
+                                <td>$總收入(筆)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="top-campaign">
-            <h3 class="title-3 m-b-30">最暢銷專輯前5</h3>
-            <div class="table-responsive">
-                <table class="table table-top-campaign">
-                    <tbody id="memberTop5AlbumList">
-                        <tr>
-                            <td>專輯名</td>
-                            <td>$總收入(筆)</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="col-md-5">
+            <div class="top-campaign">
+                <h3 class="title-3 m-b-30">最暢銷專輯前5</h3>
+                <div class="table-responsive">
+                    <table class="table table-top-campaign">
+                        <tbody id="memberTop5AlbumList">
+                            <tr>
+                                <td>專輯名</td>
+                                <td>$總收入(筆)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="au-card m-b-20">
-            <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">By 月試聽專輯/單曲總數</h3>
-                <canvas id="byMonthTry"></canvas>
+        <div class="col-md-5">
+            <div class="au-card m-b-20">
+                <div class="au-card-inner">
+                    <h3 class="title-2 m-b-40">By 月試聽專輯/單曲總數</h3>
+                    <canvas id="byMonthTry"></canvas>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="au-card m-b-20">
-            <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">By 月購買專輯/單曲總數</h3>
-                <canvas id="byMonthSale"></canvas>
+        <div class="col-md-5">
+            <div class="au-card m-b-20">
+                <div class="au-card-inner">
+                    <h3 class="title-2 m-b-40">By 月購買專輯/單曲總數</h3>
+                    <canvas id="byMonthSale"></canvas>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="au-card m-b-20">
-            <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">試聽/銷售百分比</h3>
-                <canvas id="pieSaleTryRatio"></canvas>
+        <div class="col-md-5">
+            <div class="au-card m-b-20">
+                <div class="au-card-inner">
+                    <h3 class="title-2 m-b-40">試聽/銷售百分比</h3>
+                    <canvas id="pieSaleTryRatio"></canvas>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="au-card m-b-20">
-            <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">週間試聽數變化</h3>
-                <canvas id="tryWeekOfBarChart"></canvas>
+        <div class="col-md-5">
+            <div class="au-card m-b-20">
+                <div class="au-card-inner">
+                    <h3 class="title-2 m-b-40">週間試聽數變化</h3>
+                    <canvas id="tryWeekOfBarChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-
 <script src="~/vendor/chartjs/Chart.bundle.min.js"></script>
 @*<script src="~/js/main.js"></script>*@@*圖表假數據*@
 <script src="~/vendor/animsition/animsition.min.js"></script>
@@ -107,7 +138,7 @@
             //試聽
     var m_statistDateTry =new Array();
     var m_statistCntTry =new Array();
-    $.getJSON('@Url.Action("getStatistic_tryNum","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_tryNum","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                   m_statistDateTry.push(value.date)
                   m_statistCntTry.push(value.CNT)
@@ -199,7 +230,7 @@
     //購買
     var m_statistDatePruchase =new Array();
     var m_statistCntPruchase =new Array();
-    $.getJSON('@Url.Action("getStatistic_purchaseNum","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_purchaseNum","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                   m_statistDatePruchase.push(value.date)
                   m_statistCntPruchase.push(value.CNT)
@@ -291,7 +322,7 @@
     //購買試聽占比
     var m_statistNamePie =new Array();
     var m_statistCntPie =new Array();
-    $.getJSON('@Url.Action("getStatistic_purchaseTry","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_purchaseTry","Statistic")', function (datas) {
         let m_statistTotal =0;
         $.each(datas, function (name, value) {
             m_statistTotal += value.CNT;
@@ -350,7 +381,7 @@
     //星期幾
     var m_statistWeekTry =new Array();
     var m_statistWeekCntTry =new Array();
-    $.getJSON('@Url.Action("getStatistic_tryWeek","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_tryWeek","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 if (value.weekOf == 6) {
                     m_statistWeekTry.push("Sat");
@@ -415,21 +446,21 @@
         })
 
     //最佳銷售單曲
-    $.getJSON('@Url.Action("getStatistic_memberTop5Song","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_memberTop5Song","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 $("#memberTop5SongList").append(`<tr><td>${value.Song}</td><td>${value.Money}(${value.CNT})</td></tr>`);
                   })
     })
 
     //最佳銷售專輯
-    $.getJSON('@Url.Action("getStatistic_memberTop5Album","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_memberTop5Album","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 $("#memberTop5AlbumList").append(`<tr><td>${value.Album}</td><td>${value.Money}(${value.CNT})</td></tr>`);
                   })
     })
 
     //本周最多試聽單曲
-    $.getJSON('@Url.Action("getStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
+    $.getJSON('@Url.Action("getAdminStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 $("#memberTryWeekTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
                   })

@@ -213,5 +213,11 @@ namespace MusicPrj.Controllers
             var result = cs.MusicManage(keyword, method);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult SaleStatistic()
+        {
+
+            return View();
+        }
     }
 }

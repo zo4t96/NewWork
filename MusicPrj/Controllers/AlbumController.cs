@@ -256,6 +256,20 @@ namespace MusicPrj.Controllers
             }
         }
 
+        public ActionResult deletePlayLists(int amid)
+        {
+            string s1 = "";
+            try
+            {
+                s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            }
+            catch
+            {
+                s1 = "";
+            }
+            return JavaScript("alert('" + playlist.userDeletePlayLists(s1, amid) + "');");
+        }
+
         //創作者相關
         public ActionResult MyAlbumList(string account, bool ajax = false)
         {

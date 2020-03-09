@@ -56,7 +56,7 @@
             /*box-sizing: border-box;*/
         }
 
-    .tab_btns li a {
+    .tab_btns li a.nav-link{
         cursor: pointer;
     }
 
@@ -73,6 +73,10 @@
         padding: 0;
         margin: 0;
     }
+    .messageListPanel{
+        display:block;
+       min-height: 25%;
+    }
 </style>
 <div id="wrapper">
     <div class="container">
@@ -88,27 +92,27 @@
             <li>
                 <div class="list-group container py-3 px-3">
                     <div class="align-self-end"><button class="btn btn-danger deleteAllmail">全部刪除</button></div>
-                    <div class="py-3" id="messageList"> @Html.Action("_MessageListView")</div>
+                    <div class="py-3 messageListPanel" id="messageList"> @Html.Action("_MessageListView")</div>
+                    <nav class="py-3" aria-label="...">
+                        <ul class="pagination pagination-sm">
+                            @{
+                                for (int i = 1; i < totalPage; i++)
+                                {
+                                    if (i == 1)
+                                    {
+                                        <li data-page="@i" class="page-item active pageBtn"><a class="page-link">@i</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li data-page="@i" class="page-item pageBtn"><a class="page-link">@i</a></li>
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    </nav>
                 </div>
                 @*頁籤*@
-                <nav class="py-3" aria-label="...">
-                    <ul class="pagination pagination-sm">
-                        @{
-                            for (int i = 1; i < totalPage; i++)
-                            {
-                                if (i == 1)
-                                {
-                                    <li data-page="@i" class="page-item active pageBtn"><a class="page-link">@i</a></li>
-                                }
-                                else
-                                {
-                                    <li data-page="@i" class="page-item pageBtn"><a class="page-link">@i</a></li>
-                                }
-                            }
-
-                        }
-                    </ul>
-                </nav>
 
             </li>
             <li>
