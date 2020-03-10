@@ -12,7 +12,7 @@
 
     /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 240px;
+        width: 220px;
         padding: 7px;
         min-height: 300px;
         background-color: #292929;
@@ -45,7 +45,7 @@
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
-        max-width: 800px;
+        max-width: 1200px;
         text-align: center;
     }
 
@@ -72,7 +72,7 @@
 
     @*//防止網站被攻擊的防護，但目前會報錯先註解*@
     @*@Html.AntiForgeryToken();*@
-    <h2>類型更改</h2>
+    <div clsdd="h2">類型更改</div>
 
     @*使用拖曳填入input的專輯Kind*@
     <div class="form-group" style="min-height:400px">
@@ -120,23 +120,23 @@
     //重新載入drag
     function dragReflash() {
         //可拖動Ul/Li物件初始化
-drag = {
-class_name: null,
-permitDrag: false,
-_x: 0,
-_y: 0,
-_left: 0,
-_top: 0,
-old_elm: null,
-tmp_elm: null,
-new_elm: null,
-init: function (className) {
-drag.class_name = className;
-    $('.' + drag.class_name).on('mousedown', 'ul > li', function (event) {
-                drag.permitDrag = true;
-                drag.old_elm = $(this);
-                drag.mousedown(event);
-                return false;
+        drag = {
+        class_name: null,
+        permitDrag: false,
+        _x: 0,
+        _y: 0,
+        _left: 0,
+        _top: 0,
+        old_elm: null,
+        tmp_elm: null,
+        new_elm: null,
+        init: function (className) {
+        drag.class_name = className;
+            $('.' + drag.class_name).on('mousedown', 'ul > li', function (event) {
+                        drag.permitDrag = true;
+                        drag.old_elm = $(this);
+                        drag.mousedown(event);
+                        return false;
     });
 
     $(document).mousemove(function (event) {

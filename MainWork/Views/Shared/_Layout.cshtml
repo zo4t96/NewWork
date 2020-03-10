@@ -47,6 +47,7 @@
 
         .header-logo {
             position: relative;
+            display:inline-block;
             top: 10px;
             width: 180px;
             padding-left: 10px;
@@ -812,14 +813,14 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="@Url.Action("TwoPlayer", "Player")">
-                        <div class="menuItem">
-                            <i class="fa fa-headphones"></i>
-                            <span>雙重播放器測試</span>
-                        </div>
-                    </a>
-                </li>
+                @*<li>
+                        <a href="@Url.Action("TwoPlayer", "Player")">
+                            <div class="menuItem">
+                                <i class="fa fa-headphones"></i>
+                                <span>雙重播放器測試</span>
+                            </div>
+                        </a>
+                    </li>*@
 
                 @if (sk != null)
                 {
@@ -827,7 +828,7 @@
                         <a href="@Url.Action("MyAlbumList", "Album")/?account=@sk.fAccount">
                             <div class="menuItem">
                                 <i class="fa fa-headphones"></i>
-                                <span>我的發行(測試用)</span>
+                                <span>我的發行</span>
                             </div>
                         </a>
                     </li>
@@ -873,57 +874,60 @@
         </div>
     </div>
 
-    <!--播放器-->
-    <div id="footer">
-        <div id="playerPanel">
-            <!-- 封面與歌名div -->
-              <figure id = "playerfigure" >
-                 <img id = "playercover" class="playerCover">
-              </figure>
-              <div id = "titlePanel" >
-                <span class="album description"></span><br />
-                <span id = "Descriptiontwo" class="music descriptionSub"></span><br />
-                <span id = "singer" class="singer descriptionSub"></span>
-              </div>
-            <!-- 基本按鍵div -->
-            <div id="btnPanel">
-                <div id="random" class="btn"><img src="~/PlayerImg/random.png"></div>
-                <div id="prev" class="btn"><img src="~/PlayerImg/prev.png"></div>
-                <div id="play" class="btn"><img src="~/PlayerImg/play.png"></div>
-                <div id="pause" class="btn"><img src="~/PlayerImg/pause.png"></div>
-                <div id="next" class="btn"><img src="~/PlayerImg/next.png"></div>
-                <div id="replay" class="btn"><img src="~/PlayerImg/replay.png"></div>
-            </div>
+    
+        <!--播放器-->
+        <div id="footer">
+            <div id="playerPanel">
+                <!-- 封面與歌名div -->
 
-            <!-- 進度條div -->
-            <div id="progressPanel">
-                <span id="nowTime">00:00</span>
-                <input id="progress" type="range" min="0" max="100" step="0.01" value="0">
-                <span id="totalTime">00:00</span>
-            </div>
+                <figure id="playerfigure">
+                    <img id="playercover" class="playerCover">
+                </figure>
 
-            <!-- 音量條div -->
-            <div id="volumePanel">
-                <img src="/PlayerImg/sound.png" data-sound="volumeImg" id="volumeImg" class="sound">
-                <img src="/PlayerImg/mute.png" data-sound="muteImg" id="muteImg" class="sound">
-                <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.5">
-            </div>
+                <div id="titlePanel">
+                    <span class="album description"></span><br />
+                    <span id="Descriptiontwo" class="music descriptionSub"></span><br />
+                    <span id="singer" class="singer descriptionSub"></span>
+                </div>
+                <!-- 基本按鍵div -->
+                <div id="btnPanel">
+                    <div id="random" class="btn"><img src="~/PlayerImg/random.png"></div>
+                    <div id="prev" class="btn"><img src="~/PlayerImg/prev.png"></div>
+                    <div id="play" class="btn"><img src="~/PlayerImg/play.png"></div>
+                    <div id="pause" class="btn"><img src="~/PlayerImg/pause.png"></div>
+                    <div id="next" class="btn"><img src="~/PlayerImg/next.png"></div>
+                    <div id="replay" class="btn"><img src="~/PlayerImg/replay.png"></div>
+                </div>
 
-            <!--播放器本體-->
-            <audio id="mainPlayer" src="~/Music/紅魔 「Un-demystified Fantasy」.mp3"></audio>
+                <!-- 進度條div -->
+                <div id="progressPanel">
+                    <span id="nowTime">00:00</span>
+                    <input id="progress" type="range" min="0" max="100" step="0.01" value="0">
+                    <span id="totalTime">00:00</span>
+                </div>
+
+                <!-- 音量條div -->
+                <div id="volumePanel">
+                    <img src="/PlayerImg/sound.png" data-sound="volumeImg" id="volumeImg" class="sound">
+                    <img src="/PlayerImg/mute.png" data-sound="muteImg" id="muteImg" class="sound">
+                    <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.5">
+                </div>
+
+                <!--播放器本體-->
+                <audio id="mainPlayer" src="~/Music/紅魔 「Un-demystified Fantasy」.mp3"></audio>
+            </div>
         </div>
-    </div>
+    
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        @*<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>*@
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="@Url.Content("~/Scripts/dragableplugin.js")" type="text/javascript"></script>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>*@
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="@Url.Content("~/Scripts/dragableplugin.js")" type="text/javascript"></script>
-
-    <script>
+        <script>
 
         /////////////////
         ///主播放器相關///
@@ -1436,6 +1440,7 @@
             source: '@Url.Action("AutoCompleteAlbum", "Search")'
         });
 
+
         //讓左側選單被選擇時有點變化
         $(".menuItem").click(function () {
             $(this).parents("li").siblings().find(".menuItemSelected").children().css("color", "#656565");
@@ -1443,6 +1448,7 @@
             $(this).addClass("menuItemSelected");
             $(this).children().css("color", "white");
         })
+            
 
         //////////////////////////
         ///透過modal介面載入資訊///
@@ -1497,7 +1503,7 @@
         $(".playlistLogin").click(function () {
             $("#loginInterface").trigger("click");
         })
-        
+
         //點擊主視窗以外的位置會讓介面消失(03/09/2020新增對包月廣告頁面的反應)
         $("#modal").click(function (e) {
             if ($(e.target).children("#modalContent").length != 0
@@ -1509,7 +1515,8 @@
                 setTimeout(function () {
                     $("#modal").css("display", "none");
                 }, 500)
-
+                //處理拖拉系統bug用
+                drag = null;
             }
         })
 
@@ -1524,8 +1531,8 @@
         $(".playListSwitch.s2").click(function () {
             $(".playListPanel").removeClass("open");
         })
-    </script>
+        </script>
 
-    @RenderSection("scripts", required: false)
-</body>
+        @RenderSection("scripts", required: false)
+    </body>
 </html>

@@ -305,24 +305,26 @@ namespace MainWork.Controllers
 
         public ActionResult AlbumInfo(int amid, bool ajax = false)
         {
-            //   Session[CDictionary.SK_ACCOUNT] = "aaa";
-            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
-            var list = db.tProducts.Where(p => p.fAlbumID == amid);
-            if (list != null)
+            string s1 ="";
+            if (Session[CDictionary.SK_ACCOUNT] == null)
             {
-                //非創作者或管理員
-                int? priviageClass = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fPrivilege;
-                if (list.FirstOrDefault(p => p.tAlbum.fAccount == s1) == null && priviageClass < 2)
-                {
-                    Response.Redirect("~/Index/");
-                }
-                Session["albumid"] = amid;
-                return View(list);
+                return RedirectToAction("Main", "Homepage");
+                //Response.Redirect("~/Homepage/Main");
             }
             else
             {
-                return View();
+                s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             }
+            var list = db.tProducts.Where(p => p.fAlbumID == amid);
+            //非創作者或管理員
+            if (db.tAlbums.FirstOrDefault(p=>p.fAlbumID == amid).fAccount != s1)
+            {
+                return RedirectToAction("Main", "Homepage");
+                //Response.Redirect("~/Homepage/Main");
+            }
+            Session["albumid"] = amid;
+            return View(list);
+            
         }
 
         public ActionResult _LinePlayer()
@@ -557,10 +559,9 @@ namespace MainWork.Controllers
             return PartialView("_kindAddInterface");
         }
 
-
-
-        //03/08/2020新增使用自訂活動頁面(先放棄實作)
-        public ActionResult _userEvent()
+   
+    //03/08/2020新增使用自訂活動頁面(先放棄實作)
+    public ActionResult _userEvent()
         {
             return PartialView();
         }

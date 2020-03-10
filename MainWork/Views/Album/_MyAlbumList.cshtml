@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<MainWork.tAlbum>
-
 @{
     Layout = null;
 }
 <style>
+
 
     /*商品box開始*/
 
@@ -17,7 +17,7 @@
 
     .productitem {
         margin: 15px 15px 0px 0px;
-        padding:15px 15px 25px 15px;
+        padding: 15px 15px 25px 15px;
         background-color: #3e3b3b;
         cursor: pointer;
         border-radius: 10px;
@@ -36,28 +36,27 @@
     .animation {
         opacity: 1;
     }
-        .cover > img {
-            width: 200px;
-            height: 200px;
-            display: inline-block;
-            background-size: cover;
-            margin-bottom:10px;
-            border-radius:10px;
-        }
+
+    .cover > img {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        background-size: cover;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
 
     /*商品box結束*/
 </style>
-
 <div>
-    <div class="h1 headtitle">你的所有販售中專輯</div>
+    <div class="h1 headtitle font-weight-bold">你的所有販售中專輯</div>
     <table>
         <tr>
             @foreach (var item in Model.Where(p => p.fStatus == 2))
             {
 
                 <td class="productitem">
-                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
-
+                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
                         <fieldset>
                             <table>
                                 <tr><td><div class="cover"><img src="~/CoverFiles/@Html.DisplayFor(modelItem => item.fCoverPath)" width="200" height="200" /></div></td></tr>
@@ -69,21 +68,19 @@
                                 <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
                             </table>
                         </fieldset>
-
                     </a>
                 </td>
             }
         </tr>
     </table>
-    <div class="h1 headtitle">你的所有送審中專輯</div>
+    <div class="h1 headtitle font-weight-bold">你的所有送審中專輯</div>
     <table>
         <tr>
             @foreach (var item in Model.Where(p => p.fStatus == 1))
             {
 
                 <td class="productitem">
-                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
-
+                    <a class="productitemhy" href="~/Album/AlbumInfo?amid=@Html.DisplayFor(modelItem => item.fAlbumID)">
                         <fieldset>
                             <table>
                                 <tr>
@@ -101,21 +98,20 @@
                                 <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
                             </table>
                         </fieldset>
-
                     </a>
                 </td>
             }
         </tr>
     </table>
-    <div class="h1 headtitle">你的所有待上架專輯</div>
+    <div class="h1 headtitle font-weight-bold">你的所有待上架專輯</div>
     <table>
         <tr>
             @foreach (var item in Model.Where(p => p.fStatus == 0))
             {
 
-                <td class="productitem" >
+                <td class="productitem">
                     <a class="productitemhy" href="@Url.Action("AlbumInfo","Album")?amid=@Html.DisplayFor(modelItem => item.fAlbumID)" data-sid="@Html.DisplayFor(modelItem => item.fAlbumID)">
-                        <fieldset >
+                        <fieldset>
                             <table>
                                 <tr>
                                     <td>
@@ -132,27 +128,22 @@
                                 <tr><td>@Html.DisplayFor(modelItem => item.fMaker)</td></tr>
                             </table>
                         </fieldset>
-
                     </a>
                 </td>
             }
         </tr>
     </table>
 </div>
-
 <script>
-
     setTimeout(function () {
         $(".productitem").addClass("animation");
     }, 200)
-
     //?amid=${amid}
     $(".productitemhy").on("click", function (e) {
         e.preventDefault();
         let amid = $(this).data("sid");
         let url = `${$(this).attr("href")}`;
         let stateObj = { amid: amid, ajax: true };
-        history.pushState(stateObj, null, url);
         $.ajax({
             url: url,
             data: stateObj,
@@ -163,21 +154,15 @@
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>`);
-                console.log(history.state)
-
             },
             success: function (data) {
+                console.log(data)
                 $(".mainbox").html(data);
-            },
-            comolete: function () {
                 $(window).scrollTop(0);
-                console.log(history.state)
-
             }
         })
+        history.pushState(stateObj, null, url);
         let title = $(this).data("title");
         document.title = title;
-
-
     })
 </script>

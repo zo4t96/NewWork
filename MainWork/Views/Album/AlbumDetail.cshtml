@@ -143,12 +143,16 @@
         @if (@AlbInfo.fMaker != null)
         {
             <div>— 社團 —</div>
-            <div class="mb-4"><b>@AlbInfo.fMaker</b> </div>
+            <div class="mb-4"><b>@AlbInfo.fMaker</b> > </div>
         }
         <div>— 分類 —</div>
         <div class="mb-4">@(AlbInfo.tAlbumType.fTypeName)</div>
         <div>— 音樂風格 —</div>
         <div>@(AlbInfo.fKinds.Replace(",", "、"))</div>
+
+        <div class="mt-4">
+            <small class="font-weight-bolder">上傳者: @AlbInfo.fAccount</small>
+        </div>
     </div>
 
 </div>

@@ -13,7 +13,7 @@ namespace MainWork.Models
         public string userSendMail(string senderName, FormCollection formCollection)
         {
             string s2 = "";
-            if (db.tMembers.FirstOrDefault(p=>p.fAccount == senderName) == null)
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == senderName) == null)
             {
                 s2 = "失敗,無此寄件人";
                 return s2;
@@ -30,7 +30,7 @@ namespace MainWork.Models
             string[] singelAccounts = { };
             if (!string.IsNullOrWhiteSpace(fAccountTo))
             {
-                char[] c1 = { ';'};
+                char[] c1 = { ';' };
                 singelAccounts = fAccountTo.Split(c1, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in singelAccounts)
                 {
@@ -40,30 +40,30 @@ namespace MainWork.Models
                     }
                 }
             }
-            if(s2 == "失敗,無此副本收件人")
+            if (s2 == "失敗,無此收件人")
             {
                 return s2;
             }
             //信件內容加入DB
             tMessage tMes = new tMessage();
             tMes.fAccountFrom = senderName;
-            //副本
-                foreach (string s in singelAccounts)
-                {
-                    tMessage tMesOther = tMes;
-                    tMesOther.fAccountTo = s;
-                    db.tMessages.Add(tMesOther);
-                    db.SaveChanges();
-                }
-      //      tMes.fAccountTo = fAccountTo;
+            //      tMes.fAccountTo = fAccountTo;
             tMes.fTitle = formCollection["tMes.fTitle"];
             tMes.fContent = formCollection["tMes.fContent"];
             tMes.fTime = DateTime.Now;
             tMes.fStatus = 1;
+            //多個收件人
+            foreach (string s in singelAccounts)
+            {
+                tMessage tMesOther = tMes;
+                tMesOther.fAccountTo = s;
+                db.tMessages.Add(tMesOther);
+                db.SaveChanges();
+            }
             //寄件備份
             tMessage tMesCopy = tMes;
             tMesCopy.fStatus = 0;
-            db.tMessages.Add(tMes);
+            //db.tMessages.Add(tMes);
             db.tMessages.Add(tMesCopy);
             try
             {
@@ -76,16 +76,16 @@ namespace MainWork.Models
                 return s2;
             }
             //副本
-            if (singelAccounts != null)
-            {
-                foreach (string s in singelAccounts)
-                {
-                    tMessage tMesOther = tMes;
-                    tMesOther.fAccountTo = s;
-                    db.tMessages.Add(tMesOther);
-                    db.SaveChanges();
-                }
-            }
+            //if (singelAccounts != null)
+            //{
+            //    foreach (string s in singelAccounts)
+            //    {
+            //        tMessage tMesOther = tMes;
+            //        tMesOther.fAccountTo = s;
+            //        db.tMessages.Add(tMesOther);
+            //        db.SaveChanges();
+            //    }
+            //}
 
             s2 = "成功";
             return s2;
@@ -106,7 +106,7 @@ namespace MainWork.Models
                 s2 = "失敗,找不到此封信";
                 return s2;
             }
-            if (tMes.fAccountTo != issuerName)
+            if (tMes.fAccountTo != issuerName && tMes.fAccountFrom != issuerName)
             {
                 s2 = "失敗,你非這封信擁有者";
                 return s2;

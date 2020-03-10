@@ -168,12 +168,12 @@
 
 
 
-    <div class="h3 mx-5 mt-5 font-weight-bold">所有音樂</div>
+    <div class="h3 mx-5 mt-5 font-weight-bold">最新音樂</div>
     <div class="albumPanel">
         @foreach (var item in Model)
         {
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
-        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID"  title="@item.fAlbumName">
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID"  title="@item.fAlbumName">
             <img src="~/Images/@item.fCoverPath" class="albumCover" />
             <div class="albumContent">
                 <span class="albumTitle">@item.fAlbumName</span>
@@ -201,7 +201,7 @@
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
-            let url = `${$(this).attr("href")}?amid=${amid}`;
+            let url = this.href;
             let stateObj = { amid: amid, ajax: true, scrollY: 0 };
 
             history.pushState(stateObj, null, url);

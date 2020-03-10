@@ -851,6 +851,7 @@
     <Content Include="Views\Homepage\_MonthlyPage.cshtml" />
     <Content Include="Views\Admin\SaleStatistic.cshtml" />
     <Content Include="Views\Message\_MessageListView.cshtml" />
+    <Content Include="Views\MemberHome\EditPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

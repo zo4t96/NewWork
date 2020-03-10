@@ -63,7 +63,7 @@
                 // Show a success message to the buyer
                 alert('Transaction completed by ' + details.payer.name.given_name + '!');
             }).then($.post("@Url.Action("BuyCheck", "tShoppingCart")", { "shopcarid": shopcarid ,"ajax":true},
-                    function (data) { console.log(data)}));
+                    function (data) { console.log(data) }));
         }
     }).render('#paypalMonthlyPay')
     $(".paypal-button-text").css("display", "none");

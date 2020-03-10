@@ -27,7 +27,7 @@
     {
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
-    int amid = (int)Session["albumid"];
+    int amid = Int32.Parse(Session["albumid"].ToString());
     tAlbum tAl = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
     tProduct tP = new tProduct();
 }
@@ -170,9 +170,9 @@
         display: inline-block;
         background-size:cover;
     }
-    .form-group{
-        display:inline-block;
-        width:70%;
+    .myForm {
+        display: inline-block;
+        width: 70%;
     }
     .form-group > .h5{
         font-weight:600;
@@ -198,7 +198,7 @@
 
             @{ if (tAl.fStatus == 0)
                 {
-                    <div class="form-group mb-4">
+                    <div class="form-group mb-4 myForm">
                         <span class="h5">更換封面：　</span>
                         <input class="file" type="file" name="fCoverPathUpload" id="fCoverPathUpload" />
                     </div>
@@ -207,7 +207,7 @@
 
             @{ if (tAl.fStatus == 0)
                 {
-                    <div class="form-group">
+                    <div class="form-group myForm">
                         <div class="h5">專輯名稱</div>
                         <div class="col-md-12">
                             <input name="revisefAlbumName" class="form-control albumtextbox" type="text" value="@tAl.fAlbumName" />
@@ -216,14 +216,14 @@
                 }
                 else
                 {
-                    <div class="form-group">
+                    <div class="form-group myForm">
                         <div class="h5">@tAl.fAlbumName</div>
                     </div>
                 }
             }
 
 
-            <div class="form-group">
+            <div class="form-group myForm">
                 <div class="h5">發行團體</div>
                 <div class="col-md-12">
                     @{ if (tAl.fStatus == 0)
@@ -238,7 +238,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group myForm">
                 <div class="h5">販售分類</div>
                 <div class="col-md-8 kind">
                     @{ if (tAl.fStatus == 0)
@@ -253,7 +253,7 @@
                 </div>
             </div>
             @* 網頁初始化時會在這裡載入的類別以talTypeload抓取 *@
-            <div class="form-group">
+            <div class="form-group myForm">
                 <div class="h5">音樂曲風</div>
                 <div class="col-md-12">
                     @{ if (tAl.fStatus == 0)
@@ -267,7 +267,7 @@
                     }
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group myForm">
                 <div class="h5">專輯售價</div>
                 <div class="col-md-12 albumtextbox">
                     @{ if (tAl.fStatus == 0)
@@ -281,7 +281,7 @@
                     }
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group myForm">
                 <div class="h5">狀態</div>
                 <div class="col-md-12">
                     @{ if (tAl.fStatus == 0)
@@ -334,7 +334,7 @@
                     <div class="container" style="color:white">
                         @using (Html.BeginForm("AlbumInfo", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
                         {
-                            @Html.AntiForgeryToken()
+                            @*@Html.AntiForgeryToken()*@
 
                             <div class="form-horizontal">
                                 <div class="h4">請輸入單曲基本資料</div>
@@ -379,7 +379,7 @@
                                     </div>
                                 </div>
                                 @*增加placeholder提醒會自動更新*@
-                                <div class="form-group">
+                                <div class="form-group myForm">
                                     @Html.LabelFor(model => tP.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => tP.fProductName, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
@@ -387,28 +387,28 @@
                                     </div>
                                 </div>
                                 @*增加placeholder提醒會自動更新*@
-                                <div class="form-group">
+                                <div class="form-group myForm">
                                     @Html.LabelFor(model => tP.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => tP.fSinger, new { htmlAttributes = new { @class = "form-control", placeholder = "上傳檔案後會根據單曲內標籤自動填入" } })
                                         @Html.ValidationMessageFor(model => tP.fSinger, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group myForm">
                                     @Html.LabelFor(model => tP.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => tP.fComposer, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => tP.fComposer, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group myForm">
                                     @Html.LabelFor(model => tP.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
                                         @Html.EditorFor(model => tP.fSIPrice, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => tP.fSIPrice, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group myForm">
                                     <div class="col-md-offset-2 col-md-10">
                                         <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
                                     </div>
@@ -438,35 +438,67 @@
                 <div class="fold-container">
                     <div class="container">
                         <div class="container playerPanel">
-                            <div class="form-group">
-                                @Html.LabelFor(modelItem => item.fProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="form-group myForm">
+                                <label class="control-label col-md-2">曲名</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line revise_fProductName" type="text" value="">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fProductName" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fProductName" type="text" disabled value="">
+                                        }
+                                    }
                                     @Html.ValidationMessageFor(modelItem => item.fProductName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div class="form-group">
-                                @Html.LabelFor(modelItem => item.fSinger, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="form-group myForm">
+                                <label class="control-label col-md-2">歌手</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line revise_fSinger" type="text" value="">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fSinger" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fSinger" type="text" disabled value="">
+                                        }
+                                    }
                                     @Html.ValidationMessageFor(modelItem => item.fSinger, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div class="form-group">
-                                @Html.LabelFor(modelItem => item.fComposer, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="form-group myForm">
+                                <label class="control-label col-md-2">作曲</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line revise_fComposer" type="text" value="">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line revise_fComposer" type="text" value="">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line revise_fComposer" type="text" disabled value="">
+                                        }
+                                    }
                                     @Html.ValidationMessageFor(modelItem => item.fComposer, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div class="form-group">
-                                @Html.LabelFor(modelItem => item.fSIPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="form-group myForm">
+                                <label class="control-label col-md-2">單價</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line revise_fSIPrice" type="text" value="">
+                                    @{ if (tAl.fStatus == 0)
+                                        {
+                                            <input class="form-control text-box single-line" type="text" value="@((int)(item.fSIPrice))">
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control text-box single-line" type="text" disabled value="@((int)(item.fSIPrice))">
+                                        }
+                                    }
                                     @Html.ValidationMessageFor(modelItem => item.fSIPrice, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group myForm">
                                 @*<input type="file" id="upload" accept=".mp3" />*@
                             </div>
                             <hr>
@@ -481,8 +513,11 @@
                                 <div class="vbtn opause"><img src="~/Content/pause.png"></div>
                             </div>
 
-                            <p>※拉動滑條來選取可供人免費試聽的範圍(若不選取，預設試聽範圍0~30秒)</p>
-                            <div id="slider-range" class="slider"></div>
+                            @if (tAl.fStatus == 0)
+                            {
+                                <p>※拉動滑條來選取可供人免費試聽的範圍(若不選取，預設試聽範圍0~30秒)</p>
+                                <div id="slider-range" class="slider"></div>
+                            }
 
                             <div class="h4 font-weight-bold">試聽檔案</div>
                             <small>在此確認擷取的試聽範圍</small>
@@ -512,8 +547,7 @@
         }
     </div>
 </div>
-<div class="eventNotification" hidden>
-</div>
+<div class="eventNotification" hidden></div>
 
 <script>
 

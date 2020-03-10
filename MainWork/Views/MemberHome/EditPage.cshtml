@@ -1,0 +1,171 @@
+﻿@model MainWork.tMember
+@using MainWork.Models
+
+@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+    ViewBag.Title = "Edit";
+    tMember member = Session[CDictionary.SK_CURRENT_LOGINED_USER] as tMember;
+
+}
+
+<style>
+    .memberPanel {
+        float: left;
+        background-color: #D2E9FF;
+        border-radius: 15px;
+        width: 80%;
+        margin: 30px;
+        padding: 30px 0;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .memberInfo,
+    .changePwd {
+        background-color: darkseagreen;
+        margin: 0 20px;
+    }
+
+    .member > p {
+        color: #8E8E8E;
+        font-size: 80%;
+    }
+
+    .member > img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border:1px dashed #797979
+    }
+</style>
+
+<div class="headtitle h1">會員修改</div>
+<div class="memberPanel row">
+    <div class="memberInfo col-4">
+        <div class="member">
+            <img src="~/Images/@Model.fPicPath" />
+            <p></p>
+        </div>
+
+        <label>會員帳號 : </label>
+        @Model.fAccount
+        <p></p>
+
+        <label>信箱 : </label>
+        @Model.fEmail
+        <p></p>
+
+        <label>暱稱 : </label>
+        @Model.fNickName
+        <p></p>
+
+        <label>訂閱起始日期 : </label>
+        @Model.fSubscriptStartDate
+        <p></p>
+
+        <label>訂閱結束日期 : </label>
+        @Model.fSubscriptEndDate
+        <p></p>
+
+        <label>剩餘積分 : </label>
+        @Convert.ToInt32(Model.fMoney)
+        <p></p>
+
+        <label>會員類別 : </label>
+        @if (@Model.fPrivilege == 0)
+        {
+            <span>一般會員</span>
+        }
+        else if (@Model.fPrivilege == 1)
+        {
+            <span>包月會員</span>
+        }
+        else
+        {
+            <span>管理員</span>
+        }
+        <p></p>
+    </div>
+
+    @using (Html.BeginForm("Edit", "MemberHome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "memberInfo col-4" }))
+    {
+        <div class="member">
+            <img id="showPicPath" />
+        </div>
+        <label>修改頭像 : </label>
+        <input type="file" name="fPicPath" id="picpath" />
+        <p></p>
+
+        <label>修改密碼 : </label>
+        <input type="password" name="fPassword" placeholder="Password" class="form-control" value="@Model.fPassword" />
+        <p></p>
+
+        <label>修改信箱 : </label>
+        <input type="email" name="fEmail" placeholder="Email" class="form-control" value="@Model.fEmail" />
+        <p></p>
+
+        <label>修改暱稱 : </label>
+        <input type="text" name="fNickName" placeholder="NickName" class="form-control" value="@Model.fNickName" />
+        <p></p>
+
+        <input type="hidden" name="fAccount" value="@Model.fAccount" />
+        <ul>
+            <li>
+                <a class="btn btn-primary link" href="@Url.Action("Index", "MemberHome")">返回</a>
+
+                <input type="submit" value="修改" class="btn btn-primary" />
+            </li>
+        </ul>
+    }
+</div>
+
+
+<script>
+    @* 預覽圖片 *@
+    $("#picpath").change(function (e) {
+            let file = this.files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            console.log(file);
+            reader.onload = function (e) {
+                $("#showPicPath").css("background-image", `url(${e.target.result})`)
+            }
+    })
+
+    $("li > a , .link").on("click", function (e) {
+        if ($(this).hasClass("manage")) {
+            return;
+        }
+        e.preventDefault();
+        let link = $(this).attr("href");
+        history.pushState({ ajax: true, scrollY: 0 }, null, link);
+        $.ajax({
+            beforeSend: function () {
+                $(".mainbox").html(
+                    `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+            },
+            url: link,
+            data: history.state,
+            type: "post",
+            success: function (data) {
+                $(".mainbox").html(data);
+            },
+            complete: function () {
+                $(window).scrollTop(0);
+            }
+        })
+    });
+
+    @*$post('@Url.Action("action","controller")', { email:"xxxx@ffffff",password:"xxxxxxxxx"}, function (datas) {
+        var  s = $("#email").val();
+        $("#originalEmail").val(s);
+    })*@
+
+
+</script>

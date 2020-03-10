@@ -117,7 +117,7 @@
     <div class="albumPanel">
         @foreach (var item in Model)
         {
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
                 @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
                 <div class="albumCover"></div>
                 <div class="albumContent">
@@ -144,7 +144,7 @@
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
-            let url = `${$(this).attr("href")}?amid=${amid}`;
+            let url = this.href;
             let stateObj = { amid: amid, ajax: true };
             history.pushState(stateObj, null, url);
             $.ajax({

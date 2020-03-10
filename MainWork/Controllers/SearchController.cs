@@ -15,6 +15,7 @@ namespace MainWork.Controllers
 
         // GET: BasicSearch
         //曲風選擇頁面
+        
         public ActionResult Kinds(bool ajax = false)
         {
             if (ajax)

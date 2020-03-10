@@ -60,13 +60,13 @@
             background-color: #cde4ea;
         }
 
-        .trItemMain td {
+        .trItemMain > td {
             text-align: center;
             vertical-align: middle;
-            /*line-height: 110px;*/
         }
 
     .cover {
+        display:inline-block;
         width: 120px;
         height: 120px;
     }
@@ -132,7 +132,7 @@
                     <td><div class="btn btn-info open">詳細內容</div></td>
                     <td><input type="checkbox" data-account="@item.fAccount" data-album="@item.fAlbumID" /></td>
                     <td>@(((DateTime)item.fYear).ToLongDateString())</td>
-                    <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
+                    <td><img class="cover" src="~/CoverFiles/@item.fCoverPath" /></td>
                     <td>@item.fAccount</td>
                     <td>@item.fAlbumName</td>
                     <td>@Convert.ToInt32(item.fALPrice)元</td>

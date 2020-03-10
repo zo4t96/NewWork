@@ -3,40 +3,34 @@
     tAlbum tA = new tAlbum();
 }
 
-
-<div class="headtitle h1">專輯新增</div>
+<div class="headtitle h1 font-weight-bold">專輯新增</div>
 @*for start*@
 @using (Html.BeginForm("AddAlbum", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "formInput" }))
 {
     <div class="albumCreatePanel row">
         <div class="col-md-6">
             <div class="container" style="color:white">
-
                 @Html.AntiForgeryToken()
-
                 <div class="form-horizontal">
                     <div class="h4">請輸入專輯基本資料</div>
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
                     <div class="form-group">
-                        *@Html.LabelFor(model => tA.fAlbumName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        *專輯名稱
                         <div class="col-md-9">
                             @Html.EditorFor(model => tA.fAlbumName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => tA.fAlbumName, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="form-group">
-                        *@Html.LabelFor(model => tA.fMaker, htmlAttributes: new { @class = "control-label col-md-2" })
+                        *團體名稱
                         <div class="col-md-9">
                             @Html.EditorFor(model => tA.fMaker, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => tA.fMaker, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="form-group">
-                        @Html.LabelFor(model => tA.fType, htmlAttributes: new { @class = "control-label col-md-2" })
+                        販賣分類
                         <div class="col-md-9">
                             @*@Html.EditorFor(model => tA.fType, new { htmlAttributes = new { @class = "form-control" } })*@
                             <select class="advancedtxt form-control ustom-select my-1 mr-sm-2" name="tA.fType" id="adTypePageload">
@@ -45,9 +39,8 @@
                             @Html.ValidationMessageFor(model => tA.fType, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="form-group">
-                        @Html.LabelFor(model => tA.fALPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                        專輯價格
                         <div class="col-md-9">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -58,9 +51,8 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        *@Html.LabelFor(model => tA.fCoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+                        *專輯封面
                         <div class="col-md-9">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="tA.fCoverRealFile" id="preview_fCoverRealFile_source" />
@@ -68,41 +60,28 @@
                             </div>
                         </div>
                     </div>
-
                     @*使用拖曳填入input的專輯Kind*@
                     <div class="form-group">
-                        @Html.LabelFor(model => tA.fKinds, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-5">
-                            <div>類別: <span id="tA_fKindstext"></span></div>
+                            <div>專輯曲風 <span id="tA_fKindstext"></span></div>
                             <div id="kindReviseInterface" class="form-control btn btn-outline-secondary">修改</div>
                             @*input除錯用,平常type設成hide*@
                             <input class="form-control text-box single-line" id="tA_fKinds" name="tA.fKinds" type="text" value="">
                             @Html.ValidationMessageFor(model => tA.fKinds, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="d-inline-block">
             <div class="form-group">
                 <div class="col-md-9">
                 </div>
             </div>
-            @*<div class="form-group" style="text-align:center">
-                    <div  style="display:inline-block">
-                        <img id="preview_fCoverRealFile" src="#" width="320" height="320" />
-                    </div>
-                    <h3 id="previewTitle">Title</h3>
-                    <h4 id="previewGroup">Group</h4>
-                    <h4 id="previewPrice">Price</h4>
-                    <h4 id="previewTitle">Type</h4>
-                    <h4 id="previewTitle">Kind</h4>
-                </div>*@
             <div class="form-group">
                 <div class="albumBlock">
-                    <div class="albumCover">
-                        <img id="preview_fCoverRealFile" src="" />
+                    <div>
+                        <img id="preview_fCoverRealFile" src="#" class="albumCover d-none"/>
                     </div>
                     <div class="albumContent">
                         <span id="previewTitle" class="albumTitle"></span>
@@ -120,11 +99,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 }
 @*for End*@
-
 <script>
 
           //圖片選擇按下時時重新載入-跳轉
@@ -138,6 +115,7 @@
             var reader = new FileReader();
             reader.onload = function (e) {
                 $("#preview_fCoverRealFile").attr('src', e.target.result);
+                $("#preview_fCoverRealFile").removeClass("d-none");
                 $("#preview_fCoverRealFile").css("display", "inline");
                     }
                 reader.readAsDataURL(input.files[0]);

@@ -17,15 +17,7 @@ namespace MusicPrj.Controllers
             {
                 ViewBag.ajax = true;
             }
-            if (tCart.getShoppingCart(cname).Count != 0)
-            {
-                return View(tCart.getShoppingCart(cname));
-            }
-            else
-            {
-                return RedirectToAction("MyMusic", "Album");
-            }
-
+            return View(tCart.getShoppingCart(cname));
         }
         public ActionResult AddCart(string cname, string pdid)
         {

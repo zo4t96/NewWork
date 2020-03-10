@@ -165,7 +165,7 @@
     .noMusic {
         position: absolute;
         top: 40%;
-        left:30%;
+        left: 30%;
         text-align: center;
     }
 
@@ -192,10 +192,9 @@
     }
 
 
-
-
-    else
+    @if(Model.FirstOrDefault() != null)
     {
+
         @* 正在撥放的音樂 *@
         <div class="playListItem" title="點擊撥放"
              data-singer="@Model.First().fComposer"
