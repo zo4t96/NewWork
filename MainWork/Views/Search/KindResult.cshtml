@@ -6,6 +6,12 @@
     }
 }
 <script>
+    //var y;
+    //if (y == null) {
+    //    y = 0;
+    //}
+    history.state.kindId = '@ViewBag.kindId';
+    history.replaceState(history.state, null);
     $.ajax({
         beforeSend:function() {
             $(".mainbox").html(

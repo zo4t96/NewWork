@@ -5,6 +5,10 @@
     }
 }
 <script>
+    var y;
+    if (y == null) {
+        y = 0;
+    }
     $.ajax({
         beforeSend:function() {
             $(".mainbox").html(

@@ -37,9 +37,11 @@ namespace MainWork.Controllers
         }
 
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
-        public ActionResult KindResultView(int kindID)
+        public ActionResult KindResultView(int kindId)
         {
-            return PartialView(search.byKindPage(kindID));
+            string kindName = (new dbProjectMusicStoreEntities()).tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
+            ViewBag.kindName = kindName;
+            return PartialView(search.byKindPage(kindId));
         }
         
         //基礎搜尋頁面

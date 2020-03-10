@@ -1268,6 +1268,18 @@
                     $(window).scrollTop(y);
                     history.state.scrollY = y;
                     history.replaceState(history.state, null);
+
+                    //不是很必要但讓人很在意的左邊邊條
+                    $(".menuItem").each(function () {
+                        let urlRecord = $(this).parent().attr("href").split('?')[0];
+                        if (urlRecord == location.pathname) {
+                            $(this).parents("li").siblings().find(".menuItemSelected").children().css("color", "#656565");
+                            $(this).parents("li").siblings().find(".menuItemSelected").removeClass("menuItemSelected");
+                            $(this).addClass("menuItemSelected");
+                            $(this).children().css("color", "white");
+                        }
+                    })
+
                 }
             })
         })
@@ -1358,8 +1370,9 @@
             if (keyword == "") {
                 return;
             }
-            let url = `@Url.Action("Result", "Search")`;
+            let url = `@Url.Action("Result", "Search")?keyword=${keyword}`;
             let stateObj = { keyword: keyword, ajax: true };
+            history.pushState(stateObj, null, url);
             $.ajax({
                 beforeSend:function() {
                     $(".mainbox").html(
@@ -1375,7 +1388,6 @@
                     $(".mainbox").html(data);
                 }
             })
-            history.pushState(stateObj, null, url);
         })
 
         //進階搜尋(找出符合條件的專輯(專輯不重複))

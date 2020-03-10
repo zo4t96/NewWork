@@ -74,7 +74,7 @@
         font-size: 16px;
         font-weight: 600;
         color: #808080;
-        margin-bottom:5px;
+        margin-bottom: 5px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -94,7 +94,7 @@
         color: #dc0000;
     }
 </style>
-
+@{string name = ViewBag.kindName as string; }
 @if (Model.FirstOrDefault() == null)
 {
     <div class="noResult">
@@ -161,5 +161,6 @@ else
         let title = $(this).data("title");
         document.title = title;
     });
-    $(".searchTitle").text(`${history.state.kindName}`);
+    var name ="@name";
+    $(".searchTitle").text(name);
 </script>
