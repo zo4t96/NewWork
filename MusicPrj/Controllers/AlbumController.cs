@@ -254,7 +254,8 @@ namespace MusicPrj.Controllers
         }
 
         //0311新增撥放刪除功能
-        public ActionResult deletePlayLists(int amid)
+        [HttpPost]
+        public ActionResult deletePlayLists(int deleteid)
         {
             string s1 = "";
             try
@@ -265,7 +266,16 @@ namespace MusicPrj.Controllers
             {
                 s1 = "";
             }
-            return JavaScript("alert('" + playlist.userDeletePlayLists(s1, amid) + "');");
+            string Msg = playlist.userDeletePlayLists(s1, deleteid);
+            if (Msg == "")
+            {
+            return JavaScript("");
+            }
+            else
+            {
+            return JavaScript("alert('" + Msg + "');");
+            }
+
         }
 
         //創作者相關

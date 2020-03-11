@@ -307,5 +307,9 @@
         $.get("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
             $(".eventNotification").html(data);
         });
+                     let plink = "@Url.Action("_PlayLists","Album")";
+             $.post(plink, {ajax:true}, function (data) {
+             $(".playListPartialView").html(data);
+            })
     })
 </script>
