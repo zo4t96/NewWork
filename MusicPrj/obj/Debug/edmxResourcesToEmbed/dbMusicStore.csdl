@@ -1,19 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="dbProjectMusicStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   <EntityType Name="tAlbumType">
+=======
+  <EntityContainer Name="dbProjectMusicStoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tActivities" EntityType="dbProjectMusicStoreModel.tActivity" />
+    <EntitySet Name="tAlbums" EntityType="dbProjectMusicStoreModel.tAlbum" />
+    <EntitySet Name="tAlbumKinds" EntityType="dbProjectMusicStoreModel.tAlbumKind" />
+    <EntitySet Name="tAlbumTypes" EntityType="dbProjectMusicStoreModel.tAlbumType" />
+    <EntitySet Name="tLogs" EntityType="dbProjectMusicStoreModel.tLog" />
+    <EntitySet Name="tMembers" EntityType="dbProjectMusicStoreModel.tMember" />
+    <EntitySet Name="tMessages" EntityType="dbProjectMusicStoreModel.tMessage" />
+    <EntitySet Name="tPlayLists" EntityType="dbProjectMusicStoreModel.tPlayList" />
+    <EntitySet Name="tProducts" EntityType="dbProjectMusicStoreModel.tProduct" />
+    <EntitySet Name="tPurchaseItems" EntityType="dbProjectMusicStoreModel.tPurchaseItem" />
+    <EntitySet Name="tShoppingCarts" EntityType="dbProjectMusicStoreModel.tShoppingCart" />
+    <EntitySet Name="tStatistics" EntityType="dbProjectMusicStoreModel.tStatistic" />
+    <AssociationSet Name="FK_tActivity_tMember" Association="dbProjectMusicStoreModel.FK_tActivity_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tActivity" EntitySet="tActivities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tActivity" Association="dbProjectMusicStoreModel.FK_tAlbum_tActivity">
+      <End Role="tActivity" EntitySet="tActivities" />
+      <End Role="tAlbum" EntitySet="tAlbums" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tAlbumType" Association="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType">
+      <End Role="tAlbumType" EntitySet="tAlbumTypes" />
+      <End Role="tAlbum" EntitySet="tAlbums" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tAlbum_tMember" Association="dbProjectMusicStoreModel.FK_tAlbum_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tAlbum" EntitySet="tAlbums" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tProducts_tAlbum" Association="dbProjectMusicStoreModel.FK_tProducts_tAlbum">
+      <End Role="tAlbum" EntitySet="tAlbums" />
+      <End Role="tProduct" EntitySet="tProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tLog_tMember" Association="dbProjectMusicStoreModel.FK_tLog_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tLog" EntitySet="tLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tLog_tMember1" Association="dbProjectMusicStoreModel.FK_tLog_tMember1">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tLog" EntitySet="tLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tMessage_tMember" Association="dbProjectMusicStoreModel.FK_tMessage_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tMessage" EntitySet="tMessages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tMessage_tMember1" Association="dbProjectMusicStoreModel.FK_tMessage_tMember1">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tMessage" EntitySet="tMessages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPlayLists_tMember" Association="dbProjectMusicStoreModel.FK_tPlayLists_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tPlayList" EntitySet="tPlayLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tMember1" Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tShoppingCart_tMember" Association="dbProjectMusicStoreModel.FK_tShoppingCart_tMember">
+      <End Role="tMember" EntitySet="tMembers" />
+      <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPlayLists_tProducts" Association="dbProjectMusicStoreModel.FK_tPlayLists_tProducts">
+      <End Role="tProduct" EntitySet="tProducts" />
+      <End Role="tPlayList" EntitySet="tPlayLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tProducts1" Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1">
+      <End Role="tProduct" EntitySet="tProducts" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tStatistic_tProducts" Association="dbProjectMusicStoreModel.FK_tStatistic_tProducts">
+      <End Role="tProduct" EntitySet="tProducts" />
+      <End Role="tStatistic" EntitySet="tStatistics" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tPurchaseItem_tShoppingCart" Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tShoppingCart">
+      <End Role="tShoppingCart" EntitySet="tShoppingCarts" />
+      <End Role="tPurchaseItem" EntitySet="tPurchaseItems" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tActivity">
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Key>
       <PropertyRef Name="fTypeID" />
     </Key>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="fTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="fTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="tAlbums" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" FromRole="tAlbumType" ToRole="tAlbum" />
+=======
+    <Property Name="fId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fLauncher" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fStartTime" Type="DateTime" Precision="3" />
+    <Property Name="fEndTime" Type="DateTime" Precision="3" />
+    <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tActivity" ToRole="tMember" />
+    <NavigationProperty Name="tAlbums" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tActivity" FromRole="tActivity" ToRole="tAlbum" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityType Name="tProduct">
     <Key>
       <PropertyRef Name="fProductID" />
     </Key>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="fProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="fAlbumID" Type="Int32" />
     <Property Name="fProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -35,6 +129,33 @@
     <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" FromRole="tProduct" ToRole="tPurchaseItem" />
     <NavigationProperty Name="tStatistics" Relationship="dbProjectMusicStoreModel.FK_tStatistic_tProducts" FromRole="tProduct" ToRole="tStatistic" />
     <NavigationProperty Name="tAlbum" Relationship="dbProjectMusicStoreModel.FK_tProducts_tAlbum" FromRole="tProduct" ToRole="tAlbum" />
+=======
+    <Property Name="fAlbumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fAlbumName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fMaker" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fYear" Type="DateTime" Precision="0" />
+    <Property Name="fType" Type="Int32" />
+    <Property Name="fStatus" Type="Int32" />
+    <Property Name="fALPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fCoverPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fKinds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fDiscount" Type="Single" />
+    <Property Name="fActivityID" Type="Int32" />
+    <NavigationProperty Name="tActivity" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tActivity" FromRole="tAlbum" ToRole="tActivity" />
+    <NavigationProperty Name="tAlbumType" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" FromRole="tAlbum" ToRole="tAlbumType" />
+    <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tMember" FromRole="tAlbum" ToRole="tMember" />
+    <NavigationProperty Name="tProducts" Relationship="dbProjectMusicStoreModel.FK_tProducts_tAlbum" FromRole="tAlbum" ToRole="tProduct" />
+  </EntityType>
+  <EntityType Name="tAlbumKind">
+    <Key>
+      <PropertyRef Name="KindID" />
+    </Key>
+    <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fColor" Type="String" MaxLength="7" FixedLength="true" Unicode="true" />
+    <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityContainer Name="dbProjectMusicStoreEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="tAlbumTypes" EntityType="Self.tAlbumType" />
@@ -118,11 +239,17 @@
     <Key>
       <PropertyRef Name="fPlayId" />
     </Key>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="fPlayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="fAccount" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fProductID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="tProduct" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" FromRole="tPlayList" ToRole="tProduct" />
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tMember" FromRole="tPlayList" ToRole="tMember" />
+=======
+    <Property Name="fTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tAlbums" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" FromRole="tAlbumType" ToRole="tAlbum" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <Association Name="FK_tPlayLists_tProducts">
     <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="1" />
@@ -147,6 +274,37 @@
     <Property Name="fMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tLog_tMember" FromRole="tLog" ToRole="tMember" />
     <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tLog_tMember1" FromRole="tLog" ToRole="tMember" />
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
+=======
+  </EntityType>
+  <EntityType Name="tMember">
+    <Key>
+      <PropertyRef Name="fAccount" />
+    </Key>
+    <Property Name="fAccount" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fPrivilege" Type="Int32" />
+    <Property Name="fNickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fMoney" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fPicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fSubscriptStartDate" Type="DateTime" Precision="3" />
+    <Property Name="fSubscriptEndDate" Type="DateTime" Precision="3" />
+    <Property Name="fLastPlaySong" Type="Int32" />
+    <Property Name="fLineId" Type="Int32" />
+    <Property Name="fLineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fLineTimeMark" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="tActivities" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tMember" ToRole="tActivity" />
+    <NavigationProperty Name="tAlbums" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tMember" FromRole="tMember" ToRole="tAlbum" />
+    <NavigationProperty Name="tLogs" Relationship="dbProjectMusicStoreModel.FK_tLog_tMember" FromRole="tMember" ToRole="tLog" />
+    <NavigationProperty Name="tLogs1" Relationship="dbProjectMusicStoreModel.FK_tLog_tMember1" FromRole="tMember" ToRole="tLog" />
+    <NavigationProperty Name="tMessages" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMember" ToRole="tMessage" />
+    <NavigationProperty Name="tMessages1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMember" ToRole="tMessage" />
+    <NavigationProperty Name="tPlayLists" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tMember" FromRole="tMember" ToRole="tPlayList" />
+    <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
+    <NavigationProperty Name="tShoppingCarts" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
+    <Property Name="fPayPalAccount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -158,24 +316,40 @@
     <Property Name="fContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="fTime" Type="DateTime" Precision="3" />
     <Property Name="fStatus" Type="Int32" />
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="fRead" Type="Int32" />
     <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
     <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
+=======
+    <Property Name="fTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
+    <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
+    <Property Name="fReaded" Type="Int32" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityType Name="tAlbumKind">
     <Key>
       <PropertyRef Name="KindID" />
     </Key>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="KindID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="KindName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="fColor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="fPhotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+=======
+    <Property Name="fPlayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fAccount" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fProductID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tMember" FromRole="tPlayList" ToRole="tMember" />
+    <NavigationProperty Name="tProduct" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" FromRole="tPlayList" ToRole="tProduct" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityType Name="tMember">
     <Key>
       <PropertyRef Name="fAccount" />
     </Key>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <Property Name="fAccount" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -198,6 +372,25 @@
     <NavigationProperty Name="tShoppingCarts" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
     <NavigationProperty Name="tActivities" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tMember" ToRole="tActivity" />
     <NavigationProperty Name="tAlbums" Relationship="dbProjectMusicStoreModel.FK_tAlbum_tMember" FromRole="tMember" ToRole="tAlbum" />
+=======
+    <Property Name="fProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fAlbumID" Type="Int32" />
+    <Property Name="fProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fSinger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fSIPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fComposer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fArranger" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fLyricist" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fPlayStart" Type="Double" />
+    <Property Name="fPlayEnd" Type="Double" />
+    <Property Name="fStatus" Type="Int32" />
+    <Property Name="fModifiedDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tAlbum" Relationship="dbProjectMusicStoreModel.FK_tProducts_tAlbum" FromRole="tProduct" ToRole="tAlbum" />
+    <NavigationProperty Name="tPlayLists" Relationship="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" FromRole="tProduct" ToRole="tPlayList" />
+    <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" FromRole="tProduct" ToRole="tPurchaseItem" />
+    <NavigationProperty Name="tStatistics" Relationship="dbProjectMusicStoreModel.FK_tStatistic_tProducts" FromRole="tProduct" ToRole="tStatistic" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
   <EntityType Name="tPurchaseItem">
     <Key>
@@ -215,7 +408,94 @@
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" FromRole="tPurchaseItem" ToRole="tMember" />
     <NavigationProperty Name="tProduct" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" FromRole="tPurchaseItem" ToRole="tProduct" />
     <NavigationProperty Name="tShoppingCart" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tShoppingCart" FromRole="tPurchaseItem" ToRole="tShoppingCart" />
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   </EntityType>
+=======
+  </EntityType>
+  <EntityType Name="tShoppingCart">
+    <Key>
+      <PropertyRef Name="fCartID" />
+    </Key>
+    <Property Name="fCartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fCustomer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fDate" Type="DateTime" Precision="3" />
+    <Property Name="fPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fType" Type="Int32" />
+    <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tShoppingCart" ToRole="tMember" />
+    <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tShoppingCart" FromRole="tShoppingCart" ToRole="tPurchaseItem" />
+  </EntityType>
+  <EntityType Name="tStatistic">
+    <Key>
+      <PropertyRef Name="fId" />
+    </Key>
+    <Property Name="fId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fProductID" Type="Int32" />
+    <Property Name="fType" Type="Int32" />
+    <Property Name="fTime" Type="DateTime" Precision="3" />
+    <Property Name="fAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tProduct" Relationship="dbProjectMusicStoreModel.FK_tStatistic_tProducts" FromRole="tStatistic" ToRole="tProduct" />
+  </EntityType>
+  <Association Name="FK_tActivity_tMember">
+    <End Type="dbProjectMusicStoreModel.tMember" Role="tMember" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tActivity" Role="tActivity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tActivity">
+        <PropertyRef Name="fLauncher" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tActivity">
+    <End Type="dbProjectMusicStoreModel.tActivity" Role="tActivity" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tAlbum" Role="tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tActivity">
+        <PropertyRef Name="fId" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fActivityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tAlbumType">
+    <End Type="dbProjectMusicStoreModel.tAlbumType" Role="tAlbumType" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tAlbum" Role="tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbumType">
+        <PropertyRef Name="fTypeID" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tAlbum_tMember">
+    <End Type="dbProjectMusicStoreModel.tMember" Role="tMember" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tAlbum" Role="tAlbum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tMember">
+        <PropertyRef Name="fAccount" />
+      </Principal>
+      <Dependent Role="tAlbum">
+        <PropertyRef Name="fAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tProducts_tAlbum">
+    <End Type="dbProjectMusicStoreModel.tAlbum" Role="tAlbum" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tAlbum">
+        <PropertyRef Name="fAlbumID" />
+      </Principal>
+      <Dependent Role="tProduct">
+        <PropertyRef Name="fAlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   <Association Name="FK_tLog_tMember">
     <End Type="dbProjectMusicStoreModel.tMember" Role="tMember" Multiplicity="0..1" />
     <End Type="dbProjectMusicStoreModel.tLog" Role="tLog" Multiplicity="*" />
@@ -335,30 +615,50 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   <Association Name="FK_tStatistic_tProducts">
     <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="0..1" />
     <End Type="dbProjectMusicStoreModel.tStatistic" Role="tStatistic" Multiplicity="*" />
+=======
+  <Association Name="FK_tPlayLists_tProducts">
+    <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="1" />
+    <End Type="dbProjectMusicStoreModel.tPlayList" Role="tPlayList" Multiplicity="*" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
     <ReferentialConstraint>
       <Principal Role="tProduct">
         <PropertyRef Name="fProductID" />
       </Principal>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
       <Dependent Role="tStatistic">
+=======
+      <Dependent Role="tPlayList">
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
         <PropertyRef Name="fProductID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   <Association Name="FK_tPurchaseItem_tShoppingCart">
     <End Type="dbProjectMusicStoreModel.tShoppingCart" Role="tShoppingCart" Multiplicity="1" />
     <End Type="dbProjectMusicStoreModel.tPurchaseItem" Role="tPurchaseItem" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="tShoppingCart">
         <PropertyRef Name="fCartID" />
+=======
+  <Association Name="FK_tPurchaseItem_tProducts1">
+    <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="1" />
+    <End Type="dbProjectMusicStoreModel.tPurchaseItem" Role="tPurchaseItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tProduct">
+        <PropertyRef Name="fProductID" />
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
       </Principal>
       <Dependent Role="tPurchaseItem">
-        <PropertyRef Name="fPurchaseItemID" />
+        <PropertyRef Name="fProductID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
   <EntityType Name="tActivity">
     <Key>
       <PropertyRef Name="fId" />
@@ -454,4 +754,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+=======
+  <Association Name="FK_tStatistic_tProducts">
+    <End Type="dbProjectMusicStoreModel.tProduct" Role="tProduct" Multiplicity="0..1" />
+    <End Type="dbProjectMusicStoreModel.tStatistic" Role="tStatistic" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tProduct">
+        <PropertyRef Name="fProductID" />
+      </Principal>
+      <Dependent Role="tStatistic">
+        <PropertyRef Name="fProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tPurchaseItem_tShoppingCart">
+    <End Type="dbProjectMusicStoreModel.tShoppingCart" Role="tShoppingCart" Multiplicity="1" />
+    <End Type="dbProjectMusicStoreModel.tPurchaseItem" Role="tPurchaseItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tShoppingCart">
+        <PropertyRef Name="fCartID" />
+      </Principal>
+      <Dependent Role="tPurchaseItem">
+        <PropertyRef Name="fPurchaseItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.csdl
 </Schema>

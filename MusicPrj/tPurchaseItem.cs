@@ -14,6 +14,7 @@ namespace MusicPrj
     
     public partial class tPurchaseItem
     {
+<<<<<<< HEAD:MusicPrj/tPurchaseItem.cs
         public int fPurchaseItemID { get; set; }
         public string fCustomer { get; set; }
         public int fProductID { get; set; }
@@ -26,5 +27,22 @@ namespace MusicPrj
         public virtual tShoppingCart tShoppingCart { get; set; }
         public virtual tProduct tProduct { get; set; }
         public virtual tMember tMember { get; set; }
+=======
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tShoppingCart()
+        {
+            this.tPurchaseItems = new HashSet<tPurchaseItem>();
+        }
+    
+        public int fCartID { get; set; }
+        public string fCustomer { get; set; }
+        public Nullable<System.DateTime> fDate { get; set; }
+        public Nullable<decimal> fPrice { get; set; }
+        public Nullable<int> fType { get; set; }
+    
+        public virtual tMember tMember { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/tShoppingCart.cs
     }
 }

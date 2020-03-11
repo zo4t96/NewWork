@@ -33,9 +33,12 @@ namespace MusicPrj
         public virtual DbSet<tPurchaseItem> tPurchaseItems { get; set; }
         public virtual DbSet<tShoppingCart> tShoppingCarts { get; set; }
         public virtual DbSet<tStatistic> tStatistics { get; set; }
+<<<<<<< HEAD:MusicPrj/dbMusicStore.Context.cs
         public virtual DbSet<tProduct> tProducts { get; set; }
         public virtual DbSet<tMember> tMembers { get; set; }
         public virtual DbSet<tMessage> tMessages { get; set; }
         public virtual DbSet<tAlbum> tAlbums { get; set; }
+=======
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/dbMusicStore.Context.cs
     }
 }

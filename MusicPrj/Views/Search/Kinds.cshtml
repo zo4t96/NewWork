@@ -70,6 +70,7 @@
     .fadein {
         opacity: 0.8;
     }
+
 </style>
 
 <body>
@@ -89,11 +90,20 @@
         setTimeout(function () {
             $(".photo").addClass("fadein");
         }, 300)
+<<<<<<< HEAD:MusicPrj/Views/Search/Kinds.cshtml
         //讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
         $(".kindBlock").each(function () {
             $(this).css("background-color", $(this).data("color"));
             $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
             $(this).find(".photo").css("background-image", `url(@Url.Content("~")Images/${$(this).data("image")})`)
+=======
+
+        //讓類別窗格不同色的程式碼
+        $(".kindBlock").each(function () {
+            $(this).css("background-color", $(this).data("color"));
+            $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
+            $(this).find(".photo").css("background-image", `url(/CoverFiles/${$(this).data("image")})`)
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/Kinds.cshtml
             $(this).click(function(){
                 let kindId = $(this).data("kind");
                 let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`
@@ -108,7 +118,11 @@
                             <span class="sr-only">Loading...</span>
                         </div>`);
                     },
+<<<<<<< HEAD:MusicPrj/Views/Search/Kinds.cshtml
                     url: '@Url.Action("KindResultView", "Search")',
+=======
+                    url: url,
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/Kinds.cshtml
                     data: history.state,
                     type: "post",
                     success: function (data) {
@@ -118,8 +132,14 @@
                         $(window).scrollTop(y);
                     }
                  })
+<<<<<<< HEAD:MusicPrj/Views/Search/Kinds.cshtml
 
             })
         })
+=======
+                
+            })
+        })  
+>>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/Kinds.cshtml
     </script>
 </body>
