@@ -193,6 +193,13 @@ namespace MusicPrj.Models
                 s2 = "你的撥放清單找不到此首音樂";
                 return s2;
             }
+            //最後一首單曲時移除member欄位的最後單曲紀錄
+            tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
+            if (tnowPL.Count() == 1)
+            {
+                tM.fLastPlaySong = null;
+            }
+            //移除此單曲
             db.tPlayLists.Remove(tPL);
             try
             {

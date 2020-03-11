@@ -1,4 +1,5 @@
 ﻿using MusicPrj.Models;
+using MusicPrj.ViewModel;
 using MusicPrj.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -15,8 +16,10 @@ namespace MusicPrj.Controllers
 {
     public class MemberLoginController : Controller
     {
+        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
 
-        string redirect_uri = "http://localhost/test/MemberLogin/AfterLineLogin";
+        //string redirect_uri;
+        string redirect_uri = "http://114.34.9.151/test/MemberLogin/AfterLineLogin";//網址需要再雲端後看雲端網址是什麼再改
         string client_id = "1653927630";
         string client_secret = "a92834ca3cb1d19554db273b160a659f";
 
@@ -31,8 +34,11 @@ namespace MusicPrj.Controllers
             //每次Ajax Request都產生不同的state字串，避免駭客拿固定的state字串將網址掛載自己的釣魚網站獲取用戶的Line個資授權(CSRF攻擊)
             string state = Guid.NewGuid().ToString();
             TempData["state"] = state;//利用TempData被取出資料後即消失的特性，來防禦CSRF攻擊
-            //如果是ASP.net Form，就改成放入Session或Cookie，之後取出資料時再把Session或Cookie設為null刪除資料
-            string LineLoginUrl =
+            string redirect_uri_1 = "http://";
+            string redirect_uri_2 = Request.Url.Authority;
+            string redirect_uri_3 = Url.Content("~")+"MemberLogin/AfterLineLogin";
+            //redirect_uri = redirect_uri_1+ redirect_uri_2 + redirect_uri_3;
+            string LineLoginUrl = 
              $@"https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&state={state}&scope={HttpUtility.UrlEncode("openid profile email")}";
             //scope給openid是程式為了抓id_token用，設email則為了id_token的Payload裡才會有用戶的email資訊
             return Content(LineLoginUrl);
@@ -122,7 +128,7 @@ namespace MusicPrj.Controllers
                 tMember tm = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fLineId == user.userId);
                 if(tm == null)
                 {
-                    return Content("此帳號未被綁定");
+                    return Content("此帳號未被綁定,請改用一般方式登入");
                 }
                 else
                 {
@@ -143,46 +149,6 @@ namespace MusicPrj.Controllers
             }//end if 
           
             return View();
-        }
-
-
-        /// <summary>
-        /// 徹銷Line Login，目前感覺不出差別在哪= =a，等待API改版
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult RevokeLineLoginUrl(string access_token)
-        {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.line.me/oauth2/v2.1/revoke");
-            req.Method = "POST";
-            req.ContentType = "application/x-www-form-urlencoded";
-            //必須透過ParseQueryString()來建立NameValueCollection物件，之後.ToString()才能轉換成queryString
-            NameValueCollection postParams = HttpUtility.ParseQueryString(string.Empty);
-            postParams.Add("access_token", access_token);
-            postParams.Add("client_id", this.client_id);
-            postParams.Add("client_secret", this.client_secret);
-
-
-            //要發送的字串轉為byte[] 
-            byte[] byteArray = Encoding.UTF8.GetBytes(postParams.ToString());
-            using (Stream reqStream = req.GetRequestStream())
-            {
-                reqStream.Write(byteArray, 0, byteArray.Length);
-            }//end using
-
-            //API回傳的字串
-            string responseStr = "";
-            //發出Request
-            using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
-            {
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
-                {
-                    responseStr = sr.ReadToEnd();
-                }//end using  
-            }
-
-
-            return Content(responseStr);
         }
 
         // 登入連結畫面
@@ -228,12 +194,21 @@ namespace MusicPrj.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(tMember c)
+        public ActionResult New(tMember m)
         {
-            tMemberFactory factory = new tMemberFactory();
-            factory.create(c);
+            //string fileName = "";
+            //fileName = Guid.NewGuid() + ".jpg";
+            //var path = Path.Combine(Server.MapPath("~/Images"), fileName);
+            //m.SaveAs(path);
 
+            m.fPicPath = "nobody.jpg";
+            db.tMembers.Add(m);
+            db.SaveChanges();
             return RedirectToAction("Main", "Homepage");
+            //tMemberFactory factory = new tMemberFactory();
+            //factory.create(c);
+
+            //return RedirectToAction("Main","Homepage");
         }
 
         public ActionResult Logout()
@@ -243,24 +218,26 @@ namespace MusicPrj.Controllers
             return RedirectToAction("Main", "Homepage");
         }
 
+        public ActionResult LoginCheck(string fAccount)
+        {
+            string account = fAccount;
+            tMember loginUser = db.tMembers.FirstOrDefault(m => m.fAccount == account);
+
+            string message = "此帳號已被使用";
+
+            if (loginUser == null)
+            {
+                message = "可以使用的帳號";
+            }
+
+            if (account == "")
+            {
+                message = "請輸入帳號";
+            }
+            return Content(message);
+        }
+
 
     }
-    public class LineLoginToken
-    {
-        public string access_token { get; set; }
-        public int expires_in { get; set; }
-        public string id_token { get; set; }
-        public string refresh_token { get; set; }
-        public string scope { get; set; }
-        public string token_type { get; set; }
-    }
 
-    public class LineUserProfile
-    {
-        public string userId { get; set; }
-        public string displayName { get; set; }
-        public string pictureUrl { get; set; }
-        public string statusMessage { get; set; }
-        public string email { get; set; }
-    }
 }

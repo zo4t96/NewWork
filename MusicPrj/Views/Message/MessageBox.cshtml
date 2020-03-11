@@ -21,8 +21,7 @@
     }
     tMessage tMes = new tMessage();
     //撈取寄件備份
-    List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == account && p.fStatus == 0).ToList();
-    tMesCopy.Reverse();
+
     int totalPage = ViewBag.totalPage;
 
 }
@@ -74,7 +73,7 @@
         margin: 0;
     }
     .messageListPanel{
-        display:block;
+        /*display:block;*/
        min-height: 25%;
     }
 </style>
@@ -91,6 +90,7 @@
         <ul class="tab_contents" id="tab_contents1">
             <li>
                 <div class="list-group container py-3 px-3">
+                    <div><span>信件搜尋: </span><input class="mailTextColor" placeholder="輸入要找的內容" id="mailSearchContent"/><button class="btn btn-outline-secondary textSearch">搜尋</button></div>
                     <div class="align-self-end"><button class="btn btn-danger deleteAllmail">全部刪除</button></div>
                     <div class="py-3 messageListPanel" id="messageList"> @Html.Action("_MessageListView")</div>
                     <nav class="py-3" aria-label="...">
@@ -100,11 +100,11 @@
                                 {
                                     if (i == 1)
                                     {
-                                        <li data-page="@i" class="page-item active pageBtn"><a class="page-link">@i</a></li>
+                                        <li data-page="@i" class="page-item active pageBtn mailTextColor"><a class="page-link">@i</a></li>
                                     }
                                     else
                                     {
-                                        <li data-page="@i" class="page-item pageBtn"><a class="page-link">@i</a></li>
+                                        <li data-page="@i" class="page-item pageBtn mailTextColor"><a class="page-link">@i</a></li>
                                     }
                                 }
 
@@ -162,20 +162,8 @@
             </li>
             <li>
                 <div class="list-group container py-3 px-3">
-                    @foreach (var item in tMesCopy)
-                    {
-                        <div class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
-                                <small class="mailTextColor">
-                                    @Html.DisplayFor(modelItem => item.fTime)
-                                    <span>  <button data-mailid="@Html.DisplayFor(modelItem => item.fMessageId)" class="btn btn-danger deletemail">刪除</button></span>
-                                </small>
-                            </div>
-                            <p class="mb-1 mailTextColor">@Html.DisplayFor(modelItem => item.fContent)</p>
-                            <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
-                        </div>
-                    }
+                    <div class="align-self-end"><button class="btn btn-danger deleteAllmailCopy">全部刪除</button></div>
+                    <div class="py-3 messageListPanel" id="messageListBackUp"> @Html.Action("_MessageListView",new {page=-1 })</div>
                 </div>
             </li>
         </ul>
@@ -185,8 +173,8 @@
     </div>
 <script>
 
-    //Tab頁面控制
-    function tab_switch(_this) {
+            //Tab頁面控制
+            function tab_switch(_this) {
         var now_tab = $(_this).parent().index();
         $(_this).parent().siblings().removeClass('on');
         $(_this).parent().addClass('on');
@@ -194,6 +182,8 @@
         $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
 
     };
+
+            //送信
             $("#inputFormSubmit").click(function () {
             if ($("#tMes_fAccountTo").val() != "") {
                 if ($("#tMes_fTitle").val() != "") {
@@ -235,6 +225,7 @@
             }
             });
 
+            //刪信(含備份)
             $(".deletemail").click(function () {
             if (confirm("真的要刪除嗎?")) {
                 $.get("@Url.Action("DelteMail","Message")?mailid="+$(this).data("mailid"), function (data) {
@@ -248,12 +239,53 @@
                 }
             })
 
+            //刪所有
+            $(".deleteAllmail").click(function () {
+            if (confirm("真的要刪除所有訊息嗎?")) {
+                $.get("@Url.Action("DelteAllMail","Message")", function (data) {
+                    $(".eventNotification").html(data);
+                    let plink = "@Url.Action("MessageBox","Message")";
+                    $.get(plink, { ajax: true }, function (data) {
+                    $(".mainbox").html(data);
+                })
+                });
+            } else {
+                }
+            })
 
-    $(".pageBtn").click(function () {
-        console.log($(this).data("page"));
-        $.get("@Url.Action("_MessageListView","Message")?page=" + $(this).data("page"), function (data) {
-             $("#messageList").html(data);
-        })
-    })
+            $(".deleteAllmailCopy").click(function () {
+            if (confirm("真的要刪除寄件備份嗎?")) {
+                $.get("@Url.Action("DelteAllMailCopy","Message")", function (data) {
+                    $(".eventNotification").html(data);
+                    let plink = "@Url.Action("MessageBox","Message")";
+                    $.get(plink, { ajax: true }, function (data) {
+                    $(".mainbox").html(data);
+                })
+                });
+            } else {
+                }
+            })
+
+            //分頁
+            $(".pageBtn").click(function () {
+                console.log($(this).data("page"));
+                $(".pageBtn").removeClass("active");
+                $(this).addClass("active");
+                $.get("@Url.Action("_MessageListView","Message")?page=" + $(this).data("page"), function (data) {
+                $("#messageList").html(data);
+                })
+            })
+
+            //搜尋
+            $(".textSearch").click(function () {
+                $.get("@Url.Action("MessageSearch","Message")?text=" + $("#mailSearchContent").val().trim(), function (data) {
+                if (data.indexOf("讀") != -1) {
+                    $("#messageList").html(data);
+            } else {
+                $("#messageList").html("沒有找到你要找的內容");
+            }
+
+                })
+            })
 
     </script>

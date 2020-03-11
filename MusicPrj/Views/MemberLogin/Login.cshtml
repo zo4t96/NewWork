@@ -34,9 +34,15 @@
         transition: 0.4s;
     }
 
-        .loingBtn:hover {
-            background-color: #1dd15d;
-        }
+    .loingBtn:hover {
+        background-color: #1dd15d;
+    }
+
+    .lineLoginBtn{
+        width:25%;
+        padding-top:20px;
+        cursor:pointer;
+    }
 </style>
 
 <div class="box">
@@ -55,7 +61,7 @@
     }
     <div>
         <a onclick="openPopupWindow()">
-            點我Line Login
+            <img class="lineLoginBtn" src="~/images/btn_login_base.png"/>
         </a>
     </div>
     <div id="LineLoginresult"></div>
@@ -65,11 +71,11 @@
     $(".loingBtn").click(function () {
         $("form").submit();
     })
-</script>
-<script type="text/javascript">
-        let LineLoginUrl = "@Url.Action("GetLineLoginUrl","MemberLogin")";
+
+    let LineLoginUrl = "@Url.Action("GetLineLoginUrl","MemberLogin")";
     let RevokeLineLoginUrl = "@Url.Action("RevokeLineLoginUrl","MemberLogin")";
 
+    //Line回傳成功後關閉此容器
     $("body").on('DOMSubtreeModified', "#LineLoginresult", function () {
                  setTimeout(function () {
                     $("#modal").removeClass("fadein");

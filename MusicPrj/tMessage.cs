@@ -11,15 +11,20 @@ namespace MusicPrj
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class tMessage
     {
         public int fMessageId { get; set; }
+        [Display(Name = "寄件人")]
         public string fAccountFrom { get; set; }
+        [Display(Name = "收件人")]
         public string fAccountTo { get; set; }
+        [Display(Name = "內文")]
         public string fContent { get; set; }
         public Nullable<System.DateTime> fTime { get; set; }
         public Nullable<int> fStatus { get; set; }
+        [Display(Name = "主旨")]
         public string fTitle { get; set; }
         public Nullable<int> fReaded { get; set; }
     

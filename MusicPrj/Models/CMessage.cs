@@ -126,5 +126,67 @@ namespace MusicPrj.Models
             s2 = "成功";
             return s2;
         }
+
+        //使用者刪所有信
+        public string userDeleteAllMail(string issuerName)
+        {
+            string s2 = "";
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == issuerName) == null)
+            {
+                s2 = "失敗,查無此人";
+                return s2;
+            }
+            List<tMessage> tMes = db.tMessages.Where(p => p.fAccountTo == issuerName && p.fStatus ==1).ToList();
+            if (tMes == null)
+            {
+                s2 = "失敗,信箱內找不到信";
+                return s2;
+            }
+            //信件自DB移除
+            db.tMessages.RemoveRange(tMes);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                s2 = "資料庫異常,請通知管理員";
+                //   return ex.Message.ToString();
+                return s2;
+            }
+            s2 = "成功";
+            return s2;
+        }
+
+        //使用者刪所有寄件備份
+        public string userDeleteAllMailCopy(string issuerName)
+        {
+            string s2 = "";
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == issuerName) == null)
+            {
+                s2 = "失敗,查無此人";
+                return s2;
+            }
+            List<tMessage> tMes = db.tMessages.Where(p => p.fAccountFrom == issuerName && p.fStatus == 0).ToList();
+            if (tMes == null)
+            {
+                s2 = "失敗,信箱內找不到信";
+                return s2;
+            }
+            //信件自DB移除
+            db.tMessages.RemoveRange(tMes);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                s2 = "資料庫異常,請通知管理員";
+                //   return ex.Message.ToString();
+                return s2;
+            }
+            s2 = "成功";
+            return s2;
+        }
     }
 }

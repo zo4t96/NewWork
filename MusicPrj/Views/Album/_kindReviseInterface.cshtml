@@ -13,9 +13,9 @@
 
         /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 240px;
+        width: 43%;
         padding: 7px;
-        min-height: 300px;
+        min-height: 10%;
         background-color: #292929;
         margin: 10px;
         display: block;
@@ -24,10 +24,10 @@
         border: 1px solid #bbb;
     }
 
-        .containerDrag ul li {
+    .containerDrag ul li {
             display: block;
             float: left;
-            width: 80px;
+            width: 45%;
             height: 35px;
             line-height: 35px;
             border-radius: 4px;
@@ -40,14 +40,14 @@
             user-select: none;
             text-indent: 10px;
             color: black;
-            margin-right: 10px
-        }
+            margin-right: 5px
+    }
 
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
         max-width: 800px;
-        text-align: center;
+        text-align: left;
     }
 
     .kindReviseBtn {
@@ -62,9 +62,15 @@
         transition: 0.4s;
     }
 
-        .loingBtn:hover {
-            background-color: #1dd15d;
-        }
+    .kindReviseBtn:hover {
+        background-color: #1dd15d;
+    }
+    .kindTitle{
+    text-align:center;
+    }
+    .containerDrag{
+    min-width:450px;
+    }
 </style>
 <script>
     dragReflash();
@@ -73,19 +79,19 @@
 
         @*//防止網站被攻擊的防護，但目前會報錯先註解*@
         @*@Html.AntiForgeryToken();*@
-        <h2>類型更改</h2>
+        <div class="h2 kindTitle">類型更改</div>
 
         @*使用拖曳填入input的專輯Kind*@
-        <div class="form-group" style="min-height:400px">
+        <div class="form-group">
             <div class="col-md-12">
-                <div class="containerDrag">
+                <div class="containerDrag" >
                     <ul id="userKindtaginput"></ul>
                     <ul id="adKindULPageload">
                     </ul>
                 </div>
                 <hr />
                 @*input除錯用,平常type設成hide*@
-                <input class="form-control text-box single-line" id="tA_fKinds" name="tAfKinds" type="text" value="">
+                <input class="form-control text-box single-line" id="tA_fKinds" name="tAfKinds" type="hidden" value="">
             </div>
         </div>
         <script>

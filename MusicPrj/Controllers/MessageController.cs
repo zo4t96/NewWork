@@ -27,31 +27,46 @@ namespace MusicPrj.Controllers
         public ActionResult _MessageListView(int page=1)
         {
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
-            List<tMessage> tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1).ToList();
-            tME.Reverse();
-            ViewBag.index = page;
-            foreach (var a in tME.Skip(5 * (page - 1)).Take(5))
+            if (page != -1)
             {
-                if (a.fReaded  ==0 ||a.fReaded ==null)
+                List<tMessage> tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1).ToList();
+                tME.Reverse();
+                ViewBag.index = page;
+                foreach (var a in tME.Skip(5 * (page - 1)).Take(5))
                 {
-                    a.fReaded = 1;
-                }else if(a.fReaded == 1)
-                {
-                    a.fReaded = 2;
+                    //未讀信第一次讀取
+                    if (a.fReaded == 0 || a.fReaded == null)
+                    {
+                        a.fReaded = 1;
+                    }
+                    //已讀信第一次讀取
+                    else if (a.fReaded == 1)
+                    {
+                        a.fReaded = 2;
+                    }
                 }
-                else if (a.fReaded == 2)
+                db.SaveChanges();
+                if (tME != null)
                 {
-                    a.fReaded = 3;
+                    return PartialView("_MessageListView", tME.Skip(5 * (page - 1)).Take(5));
                 }
-            }
-            db.SaveChanges();
-            if (tME != null)
-            {
-                return PartialView("_MessageListView", tME.Skip(5 * (page - 1)).Take(5));
+                else
+                {
+                    return PartialView("_MessageListView");
+                }
             }
             else
             {
-                return PartialView();
+                List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == s1 && p.fStatus == 0).ToList();
+                tMesCopy.Reverse();
+                if (tMesCopy != null)
+                {
+                    return PartialView("_MessageListView", tMesCopy);
+                }
+                else
+                {
+                    return PartialView("_MessageListView");
+                }
             }
         }
 
@@ -70,5 +85,35 @@ namespace MusicPrj.Controllers
             ViewBag.Msg = message.userDeleteMail(issuerName, mailid);
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
+
+        public ActionResult DelteAllMail()
+        {
+            string issuerName = Session[CDictionary.SK_ACCOUNT].ToString();
+            ViewBag.Msg = message.userDeleteAllMail(issuerName);
+            return JavaScript("alert('" + ViewBag.Msg + "');");
+        }
+
+        public ActionResult DelteAllMailCopy()
+        {
+            string issuerName = Session[CDictionary.SK_ACCOUNT].ToString();
+            ViewBag.Msg = message.userDeleteAllMailCopy(issuerName);
+            return JavaScript("alert('" + ViewBag.Msg + "');");
+        }
+        
+        public ActionResult MessageSearch(string text ="")
+        {
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            List<tMessage> tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1 && (p.fContent.Contains(text) || p.fTitle.Contains(text))).ToList();
+            tME.Reverse();
+            if (tME != null)
+            {
+                return PartialView("_MessageListView", tME);
+            }
+            else
+            {
+                return PartialView("_MessageListView");
+            }
+        }
+
     }
 }

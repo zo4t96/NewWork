@@ -11,7 +11,7 @@
 
     /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 240px;
+        width: 43%;
         padding: 7px;
         min-height: 300px;
         background-color: #292929;
@@ -25,7 +25,7 @@
         .containerDrag ul li {
             display: block;
             float: left;
-            width: 80px;
+            width: 45%;
             height: 35px;
             line-height: 35px;
             border-radius: 4px;
@@ -38,14 +38,14 @@
             user-select: none;
             text-indent: 10px;
             color: black;
-            margin-right: 10px
+            margin-right: 5px
         }
 
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
         max-width: 800px;
-        text-align: center;
+        text-align: left;
     }
 
     .kindReviseBtn {
@@ -60,8 +60,14 @@
         transition: 0.4s;
     }
 
-    .loingBtn:hover {
+    .kindReviseBtn:hover {
         background-color: #1dd15d;
+    }
+    .kindTitle{
+    text-align:center;
+    }
+    .containerDrag{
+
     }
 </style>
 <script>
@@ -71,10 +77,10 @@
 
     @*//防止網站被攻擊的防護，但目前會報錯先註解*@
     @*@Html.AntiForgeryToken();*@
-    <h2>類型更改</h2>
+    <div class="h2 kindTitle">單曲類型</div>
 
     @*使用拖曳填入input的專輯Kind*@
-    <div class="form-group" style="min-height:400px">
+    <div class="form-group" style="min-height:450px">
         <div class="col-md-12">
             <div class="containerDrag">
                 <ul id="userKindtaginput"></ul>
@@ -262,6 +268,7 @@ drag.class_name = className;
              }
 
          })
+
     })
 
         //滑鼠拖動時取得拖曳內容轉成文字方塊
