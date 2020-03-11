@@ -37,6 +37,11 @@
     .loingBtn:hover {
         background-color: #1dd15d;
     }
+     .lineLoginBtn{
+        width:25%;
+        padding-top:20px;
+        cursor:pointer;
+    }
 
 </style>
 
@@ -52,33 +57,51 @@
         <div class="form-input-password">
             <input type="password" name="txtPassword" placeholder="密碼" class="form-control " value="">
         </div>
+        <div class="error"></div>
         <div class="loingBtn">登入</div>
     }
     <div>
         <a onclick="openPopupWindow()">
-            點我Line Login
+            <img class="lineLoginBtn" src="~/images/btn_login_base.png" />
         </a>
     </div>
     <div id="LineLoginresult"></div>
 </div>
 
 <script>
+    // 帳號密碼判斷
     $(".loingBtn").click(function () {
-        $("form").submit();
+        $.post("@Url.Action("Login", "MemberLogin")",
+            {
+                txtAccount:$("input[name='txtAccount']").val(),
+                txtPassword: $("input[name='txtPassword']").val(),
+                ajax:true
+            },
+            function (data) {
+                if (data == "false") {
+                    $(".error").text("帳號或密碼錯誤");
+                    //alert("帳號或密碼錯誤");
+                } else {
+                    $("form").submit();
+                }
+            })  
     })
 </script>
-<script type="text/javascript">
+
+
+<script>
     let LineLoginUrl = "@Url.Action("GetLineLoginUrl","MemberLogin")";
     let RevokeLineLoginUrl = "@Url.Action("RevokeLineLoginUrl","MemberLogin")";
+    //Line回傳成功後關閉此容器
     $("body").on('DOMSubtreeModified', "#LineLoginresult", function () {
-        setTimeout(function () {
-            $("#modal").removeClass("fadein");
-            $("#modalContent").removeClass("fadein");
-        }, 10)
-        setTimeout(function () {
-            $("#modal").css("display", "none");
-        }, 500)
-        window.location.href = "@Url.Action("Main","Homepage")"
+                 setTimeout(function () {
+                    $("#modal").removeClass("fadein");
+                    $("#modalContent").removeClass("fadein");
+                }, 10)
+                setTimeout(function () {
+                    $("#modal").css("display", "none");
+                }, 500)
+                window.location.href = "@Url.Action("Main","Homepage")"
     });
     function openPopupWindow() {
         $("#result").html("");//清空顯示結果

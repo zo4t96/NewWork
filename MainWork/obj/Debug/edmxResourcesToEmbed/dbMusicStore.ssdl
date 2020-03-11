@@ -68,10 +68,11 @@
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
     <Property Name="fLastPlaySong" Type="int" />
-    <Property Name="fLineId" Type="int" />
+    <Property Name="fLineId" Type="nvarchar(max)" />
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
     <Property Name="fPayPalAccount" Type="nvarchar(max)" />
+    <Property Name="fLineStatus" Type="int" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -83,6 +84,7 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
+    <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
     <Property Name="fReaded" Type="int" />
   </EntityType>

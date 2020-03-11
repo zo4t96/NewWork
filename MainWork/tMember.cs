@@ -38,10 +38,11 @@ namespace MainWork
         public Nullable<System.DateTime> fSubscriptStartDate { get; set; }
         public Nullable<System.DateTime> fSubscriptEndDate { get; set; }
         public Nullable<int> fLastPlaySong { get; set; }
-        public Nullable<int> fLineId { get; set; }
+        public string fLineId { get; set; }
         public string fLineName { get; set; }
         public Nullable<System.DateTime> fLineTimeMark { get; set; }
         public string fPayPalAccount { get; set; }
+        public Nullable<int> fLineStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tActivity> tActivities { get; set; }

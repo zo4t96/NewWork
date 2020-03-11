@@ -28,11 +28,24 @@ namespace MainWork.Models
         //使用者新增專輯
         public string userAddAlbum(tAlbum tA, string user)
         {
-            string name = Guid.NewGuid().ToString() + ".jpg";
+            if (tA.fCoverRealFile == null)
+            {
+                return "並未選擇上傳檔案";
+            }
+            if (tA.fCoverRealFile.ContentLength <= 0)
+            {
+                return "檔案大小不可為0";
+            }
+            string fileType = tA.fCoverRealFile.FileName.Split('.').Last().ToLower();
+            if (!(fileType.Equals("jpg") || fileType.Equals("jpeg") || fileType.Equals("png")))
+            {
+                return "只接受圖片檔(jpg,jpeg,png)";
+            }
+            string name = Guid.NewGuid().ToString() + "." + fileType;
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/CoverFiles/"), name);
+            tA.fCoverRealFile.SaveAs(path);
             tA.fCoverPath = name;
             tA.fStatus = 0;
-            tA.fCoverRealFile.SaveAs(path);
             tA.fAccount = user;
             tA.fYear = DateTime.Now;
             db.tAlbums.Add(tA);
@@ -51,6 +64,19 @@ namespace MainWork.Models
         //使用者新增單曲
         public string userAddsong(FormCollection formCollection, int amid, HttpPostedFileBase tP_fRealFile)
         {
+            if (tP_fRealFile == null)
+            {
+                return "並未選擇上傳檔案";
+            }
+            if (tP_fRealFile.ContentLength <= 0)
+            {
+                return "檔案大小不可為0";
+            }
+            string fileType = tP_fRealFile.FileName.Split('.').Last().ToLower();
+            if (!(fileType.Equals("mp3")))
+            {
+                return "只接受mp3音樂檔";
+            }
             string name = Guid.NewGuid().ToString() + ".mp3";
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), name);
             tProduct tP = new tProduct();
@@ -148,6 +174,19 @@ namespace MainWork.Models
         //使用者更新專輯封面(only封面)
         public string userUpdateAlbumFile(string albumid, HttpPostedFileBase fCoverPathUpload)
         {
+            if (fCoverPathUpload == null)
+            {
+                return "並未選擇上傳檔案";
+            }
+            if (fCoverPathUpload.ContentLength <= 0)
+            {
+                return "檔案大小不可為0";
+            }
+            string fileType = fCoverPathUpload.FileName.Split('.').Last().ToLower();
+            if (!(fileType.Equals("jpg") || fileType.Equals("jpeg") || fileType.Equals("png")))
+            {
+                return "只接受圖片檔(jpg,jpeg,png)";
+            }
             int intAlbumid = Int32.Parse(albumid);
             tAlbum tA = db.tAlbums.FirstOrDefault(p => p.fAlbumID == intAlbumid);
             string s2 = "";
@@ -305,6 +344,19 @@ namespace MainWork.Models
         //使用者透過介面更新單曲資料含檔案
         public string userUpdateSongFile(string fProductID, HttpPostedFileBase fRealFile)
         {
+            if (fRealFile == null)
+            {
+                return "並未選擇上傳檔案";
+            }
+            if (fRealFile.ContentLength <= 0)
+            {
+                return "檔案大小不可為0";
+            }
+            string fileType = fRealFile.FileName.Split('.').Last().ToLower();
+            if (!(fileType.Equals("mp3")))
+            {
+                return "只接受mp3音樂檔";
+            }
             int intProductID = Int32.Parse(fProductID);
             tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == intProductID);
             string s2 = "";
@@ -339,6 +391,42 @@ namespace MainWork.Models
             tP.fPlayEnd = Double.Parse(formCollection["revise_fPlayEnd"]);
             db.SaveChanges();
             s2 = "成功";
+            return s2;
+        }
+
+        public string userBindLineAccount(string s1)
+        {
+            string s2 = "";
+            tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
+            if (tM == null)
+            {
+                s2 = "找不到帳號";
+                return s2;
+            }
+            if (tM.fLineStatus == 0 || tM.fLineStatus == 2)
+            {
+                s2 = "帳號未至Line進行綁定或已經綁定帳號了";
+                return s2;
+            }
+            tM.fLineStatus = 2;
+            db.SaveChanges();
+            s2 = "綁定成功";
+            return s2;
+        }
+
+        public string checkDownloadPrivilege(string s1, int songid)
+        {
+            string s2 = "";
+            //不同會員有相同網址但該會員沒有購買這首時的防護
+            int? amid = db.tProducts.FirstOrDefault(p => p.fProductID == songid).fAlbumID;
+            if (amid == null)
+            {
+                amid = 0;
+            }
+            if (db.tPurchaseItems.FirstOrDefault(p => p.fCustomer == s1 && p.tShoppingCart.fType == 1 && (p.fProductID == songid || (p.fisAlbum == 1 && p.tProduct.tAlbum.fAlbumID == amid))) == null)
+            {
+                return "你沒有購買這首單曲";
+            }
             return s2;
         }
     }

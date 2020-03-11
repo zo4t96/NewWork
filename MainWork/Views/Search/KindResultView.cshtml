@@ -94,6 +94,7 @@
         color: #dc0000;
     }
 </style>
+
 @{string name = ViewBag.kindName as string; }
 @if (Model.FirstOrDefault() == null)
 {
@@ -119,7 +120,7 @@ else
                 {
                     <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
                 }
-                <span class="albumDescripion">@item.fKinds</span>
+               <span class="albumDescripion">@item.fKinds.Replace(",", "、")</span>
                 @if (item.fActivityID != null)
                 {
                     <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
@@ -161,6 +162,5 @@ else
         let title = $(this).data("title");
         document.title = title;
     });
-    var name ="@name";
-    $(".searchTitle").text(name);
+    $(".searchTitle").text(history.state.kindName);
 </script>

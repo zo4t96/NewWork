@@ -343,3 +343,12 @@ C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\obj\Debug\MainWork.cspro
 C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\obj\Debug\MainWork.dll
 C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\obj\Debug\MainWork.pdb
 C:\Users\User\Desktop\期末專題\期末專題New\Test\MainWork\obj\Debug\MainWork.csprojAssemblyReference.cache
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\Newtonsoft.Json.xml
+C:\Users\Cedric\Desktop\期末專題新版0221\MainWork\bin\System.IdentityModel.Tokens.Jwt.xml

@@ -286,25 +286,48 @@
     }
 
     $(".addThisSongToCart").click(function () {
-                        console.log("step1");
-        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=si" + $(this).data('songid'), function (data) {
-                                                console.log("step2");
+        $.post('@Url.Action("AddCart","tShoppingCart")', {cname:'@account', pdid:'si' + $(this).data('songid')}, function (data) {
             $(".eventNotification").html(data);
-                                                            console.log("step3");
         });
     })
     $(".addThisAlbumToCart").click(function () {
-                console.log("step1");
-        $.get("@Url.Action("AddCart","tShoppingCart")?cname=@account&pdid=" + $(this).data('albumid'), function (data) {
-                                    console.log("step2");
+        $.post('@Url.Action("AddCart","tShoppingCart")', { cname:'@account', pdid: $(this).data('albumid') }, function (data) {
             $(".eventNotification").html(data);
-                                                console.log("step3");
         });
     })
+
     $(".addThisSongToPlayList").click(function () {
-                console.log("step1");
-        $.get("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
+        let songn = $(this).parents("h4").prev().data('songn');
+        let singer = $(this).parents("h4").prev().data('singer');
+        let soid = $(this).parents("h4").prev().data('soid');
+        let start = $(this).parents("h4").prev().data('start');
+        let end = $(this).parents("h4").prev().data('end');
+        let songcover = $(this).parents("h4").prev().data('songcover');
+        let playurl = $(this).parents("h4").prev().data('playurl');
+        let albumName = '@AlbInfo.fAlbumName';
+
+        $.post("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
             $(".eventNotification").html(data);
+            if (data == "成功") {
+                let newMusic = $(
+                `<div class='playListItem'
+                    data-singer='${singer}'
+                    data-songn='${songn}'
+                    data-soid='${soid}'
+                    data-songcover='${songcover}'
+                    data-albumname='${albumName}'
+                    data-playurl='${playurl}'>
+                    <div class="plSymbol">
+                        <i class='fas fa-music symbol'></i>
+                    </div>
+                <div class="plDescription">
+                    <div class="mTitle">${songn}</div>
+                    <div class="hr"></div>
+                    <div class="mDetail">${albumName} - ${singer}</div>
+                </div>
+                </div>`);
+            $(".playListPartialView").append(newMusic)
+            }
         });
     })
 </script>

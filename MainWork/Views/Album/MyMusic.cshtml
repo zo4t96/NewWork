@@ -57,7 +57,7 @@
                                     <td>@item.fProductName</td>
                                     <td><a class="albumDeltail" data-album="@item.fAlbumID" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID">@item.tAlbum.fAlbumName</a></td>
                                     <td>@item.fSinger</td>
-                                    <td><a class="btn btn-outline-secondary" download href="~/MusicFiles/@item.fFilePath">下載</a></td>
+                                    <td><a class="btn btn-outline-secondary" href="~/MusicFiles/@item.fFilePath@Url.Action("MusicDownload","Album")?songid=@item.fProductID">下載</a></td>
                                     <td  class="text-center">NT$@(Convert.ToInt32((float)item.fSIPrice * item.tAlbum.fDiscount))</td>
                                     @*<td>
                                         <div class="text-center"><a  href="#">加入至播放清單</a></div>

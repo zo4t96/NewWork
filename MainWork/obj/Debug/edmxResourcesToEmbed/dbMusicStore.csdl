@@ -155,7 +155,7 @@
     <Property Name="fSubscriptStartDate" Type="DateTime" Precision="3" />
     <Property Name="fSubscriptEndDate" Type="DateTime" Precision="3" />
     <Property Name="fLastPlaySong" Type="Int32" />
-    <Property Name="fLineId" Type="Int32" />
+    <Property Name="fLineId" Type="String" />
     <Property Name="fLineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fLineTimeMark" Type="DateTime" Precision="3" />
     <NavigationProperty Name="tActivities" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tMember" ToRole="tActivity" />
@@ -168,6 +168,7 @@
     <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
     <NavigationProperty Name="tShoppingCarts" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
     <Property Name="fPayPalAccount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fLineStatus" Type="Int32" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -183,6 +184,7 @@
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
     <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
     <Property Name="fReaded" Type="Int32" />
+    <Property Name="fRead" Type="Int32" />
   </EntityType>
   <EntityType Name="tPlayList">
     <Key>

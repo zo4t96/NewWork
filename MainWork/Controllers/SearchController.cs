@@ -33,14 +33,13 @@ namespace MainWork.Controllers
                 ViewBag.ajax = true;
             }
             ViewBag.kindId = kindId;
+            ViewBag.kindName = (new dbProjectMusicStoreEntities()).tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
             return View();
         }
 
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
         public ActionResult KindResultView(int kindId)
-        {
-            string kindName = (new dbProjectMusicStoreEntities()).tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
-            ViewBag.kindName = kindName;
+        {    
             return PartialView(search.byKindPage(kindId));
         }
         

@@ -2,16 +2,19 @@
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
-
     }
 }
 <script>
-    //var y;
-    //if (y == null) {
-    //    y = 0;
-    //}
-    history.state.kindId = '@ViewBag.kindId';
-    history.replaceState(history.state, null);
+    //以下狀況為透過網址跳轉至網頁的對應法
+    var y;
+    if (y == null) {
+        y = 0;
+    }
+    if (history.state == null) {
+        history.replaceState({ kindId: @ViewBag.kindId , kindName:'@ViewBag.kindName',ajax:true },null);
+    }
+
+
     $.ajax({
         beforeSend:function() {
             $(".mainbox").html(

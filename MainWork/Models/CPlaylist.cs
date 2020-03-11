@@ -14,10 +14,10 @@ namespace MainWork.Models
         {
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
             List<tPlayList> tPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
-            int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
-            List<tPlayList> tPLOut = null;
-            if (lastPlayID != 0)
+            List<tPlayList> tPLOut = null;    
+            if (fLastPlaySong != null)
             {
+                int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
                 tPLOut = tPL.Where(p => p.fPlayId >= lastPlayID).ToList();
                 tPLOut.AddRange(tPL.Where(p => p.fPlayId < lastPlayID));
             }
@@ -184,15 +184,21 @@ namespace MainWork.Models
                 s2 = "查無此單曲";
                 return s2;
             }
-            tPlayList tPL = new tPlayList();
-            tPL.fAccount = s1;
-            tPL.fProductID = amid;
-            List<tPlayList> tnowPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
-            if (tnowPL.FirstOrDefault(p => p.fProductID == amid) == null)
+            //查詢該用戶的撥放清單有無此首單曲ID
+            tPlayList tPL = db.tPlayLists.FirstOrDefault(p => p.fAccount == s1 && p.fProductID == amid);
+            if (tPL == null)
             {
                 s2 = "你的撥放清單找不到此首音樂";
                 return s2;
             }
+            //最後一首單曲時移除member欄位的最後單曲紀錄
+            List<tPlayList> tnowPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
+            tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
+            if (tnowPL.Count() == 1)
+            {
+                tM.fLastPlaySong = null;
+            }
+            //移除此單曲
             db.tPlayLists.Remove(tPL);
             try
             {
@@ -203,7 +209,7 @@ namespace MainWork.Models
                 s2 = ex.ToString();
                 return s2;
             }
-            s2 = "成功刪除: " + tPL.tProduct.fProductName;
+            s2 = "";
             return s2;
         }
     }

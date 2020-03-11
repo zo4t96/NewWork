@@ -73,10 +73,11 @@
           <Property Name="fSubscriptStartDate" Type="datetime" />
           <Property Name="fSubscriptEndDate" Type="datetime" />
           <Property Name="fLastPlaySong" Type="int" />
-          <Property Name="fLineId" Type="int" />
+          <Property Name="fLineId" Type="nvarchar(max)" />
           <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
           <Property Name="fLineTimeMark" Type="datetime" />
           <Property Name="fPayPalAccount" Type="nvarchar(max)" />
+          <Property Name="fLineStatus" Type="int" />
         </EntityType>
         <EntityType Name="tMessage">
           <Key>
@@ -88,6 +89,7 @@
           <Property Name="fContent" Type="nvarchar(max)" />
           <Property Name="fTime" Type="datetime" />
           <Property Name="fStatus" Type="int" />
+          <Property Name="fRead" Type="int" />
           <Property Name="fTitle" Type="nvarchar(max)" />
           <Property Name="fReaded" Type="int" />
         </EntityType>
@@ -580,7 +582,7 @@
           <Property Name="fSubscriptStartDate" Type="DateTime" Precision="3" />
           <Property Name="fSubscriptEndDate" Type="DateTime" Precision="3" />
           <Property Name="fLastPlaySong" Type="Int32" />
-          <Property Name="fLineId" Type="Int32" />
+          <Property Name="fLineId" Type="String" />
           <Property Name="fLineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fLineTimeMark" Type="DateTime" Precision="3" />
           <NavigationProperty Name="tActivities" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tMember" ToRole="tActivity" />
@@ -593,6 +595,7 @@
           <NavigationProperty Name="tPurchaseItems" Relationship="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" FromRole="tMember" ToRole="tPurchaseItem" />
           <NavigationProperty Name="tShoppingCarts" Relationship="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" FromRole="tMember" ToRole="tShoppingCart" />
           <Property Name="fPayPalAccount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fLineStatus" Type="Int32" />
         </EntityType>
         <EntityType Name="tMessage">
           <Key>
@@ -608,6 +611,7 @@
           <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
           <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
           <Property Name="fReaded" Type="Int32" />
+          <Property Name="fRead" Type="Int32" />
         </EntityType>
         <EntityType Name="tPlayList">
           <Key>
@@ -941,6 +945,7 @@
           <EntitySetMapping Name="tMembers">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
               <MappingFragment StoreEntitySet="tMember">
+                <ScalarProperty Name="fLineStatus" ColumnName="fLineStatus" />
                 <ScalarProperty Name="fPayPalAccount" ColumnName="fPayPalAccount" />
                 <ScalarProperty Name="fLineTimeMark" ColumnName="fLineTimeMark" />
                 <ScalarProperty Name="fLineName" ColumnName="fLineName" />
@@ -961,6 +966,7 @@
           <EntitySetMapping Name="tMessages">
             <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
               <MappingFragment StoreEntitySet="tMessage">
+                <ScalarProperty Name="fRead" ColumnName="fRead" />
                 <ScalarProperty Name="fReaded" ColumnName="fReaded" />
                 <ScalarProperty Name="fTitle" ColumnName="fTitle" />
                 <ScalarProperty Name="fStatus" ColumnName="fStatus" />

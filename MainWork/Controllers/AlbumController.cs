@@ -154,7 +154,17 @@ namespace MainWork.Controllers
             {
                 s1 = "";
             }
-            return JavaScript("alert('" + playlist.userAddPlayLists(s1, amid) + "');");
+            string msg = playlist.userAddPlayLists(s1, amid);
+
+            //只有成功時不跳alert
+            if(msg == "成功")
+            {
+                return Content("成功");
+            }
+            else
+            {
+                return JavaScript("alert('" + msg + "');");
+            }
         }
 
         public ActionResult nextPlayLists(int amid, int playmode)
@@ -257,7 +267,8 @@ namespace MainWork.Controllers
             }
         }
 
-        public ActionResult deletePlayLists(int amid)
+        [HttpPost]
+        public ActionResult deletePlayLists(int deleteid)
         {
             string s1 = "";
             try
@@ -268,7 +279,15 @@ namespace MainWork.Controllers
             {
                 s1 = "";
             }
-            return JavaScript("alert('" + playlist.userDeletePlayLists(s1, amid) + "');");
+            string Msg = playlist.userDeletePlayLists(s1, deleteid);
+            if (Msg == "")
+            {
+                return JavaScript("");
+            }
+            else
+            {
+                return JavaScript("alert('" + Msg + "');");
+            }
         }
 
         //創作者相關
@@ -277,7 +296,7 @@ namespace MainWork.Controllers
             //Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             var list = db.tAlbums.Where(p => p.fAccount == s1);
-            return View(list);
+            return PartialView(list);
         }
 
         //創作者所有專輯
@@ -329,11 +348,6 @@ namespace MainWork.Controllers
 
         public ActionResult _LinePlayer()
         {
-            //if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
-            //{
-            //    return Content("<span>你還沒登入喔<span>");
-            //}
-            //Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
             List<tProduct> tp = null;
@@ -355,8 +369,7 @@ namespace MainWork.Controllers
             }
             else
             {
-                //    return View();
-                return Content("<span>撥放清單是空的喔<span>");
+                return PartialView("_PlayLists", tp);
             }
         }
 
@@ -388,12 +401,35 @@ namespace MainWork.Controllers
             return View();
         }
 
+        public ActionResult _LineAccountBinding()
+        {
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
+            if (tM.fLineStatus > 0)
+            {
+                return View(tM);
+            }
+            else
+            {
+                return View();
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult LineAccountBindingSubmit()
+        {
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            ViewBag.Msg = album.userBindLineAccount(s1);
+            return JavaScript("alert('" + ViewBag.Msg + "');");
+        }
+
         //已購買音樂
         public ActionResult MyMusic()
         {
             if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
             {
-                return Content("<span>你還沒登入喔<span>");
+                return Content("你還沒登入喔");
             }
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
@@ -409,11 +445,29 @@ namespace MainWork.Controllers
             }
         }
 
-        public ActionResult AddAlbum(string account)
+        public ActionResult MusicDownload(int songid)
         {
-            tAlbum tA = new tAlbum();
-            tA.fAccount = account;
-            return View(tA);
+            //網址給其他人時的防護
+            if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+            {
+                return Content("你還沒登入喔");
+            }
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            string mes = album.checkDownloadPrivilege(s1, songid);
+            if (mes == "")
+            {
+                string filepath = db.tProducts.FirstOrDefault(p => p.fProductID == songid).fFilePath;
+                string path = Server.MapPath(@"~\MusicFiles\" + filepath);
+                //取得檔案名稱
+                string filename = System.IO.Path.GetFileName(path);
+                //讀成串流
+                Stream iStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                return File(iStream, "application/unknown", filename);
+            }
+            else
+            {
+                return Content(mes);
+            }
         }
 
         //##################################新增刪除修改子程式###################################################
