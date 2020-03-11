@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
+﻿@model List<MainWork.ViewModels.CSearchResult>
 
 <style>
     .albumPanel {
@@ -45,7 +45,7 @@
         min-height: 160px;
         border-radius: 10px;
         /*測試用圖片*/
-        background-image: url("/Images/4.jpg");
+        /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
     }
 
@@ -118,8 +118,7 @@
         @foreach (var item in Model)
         {
             <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.album.fAlbumID" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
-                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-                <div class="albumCover"></div>
+                <img src="~/Images/@item.album.fCoverPath" class="albumCover" />
                 <div class="albumContent">
                     <span class="albumTitle">@item.product.fProductName</span>
                     <span class="albumDescripion">@item.album.fAlbumName</span>

@@ -17,6 +17,7 @@ namespace MainWork.Models
             List<tPlayList> tPLOut = null;    
             if (fLastPlaySong != null)
             {
+                
                 int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
                 tPLOut = tPL.Where(p => p.fPlayId >= lastPlayID).ToList();
                 tPLOut.AddRange(tPL.Where(p => p.fPlayId < lastPlayID));

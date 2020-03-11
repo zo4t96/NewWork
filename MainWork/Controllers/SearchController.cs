@@ -33,14 +33,18 @@ namespace MainWork.Controllers
                 ViewBag.ajax = true;
             }
             ViewBag.kindId = kindId;
-            ViewBag.kindName = (new dbProjectMusicStoreEntities()).tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
+
+            dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+            string kindName = db.tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
+            ViewBag.kindName = kindName;
+
             return View();
         }
 
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
         public ActionResult KindResultView(int kindId)
         {    
-            return PartialView(search.byKindPage(kindId));
+            return PartialView(search.byKindPage(kindId).ToList());
         }
         
         //基礎搜尋頁面
@@ -54,7 +58,7 @@ namespace MainWork.Controllers
         }
         public ActionResult ResultView(string keyword)
         {
-            return PartialView(search.byKeyword(keyword));
+            return PartialView(search.byKeyword(keyword).ToList());
         }
 
         //進階搜尋，實作方法與普通差不多

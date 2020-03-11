@@ -175,11 +175,11 @@
     //先隔開
 
 
-    //$("input[name='discount']").on("keydown", function (e) {
-    //        console.log(e.keyCode);
-    //        if (e.keyCode == 8 || (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 97 && e.keyCode <= 105))
-    //        { return true; } else { return false; }
-    //    })
+    $("input[name='discount']").on("keydown", function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode == 8 || (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 97 && e.keyCode <= 105) || e.keyCode == 96)
+            { return true; } else { return false; }
+        })
 
     @*$("input[name='deletebtn']").on("click", function () {
         if (confirm("確定刪除?")) {

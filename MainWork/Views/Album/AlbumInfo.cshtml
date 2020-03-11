@@ -1018,23 +1018,23 @@
             });
 
         $('.editAlbumInfoClose').click(function () {
-                    $.ajax({
-                    type: "Post",
-                    url: `./updateAlbumInfoClose/`,
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "script",
-                    async: false,
-                    success: function (data) {
-                           $(".eventNotification").html(data);
-                           let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
-                           $.get(plink, { ajax: true }, function (data) {
-                               $(".mainbox").html(data);
-                           });
-                    },
-                    failure: function (errMsg) {
-                    }
-                })
+                $.ajax({
+                type: "Post",
+                url: `./updateAlbumInfoClose/`,
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "script",
+                async: false,
+                success: function (data) {
+                        $(".eventNotification").html(data);
+                        let plink = "@Url.Action("AlbumInfo","Album",new {amid = Session["albumid"].ToString()})";
+                        $.get(plink, { ajax: true }, function (data) {
+                            $(".mainbox").html(data);
+                        });
+                },
+                failure: function (errMsg) {
+                }
+            })
         })
 
         //更新單曲檔案

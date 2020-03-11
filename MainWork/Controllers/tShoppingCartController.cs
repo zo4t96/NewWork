@@ -42,10 +42,10 @@ namespace MusicPrj.Controllers
         //購買專輯確認付款後相關狀態更新
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult BuyCheck(int shopcartid, int dis, bool ajax = false)
+        public ActionResult BuyCheck(int shopcartid, int dis = 0, bool ajax = false)
         {
             tCart.CarType(shopcartid, dis);
-            return RedirectToAction("CheckCart", "tShoppingCart", new { cartid = shopcartid, ajax });
+            return RedirectToAction("Mymusic", "Album");
         }
         //確認剩餘積分
         [HttpPost]
