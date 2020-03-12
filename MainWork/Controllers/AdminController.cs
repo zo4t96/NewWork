@@ -101,6 +101,7 @@ namespace MainWork.Controllers
         }
 
         //音樂風格新刪修
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult KindAlter()
         {
             CSearch cs = new CSearch();
@@ -110,14 +111,19 @@ namespace MainWork.Controllers
         public ActionResult KindNew(CKindEditObject kindObj)
         {
             //Server屬性只能在控制器端使用
-            string serverPath = Server.MapPath("~/Images");
+            string serverPath = Server.MapPath("~/CoverFiles");
             manage.kindNew(kindObj, serverPath);
             return RedirectToAction("KindAlter");
         }
 
         public ActionResult KindEdit(CKindEditObject kindObj)
         {
-            string serverPath = Server.MapPath("~/Images");
+            string serverPath = Server.MapPath("~/CoverFiles");
+            if (kindObj.uploadCheck == "true")
+            {
+                string path = db.tAlbumKinds.FirstOrDefault(k => k.KindID == kindObj.kindId).fPhotoPath;
+                System.IO.File.Delete(Server.MapPath("~/CoverFiles/") + path);
+            }
             manage.kindEdit(kindObj, serverPath);
             return RedirectToAction("KindAlter");
         }
@@ -135,13 +141,13 @@ namespace MainWork.Controllers
             CSearch cs = new CSearch();
             ViewBag.types = cs.takeAllType();
             ViewBag.kinds = cs.takeAllKind();
-            return View(ce.eventQuery());
+            return View(ce.eventQuery().ToList());
         }
 
         public ActionResult EventAlbum(int type, int[] kinds, int eventId = 0)
         {
             CEvent ce = new CEvent();
-            var result = (ce.eventAlbum(kinds, type, eventId)).Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds });
+            var result = (ce.eventAlbum(kinds, type, eventId)).ToList().Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds }).ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult EventNew(CEventObject eventObj)
@@ -168,7 +174,13 @@ namespace MainWork.Controllers
         public ActionResult EventAlter(CEventObject eventObj)
         {
             CEvent ce = new CEvent();
-            ce.eventAlter(eventObj);
+            string serverPath = Server.MapPath("~/Images/");
+            if(eventObj.eventImage != null)
+            {
+                string path = (new dbProjectMusicStoreEntities()).tActivities.FirstOrDefault(e => e.fId == eventObj.eventId).fPhotoPath;
+                System.IO.File.Delete(serverPath + path);
+            }
+            ce.eventAlter(eventObj, serverPath);
             return RedirectToAction("EventPage");
         }
 

@@ -36,6 +36,7 @@ namespace prjSpotifyProject.Models.Member
                 x.fPassword = r["fPassword"].ToString();                
                 x.fEmail = r["fEmail"].ToString();
                 x.fNickName = r["fNickName"].ToString();
+                x.fPrivilege = 0;
                 
                 list.Add(x);
             }

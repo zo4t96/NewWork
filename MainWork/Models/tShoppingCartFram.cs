@@ -99,22 +99,60 @@ namespace MainWork.Models
                  );
                 foreach (var k in pd)
                 {
-                    if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
+                    decimal? money = 0;
+                    if (isAlbum == 0)
                     {
-                        db.tPurchaseItems.Add(
-                        new tPurchaseItem
+                        if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
                         {
-                            fPurchaseItemID = dts.fCartID,
-                            fCustomer = cname,
-                            fProductID = k.fProductID,
-                            fPrice = k.fSIPrice,
-                            fDate = DateTime.Now,
-                            fisAlbum = isAlbum
-                        });
+
+                            money = k.fSIPrice;
+                            db.tPurchaseItems.Add(
+                            new tPurchaseItem
+                            {
+                                fPurchaseItemID = dts.fCartID,
+                                fCustomer = cname,
+                                fProductID = k.fProductID,
+                                fPrice = money,
+                                fDate = DateTime.Now,
+                                fisAlbum = isAlbum
+                            });
+                        }
+                        else
+                        {
+                            return "此首歌曲已經有囉~無法加入購物車";
+                        }
                     }
                     else
                     {
-                        return "此首歌曲已經有囉~無法加入購物車";
+
+                        if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
+                        {
+
+                            money = k.tAlbum.fALPrice;
+                            db.tPurchaseItems.Add(
+                            new tPurchaseItem
+                            {
+                                fPurchaseItemID = dts.fCartID,
+                                fCustomer = cname,
+                                fProductID = k.fProductID,
+                                fPrice = money,
+                                fDate = DateTime.Now,
+                                fisAlbum = isAlbum
+                            });
+                        }
+                        else
+                        {
+                            var tpi = db.tPurchaseItems.Where(p => p.fCustomer == cname && p.fProductID == k.fProductID);
+                            foreach (var x in tpi)
+                            {
+                                x.fPurchaseItemID = dts.fCartID;
+                                x.fCustomer = cname;
+                                x.fProductID = k.fProductID;
+                                x.fPrice = money;
+                                x.fDate = DateTime.Now;
+                                x.fisAlbum = isAlbum;
+                            }
+                        }
                     }
                 }
                 db.SaveChanges();
@@ -124,22 +162,62 @@ namespace MainWork.Models
             {
                 foreach (var k in pd)
                 {
-                    if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
+                    decimal? money = 0;
+                    if (isAlbum == 0)
                     {
-                        db.tPurchaseItems.Add(
-                        new tPurchaseItem
+                        money = k.fSIPrice;
+                        if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
                         {
-                            fPurchaseItemID = q.First().fCartID,
-                            fCustomer = cname,
-                            fProductID = k.fProductID,
-                            fPrice = k.fSIPrice,
-                            fDate = DateTime.Now,
-                            fisAlbum = isAlbum
-                        });
+
+                            
+                            db.tPurchaseItems.Add(
+                            new tPurchaseItem
+                            {
+                                fPurchaseItemID = q.ToList()[0].fCartID,
+                                fCustomer = cname,
+                                fProductID = k.fProductID,
+                                fPrice = money,
+                                fDate = DateTime.Now,
+                                fisAlbum = isAlbum
+                            });
+                        }
+                        else
+                        {
+                            return "此首歌曲已經有囉~無法加入購物車";
+                        }
                     }
                     else
                     {
-                        return "此首歌曲已經有囉~無法加入購物車";
+                        money = k.tAlbum.fALPrice;
+
+                        if (db.tPurchaseItems.Where(p => p.fCustomer == cname).All(p => p.fProductID != k.fProductID))
+                        {
+
+                            
+                            db.tPurchaseItems.Add(
+                            new tPurchaseItem
+                            {
+                                fPurchaseItemID = q.ToList()[0].fCartID,
+                                fCustomer = cname,
+                                fProductID = k.fProductID,
+                                fPrice = money,
+                                fDate = DateTime.Now,
+                                fisAlbum = isAlbum
+                            });
+                        }
+                        else
+                        {
+                            var tpi = db.tPurchaseItems.Where(p => p.fCustomer == cname && p.fProductID == k.fProductID);
+                            foreach (var x in tpi)
+                            {
+                                x.fPurchaseItemID = q.ToList()[0].fCartID;
+                                x.fCustomer = cname;
+                                x.fProductID = k.fProductID;
+                                x.fPrice = money;
+                                x.fDate = DateTime.Now;
+                                x.fisAlbum = isAlbum;
+                            }
+                        }
                     }
                 }
                 db.SaveChanges();
@@ -149,8 +227,28 @@ namespace MainWork.Models
         //刪除購物車資料
         public void CartItemDel(int pID, int cID)
         {
-            tPurchaseItem tpit = db.tPurchaseItems.Single(p => p.fPurchaseItemID == cID && p.fProductID == pID);
-            db.tPurchaseItems.Remove(tpit);
+            if (db.tPurchaseItems.Where(p => p.fPurchaseItemID == cID && p.fProductID == pID).Select(p => p.fisAlbum).ToList()[0] == 0)
+            {
+                tPurchaseItem tpit = db.tPurchaseItems.Single(p => p.fPurchaseItemID == cID && p.fProductID == pID);
+                db.tPurchaseItems.Remove(tpit);
+            }
+            else
+            {
+                var mon = from x in db.tPurchaseItems
+                          where x.fPurchaseItemID == cID && x.fProductID == pID
+                          select x.tProduct.fAlbumID;
+                var a = mon.ToList()[0].Value;
+                var tpit = from x in db.tPurchaseItems
+                           where x.fPurchaseItemID == cID && x.tProduct.fAlbumID == a
+                           select x;
+
+                var p = tpit.ToList();
+                for (int i = 0; i < p.Count; i++)
+                {
+                    db.tPurchaseItems.Remove(p[i]);
+                }
+            }
+
             db.SaveChanges();
         }
         //抓取會員積分

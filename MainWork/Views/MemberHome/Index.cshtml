@@ -16,7 +16,7 @@
         float: left;
         border-radius: 15px;
         width: 80%;
-        margin: 30px auto;
+        margin: 10px auto;
         padding: 30px 0;
         text-align: center;
         font-size: 20px;
@@ -36,6 +36,7 @@
         width: 200px;
         height: 200px;
         border-radius: 50%;
+        background-size:cover;
     }
     .buyMonthlyService{
         display:inline-block;
@@ -51,7 +52,7 @@
     }
 </style>
 
-<div class="headtitle h1">會員管理</div>
+<div class="headtitle h1">會員中心</div>
 <div class="memberPanel row">
     <div class="memberInfo col-4">
         <div class="member">
@@ -84,6 +85,10 @@
         {
             <span>管理員</span>
         }
+        <p></p>
+
+        <label>line帳號綁定:</label>
+        <span id="LineBindInterface" class="btn btn-success">Line綁定</span>
         <p></p>
 
         <label>包月服務到期日 : </label>
@@ -154,8 +159,26 @@
     $(".buyMonthlyService").click(function () {
         $(".monthlyBtn").trigger("click");
     })
-    //$("btn").click(function () {
-    //    $("#nickname").prop("hidden", false);
-    //    $("#nickname").prop("hidden") = true or false;
-    //})
+
+    $("#LineBindInterface").on("click", function () {
+            $.ajax({
+                url:"@Url.Action("_LineAccountBinding","Album")",
+                type: "get",
+                beforeSend:function() {
+                    $("#modalContent").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $("#modalContent").html(data);
+                }
+            })
+            $("#modal").css("display", "block");
+            setTimeout(function () {
+                $("#modal").addClass("fadein");
+                $("#modalContent").addClass("fadein");
+            }, 10)
+        })
 </script>

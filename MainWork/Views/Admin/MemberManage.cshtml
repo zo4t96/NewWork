@@ -86,7 +86,7 @@
                 <th>刪除帳號</th>
             </tr>
         </thead>
-        <tbody class="list">
+        <tbody class="list text-center">
             @{ int count = 0;}
             @foreach (var item in Model)
             {
@@ -142,6 +142,10 @@
             return;
         }
 
+        $(".list").html(`<tr><td class="loading" colspan="9">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </td></tr>`);
         $.getJSON('@Url.Action("AccountList","Admin")', { keyword: keyword}, function (datas) {
             $(".list").html("");
             if (datas.length == 0) {

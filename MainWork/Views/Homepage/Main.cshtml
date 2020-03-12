@@ -73,9 +73,6 @@
         font-weight: 600;
         margin-bottom: 8px;
         /*使多出的字元變...，下面三個屬性都要設才有效果*/
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
     }
 
     .albumDescripion {
@@ -124,9 +121,9 @@
                 }
                 c++;
             }
-            <li data-target="#adCarousel" data-slide-to="@(c)"></li>
+            @*<li data-target="#adCarousel" data-slide-to="@(c)"></li>
             <li data-target="#adCarousel" data-slide-to="@(c+1)"></li>
-            <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>
+            <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>*@
         </ol>
         <div class="carousel-inner">
             @{c = 0;}
@@ -146,7 +143,7 @@
                 }
                 c++;
             }
-            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
+            @*<a class="carousel-item" href="@Url.Action("Kinds","Search")">
                 <img src="~/Images/top12.jpg" class="d-block w-100">
             </a>
             <a class="carousel-item" href="@Url.Action("Kinds","Search")">
@@ -154,7 +151,7 @@
             </a>
             <a class="carousel-item" href="@Url.Action("Kinds","Search")">
                 <img src="~/Images/top20.jpg" class="d-block w-100">
-            </a>
+            </a>*@
         </div>
         <a class="carousel-control-prev" href="#adCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

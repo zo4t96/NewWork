@@ -57,13 +57,10 @@ namespace MainWork.Controllers
             {
                 if (fPicPath.ContentLength > 0)
                 {
-                    if (member.fPicPath == null)
+                    fileName = Guid.NewGuid() + ".jpg";
+                    if (member.fPicPath != "nobody.jpg")
                     {
-                        fileName = Guid.NewGuid() + ".jpg";
-                    }
-                    else
-                    {
-                        fileName = member.fPicPath.ToString();
+                        System.IO.File.Delete(Server.MapPath("~/Images/" + member.fPicPath));
                     }
                     var path = Path.Combine(Server.MapPath("~/Images"), fileName);
                     fPicPath.SaveAs(path);

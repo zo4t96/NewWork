@@ -294,6 +294,11 @@
         let id = $(this).data("deleteid");
         $.post('@Url.Action("deletePlayLists","Album")', {deleteid:id}, function () {
             $(".playList").find(`.playListItem[data-soid=${id}]`).remove();
+            if ($(".playListItem").length == 0) {
+                $(".playListPartialView").append(`<div class="noMusic">
+                <div class="h5">播放清單是空的喔</div>
+                </div>`)
+            }
         });
     })
     $(document).click(function () {

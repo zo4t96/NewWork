@@ -13,9 +13,10 @@
     ViewBag.Title = "AlbumDetail2";
     var AlbInfo = ViewBag.AlbInfo as tAlbum;
     var account = "";
+    string nobody = "";
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
-        //          Response.Redirect("~/Index/");
+        nobody = "nobody";
     }
     else
     {
@@ -143,7 +144,7 @@
         @if (@AlbInfo.fMaker != null)
         {
             <div>— 社團 —</div>
-            <div class="mb-4"><b>@AlbInfo.fMaker</b> > </div>
+            <div class="mb-4"><b>@AlbInfo.fMaker</b></div>
         }
         <div>— 分類 —</div>
         <div class="mb-4">@(AlbInfo.tAlbumType.fTypeName)</div>
@@ -163,7 +164,7 @@
     {
 
         count++;
-
+        <input class="privilege" type="hidden" value="@ViewBag.privilege"/>
         <div class="container">
             <div style="display:inline-block" class="vbtn dplay"
                  data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
@@ -203,8 +204,7 @@
     }
 
 </div>
-<div class="eventNotification" hidden>
-</div>
+<div class="eventNotification" hidden></div>
 <script>
     $(".demoAudio").each(function () {
         this.volume = 0.6;
@@ -217,6 +217,16 @@
         $(this).siblings(".demoSlider").prop("max", demoEnd);
         $(this).siblings(".demoSlider").prop("value", demostart);
         this.currentTime = $(this).siblings(".demoSlider").prop("min");
+
+        //03/12新增，假如判斷是包月會員，直接讓整首歌可聽
+        if ($(".privilege").val() == 1) {
+            $(this).siblings(".demoSlider").prop("min",0 );
+            $(this).siblings(".demoSlider").prop("max", this.duration);
+            $(this).siblings(".demoSlider").prop("value", 0);
+            $(this).siblings(".nowTime").text("00:00");
+            $(this).siblings(".endTime").text(getTimeText(this.duration));
+            this.currentTime = 0;
+        }
     });
     //播放器的timer
     $(".demoAudio").on("timeupdate", function () {
@@ -234,16 +244,20 @@
         let start = $(this).siblings(".dplay").data("start");
         let end = $(this).siblings(".dplay").data("end");
         //試聽淡入效果(因為設定上淡入三秒淡出四秒，所以要是試聽時間在七秒內會出現音量bug)
-        if (this.currentTime < start + 3) {
-            this.volume = (this.currentTime - start) * 0.2;
+        //03/12更新包月會員不會有淡入淡出效果
+        if ($(".privilege").val() != 1) {
+            if (this.currentTime < start + 3) {
+                this.volume = (this.currentTime - start) * 0.2;
+            }
+            //試聽淡出效果
+            else if (this.currentTime + 7 > end) {
+                this.volume = (end - this.currentTime) * 0.1;
+            }
+            else {
+                this.volume = 0.6;
+            }
         }
-        //試聽淡出效果
-        else if (this.currentTime + 7 > end) {
-            this.volume = (end - this.currentTime) * 0.1;
-        }
-        else {
-            this.volume = 0.6;
-        }
+        
     });
     //音樂播放暫停鍵
     $(".dplay").click(function () {
@@ -286,17 +300,29 @@
     }
 
     $(".addThisSongToCart").click(function () {
+        if ('@nobody' == "nobody") {
+            $("#loginInterface").trigger("click");
+            return;
+        }
         $.post('@Url.Action("AddCart","tShoppingCart")', {cname:'@account', pdid:'si' + $(this).data('songid')}, function (data) {
             $(".eventNotification").html(data);
         });
     })
     $(".addThisAlbumToCart").click(function () {
+        if ('@nobody' == "nobody") {
+            $("#loginInterface").trigger("click");
+            return;
+        }
         $.post('@Url.Action("AddCart","tShoppingCart")', { cname:'@account', pdid: $(this).data('albumid') }, function (data) {
             $(".eventNotification").html(data);
         });
     })
 
     $(".addThisSongToPlayList").click(function () {
+        if ('@nobody' == "nobody") {
+            $("#loginInterface").trigger("click");
+            return;
+        }
         let songn = $(this).parents("h4").prev().data('songn');
         let singer = $(this).parents("h4").prev().data('singer');
         let soid = $(this).parents("h4").prev().data('soid');
@@ -308,7 +334,7 @@
         $.post("@Url.Action("addPlayLists","Album")?amid=" + $(this).data('songid'), function (data) {
             $(".eventNotification").html(data);
             if (data == "成功") {
-                $(".playListPartialView").find("noMusic").remove();
+                $(".playListPartialView").find(".noMusic").remove();
                 let newMusic = $(
                 `<div class='playListItem'
                     data-singer='${singer}'

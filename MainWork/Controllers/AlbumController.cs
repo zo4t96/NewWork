@@ -83,6 +83,15 @@ namespace MainWork.Controllers
             ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
             var list = db.tProducts.Where(p => p.fAlbumID == amid);
             //         Session["account"] = "aaa";
+
+            //03/12新增，如果是包月會員進入本頁，該會員可以該頁面的所有歌不受視聽限制
+            if(Session[CDictionary.SK_ACCOUNT] != null)
+            {
+                string nowAccount = Session[CDictionary.SK_ACCOUNT].ToString();
+                ViewBag.privilege = db.tMembers.FirstOrDefault(m => m.fAccount == nowAccount).fPrivilege;
+            }
+            //03/12新增到這
+
             if (list != null)
             {
                 Session["albumid"] = amid;

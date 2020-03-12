@@ -106,7 +106,7 @@ namespace MainWork.Models
             db.SaveChanges();
         }
 
-        public void eventAlter(CEventObject eventObj)
+        public void eventAlter(CEventObject eventObj ,string serverPath)
         {
             //修改資料時，先把該活動的相關專輯的活動清空
             var albums = db.tAlbums.Where(a => a.fActivityID == eventObj.eventId);
@@ -121,7 +121,9 @@ namespace MainWork.Models
             target.fEndTime = eventObj.endDate;
             if (eventObj.eventImage != null)
             {
-                eventObj.eventImage.SaveAs(target.fPhotoPath);
+                string newName = Guid.NewGuid().ToString() + ".jpg";
+                eventObj.eventImage.SaveAs(serverPath + newName);
+                target.fPhotoPath = newName;
             }
             foreach (int i in eventObj.eventAlbums)
             {

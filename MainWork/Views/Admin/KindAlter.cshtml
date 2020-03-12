@@ -349,7 +349,7 @@
         $(".kindBlockBig").each(function () {
             $(this).css("background-color", $(this).data("color"))
             $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
-            $(this).find(".photo").css("background-image", `url(/Images/${$(this).data("path")}`)
+            $(this).find(".photo").css("background-image", `url(/CoverFiles/${$(this).data("path")}`)
             $(this).find("span").text($(this).data("name"));
         })
         //把上傳檔案資料清空

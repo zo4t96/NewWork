@@ -73,7 +73,7 @@
                 alert('Transaction completed by ' + details.payer.name.given_name + '!');
             }).then($.post("@Url.Action("BuyMonth","tShoppingCart")", { account: account }, function () {
                 alert("訂閱成功!");
-                document.location = document.location.pathname;
+                document.location = '@(Url.Action("Main","Homepage"))';
             }))
         }
     }).render('#paypalMonthlyPay')

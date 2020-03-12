@@ -15,7 +15,7 @@ namespace MainWork.Models
             var result = db.tAlbumKinds.Select(p => p);
             return result;
         }
-        
+
         public IEnumerable<tAlbumType> takeAllType()
         {
             var result = db.tAlbumTypes.Select(p => p).ToList();
@@ -33,7 +33,7 @@ namespace MainWork.Models
         public IEnumerable<tAlbum> byKindPage(int kindID)
         {
             string kind = db.tAlbumKinds.Where(s => s.KindID == kindID).First().KindName;
-            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind) && a.fStatus ==2).OrderByDescending(a => a.fYear);
+            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind) && a.fStatus == 2).OrderByDescending(a => a.fYear);
             return result;
         }
 
@@ -94,7 +94,7 @@ namespace MainWork.Models
 
             //因為前面所挑出來的專輯可能會重複，因此要再過濾一次重複的專輯
             List<tAlbum> result = new List<tAlbum>();
-            foreach(var a in data)
+            foreach (var a in data)
             {
                 if (!result.Contains(a.album))
                 {
@@ -145,10 +145,10 @@ namespace MainWork.Models
                     };
                     musics.Add(pro);
                 }
-                tAlbum album = new tAlbum()
+                myNewAlbum album = new myNewAlbum()
                 {
                     fAlbumID = a.fAlbumID,
-                    fYear = a.fYear,
+                    fYear = ((DateTime)a.fYear).ToShortDateString(),
                     fCoverPath = a.fCoverPath,
                     fAccount = a.fAccount,
                     fMaker = a.fMaker,
@@ -164,7 +164,7 @@ namespace MainWork.Models
         {
             List<object> result = new List<object>();
             var members = db.tMembers.Where(m => m.fAccount.Contains(keyword)).ToList();
-            foreach(var m in members)
+            foreach (var m in members)
             {
                 var member = new
                 {
@@ -181,4 +181,16 @@ namespace MainWork.Models
             return result;
         }
     }
+    //急就章的寫法
+    public class myNewAlbum
+    {
+        public int fAlbumID { get; set; }
+        public string fAlbumName { get; set; }
+        public string fMaker { get; set; }
+        public string fAccount { get; set; }
+        public string fYear { get; set; }
+        public Nullable<decimal> fALPrice { get; set; }
+        public string fCoverPath { get; set; }
+    }   
+
 }

@@ -7,8 +7,8 @@
     {
         Layout = null;
     }
-    int totalprice = Convert.ToInt32(Model.Sum(p => (double)p.fPrice * p.tProduct.tAlbum.fDiscount).Value);
-    var modata = Model.GroupBy(p => p.fisAlbum);
+    int totalprice = 0;
+    var modata = Model.GroupBy(p => p.tProduct.fAlbumID);
     var account = Session[CDictionary.SK_ACCOUNT].ToString();
     var member = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(m => m.fAccount == account);
 }
@@ -102,35 +102,72 @@
                 <tr><td class="bg-dark" colspan="6">您的購物車裡沒有任何東西喔</td></tr>
             }
 
-            @foreach (var x in Model)
+            @foreach (var x in modata)
             {
-                
+                foreach (var item in x)
+                {
                     <tr class="buyItem">
                         <td class="cartId" data-name="Cid">
                             <div>
-                                @if (x.fisAlbum == 1)
-                                {@(x.fPurchaseItemID)@(x.tProduct.fAlbumID)}
-                            else
-                            {@(x.fPurchaseItemID)@(x.fProductID)}
+                                @if (item.fisAlbum != 0)
+                                {
+                                    @(item.fPurchaseItemID)@(item.tProduct.fAlbumID)
+
+                                }
+                                else
+                                {
+                                    @(item.fPurchaseItemID)@(item.fProductID)
+                                }
                             </div>
                         </td>
                         <td class="bg-dark" data-name="Member">
-                            <div>@x.fDate</div>
+                            <div>@item.fDate</div>
                         </td>
-                        <td class="bg-dark"> <img src="~/CoverFiles/@x.tProduct.tAlbum.fCoverPath" /></td>
+                        <td class="bg-dark"> <img src="~/CoverFiles/@item.tProduct.tAlbum.fCoverPath" /></td>
                         <td class="bg-dark" data-name="pName">
                             <div>
-                                @x.tProduct.fProductName
+                                @if (item.fisAlbum != 0)
+                                {
+                                    @item.tProduct.tAlbum.fAlbumName
+                                }
+                                else
+                                {
+                                    @item.tProduct.fProductName
+                                }
                             </div>
                         </td>
                         <td class="bg-dark" data-name="Price">
-                            <span>NT$</span><div class="price d-inline-block">@(Convert.ToInt32((double)x.fPrice.Value * x.tProduct.tAlbum.fDiscount.Value))</div>
+                            @if (item.fisAlbum != 0)
+                            {
+                                <span>NT$</span><div class="price d-inline-block">@(Convert.ToInt32((double)item.tProduct.tAlbum.fALPrice * item.tProduct.tAlbum.fDiscount.Value))</div>
+
+                            }
+                            else
+                            {
+                                <span>NT$</span><div class="price d-inline-block">@(Convert.ToInt32((double)item.fPrice.Value * item.tProduct.tAlbum.fDiscount.Value))</div>
+
+                            }
                         </td>
 
                         <td class="bg-dark">
-                            <input class="btn btn-primary" type="button" name="deletebtn" value="刪除" data-products="@x.fProductID" data-cartid="@x.fPurchaseItemID" />
+                            <input class="btn btn-primary" type="button" name="deletebtn" value="刪除" data-products="@item.fProductID" data-cartid="@item.fPurchaseItemID" />
                         </td>
                     </tr>
+
+                    if (item.fisAlbum != 0)
+                    {
+                        totalprice += Convert.ToInt32((double)item.tProduct.tAlbum.fALPrice * item.tProduct.tAlbum.fDiscount.Value);
+                    }
+                    else
+                    {
+                        totalprice += Convert.ToInt32((double)item.fPrice.Value * item.tProduct.tAlbum.fDiscount.Value);
+                    }
+                    if (item.fisAlbum != 0)
+                    {
+                        break;
+                    }
+                }
+
             }
 
             @if (Model.Count != 0)
@@ -144,8 +181,9 @@
                                 <span class="disinfo  mr-3">請輸入數量</span>
                                 <input type="button" value="確認" class="btn btn-info chdisc" />
                             </div>
-                            <div class="mr-4">總金額: NT$@totalprice</div>
-
+                            <div class="mr-4">總金額: NT$@totalprice </div>
+                            <div class="mr-4 reduce"></div>
+                            <div class="mr-4 sum"></div>
                         </div>
                         <div class="text-right" id="paypalOutBox">
                             <div id="paypal-button-container"></div>
@@ -161,11 +199,11 @@
 <script>
     @if (Model.Count != 0)
     {
-        var discon = 0;
+        
         @:var totalPrice = '@totalprice';
         @:var shopcarid = '@Model[0].fPurchaseItemID';
     }
-
+    var discon = 0;
     //擅自新增的
     history.state.cname = '@account';
     history.replaceState(history.state,null);
@@ -227,43 +265,53 @@
             $(".chdisc").val("確認")
         }
     });*@
+    $("#paypalOutBox").hide();
+    $(".chdisc").on("click", function disck() {
+        if ($(".chdisc").val() == "確認") {
+            $.post("@Url.Action("CheckDis","tShoppingCart")", { "cname": "aaa" },
+                function (data) {
+                    if ((data - $("input[name='discount']").val()) >= 0) {
+                        if ((totalPrice - $("input[name='discount']").val()) > 0) {
+                            $(".disinfo").text("OK");
+                            discon = $("input[name='discount']").val();
+                            $("input[name='discount']").attr('disabled', true);
+                            $(".chdisc").val("修改");
+                            $(".reduce").text(`-${discon}`);
+                            $(".sum").text(`=NT$${totalPrice - discon}`)
 
+
+                            $("#paypalOutBox").show()
+                        }
+                        else {
+                            alert("折扣最低只能降到1喔");
+
+                        }
+                    } else {
+                        alert("你沒那麼多剩餘點數喔");
+
+                    }
+                });
+        }
+        else if ($(".chdisc").val() == "修改") {
+            $(".disinfo").text("修改中");
+            $("input[name='discount']").attr('disabled', false);
+            $(".chdisc").val("確認");
+            $(".reduce").text("");
+            $(".sum").text("");
+            $("#paypalOutBox").hide();
+        }
+    })
+    
+                       
     paypal.Buttons({
-            onInit: function(data, actions) {
-      // Disable the buttons
-            actions.disable();
-      // Listen for changes to the checkbox
-              $(".chdisc").on("click",function disck() {
-                    if ($(".chdisc").val() == "確認") {
-                        $.post("@Url.Action("CheckDis","tShoppingCart")", { "cname": "aaa" },
-                            function (data) {
-                                if ((data - $("input[name='discount']").val()) >= 0) {
-                                    if ((totalPrice - $("input[name='discount']").val()) > 0) {
-                                        $(".disinfo").text("OK");
-                                        discon = $("input[name='discount']").val();
-                                        $("input[name='discount']").attr('disabled', true);
-                                        $(".chdisc").val("修改");
-                                        actions.enable();
-                                    }
-                                    else {
-                                        alert("折扣最低只能降到1喔~~");
-                                        actions.disable();
-                                    }
-                                } else {
-                                    alert("你沒那麼多餘額喔~~");
-                                    actions.disable();
-                                }
-                            });
-                    }
-                    else if ($(".chdisc").val() == "修改") {
-                        $(".disinfo").text("修改中");
-                        $("input[name='discount']").attr('disabled', false);
-                        $(".chdisc").val("確認");
-                        actions.disable();
-                    }
-                  // Enable or disable the button when it is checked or unchecked
-               });
-            },    
+      //      onInit: function(data, actions) {
+      //// Disable the buttons
+            
+      //// Listen for changes to the checkbox
+             
+      //            // Enable or disable the button when it is checked or unchecked
+      //         });
+      //      },    
             style: {
                 layout: 'horizontal',
                 color: 'gold',

@@ -987,8 +987,8 @@
                 let f = persent * p;
                 $("#progress").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${f}px,#fff 0px)` });
 
-                if (player.currentTime > $("#progress").attr("max")) {
-                player.pause();
+                if (player.currentTime >= $("#progress").attr("max")) {
+                //player.pause();
                 $(".dplayPL").css("display", "inline");
                 $(".dpausePL").css("display", "none")
                 $("#play").css("display", "inline-block");  //新增,為與舊撥放器同步
@@ -1145,7 +1145,7 @@
             player.volume = this.value;
             let v = this.value * 100;
             $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${v}%,#fff 0px)` });
-            if (demoMusic.volume == 0) {
+            if (player.volume == 0) {
                 $("#volumeImg").css("display", "none");
                 $("#muteImg").css("display", "inline-block");
             }
@@ -1160,7 +1160,7 @@
             let data = $(this).data("sound");
             switch (data) {
                 case "volumeImg":
-                    nowVolume = demoMusic.volume;
+                    nowVolume = player.volume;
                     player.volume = 0;
                     $("#volumeBar").prop("value", 0);
                     $("#volumeBar").css({ "background-image": `-webkit-linear-gradient(left , #5599FF ${0}%,#fff 0px)` });

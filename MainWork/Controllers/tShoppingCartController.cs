@@ -45,7 +45,7 @@ namespace MusicPrj.Controllers
         public ActionResult BuyCheck(int shopcartid, int dis = 0, bool ajax = false)
         {
             tCart.CarType(shopcartid, dis);
-            return RedirectToAction("Mymusic", "Album");
+            return RedirectToAction("MyMusic", "Album");
         }
         //確認剩餘積分
         [HttpPost]
@@ -68,7 +68,7 @@ namespace MusicPrj.Controllers
         public ActionResult BuyMonth(string account)
         {
             tCart.BMounth(account);
-            return View();
+            return RedirectToAction("Main","Homepage");
         }
     }
 }

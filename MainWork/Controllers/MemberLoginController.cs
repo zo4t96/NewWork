@@ -205,6 +205,7 @@ namespace prjSpotifyProject.Controllers
             //m.SaveAs(path);
 
             m.fPicPath = "nobody.jpg";
+            m.fPrivilege = 0;
             db.tMembers.Add(m);
             db.SaveChanges();
             return RedirectToAction("Main","Homepage");

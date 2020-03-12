@@ -84,7 +84,6 @@
     <EntitySetMapping Name="tMessages">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
         <MappingFragment StoreEntitySet="tMessage">
-          <ScalarProperty Name="fRead" ColumnName="fRead" />
           <ScalarProperty Name="fReaded" ColumnName="fReaded" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
           <ScalarProperty Name="fStatus" ColumnName="fStatus" />

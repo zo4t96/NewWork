@@ -155,7 +155,7 @@
     <Property Name="fSubscriptStartDate" Type="DateTime" Precision="3" />
     <Property Name="fSubscriptEndDate" Type="DateTime" Precision="3" />
     <Property Name="fLastPlaySong" Type="Int32" />
-    <Property Name="fLineId" Type="String" />
+    <Property Name="fLineId" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
     <Property Name="fLineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="fLineTimeMark" Type="DateTime" Precision="3" />
     <NavigationProperty Name="tActivities" Relationship="dbProjectMusicStoreModel.FK_tActivity_tMember" FromRole="tMember" ToRole="tActivity" />
@@ -184,7 +184,6 @@
     <NavigationProperty Name="tMember" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember" FromRole="tMessage" ToRole="tMember" />
     <NavigationProperty Name="tMember1" Relationship="dbProjectMusicStoreModel.FK_tMessage_tMember1" FromRole="tMessage" ToRole="tMember" />
     <Property Name="fReaded" Type="Int32" />
-    <Property Name="fRead" Type="Int32" />
   </EntityType>
   <EntityType Name="tPlayList">
     <Key>

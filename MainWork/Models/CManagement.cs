@@ -82,8 +82,10 @@ namespace MainWork.Models
             kind.KindName = kindObj.kindName;
             if (kindObj.uploadCheck == "true")
             {
-                string path = Path.Combine(serverPath, kind.fPhotoPath);
+                string newName = Guid.NewGuid().ToString() + ".jpg";
+                string path = Path.Combine(serverPath, newName);
                 kindObj.kindImage.SaveAs(path);
+                kind.fPhotoPath = newName;
             }
             db.SaveChanges();
         }

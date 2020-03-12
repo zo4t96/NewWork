@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MainWork.tActivity>
+﻿@model List<MainWork.tActivity>
 @using MainWork.Models;
 
 @{
@@ -350,12 +350,12 @@
     //建立活動．使用ajax實作
     $(".create").click(function () {
         //用了FormData就不用特地寫checkbox的陣列
-        //let eventAlbums = [];
-        //$(".trItem").each(function () {
-        //    if ($(this).find("input").prop("checked")) {
-        //        eventAlbums.push($(this).find("input").val());
-        //    }
-        //})
+        let eventAlbums = [];
+        $(".trItem").each(function () {
+            if ($(this).find("input").prop("checked")) {
+                eventAlbums.push($(this).find("input").val());
+            }
+        })
         if ($("#eventName").val().trim() == "") {
             alert("還未填寫活動名稱!")
             return;
@@ -397,6 +397,12 @@
             url: "@Url.Action("EventAlbum","Admin")",
             data: { kinds: kinds, type: type },
             method: "POST",
+            beforeSend: function () {
+                $(".list").html(`<tr><td class="loading" colspan="4">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </td></tr>`);
+            },
             success: function (datas) {
                 $(".list").html("");
                 if (datas.length == 0) {

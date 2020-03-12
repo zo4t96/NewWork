@@ -35,7 +35,7 @@
 <link href="~/css/theme.css" rel="stylesheet" media="all">
 <script src="~/vendor/animsition/animsition.min.js"></script>
 <div class="container" >
-    <div class="headtitle h1 mb-4 font-weight-bold">單曲列表</div>
+    <div class="headtitle h1 mb-4 font-weight-bold">已購買音樂</div>
     <div class="section__content section__content--p30">
         <div class="row">
             <div class="col-md-12">
@@ -47,34 +47,34 @@
                                 <th>單曲名</th>
                                 <th>專輯名</th>
                                 <th>歌手</th>
-                                <th>音樂下載連結</th>
                                 <th>購買價格</th>
-                                <th class="text-center">加入播放清單</th>
+                                <th class="text-center">音樂下載連結</th>
                                 @*只有最後一個要特地設置中，意義不明？*@
-                                @*<th class="text-center">播放清單</th>*@
+                                @*<th class="text-center">加入播放清單</th>*@
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@item.fProductName</td>
-                                    <td><a class="albumDeltail" data-album="@item.fAlbumID" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID">@item.tAlbum.fAlbumName</a></td>
-                                    <td>@item.fSinger</td>
-                                    <td><a class="btn btn-outline-secondary" href="~/MusicFiles/@item.fFilePath@Url.Action("MusicDownload","Album")?songid=@item.fProductID">下載</a></td>
-                                    <td  class="text-center">NT$@(Convert.ToInt32((float)item.fSIPrice * item.tAlbum.fDiscount))</td>
-                                    <td>
-                                        <a href="#" class="text-center addToPlayList" 
-                                             data-songid="@item.fProductID"
-                                             data-singer="@item.fSinger"
-                                             data-songn="@item.fProductName"
-                                             data-soid="@item.fProductID"
-                                             data-songcover="@item.tAlbum.fCoverPath"
-                                             data-albumname="@item.tAlbum.fAlbumName"
-                                             data-playurl="@item.fFilePath">
-                                        <div class="click">加入至播放清單</div></a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>@item.fProductName</td>
+                                <td><a class="albumDeltail" data-album="@item.fAlbumID" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID">@item.tAlbum.fAlbumName</a></td>
+                                <td>@item.fSinger</td>
+                                <td class="text-center">NT$@(Convert.ToInt32((float)item.fSIPrice * item.tAlbum.fDiscount))</td>
+                                <td><a class="btn btn-outline-secondary" href="~/MusicFiles/@item.fFilePath@Url.Action("MusicDownload","Album")?songid=@item.fProductID">下載</a></td>
+                                @*<td>
+                                    <a href="#" class="text-center addToPlayList"
+                                       data-songid="@item.fProductID"
+                                       data-singer="@item.fSinger"
+                                       data-songn="@item.fProductName"
+                                       data-soid="@item.fProductID"
+                                       data-songcover="@item.tAlbum.fCoverPath"
+                                       data-albumname="@item.tAlbum.fAlbumName"
+                                       data-playurl="@item.fFilePath">
+                                        <div class="click">加入至播放清單</div>
+                                    </a>
+                                </td>*@
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -114,8 +114,8 @@
         document.title = title;
     });
 
-    //03/11更新加入播放清單
-    $(".addToPlayList").click(function (e) {
+    //03/11更新加入播放清單(取消)
+    @*$(".addToPlayList").click(function (e) {
         e.preventDefault();
 
         let songn = $(this).data('songn');
@@ -148,5 +148,5 @@
             $(".playListPartialView").append(newMusic)
             }
         });
-    })
+    })*@
 </script>

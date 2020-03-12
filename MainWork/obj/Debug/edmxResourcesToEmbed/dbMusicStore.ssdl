@@ -84,7 +84,6 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
-    <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
     <Property Name="fReaded" Type="int" />
   </EntityType>

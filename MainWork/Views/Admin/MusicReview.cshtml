@@ -131,7 +131,7 @@
                 <tr class="trItemMain">
                     <td><div class="btn btn-info open">詳細內容</div></td>
                     <td><input type="checkbox" data-account="@item.fAccount" data-album="@item.fAlbumID" /></td>
-                    <td>@(((DateTime)item.fYear).ToLongDateString())</td>
+                    <td>@(((DateTime)item.fYear).ToShortDateString())</td>
                     <td><img class="cover" src="~/CoverFiles/@item.fCoverPath" /></td>
                     <td>@item.fAccount</td>
                     <td>@item.fAlbumName</td>
@@ -166,7 +166,7 @@
                                         <td>@music.fSinger</td>
                                         <td>@music.fComposer</td>
                                         <td>@Convert.ToInt32(music.fSIPrice)元</td>
-                                        <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
+                                        <td><audio src="~/MusicFiles/@music.fFilePath" controls></audio></td>
                                     </tr>
                                 }
                             </tbody>
@@ -239,6 +239,7 @@
         })
         if (accounts[0] == null || albums[0] == null) {
             alert("還未選取任何專輯");
+            $(this).prop("disabled", false);
             return
         }
         let url;

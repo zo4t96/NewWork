@@ -118,7 +118,7 @@ namespace MainWork.Models
             return tp;
         }
 
-        public string userAddPlayLists(string s1, int amid)
+        public string userAddPlayLists(string s1, int amid )
         {
             string s2 = "";
             //有無此人
