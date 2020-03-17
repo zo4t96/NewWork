@@ -1,15 +1,15 @@
-﻿using MusicPrj.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using MainWork.ViewModels;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CManagement
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         internal void typeNew(string typeName)
         {
             tAlbumType at = new tAlbumType();
@@ -82,8 +82,10 @@ namespace MusicPrj.Models
             kind.KindName = kindObj.kindName;
             if (kindObj.uploadCheck == "true")
             {
-                string path = Path.Combine(serverPath, kind.fPhotoPath);
+                string newName = Guid.NewGuid().ToString() + ".jpg";
+                string path = Path.Combine(serverPath, newName);
                 kindObj.kindImage.SaveAs(path);
+                kind.fPhotoPath = newName;
             }
             db.SaveChanges();
         }

@@ -1,29 +1,15 @@
-﻿@using MusicPrj.Models;
+﻿@using MainWork.Models;
 
 @{
-    ViewBag.Title = "Index";
-
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
-    var account = "";
-
-    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
-    {
-        Response.Redirect("~/Album/Index/");
-    }
-    else
-    {
-        account = Session[CDictionary.SK_ACCOUNT].ToString();
-        if (account != "aaa")
-        {
-            Response.Redirect("~/Album/Index/");
-        }
-        else
-        {
-
-        }
-    }
 }
 
+<style>
+    #calendar{
+        width:60%;
+        height:40%;
+    }
+</style>
 <div class="section__content section__content--p30">
     <div class="container-fluid">
         <div class="row">

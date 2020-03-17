@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tActivity>
-@using MusicPrj.Models;
+﻿@model List<MainWork.tActivity>
+@using MainWork.Models;
 
 @{
     var types = ViewBag.types as IEnumerable<tAlbumType>;
@@ -294,6 +294,7 @@
         $(`.${$(this).data("link")}`).css("display", "block");
     })
     $(".tablinks[data-link = eventMenu]").trigger("click");
+
     //控制時間上下限，使開始日期最早為今天，結束日期最早為開始日期的1天後
     //預設開始日為今天，結束時間為一週後，省去使用端不填欄位的判斷
     //toISOString()方法會將時間轉換成如"2020-02-23T08:59:20.255Z"的字串
@@ -302,12 +303,14 @@
     let date3 = new Date();
     date2.setDate(date2.getDate() + 1);
     date2 = date2.toISOString().split("T")[0];
+
     date3.setDate(date3.getDate() + 7);
     date3 = date3.toISOString().split("T")[0];
     $(".startDate").attr("min", date);3
     $(".startDate").val(date);
     $(".endDate").attr("min", date2);
     $(".endDate").val(date3);
+
     //每次設定起始時間時都要更新結束時間的最小值
     $(".startDate").change(function () {
         let min = new Date(this.value);
@@ -320,6 +323,7 @@
             $(".endDate").val(min);
         }
     })
+
     //音樂清單的全選全取消
     $(".all").click(function () {
         $(".trItem").find("input[type = checkbox]").each(function () {
@@ -331,6 +335,7 @@
             this.checked = false;
         })
     })
+
     //讀圖片檔使之呈現預覽
     $(".upload").change(function (e) {
         file = this.files[0];
@@ -341,15 +346,16 @@
             $(".preview").css("background-image", `url(${e.target.result})`)
         }
     })
+
     //建立活動．使用ajax實作
     $(".create").click(function () {
         //用了FormData就不用特地寫checkbox的陣列
-        //let eventAlbums = [];
-        //$(".trItem").each(function () {
-        //    if ($(this).find("input").prop("checked")) {
-        //        eventAlbums.push($(this).find("input").val());
-        //    }
-        //})
+        let eventAlbums = [];
+        $(".trItem").each(function () {
+            if ($(this).find("input").prop("checked")) {
+                eventAlbums.push($(this).find("input").val());
+            }
+        })
         if ($("#eventName").val().trim() == "") {
             alert("還未填寫活動名稱!")
             return;
@@ -363,7 +369,9 @@
             return;
         }
         $("#eventName").val($("#eventName").val().trim())
+
         let eventObj = new FormData($("#eventNew")[0]);
+
         $.ajax({
             url: '@Url.Action("EventNew","Admin")',
             type: "post",
@@ -376,6 +384,8 @@
             }
         })
     })
+
+
     //自動更新列表的ajax方法
     function listRenew() {
         let type = $(".typeSelected").val();
@@ -387,6 +397,12 @@
             url: "@Url.Action("EventAlbum","Admin")",
             data: { kinds: kinds, type: type },
             method: "POST",
+            beforeSend: function () {
+                $(".list").html(`<tr><td class="loading" colspan="4">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </td></tr>`);
+            },
             success: function (datas) {
                 $(".list").html("");
                 if (datas.length == 0) {
@@ -415,6 +431,7 @@
     $(".typeSelected").change(function () {
         listRenew();
     })
+
     //總之一開始先把全部專輯抓出來再說
     listRenew()
 </script>

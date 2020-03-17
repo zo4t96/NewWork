@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicPrj.tAlbumKind>
+﻿@model IEnumerable<MainWork.tAlbumKind>
 @{
     //如果是ajax讀取出這頁，取消讀取框架只讀內容
     if (ViewBag.ajax != null)
@@ -7,6 +7,7 @@
     }
 }
 <style>
+
     .kindPage {
         /* 方塊浮動(不用float)，自動換行，*/
         display: flex;
@@ -19,14 +20,12 @@
         font-weight: 700;
         font-size: 24px;
     }
-
     .outline {
         width: 13.5vw;
         height: 13.5vw;
         min-width: 160px;
         min-height: 160px;
     }
-
     .kindBlock {
         /* 寬高單位同為vw或vx可達成等比例縮放的方形效果 */
         width: 12.5vw;
@@ -66,10 +65,10 @@
         transition: 0.4s;
         opacity: 0;
     }
-
-    .fadein {
-        opacity: 0.8;
+    .fadein{
+        opacity:0.8;
     }
+
 </style>
 
 <body>
@@ -89,11 +88,12 @@
         setTimeout(function () {
             $(".photo").addClass("fadein");
         }, 300)
-        //讓類別窗格不同色的程式碼，暫時是寫死的(20種顏色)
+
+        //讓類別窗格不同色的程式碼
         $(".kindBlock").each(function () {
             $(this).css("background-color", $(this).data("color"));
             $(this).css("background-image", `linear-gradient(to bottom,#16161660 15%,${$(this).data("color")})`);
-            $(this).find(".photo").css("background-image", `url(@Url.Content("~")Images/${$(this).data("image")})`)
+            $(this).find(".photo").css("background-image", `url(/CoverFiles/${$(this).data("image")})`)
             $(this).click(function(){
                 let kindId = $(this).data("kind");
                 let url = `@Url.Action("KindResult", "Search")?kindId=${kindId}`
@@ -108,7 +108,7 @@
                             <span class="sr-only">Loading...</span>
                         </div>`);
                     },
-                    url: '@Url.Action("KindResultView", "Search")',
+                    url: url,
                     data: history.state,
                     type: "post",
                     success: function (data) {
@@ -118,8 +118,8 @@
                         $(window).scrollTop(y);
                     }
                  })
-
+                
             })
-        })
+        })  
     </script>
 </body>

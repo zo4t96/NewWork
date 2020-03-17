@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6af0013245bf48559b6f3205f432d92c" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tActivity" Width="1.5" PointX="0.875" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbum" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumKind" Width="1.5" PointX="7.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tAlbumType" Width="1.5" PointX="4.875" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tLog" Width="1.5" PointX="3.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMember" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tMessage" Width="1.5" PointX="3.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPlayList" Width="1.5" PointX="9" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tProduct" Width="1.5" PointX="5.375" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tPurchaseItem" Width="1.5" PointX="9.375" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tShoppingCart" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbProjectMusicStoreModel.tStatistic" Width="1.5" PointX="7.625" PointY="11.75" IsExpanded="true" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tActivity_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tActivity" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tAlbumType" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tAlbum_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tProducts_tAlbum" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tLog_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tLog_tMember1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tMessage_tMember1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPlayLists_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tMember1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tShoppingCart_tMember" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPlayLists_tProducts" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tProducts1" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tStatistic_tProducts" ManuallyRouted="false" />
+        <AssociationConnector Association="dbProjectMusicStoreModel.FK_tPurchaseItem_tShoppingCart" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

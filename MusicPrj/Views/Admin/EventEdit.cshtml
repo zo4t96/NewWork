@@ -1,5 +1,6 @@
-﻿@model MusicPrj.tActivity
-@using MusicPrj.Models;
+﻿@model MainWork.tActivity
+@using MainWork.Models;
+
 @{
     var types = ViewBag.types as IEnumerable<tAlbumType>;
     var kinds = ViewBag.kinds as IEnumerable<tAlbumKind>;
@@ -222,6 +223,7 @@
     </div>
     <script>
         //讀取頁面時初始化該活動的資訊內容
+
         //很神奇的，必須從資料庫讀出時間字串，然後再轉換成Date格式，再轉換成ISO字串才能丟進input的value裡
         //簡直WTF
         //更WTF的是，資料庫26號存進input會顯示25號(目前先直接+1天處理)
@@ -229,6 +231,7 @@
         let ed = "@Model.fEndTime".split(" ")[0].trim();
         console.log(sd)
         console.log(new Date())
+
         sd = new Date(sd)
         sd.setDate(sd.getDate() + 1);
         sd = sd.toISOString().split("T")[0];
@@ -237,7 +240,9 @@
         ed = ed.toISOString().split("T")[0];
         $(".startDate").val(sd);
         $(".endDate").val(ed);
+
         console.log($(".startDate").val())
+
         //同樣要處理可選擇的時間限制
         let date = new Date();
         let date2 = new Date();
@@ -245,6 +250,7 @@
         date2 = date2.toISOString().split("T")[0];
         $(".startDate").attr("min", date);
         $(".endDate").attr("min", date2);
+
         //每次設定起始時間時都要更新結束時間的最小值
         $(".startDate").change(function () {
             let min = new Date(this.value);
@@ -257,10 +263,12 @@
                 $(".endDate").val(min);
             }
         })
+
         //初始化圖片、折數
         $(".preview").css("background-image", `url("/Images/@Model.fPhotoPath")`)
         let discount = @ViewBag.discount;
         $(".discount").val(discount);
+
         //讀圖片檔上傳預覽
         $(".upload").change(function (e) {
             let file = this.files[0];
@@ -270,6 +278,7 @@
                 $(".preview").css("background-image", `url(${e.target.result})`)
             }
         })
+
         //音樂清單的全選全取消
         $(".all").click(function () {
             $(".trItem").find("input[type = checkbox]").each(function () {
@@ -281,6 +290,7 @@
                 this.checked = false;
             })
         })
+
         //開啟修改
         $(".edit").click(function () {
             //let today = new Date();
@@ -305,6 +315,21 @@
         })
         //儲存修改
         $(".save").click(function () {
+
+            let eventAlbums = [];
+            $(".trItem").each(function () {
+                if ($(this).find("input").prop("checked")) {
+                    eventAlbums.push($(this).find("input").val());
+                }
+            })
+            if ($("#eventName").val().trim() == "") {
+                alert("還未填寫活動名稱!")
+                return;
+            }
+            if (eventAlbums.length == 0) {
+                alert("沒有選擇任何專輯!")
+                return;
+            }
             let eventObj = new FormData($("#eventEdit")[0]);
             if (confirm("確定要進行修改?")) {
                 $.ajax({
@@ -320,6 +345,7 @@
                 })
             }
         })
+
         //刪除修改
         $(".delete").click(function () {
             let eventObj = new FormData($("#eventEdit")[0]);
@@ -337,6 +363,7 @@
                 })
             }
         })
+
         function listRenew() {
             let type = $(".typeSelected").val();
             let eventId = $("input[name = eventId]").val();
@@ -348,6 +375,12 @@
                 url: "@Url.Action("EventAlbum","Admin")",
                 data: { kinds: kinds, type: type, eventId: eventId},
                 method: "POST",
+                beforeSend: function () {
+                    $(".list").html(`<tr><td class="loading" colspan="4">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </td></tr>`)
+                },
                 success: function (datas) {
                     $(".list").html("");
                     if (datas.length == 0) {

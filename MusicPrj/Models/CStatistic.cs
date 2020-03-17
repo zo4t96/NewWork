@@ -1,14 +1,44 @@
-﻿using MusicPrj.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CStatistic
     {
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
+
+        //會員試聽統計
+        public void userAddTry(string s1, int ProductID)
+        {
+            tStatistic tS = new tStatistic();
+            tS.fAccount = s1;
+            tS.fProductID = ProductID;
+            tS.fTime = DateTime.Now;
+            tS.fType =1;
+            db.tStatistics.Add(tS);
+            db.SaveChanges();
+        }
+
+
+        public void userAddBuy(string s1, int ProductID, int? type=0)
+        {
+            tStatistic tS = new tStatistic();
+            tS.fAccount = s1;
+            tS.fProductID = ProductID;
+            tS.fTime = DateTime.Now;
+            if (type == 1)
+            {
+                tS.fType = 2;
+            }
+            else if(type==0)
+            {
+                tS.fType = 1;
+            }
+            db.tStatistics.Add(tS);
+            db.SaveChanges();
+        }
 
         public dynamic userGettryNum(string s1)
         {
@@ -177,5 +207,5 @@ namespace MusicPrj.Models
             return q;
         }
 
-        }
+    }
 }

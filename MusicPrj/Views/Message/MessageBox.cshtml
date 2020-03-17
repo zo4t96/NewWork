@@ -1,4 +1,4 @@
-﻿@using MusicPrj.Models;
+﻿﻿@using MainWork.Models;
 
 @{
     ViewBag.Title = "MessageBox";
@@ -26,6 +26,7 @@
 
 }
 <style>
+
     /*Tab換頁效果*/
     .tab_btns li {
         display: inline-block;
@@ -55,26 +56,27 @@
             /*box-sizing: border-box;*/
         }
 
-    .tab_btns li a.nav-link{
+    .tab_btns li a.nav-link {
         cursor: pointer;
     }
 
-        .tab_btns li a:hover, .active {
-            color: black;
-        }
+    .tab_btns li a:hover, .active {
+        color: black;
+    }
 
     .mailTextColor {
         color: black;
     }
 
     li .page-item {
-        width: 2%;
+        width: 3%;
         padding: 0;
         margin: 0;
     }
-    .messageListPanel{
+
+    .messageListPanel {
         /*display:block;*/
-       min-height: 25%;
+        min-height: 25%;
     }
 </style>
 <div id="wrapper">
@@ -90,7 +92,7 @@
         <ul class="tab_contents" id="tab_contents1">
             <li>
                 <div class="list-group container py-3 px-3">
-                    <div><span>信件搜尋: </span><input class="mailTextColor" placeholder="輸入要找的內容" id="mailSearchContent"/><button class="btn btn-outline-secondary textSearch">搜尋</button></div>
+                    <div><span>信件搜尋: </span><input class="mailTextColor" placeholder="輸入要找的內容" id="mailSearchContent" /><button class="btn btn-outline-secondary textSearch">搜尋</button></div>
                     <div class="align-self-end"><button class="btn btn-danger deleteAllmail">全部刪除</button></div>
                     <div class="py-3 messageListPanel" id="messageList"> @Html.Action("_MessageListView")</div>
                     <nav class="py-3" aria-label="...">
@@ -163,14 +165,14 @@
             <li>
                 <div class="list-group container py-3 px-3">
                     <div class="align-self-end"><button class="btn btn-danger deleteAllmailCopy">全部刪除</button></div>
-                    <div class="py-3 messageListPanel" id="messageListBackUp"> @Html.Action("_MessageListView",new {page=-1 })</div>
+                    <div class="py-3 messageListPanel" id="messageListBackUp"> @Html.Action("_MessageListView", new { page = -1 })</div>
                 </div>
             </li>
         </ul>
     </div>
 </div>
-    <div class="eventNotification" hidden>
-    </div>
+<div class="eventNotification" hidden>
+</div>
 <script>
 
             //Tab頁面控制
@@ -288,4 +290,5 @@
                 })
             })
 
-    </script>
+</script>
+

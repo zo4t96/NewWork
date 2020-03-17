@@ -1,4 +1,5 @@
-﻿using MusicPrj.Models;
+﻿using MainWork;
+using MainWork.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,36 @@ namespace MusicPrj.Controllers
     public class StatisticController : Controller
     {
 
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         CStatistic Statistic = new CStatistic();
+
+
+        public ActionResult tryMusicCount(int pid)
+        {
+            try
+            {
+                string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+                Statistic.userAddTry(s1, pid);
+            }
+            catch
+            {
+            }
+            return Content("");
+        }
+
+        public ActionResult buyMusicCount(int ProductID,int Type)
+        {
+            try
+            {
+                string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+                Statistic.userAddBuy(s1, ProductID, Type);
+            }
+            catch
+            {
+            }
+            return Content("");
+        }
+
         //該會員近6個月試聽總數
         public ActionResult getStatistic_tryNum()
         {

@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tProduct>
-@using MusicPrj.Models;
+﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
 
 @{
     if (Request.IsAjaxRequest() == false)
@@ -28,7 +28,7 @@
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
     int amid = Int32.Parse(Session["albumid"].ToString());
-    tAlbum tAl = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
+    tAlbum tAl = (new dbProjectMusicStoreEntities1()).tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
     tProduct tP = new tProduct();
 }
 
@@ -36,34 +36,31 @@
     /*額外補上的*/
     .originalPanel,
     .demoPanel {
-        position: relative;
-        width: 100%; /*此行修改過*/
-        height: 50px;
-        /*background: #5c616e;*/ /*此行拿掉過*/
-        margin: 10px;
-        padding: 10px;
+    position: relative;
+    width: 100%; /*此行修改過*/
+    height: 50px;
+    /*background: #5c616e;*/ /*此行拿掉過*/
+    margin: 10px;
+    padding: 10px;
     }
-
-        .demoPanel:hover { /*此class新增*/
-            background-color: darkgray;
+    .demoPanel:hover { /*此class新增*/
+        background-color: darkgray;
+    }
+            .demoSlider,
+        .originalSlider,
+        .vbtn {
+            cursor: pointer;
         }
-
-    .demoSlider,
-    .originalSlider,
-    .vbtn {
-        cursor: pointer;
-    }
-
-    .vbtn {
-        display: inline;
-    }
-
-        .vbtn img {
-            width: 20px;
-            height: 15px;
-            filter: invert();
+        .vbtn {
+            display: inline;
         }
+            .vbtn img {
+                width: 20px;
+                height: 15px;
+                filter: invert();
+            }
     /*額外補上的*/
+
     .demoSlider,
     .originalSlider {
         -webkit-appearance: none;
@@ -98,6 +95,7 @@
         margin: 20px;
         width: 500px;
     }
+
     /*albuminfo開始*/
     /*專輯圖/介紹開始*/
     .albumset {
@@ -105,7 +103,7 @@
         display: inline-block;
         margin-left: 5%;
         margin-top: 3%;
-        text-align: center;
+        text-align:center;
         /*background-color: saddlebrown;*/
     }
     /*專輯圖/介紹*/
@@ -126,6 +124,7 @@
         margin: 50px 80px;
         /*background-color: #257042*/
     }
+
     /*摺疊效果預設摺起來*/
     .fold-title {
         background-color: #f3f3f3;
@@ -146,6 +145,7 @@
         padding: 10px 10px 10px 30px;
         border: solid #f3f3f3 2px;
     }
+
     /*摺疊樣式結束*/
     /*MyAlbumList結束*/
     /*當滑鼠滑到該元素上，底下的兩個子元素會有變化的寫法*/
@@ -157,40 +157,35 @@
         transition: 0.4s;
         cursor: pointer;
     }
+
     /*額外新增03/07/2020*/
-    .albumCover {
-        width: 360px;
-        height: 360px;
-        margin: 0 auto;
+    .albumCover{
+        width:360px;
+        height:360px;
+        margin:0 auto;
     }
-
-        .albumCover > img {
-            width: 100%;
-            height: 100%;
-            display: inline-block;
-            background-size: cover;
-        }
-
+    .albumCover > img{
+        width:100%;
+        height:100%;
+        display: inline-block;
+        background-size:cover;
+    }
     .myForm {
         display: inline-block;
         width: 70%;
     }
-
-    .form-group > .h5 {
-        font-weight: 600;
+    .form-group > .h5{
+        font-weight:600;
     }
-
-    .form-group > .kind {
+    .form-group > .kind{
         display: inline-block;
     }
-
-    .formBox {
-        text-align: center;
+    .formBox{
+        text-align:center;
     }
-
-    .file {
-        display: inline-block;
-        width: 200px;
+    .file{
+        display:inline-block;
+        width:200px;
     }
 </style>
 @*抓取抓音樂檔檔案名稱歌手js檔*@
@@ -267,7 +262,7 @@
                         }
                         else
                         {
-                            <div class="h5">@((tAl.fKinds).Replace(",", "、"))</div>
+                            <div class="h5">@((tAl.fKinds).Replace(",","、"))</div>
                         }
                     }
                 </div>
@@ -312,20 +307,20 @@
         <h5 class="albumtext">共有 @(Model.Count()) 首 </h5>
         @{ if (tAl.fStatus == 0)
             {
-                <button class="btn btn-info editAlbumInfo mr-3 mt-2">修改專輯內容</button>
+                    <button class="btn btn-info editAlbumInfo mr-3 mt-2">修改專輯內容</button>
             }
             else if (tAl.fStatus == 1)
             {
-                <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">撤回重新修改內容</button>
+                    <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">撤回重新修改內容</button>
             }
             else if (tAl.fStatus == 2)
             {
-                <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">下架</button>
+                    <button class="btn btn-info editAlbumInfoClose mr-3 mt-2">下架</button>
             }
         }
-        @Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger mr-3 mt-2", onclick = "return confirm('確定要刪除嗎?')" })
+            @Html.ActionLink("刪除專輯", "DeleteAlbum", new { amid = Session["albumid"].ToString() }, new { @class = "btn btn-danger mr-3 mt-2", onclick = "return confirm('確定要刪除嗎?')" })
 
-        <div class="mt-3 mb-5 small">最後修改日期 @(((DateTime)(tAl.fYear)).ToShortDateString())</div>
+            <div class="mt-3 mb-5 small">最後修改日期 @(((DateTime)(tAl.fYear)).ToShortDateString())</div>
     </div>
 </div>
 
@@ -345,7 +340,7 @@
                                 <div class="h4">請輸入單曲基本資料</div>
                                 <hr />
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.LabelFor(model => tP.fFilePath, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-12">
                                     <div class="container playerPanel">
                                         <input type="file" id="upload" name="tP_fRealFile" accept=".mp3" />
@@ -370,7 +365,7 @@
                                         <input class="form-control text-box single-line" id="tP_fPlayEnd" name="tP.fPlayEnd" type="hidden" value="30">
                                         <p>※拉動滑條來選取可供人免費試聽的範圍(若不選取，預設試聽範圍0~30秒)</p>
                                         <div id="slider-range" class="slider"></div>
-                                        <div class="h4 font-weight-bold">試聽檔案</div>
+                                        <div  class="h4 font-weight-bold">試聽檔案</div>
                                         <small>在此確認擷取的試聽範圍</small>
                                         <div class="py-2 demoPanel">
                                             <audio class="demoSetAudio"></audio>
@@ -415,7 +410,7 @@
                                 </div>
                                 <div class="form-group myForm">
                                     <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" value="Create" id="inputFormSubmit" class="btn btn-warning" />
+                                        <input type="button" value="確認上傳" id="inputFormSubmit" class="btn btn-warning" />
                                     </div>
                                 </div>
                             </div>
@@ -436,7 +431,7 @@
                  data-revfproductname="@item.fProductName"
                  data-revfsinger="@item.fSinger"
                  data-revfcomposer="@item.fComposer"
-                 data-revfsiprice="@item.fSIPrice">
+                 data-revfsiprice="@Convert.ToInt32(item.fSIPrice)">
                 @Html.DisplayFor(modelItem => item.fProductName)
             </div>
             <div class="foldAlbum">
@@ -493,11 +488,11 @@
                                 <div class="col-md-10">
                                     @{ if (tAl.fStatus == 0)
                                         {
-                                            <input class="form-control text-box single-line" type="text" value="@((int)(item.fSIPrice))">
+                                            <input class="form-control text-box single-line revise_fSIPrice" type="text" value="">
                                         }
                                         else
                                         {
-                                            <input class="form-control text-box single-line" type="text" disabled value="@((int)(item.fSIPrice))">
+                                            <input class="form-control text-box single-line revise_fSIPrice" type="text" disabled value="">
                                         }
                                     }
                                     @Html.ValidationMessageFor(modelItem => item.fSIPrice, "", new { @class = "text-danger" })
@@ -611,7 +606,7 @@
     })
 
     $("#inputFormSubmit").click(function () {
-        if (music.error == null) {
+        //if (music.error == null) {
             if ($("#tP_fProductName").val() != "") {
                 if ($("#tP_fSinger").val() != "") {
                     if ($("#tP_fSIPrice").val() > 0 && $("#tP_fSIPrice").val() % 1 ==0) {
@@ -645,9 +640,9 @@
             } else {
                 alert("需填入單曲名稱");
             }
-        } else {
-                alert("需上傳檔案");
-        }
+        //} else {
+        //        alert("需上傳檔案");
+        //}
     });
 
     //撥放器開始
@@ -958,18 +953,23 @@
 
 
         });
-        //摺疊樣式結束
+    //摺疊樣式結束
+    //$(".revise_fSIPrice").blur(function () {
+    //    console.log($(".revise_fSIPrice").val());
+    //});
 
-    //更新試聽資料開始
+            //更新試聽資料開始
             $('.updatetime').click(function () {
                // var formData = new FormData($("#form3")[0]);
                 var formData = new FormData();
-                revfproductname = $(".revise_fProductName").val();
-                revfsinger = $(".revise_fSinger").val();
-                revfcomposer = $(".revise_fComposer").val();
-                revfarranger = $(".revise_fArranger").val();
-                revflyricist = $(".revise_fLyricist").val();
-                revfsiprice = $(".revise_fSIPrice").val();
+                revfproductname = $(this).parent().parent().find(".revise_fProductName").val();
+                revfsinger = $(this).parent().parent().find(".revise_fSinger").val();
+                revfcomposer = $(this).parent().parent().find(".revise_fComposer").val();
+                revfsiprice = $(this).parent().parent().find(".revise_fSIPrice").val();
+                console.log($(this).parent().parent().find(".revise_fProductName").val());
+                console.log($(this).parent().parent().find(".revise_fSinger").val());
+                console.log($(this).parent().parent().find(".revise_fComposer").val());
+                console.log($(this).parent().parent().find(".revise_fSIPrice").val());
 
                 formData.append('revise_fProductName', revfproductname);
                 formData.append('revise_fSinger', revfsinger);
@@ -977,9 +977,10 @@
                 formData.append('revise_fSIPrice', revfsiprice);
                 formData.append('revise_fPlayStart', demoSetStart);
                 formData.append('revise_fPlayEnd', demoSetEnd);
+                formData.append('revise_fProductID', m_soid);
 
                        $.ajax({
-                       url: `./updateSongInfoAjax?soid=${m_soid}`,
+                       url: `./updateSongInfoAjax/`,
                        type: "POST",
                        data: formData,
                        cache: false,
@@ -992,7 +993,7 @@
                                                $.get(plink, { ajax: true }, function (data) {
                                  $(".mainbox").html(data);
                                                })
-                       }
+                           }
                        });
             })
 
@@ -1022,7 +1023,7 @@
                 })
             });
 
-        $('.editAlbumInfoClose').click(function () {
+            $('.editAlbumInfoClose').click(function () {
                     $.ajax({
                     type: "Post",
                     url: `./updateAlbumInfoClose/`,

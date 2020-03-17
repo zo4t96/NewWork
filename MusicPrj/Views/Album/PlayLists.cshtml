@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tProduct>
-@using MusicPrj.Models;
+﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "PlayLists";
@@ -35,7 +35,7 @@
         demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";
         demotimestring = $"{demotimeEnd / 600}{demotimeEnd / 60 % 10}:{demotimeEnd % 60 / 10}{demotimeEnd % 60 % 10}";
         int FirstAlbumId = (int)Model.First().fAlbumID;
-        tAlbum tA = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == FirstAlbumId);
+        tAlbum tA = (new dbProjectMusicStoreEntities1()).tAlbums.FirstOrDefault(p => p.fAlbumID == FirstAlbumId);
         FirstAlbumId = 0;
 }
 
@@ -88,7 +88,7 @@
             { continue; }
 
 
-            tA = (new dbProjectMusicStoreEntities()).tAlbums.FirstOrDefault(p => p.fAlbumID == item.fAlbumID);
+            tA = (new dbProjectMusicStoreEntities1()).tAlbums.FirstOrDefault(p => p.fAlbumID == item.fAlbumID);
             demotimeEnd = (int)item.fPlayEnd;
             demotimeStart = (int)item.fPlayStart;
             demotimestringstart = $"{demotimeStart / 600}{demotimeStart / 60 % 10}:{demotimeStart % 60 / 10}{demotimeStart % 60 % 10}";

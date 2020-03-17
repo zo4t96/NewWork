@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MusicPrj
+namespace MainWork
 {
     using System;
     using System.Collections.Generic;
@@ -26,8 +26,8 @@ namespace MusicPrj
         public Nullable<decimal> fPrice { get; set; }
         public Nullable<int> fType { get; set; }
     
+        public virtual tMember tMember { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tPurchaseItem> tPurchaseItems { get; set; }
-        public virtual tMember tMember { get; set; }
     }
 }

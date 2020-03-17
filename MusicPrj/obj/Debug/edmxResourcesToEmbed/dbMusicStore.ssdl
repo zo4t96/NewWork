@@ -34,11 +34,7 @@
     </Key>
     <Property Name="KindID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="KindName" Type="nvarchar(max)" />
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
-    <Property Name="fColor" Type="nchar" MaxLength="10" />
-=======
     <Property Name="fColor" Type="nchar" MaxLength="7" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
     <Property Name="fPhotoPath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="tAlbumType">
@@ -72,13 +68,11 @@
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
     <Property Name="fLastPlaySong" Type="int" />
-    <Property Name="fLineId" Type="int" />
+    <Property Name="fLineId" Type="nvarchar(max)" />
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
-=======
     <Property Name="fPayPalAccount" Type="nvarchar(max)" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
+    <Property Name="fLineStatus" Type="int" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -90,13 +84,9 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
     <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
-=======
-    <Property Name="fTitle" Type="nvarchar(max)" />
     <Property Name="fReaded" Type="int" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.ssdl
   </EntityType>
   <EntityType Name="tPlayLists">
     <Key>

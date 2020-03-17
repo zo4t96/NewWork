@@ -1,47 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="dbProjectMusicStoreModelStoreContainer" CdmEntityContainer="dbProjectMusicStoreEntities">
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
-    <EntitySetMapping Name="tAlbumTypes">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumType">
-        <MappingFragment StoreEntitySet="tAlbumType">
-          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-          <ScalarProperty Name="fColor" ColumnName="fColor" />
-          <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
-          <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tProducts">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tProduct">
-        <MappingFragment StoreEntitySet="tProducts">
-          <ScalarProperty Name="fSinger" ColumnName="fSinger" />
-          <ScalarProperty Name="fPlaybackCount" ColumnName="fPlaybackCount" />
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
-          <ScalarProperty Name="fProductName" ColumnName="fProductName" />
-          <ScalarProperty Name="fSIPrice" ColumnName="fSIPrice" />
-          <ScalarProperty Name="fComposer" ColumnName="fComposer" />
-          <ScalarProperty Name="fArranger" ColumnName="fArranger" />
-          <ScalarProperty Name="fLyricist" ColumnName="fLyricist" />
-          <ScalarProperty Name="fKind" ColumnName="fKind" />
-          <ScalarProperty Name="fMusic" ColumnName="fMusic" />
-          <ScalarProperty Name="fFilePath" ColumnName="fFilePath" />
-          <ScalarProperty Name="fPlayStart" ColumnName="fPlayStart" />
-          <ScalarProperty Name="fPlayEnd" ColumnName="fPlayEnd" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fDownloadCount" ColumnName="fDownloadCount" />
-          <ScalarProperty Name="fModifiedDate" ColumnName="fModifiedDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tPlayLists">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPlayList">
-        <MappingFragment StoreEntitySet="tPlayLists">
-          <ScalarProperty Name="fProductID" ColumnName="fProductID" />
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-          <ScalarProperty Name="fPlayId" ColumnName="fPlayId" />
-=======
     <EntitySetMapping Name="tActivities">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tActivity">
         <MappingFragment StoreEntitySet="tActivity">
@@ -87,7 +46,6 @@
         <MappingFragment StoreEntitySet="tAlbumType">
           <ScalarProperty Name="fTypeName" ColumnName="fTypeName" />
           <ScalarProperty Name="fTypeID" ColumnName="fTypeID" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -99,14 +57,13 @@
           <ScalarProperty Name="fActionTo" ColumnName="fActionTo" />
           <ScalarProperty Name="fIssuerFrom" ColumnName="fIssuerFrom" />
           <ScalarProperty Name="fLogId" ColumnName="fLogId" />
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
-=======
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="tMembers">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
         <MappingFragment StoreEntitySet="tMember">
+          <ScalarProperty Name="fLineStatus" ColumnName="fLineStatus" />
           <ScalarProperty Name="fPayPalAccount" ColumnName="fPayPalAccount" />
           <ScalarProperty Name="fLineTimeMark" ColumnName="fLineTimeMark" />
           <ScalarProperty Name="fLineName" ColumnName="fLineName" />
@@ -121,20 +78,15 @@
           <ScalarProperty Name="fEmail" ColumnName="fEmail" />
           <ScalarProperty Name="fPassword" ColumnName="fPassword" />
           <ScalarProperty Name="fAccount" ColumnName="fAccount" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="tMessages">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMessage">
         <MappingFragment StoreEntitySet="tMessage">
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
-          <ScalarProperty Name="fTitle" ColumnName="fTitle" />
           <ScalarProperty Name="fRead" ColumnName="fRead" />
-=======
           <ScalarProperty Name="fReaded" ColumnName="fReaded" />
           <ScalarProperty Name="fTitle" ColumnName="fTitle" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
           <ScalarProperty Name="fStatus" ColumnName="fStatus" />
           <ScalarProperty Name="fTime" ColumnName="fTime" />
           <ScalarProperty Name="fContent" ColumnName="fContent" />
@@ -144,34 +96,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
-    <EntitySetMapping Name="tAlbumKinds">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbumKind">
-        <MappingFragment StoreEntitySet="tAlbumKind">
-          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-          <ScalarProperty Name="fColor" ColumnName="fColor" />
-          <ScalarProperty Name="KindName" ColumnName="KindName" />
-          <ScalarProperty Name="KindID" ColumnName="KindID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tMembers">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tMember">
-        <MappingFragment StoreEntitySet="tMember">
-          <ScalarProperty Name="fLineTimeMark" ColumnName="fLineTimeMark" />
-          <ScalarProperty Name="fLineName" ColumnName="fLineName" />
-          <ScalarProperty Name="fLineId" ColumnName="fLineId" />
-          <ScalarProperty Name="fLastPlaySong" ColumnName="fLastPlaySong" />
-          <ScalarProperty Name="fSubscriptEndDate" ColumnName="fSubscriptEndDate" />
-          <ScalarProperty Name="fSubscriptStartDate" ColumnName="fSubscriptStartDate" />
-          <ScalarProperty Name="fPicPath" ColumnName="fPicPath" />
-          <ScalarProperty Name="fMoney" ColumnName="fMoney" />
-          <ScalarProperty Name="fNickName" ColumnName="fNickName" />
-          <ScalarProperty Name="fPrivilege" ColumnName="fPrivilege" />
-          <ScalarProperty Name="fEmail" ColumnName="fEmail" />
-          <ScalarProperty Name="fPassword" ColumnName="fPassword" />
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-=======
     <EntitySetMapping Name="tPlayLists">
       <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tPlayList">
         <MappingFragment StoreEntitySet="tPlayLists">
@@ -197,7 +121,6 @@
           <ScalarProperty Name="fProductName" ColumnName="fProductName" />
           <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
           <ScalarProperty Name="fProductID" ColumnName="fProductID" />
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -234,40 +157,6 @@
           <ScalarProperty Name="fType" ColumnName="fType" />
           <ScalarProperty Name="fProductID" ColumnName="fProductID" />
           <ScalarProperty Name="fId" ColumnName="fId" />
-<<<<<<< HEAD:MusicPrj/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tActivities">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tActivity">
-        <MappingFragment StoreEntitySet="tActivity">
-          <ScalarProperty Name="fPhotoPath" ColumnName="fPhotoPath" />
-          <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-          <ScalarProperty Name="fEndTime" ColumnName="fEndTime" />
-          <ScalarProperty Name="fStartTime" ColumnName="fStartTime" />
-          <ScalarProperty Name="fLauncher" ColumnName="fLauncher" />
-          <ScalarProperty Name="fId" ColumnName="fId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tAlbums">
-      <EntityTypeMapping TypeName="dbProjectMusicStoreModel.tAlbum">
-        <MappingFragment StoreEntitySet="tAlbum">
-          <ScalarProperty Name="fActivityID" ColumnName="fActivityID" />
-          <ScalarProperty Name="fDiscount" ColumnName="fDiscount" />
-          <ScalarProperty Name="fKinds" ColumnName="fKinds" />
-          <ScalarProperty Name="fPublisher" ColumnName="fPublisher" />
-          <ScalarProperty Name="fCoverPath" ColumnName="fCoverPath" />
-          <ScalarProperty Name="fALPrice" ColumnName="fALPrice" />
-          <ScalarProperty Name="fStatus" ColumnName="fStatus" />
-          <ScalarProperty Name="fType" ColumnName="fType" />
-          <ScalarProperty Name="fYear" ColumnName="fYear" />
-          <ScalarProperty Name="fAccount" ColumnName="fAccount" />
-          <ScalarProperty Name="fMaker" ColumnName="fMaker" />
-          <ScalarProperty Name="fAlbumName" ColumnName="fAlbumName" />
-          <ScalarProperty Name="fAlbumID" ColumnName="fAlbumID" />
-=======
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/obj/Debug/edmxResourcesToEmbed/dbMusicStore.msl
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

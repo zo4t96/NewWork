@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tProduct>
-@using MusicPrj.Models;
+﻿﻿@model IEnumerable<MainWork.tProduct>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "PlayLists";
@@ -10,6 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <style>
+
     * {
         background-color: black;
         color: white;
@@ -58,7 +59,7 @@
         width: 40px;
         font-size: 21px;
         background-color: #cecece;
-        padding: 3.5px 7.5px 4.5px 7.5px;
+        padding: 3.5px 15.5px 4.5px 15.5px;
         border-radius: 50%;
         margin: 4px 10px 0 5px;
     }
@@ -160,49 +161,49 @@
     }
     else
     {
-    <div class="playListItem">
-        <div>@(ViewBag.memberUseType) 到期日 : @(ViewBag.memberSubscribeEnd)</div>
-    </div>
-    @* 正在撥放的音樂 *@
-    <div class="playListItem" title="點擊撥放"
-         data-singer="@Model.First().fComposer"
-         data-songn="@Model.First().fProductName"
-         data-soid="@Model.First().fProductID"
-         data-songcover="@Model.First().tAlbum.fCoverPath"
-         data-albumname="@Model.First().tAlbum.fAlbumName"
-         data-playurl="@(Url.Content("~/MusicFiles/") + Model.First().fFilePath)">
-        <div class="plSymbol">
-            <i class='fas fa-music symbol'></i>
+        <div class="playListItem">
+            <div>@(ViewBag.memberUseType) 到期日 : @(ViewBag.memberSubscribeEnd)</div>
         </div>
-        <div class="plDescription">
-            <div class="mTitle">@Model.First().fProductName</div>
-            <div class="hr"></div>
-            <div class="mDetail">@Model.First().tAlbum.fAlbumName - @Model.First().fSinger - (xx:xx)</div>
-        </div>
-    </div>
-    foreach (var item in Model)
-    {
-        FirstAlbumId++;
-        if (FirstAlbumId == 1)
-        { continue; }
-        @* 每一項音樂 *@
-        <div class="playListItem"
-             data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
-             data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
-             data-soid="@item.fProductID"
-             data-songcover="@item.tAlbum.fCoverPath"
-             data-albumname="@item.tAlbum.fAlbumName"
-             data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
+        @* 正在撥放的音樂 *@
+        <div class="playListItem" title="點擊撥放"
+             data-singer="@Model.First().fComposer"
+             data-songn="@Model.First().fProductName"
+             data-soid="@Model.First().fProductID"
+             data-songcover="@Model.First().tAlbum.fCoverPath"
+             data-albumname="@Model.First().tAlbum.fAlbumName"
+             data-playurl="@(Url.Content("~/MusicFiles/") + Model.First().fFilePath)">
             <div class="plSymbol">
                 <i class='fas fa-music symbol'></i>
             </div>
             <div class="plDescription">
-                <div class="mTitle">@Html.DisplayFor(modelItem => item.fProductName)</div>
+                <div class="mTitle">@Model.First().fProductName</div>
                 <div class="hr"></div>
-                <div class="mDetail">@Html.DisplayFor(modelItem => item.tAlbum.fAlbumName) - @Html.DisplayFor(modelItem => item.fSinger) - (xx:xx)</div>
+                <div class="mDetail">@Model.First().tAlbum.fAlbumName - @Model.First().fSinger</div>
             </div>
         </div>
-    }
+        foreach (var item in Model)
+        {
+            FirstAlbumId++;
+            if (FirstAlbumId == 1)
+            { continue; }
+            @* 每一項音樂 *@
+            <div class="playListItem"
+                 data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
+                 data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
+                 data-soid="@item.fProductID"
+                 data-songcover="@item.tAlbum.fCoverPath"
+                 data-albumname="@item.tAlbum.fAlbumName"
+                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
+                <div class="plSymbol">
+                    <i class='fas fa-music symbol'></i>
+                </div>
+                <div class="plDescription">
+                    <div class="mTitle">@Html.DisplayFor(modelItem => item.fProductName)</div>
+                    <div class="hr"></div>
+                    <div class="mDetail">@Html.DisplayFor(modelItem => item.tAlbum.fAlbumName) - @Html.DisplayFor(modelItem => item.fSinger)</div>
+                </div>
+            </div>
+        }
     }
 </div>
 <audio id="mainPlayer" src=""></audio>

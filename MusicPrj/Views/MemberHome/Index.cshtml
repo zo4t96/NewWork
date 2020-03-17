@@ -1,0 +1,184 @@
+﻿@model MainWork.tMember
+@using MainWork.Models
+
+@{
+    if (ViewBag.ajax != null)
+    {
+        @(Layout = null);
+    }
+    ViewBag.Title = "Index";
+    tMember member = Session[CDictionary.SK_CURRENT_LOGINED_USER] as tMember;
+
+}
+
+<style>
+    .memberPanel {
+        float: left;
+        border-radius: 15px;
+        width: 80%;
+        margin: 10px auto;
+        padding: 30px 0;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .memberInfo,
+    .changePwd {
+        margin: 0 20px;
+    }
+
+    .member > p {
+        color: #8E8E8E;
+        font-size: 80%;
+    }
+
+    .member > img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-size: cover;
+    }
+
+    .buyMonthlyService {
+        display: inline-block;
+        background-image: linear-gradient(to right, #1587dd,#651ea4);
+        font-size: 12px;
+        padding: 5px 7px;
+        border-radius: 20px;
+        color: white;
+        border: 1px groove #2f2f2f;
+        cursor: pointer;
+        margin: 0px 0px 3px 5px;
+    }
+</style>
+
+<div class="headtitle h1">會員中心</div>
+<div class="memberPanel row">
+    <div class="memberInfo col-4">
+        <div class="member">
+            <img src="~/Images/@Model.fPicPath" @*onerror="this.src='~/Images/預設頭像.jpg'"*@ />
+            <p></p>
+        </div>
+
+        <label>會員帳號 : </label>
+        @Model.fAccount
+        <p></p>
+
+        <label>信箱 : </label>
+        @Model.fEmail
+        <p></p>
+
+        <label>暱稱 : </label>
+        @Model.fNickName
+        <p></p>
+
+        <label>會員類別 : </label>
+        @if (@Model.fPrivilege == 0)
+        {
+            <span>一般會員</span>
+        }
+        else if (@Model.fPrivilege == 1)
+        {
+            <span>包月會員</span>
+        }
+        else
+        {
+            <span>管理員</span>
+        }
+        <p></p>
+
+        <label>line帳號綁定:</label>
+        <span id="LineBindInterface" class="btn btn-success">Line綁定</span>
+        <p></p>
+
+        <label>包月服務到期日 : </label>
+        @if (Model.fSubscriptStartDate == null || Model.fSubscriptEndDate < DateTime.Now)
+        {
+            @:未訂閱<div class="buyMonthlyService">現在就加入!</div>
+        }
+        else
+        {
+            @:@Model.fSubscriptEndDate
+        }
+        <p></p>
+
+        <label>剩餘積分 : </label>
+        @Convert.ToInt32(Model.fMoney)
+        <p></p>
+
+
+        <ul>
+            <li>
+                <a class="btn btn-primary link" href="@Url.Action("EditPage", "MemberHome")">修改會員</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<script>
+
+    // 頭像預覽
+    $("#picpath").change(function (e) {
+        let file = this.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        console.log(file);
+        reader.onload = function (e) {
+            $("#showPicPath").css("background-image", `url(${e.target.result})`)
+        }
+    })
+
+    $("li > a , .link").on("click", function (e) {
+        if ($(this).hasClass("manage")) {
+            return;
+        }
+        e.preventDefault();
+        let link = $(this).attr("href");
+        history.pushState({ ajax: true, scrollY: 0 }, null, link);
+        $.ajax({
+            beforeSend: function () {
+                $(".mainbox").html(
+                    `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+            },
+            url: link,
+            data: history.state,
+            type: "post",
+            success: function (data) {
+                $(".mainbox").html(data);
+            },
+            complete: function () {
+                $(window).scrollTop(0);
+            }
+        })
+    });
+
+
+    $(".buyMonthlyService").click(function () {
+        $(".monthlyBtn").trigger("click");
+    })
+
+    $("#LineBindInterface").on("click", function () {
+            $.ajax({
+                url:"@Url.Action("_LineAccountBinding","Album")",
+                type: "get",
+                beforeSend:function() {
+                    $("#modalContent").html(
+                        `<div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>`);
+                },
+                success: function (data) {
+                    $("#modalContent").html(data);
+                }
+            })
+            $("#modal").css("display", "block");
+            setTimeout(function () {
+                $("#modal").addClass("fadein");
+                $("#modalContent").addClass("fadein");
+            }, 10)
+        })
+</script>

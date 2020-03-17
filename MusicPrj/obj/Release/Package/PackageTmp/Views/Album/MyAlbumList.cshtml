@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tAlbum>
-@using MusicPrj.Models;
+﻿@model IEnumerable<MainWork.tAlbum>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "MyAlbumList2";
@@ -28,7 +28,7 @@
     {
         account = Session[CDictionary.SK_ACCOUNT].ToString();
     }
-
+    tAlbum tA = new tAlbum();
 
 }
 
@@ -81,6 +81,7 @@
     }
     /*Tab換頁效果*/
     /*專輯預覽block*/
+
     .albumBlock {
         display: block;
         width: 15vw;
@@ -98,10 +99,12 @@
         opacity: 1;
         transform: scale(1);
     }
+
         /*.animation {
         transform: scale(1);
         opacity: 1;
     }*/
+
         .albumBlock:hover {
             background-color: #353535;
             text-decoration: none;
@@ -114,9 +117,10 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius: 10px;
         /*測試用圖片*/
         /*background-image: url("/Images/4.jpg");*/
-        /*background-size: cover;*/
+        background-size: cover;
     }
 
     .albumContent {
@@ -132,7 +136,7 @@
         display: block;
         width: 12vw;
         min-width: 160px;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         margin-bottom: 8px;
         /*使多出的字元變...，下面三個屬性都要設才有效果*/
@@ -145,7 +149,7 @@
         display: inline-block;
         width: 12vw;
         min-width: 160px;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         color: #808080;
         text-overflow: ellipsis;
@@ -158,99 +162,106 @@
     }
     /*專輯預覽block*/
 
-        /*新增上方選單的樣式*/
+    /*新增上方選單的樣式*/
     .myMenu {
         width: 70%;
         background-image: linear-gradient(to right, #1587dd,#651ea4, #191919)
     }
-    .tab_btns{
-        padding:0px 0px;
+
+    .tab_btns {
+        padding: 0px 0px;
     }
+
         .tab_btns > li {
             /*background-color:antiquewhite;*/
             font-size: 20px;
             font-weight: 600;
             padding: 10px 0;
-            margin:0;
+            margin: 0;
         }
-    .tab_btns > li:hover{
-        background-color:rgba(255, 255, 255, 0.20)
-    }
+
+            .tab_btns > li:hover {
+                background-color: rgba(255, 255, 255, 0.20)
+            }
+
+
 </style>
 <!-- Main CSS-->
+<link href="~/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+<script src="~/vendor/animsition/animsition.min.js"></script>
+
 
 
 <div id="wrapper">
     <div class="myMenu">
-            <ul class="tab_btns">
-                @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
-                <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">發行專輯</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1"> + 增加專輯</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">販售統計</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">單曲總覽</a></li>
-            </ul>
+        <ul class="tab_btns">
+            @*如果<a>裡面加上href="javascript:void(0);"會報錯*@
+            <li class="on nav-item"><a class="nav-link active" onclick="tab_switch(this)" data-div="#tab_contents1">我的專輯</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">新增專輯</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">販售統計</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="tab_switch(this)" data-div="#tab_contents1">單曲總覽</a></li>
+        </ul>
     </div>
-        <div class="tab_container">
-            <ul class="tab_contents" id="tab_contents1">
-                <li>
-                    <div class="section__content section__content--p30">
+    <div class="tab_container">
+        <script>
+        </script>
+        <ul class="tab_contents" id="tab_contents1">
+            <li>
+                <div class="section__content section__content--p30">
 
-                        @Html.Action("_MyAlbumList")
+                    @Html.Action("_MyAlbumList")
 
-                    </div>
-                </li>
-                <li>
-                    <div class="section__content section__content--p30">
-                        @Html.Action("_MyAlbumAddAlbum")
-                    </div>
-                </li>
-                <li>
-                    <div class="headtitle h1">我的專輯統計資料</div>
-                    <div class="section__content section__content--p30">
-                        @Html.Action("_MyAlbumAnalysis")
-                    </div>
-                </li>
-                <li>
-                    <div class="headtitle h1">單曲列表</div>
-                    <div class="section__content section__content--p30">
-                        @Html.Action("_MyAlbumProductList")
-                    </div>
-                </li>
-            </ul>
-        </div>
+                </div>
+            </li>
+            <li>
+                <div class="section__content section__content--p30">
+                    @Html.Action("_MyAlbumAddAlbum")
+                </div>
+            </li>
+            <li>
+                <div class="headtitle h1 font-weight-bold">我的專輯統計資料</div>
+                <div class="section__content section__content--p30">
+                    @Html.Action("_MyAlbumAnalysis")
+                </div>
+            </li>
+            <li>
+                <div class="headtitle h1 font-weight-bold">單曲列表</div>
+                <div class="section__content section__content--p30">
+                    @Html.Action("_MyAlbumProductList")
+                </div>
+            </li>
+        </ul>
     </div>
+</div>
 
 
-    <script>
+<script>
+    setTimeout(function () {
+        $(".productitem").addClass("animation");
+    }, 200)
+    //Tab頁面控制
+    function tab_switch(_this) {
+        var now_tab = $(_this).parent().index();
+        //$(_this).parent().siblings().children().removeClass('active')
+        //$(_this).addClass("active");
+        $(_this).parent().siblings().removeClass('on');
+        $(_this).parent().addClass('on');
+        var control_div = $(_this).data('div');
+        $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
+    };
 
-        setTimeout(function () {
-            $(".productitem").addClass("animation");
-        }, 200)
-
-        //Tab頁面控制
-        function tab_switch(_this) {
-            var now_tab = $(_this).parent().index();
-            //$(_this).parent().siblings().children().removeClass('active')
-            //$(_this).addClass("active");
-            $(_this).parent().siblings().removeClass('on');
-            $(_this).parent().addClass('on');
-            var control_div = $(_this).data('div');
-            $(control_div).animate({ 'left': '-' + now_tab * 100 + '%' });
-        };
-
-
-        //摺疊
-        $(function () {
-            $('h3').click(function () {
-                if ($(this).next('.foldAlbum').hasClass('o') == true) {
-                    $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
-                    $(this).next('.foldAlbum').removeClass('o').slideUp();
-                }
-                else {
-                    $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
-                    $(this).next('.foldAlbum').addClass('o').slideDown();
-                }
-            });
+    //摺疊
+    $(function () {
+        $('h3').click(function () {
+            if ($(this).next('.foldAlbum').hasClass('o') == true) {
+                $(this).find('i.fa').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                $(this).next('.foldAlbum').removeClass('o').slideUp();
+            }
+            else {
+                $(this).find('i.fa').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                $(this).next('.foldAlbum').addClass('o').slideDown();
+            }
         });
-
-    </script>
+    });
+</script>

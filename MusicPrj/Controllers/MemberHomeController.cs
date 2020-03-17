@@ -1,17 +1,20 @@
-﻿using System;
+﻿using MainWork.Models;
+using prjSpotifyProject.Models;
+using prjSpotifyProject.Models.Member;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MusicPrj.Models;
 
-namespace MusicPrj.Controllers
+
+namespace MainWork.Controllers
 {
     public class MemberHomeController : Controller
     {
         // 會員中心
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
 
         public ActionResult Index(bool ajax = false)
         {
@@ -54,31 +57,20 @@ namespace MusicPrj.Controllers
             {
                 if (fPicPath.ContentLength > 0)
                 {
-                    if (member.fPicPath == null)
+                    fileName = Guid.NewGuid() + ".jpg";
+                    if (member.fPicPath != "nobody.jpg")
                     {
-                        fileName = Guid.NewGuid() + ".jpg";
-                    }
-                    else
-                    {
-                        fileName = member.fPicPath.ToString();
+                        System.IO.File.Delete(Server.MapPath("~/Images/" + member.fPicPath));
                     }
                     var path = Path.Combine(Server.MapPath("~/Images"), fileName);
                     fPicPath.SaveAs(path);
+                    member.fPicPath = fileName;
+                    db.SaveChanges();
                 }
             }
 
-
-            if (member != null)
-            {
-                member.fPicPath = fileName;
-                member.fAccount = m.fAccount;
-                member.fPassword = m.fPassword;
-                member.fEmail = m.fEmail;
-                member.fNickName = m.fNickName;
-                db.SaveChanges();
-            }
-            Session[CDictionary.SK_CURRENT_LOGINED_USER] = m;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "MemberHome", new { ajax = true });
         }
+
     }
 }

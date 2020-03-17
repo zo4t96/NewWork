@@ -1,5 +1,5 @@
-﻿using MusicPrj.Models;
-using MusicPrj.ViewModels;
+﻿using MainWork.Models;
+using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,14 +7,27 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MusicPrj.Controllers
+namespace MainWork.Controllers
 {
     public class AdminController : Controller
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         CManagement manage = new CManagement();
         // GET: Admin
         public ActionResult Index()
+        {
+            //首頁放待審音樂、進行中活動七天內將舉辦的活動資訊
+            ViewBag.albums = db.tAlbums.Where(a => a.fStatus == 1).OrderBy(m => m.fYear).Take(5).ToList();
+            ViewBag.eventNow = db.tActivities.Where
+                (e => DateTime.Compare((DateTime)e.fStartTime, DateTime.Now) < 0 && DateTime.Compare((DateTime)e.fEndTime, DateTime.Now) > 0).ToList();
+
+            DateTime later = DateTime.Now.AddDays(7);
+            ViewBag.eventLater = db.tActivities.Where
+                (e => DateTime.Compare((DateTime)e.fStartTime, later) < 0 && DateTime.Compare((DateTime)e.fStartTime, DateTime.Now) > 0).ToList();
+            return View();
+        }
+
+        public ActionResult calendar()
         {
             return View();
         }
@@ -89,6 +102,7 @@ namespace MusicPrj.Controllers
         }
 
         //音樂風格新刪修
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult KindAlter()
         {
             CSearch cs = new CSearch();
@@ -98,14 +112,19 @@ namespace MusicPrj.Controllers
         public ActionResult KindNew(CKindEditObject kindObj)
         {
             //Server屬性只能在控制器端使用
-            string serverPath = Server.MapPath("~/Images");
+            string serverPath = Server.MapPath("~/CoverFiles");
             manage.kindNew(kindObj, serverPath);
             return RedirectToAction("KindAlter");
         }
 
         public ActionResult KindEdit(CKindEditObject kindObj)
         {
-            string serverPath = Server.MapPath("~/Images");
+            string serverPath = Server.MapPath("~/CoverFiles");
+            if (kindObj.uploadCheck == "true")
+            {
+                string path = db.tAlbumKinds.FirstOrDefault(k => k.KindID == kindObj.kindId).fPhotoPath;
+                System.IO.File.Delete(Server.MapPath("~/CoverFiles/") + path);
+            }
             manage.kindEdit(kindObj, serverPath);
             return RedirectToAction("KindAlter");
         }
@@ -123,13 +142,13 @@ namespace MusicPrj.Controllers
             CSearch cs = new CSearch();
             ViewBag.types = cs.takeAllType();
             ViewBag.kinds = cs.takeAllKind();
-            return View(ce.eventQuery());
+            return View(ce.eventQuery().ToList());
         }
 
         public ActionResult EventAlbum(int type, int[] kinds, int eventId = 0)
         {
             CEvent ce = new CEvent();
-            var result = (ce.eventAlbum(kinds, type, eventId)).Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds });
+            var result = (ce.eventAlbum(kinds, type, eventId)).ToList().Select(a => new { a.fAlbumID, a.fAlbumName, a.tAlbumType.fTypeName, a.fKinds }).ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult EventNew(CEventObject eventObj)
@@ -156,7 +175,13 @@ namespace MusicPrj.Controllers
         public ActionResult EventAlter(CEventObject eventObj)
         {
             CEvent ce = new CEvent();
-            ce.eventAlter(eventObj);
+            string serverPath = Server.MapPath("~/Images/");
+            if (eventObj.eventImage != null)
+            {
+                string path = (new dbProjectMusicStoreEntities1()).tActivities.FirstOrDefault(e => e.fId == eventObj.eventId).fPhotoPath;
+                System.IO.File.Delete(serverPath + path);
+            }
+            ce.eventAlter(eventObj, serverPath);
             return RedirectToAction("EventPage");
         }
 
@@ -172,7 +197,7 @@ namespace MusicPrj.Controllers
         {
             //把所有狀態為送審中(1)的音樂挑出來
             //下架:0　送審中:1　上架:2　強制下架(不得送審):3
-            var result = db.tAlbums.Where(a => a.fStatus == 1).ToList();
+            var result = db.tAlbums.Where(a => a.fStatus == 1).OrderBy(m => m.fYear).ToList();
             return View(result);
         }
         public ActionResult Pass(string account, int albumId)
@@ -199,7 +224,7 @@ namespace MusicPrj.Controllers
         //上架音樂管理(含查詢&強制下架)
         public ActionResult MusicManage()
         {
-            var result = db.tAlbums.Where(a => a.fStatus == 2).ToList();
+            var result = db.tAlbums.Where(a => a.fStatus == 2).OrderBy(m => m.fYear).ToList();
             return View(result);
         }
         public ActionResult Recall(string account, int albumId)
@@ -214,10 +239,31 @@ namespace MusicPrj.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        //會員管理
+        public ActionResult MemberManage()
+        {
+            var members = db.tMembers.Where(m => m.fAccount != "aaa");
+            return View(members);
+        }
+        public ActionResult AccountList(string keyword)
+        {
+            CSearch cs = new CSearch();
+            var result = cs.accountManage(keyword);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AccountDelete(string account)
+        {
+            var target = db.tMembers.FirstOrDefault(m => m.fAccount == account);
+            db.tMembers.Remove(target);
+            db.SaveChanges();
+            return Content("");
+        }
+
         public ActionResult SaleStatistic()
         {
-
             return View();
         }
+
+
     }
 }

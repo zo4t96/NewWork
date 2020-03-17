@@ -1,5 +1,5 @@
-﻿@model List<MusicPrj.tAlbum>
-@using MusicPrj.Models;
+﻿@model List<MainWork.tAlbum>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "Index";
@@ -66,6 +66,7 @@
         width: 120px;
         height: 120px;
     }
+
     /*次表單(專輯內音樂內容)*/
     .tableSub {
         display: none;
@@ -124,13 +125,13 @@
                 <th>強制下架</th>
             </tr>
         </thead>
-        <tbody class="list">
+        <tbody class="list text-center">
             @foreach (var item in Model)
             {
                 <tr class="trItemMain">
                     <td><div class="btn btn-info open">詳細內容</div></td>
-                    <td>@item.fYear</td>
-                    <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
+                    <td>@(((DateTime)item.fYear).ToShortDateString())</td>
+                    <td><img class="cover" src="~/CoverFiles/@item.fCoverPath" /></td>
                     <td>@item.fAccount</td>
                     <td>@item.fMaker</td>
                     <td>@item.fAlbumName</td>
@@ -164,7 +165,7 @@
                                         <td>@music.fSinger</td>
                                         <td>@music.fComposer</td>
                                         <td>@Convert.ToInt32(music.fSIPrice)元</td>
-                                        <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
+                                        <td><audio src="~/MusicFiles/@music.fFilePath" controls></audio></td>
                                     </tr>
                                 }
                             </tbody>
@@ -189,13 +190,13 @@
         let account = $(this).data("account");
         let albumId = $(this).data("album");
         $.post('@Url.Action("Recall","Admin")', { account: account, albumId: albumId }, function () {
-            alert("已將專輯強制下架");
         })
         $(this).parents("tr").next().html("");
         $(this).parents("tr").html("");
     })
     }
     initialize();
+
     $("#account").autocomplete({
         source: '@Url.Action("AutoCompleteAccount", "Search")'
     });
@@ -205,7 +206,15 @@
     $("#albumName").autocomplete({
         source: '@Url.Action("AutoCompleteAlbum", "Search")'
     });
+
     $("#account,#group,#albumName").keyup(function () {
+        if ($(this).val().trim() != "") {
+            $(".list").html(`<tr><td class="loading" colspan="8">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </td></tr>`);
+        }
+
         //不同的text採用不同的搜尋方法
         let method;
         if ($(this).attr("name") == "account") {
@@ -231,7 +240,7 @@
                 let album = values.album;
                 let open = `<td><div class="btn btn-info open">詳細內容</div></td>`
                 let year = `<td>${album.fYear}</td>`;
-                let cover = `<td><img class="cover" src="~/Images/${album.fCoverPath}" /></td>`;
+                let cover = `<td><img class="cover" src="/CoverFiles/${album.fCoverPath}" /></td>`;
                 let account = `<td>${album.fAccount}</td>`;
                 let maker = `<td>${album.fMaker}</td>`;
                 let albumName = `<td>${album.fAlbumName}</td>`;
@@ -242,6 +251,7 @@
                 $(".list").append(`<tr class="trItemMain">
                     ${open + album + year + cover + account + maker + albumName + price + btn}
                 </tr>`);
+
                 let subTable = `<tr class="tableSub">
                                     <td colspan="7">
                                      <table class="table table-bordered">
@@ -252,19 +262,21 @@
                                         </tr>
                                       </thead>
                                      <tbody>`
+
                 $.each(values.musics, function (idx, music) {
                     let num = `<td>${idx + 1}</td>`;
                     let musicName = `<td>${music.fProductName}</td>`;
                     let singer = `<td>${music.fSinger}</td>`;
                     let composer = `<td>${music.fComposer}</td>`;
                     let siPrice = `<td>${music.fSIPrice}</td>`;
-                    let musicFile = `<td><audio src="~/Music/${music.fFilePath}" controls></audio></td>`;
+                    let musicFile = `<td><audio src="~/MusicFiles/${music.fFilePath}" controls></audio></td>`;
                     let subRow = `<tr class="text-center trItemSub">${num + musicName + singer + composer +
                                     siPrice + musicFile}</tr>`
                     subTable = subTable + subRow;
                 })
                 subTable = subTable + `</tbody></table></td></tr>`;
                 $(".list").append(subTable);
+
                 console.log(subTable)
             })
             initialize();

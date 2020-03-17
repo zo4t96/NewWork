@@ -1,6 +1,5 @@
-﻿@model MusicPrj.tProduct
+﻿@model MainWork.tProduct
 
-@*<script src="~/Scripts/jquery-3.4.1.min.js"></script>*@
 <!--試聽撥放器的style-->
 <style>
     * {
@@ -62,9 +61,8 @@
             height: 15px;
             filter: invert();
         }
-
-    .dpause {
-        display: none;
+    .dpause{
+        display:none;
     }
 
     .demoPanel span {
@@ -83,7 +81,7 @@
 }
 
 <div class="demoPanel">
-    <audio class="demoAudio" src="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => Model.fFilePath))" data-playing="false"></audio>
+    <audio class="demoAudio" src="~/MusicFiles/@Model.fFilePath" data-playing="false"></audio>
     <span class="nowTime">@demoStart</span>
     <input type="range" class="demoSlider" min="@Model.fPlayStart" max="@Model.fPlayEnd" step="0.01" value="@Model.fPlayStart">
     <span class="endTime">@demoEnd</span>
@@ -96,8 +94,8 @@
          data-end="@Html.DisplayFor(modelItem => Model.fPlayEnd)"
          data-songcover="@Model.tAlbum.fCoverPath"
          data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => Model.fFilePath))">
-        <img src="~/Content/play.png">
+        <img src="/PlayerImg/play.png">
     </div>
-    <div class="vbtn dpause"><img src="~/Content/pause.png"></div>
+    <div class="vbtn dpause"><img src="/PlayerImg/pause.png"></div>
 </div>
 @* 播放器的相關程式碼放在AlbumDetail.cshtml *@

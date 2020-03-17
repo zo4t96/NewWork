@@ -1,9 +1,9 @@
-﻿
-@using MusicPrj.Models;
+﻿﻿
+@using MainWork.Models;
 @{
     ViewBag.Title = "MyAlbumList2";
     Layout = "~/Views/Shared/_Layout_admin.cshtml";
-        var account = "";
+    var account = "";
     if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
     {
         Response.Redirect("~/Admin/login/");
@@ -22,7 +22,8 @@
     }
 }
 <style>
-        .panel {
+
+    .panel {
         padding: 0 40px 40px 40px;
         border: 1px solid #ccc;
         border-radius: 20px;
@@ -463,6 +464,13 @@
     $.getJSON('@Url.Action("getAdminStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 $("#memberTryWeekTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
+                  })
+    })
+
+    //本月最多試聽單曲
+    $.getJSON('@Url.Action("getAdminStatistic_memberTryMonthTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTryMonthTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
                   })
     })
 

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MusicPrj
+namespace MainWork
 {
     using System;
     using System.Collections.Generic;
@@ -24,10 +24,7 @@ namespace MusicPrj
         public string fContent { get; set; }
         public Nullable<System.DateTime> fTime { get; set; }
         public Nullable<int> fStatus { get; set; }
-<<<<<<< HEAD:MusicPrj/tMessage.cs
         [Display(Name = "主旨")]
-=======
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/tMessage.cs
         public string fTitle { get; set; }
         public Nullable<int> fReaded { get; set; }
     

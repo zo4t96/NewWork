@@ -1,8 +1,4 @@
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-﻿@model IEnumerable<MusicPrj.ViewModels.CSearchResult>
-=======
-﻿@model IEnumerable<MainWork.ViewModels.CSearchResult>
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
+﻿@model List<MainWork.ViewModels.CSearchResult>
 
 <style>
     .albumPanel {
@@ -49,7 +45,7 @@
         min-height: 160px;
         border-radius: 10px;
         /*測試用圖片*/
-        background-image: url("/Images/4.jpg");
+        /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
     }
 
@@ -87,18 +83,13 @@
         white-space: nowrap;
         overflow: hidden;
     }
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-=======
 
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
     /*查無資料*/
     .noResult {
         position: relative;
         text-align: center;
         top: 40%;
         margin: auto;
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-=======
     }
     /*折扣文字*/
     .discount {
@@ -107,7 +98,6 @@
         font-size: 12px;
         font-weight: 600;
         color: #dc0000;
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
     }
 </style>
 
@@ -127,45 +117,34 @@
     <div class="albumPanel">
         @foreach (var item in Model)
         {
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName">
-=======
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.album.fAlbumID" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
-                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-                <div class="albumCover"></div>
-                <div class="albumContent">
-                    <span class="albumTitle">@item.product.fProductName</span>
-                    <span class="albumDescripion">@item.album.fAlbumName</span>
-                    @if (item.product.fSinger != null)
-                    {
-                        <span class="albumDescripion">歌手:@item.product.fSinger</span>
-                    }
-                    <span class="albumDescripion">作曲:@item.product.fComposer</span>
-                    @if (item.album.fActivityID != null)
-                    {
-                        <div class="discount">@((1 - item.album.fDiscount) * 100)% off!</div>
-                    }
-                </div>
-            </a>
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.album.fAlbumID" data-album="@item.album.fAlbumID" data-title="@item.album.fAlbumName" title="@item.product.fProductName">
+            <img src="~/CoverFiles/@item.album.fCoverPath" class="albumCover" />
+            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+            <div class="albumContent">
+                <span class="albumTitle">@item.product.fProductName</span>
+                <span class="albumDescripion">@item.album.fAlbumName</span>
+                @if (item.product.fSinger != null)
+                {
+                    <span class="albumDescripion">歌手:@item.product.fSinger</span>
+                }
+                <span class="albumDescripion">作曲:@item.product.fComposer</span>
+                @if (item.album.fActivityID != null)
+                {
+                    <div class="discount">@((1 - item.album.fDiscount) * 100)% off!</div>
+                }
+            </div>
+        </a>
         }
     </div>
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
         }, 200)
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-        $(".albumBlock").click(function (e) {
-            e.preventDefault();
-            let amid = $(this).data("album");
-            let url = `${$(this).attr("href")}?amid=${amid}`;
-=======
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = this.href;
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
             let stateObj = { amid: amid, ajax: true };
             history.pushState(stateObj, null, url);
             $.ajax({
@@ -175,15 +154,9 @@
                 beforeSend: function () {
                     $(".mainbox").html(
                         `<div class="loading">
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span>
-                    </div>`);
-=======
                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Loading...</span>
                 </div>`);
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
                 },
                 success: function (data) {
                     $(".mainbox").html(data);
@@ -192,17 +165,11 @@
                     $(window).scrollTop(0);
                 }
             })
-<<<<<<< HEAD:MusicPrj/Views/Search/ResultView.cshtml
-            let title = $(this).data("title");
-            document.title = title;
-        });
-=======
 
             let title = $(this).data("title");
             document.title = title;
         });
 
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/ResultView.cshtml
         $(".noResult").find(".h3").text(`查無 ${history.state.keyword} 的資料`);
         $(".searchTitle").text(`「${history.state.keyword}」的搜尋結果`);
     </script>

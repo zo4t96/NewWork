@@ -1,14 +1,14 @@
-﻿using MusicPrj.ViewModels;
+﻿using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CSearch
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         //前兩個方法是用來初始化進階搜尋內容的方法
         public IEnumerable<tAlbumKind> takeAllKind()
         {
@@ -25,7 +25,7 @@ namespace MusicPrj.Models
         //首頁商品項目，選取所有商品
         public IEnumerable<tAlbum> allAlbum()
         {
-            var all = db.tAlbums.Select(a => a);
+            var all = db.tAlbums.Where(a => a.fStatus == 2).OrderByDescending(a => a.fYear);
             return all;
         }
 
@@ -33,7 +33,7 @@ namespace MusicPrj.Models
         public IEnumerable<tAlbum> byKindPage(int kindID)
         {
             string kind = db.tAlbumKinds.Where(s => s.KindID == kindID).First().KindName;
-            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind));
+            var result = db.tAlbums.Where(a => a.fKinds.Contains(kind) && a.fStatus == 2).OrderByDescending(a => a.fYear);
             return result;
         }
 
@@ -41,7 +41,8 @@ namespace MusicPrj.Models
         public IEnumerable<CSearchResult> byKeyword(string keyword)
         {
             var result = from p in db.tProducts
-                         where p.fProductName.Contains(keyword)
+                         where p.fProductName.Contains(keyword) && p.tAlbum.fStatus == 2
+                         orderby p.tAlbum.fYear descending
                          select new CSearchResult { album = p.tAlbum, product = p };
             return result;
         }
@@ -51,6 +52,8 @@ namespace MusicPrj.Models
         {
             //因為此處作法是先挑音樂再過濾出專輯，所以沒有加入音樂的專輯也不會被找到
             var data = from p in db.tProducts
+                       where p.tAlbum.fStatus == 2
+                       orderby p.tAlbum.fYear descending
                        select new CSearchResult { album = p.tAlbum, product = p };
 
             //比對專輯裡的音樂名稱是否符合
@@ -105,7 +108,7 @@ namespace MusicPrj.Models
         //尋找屬於特定活動的專輯
         public IEnumerable<tAlbum> byEvent(int eventId)
         {
-            var result = db.tAlbums.Where(a => a.fActivityID == eventId);
+            var result = db.tAlbums.Where(a => a.fActivityID == eventId && a.fStatus == 2).OrderByDescending(a => a.fYear); ;
             return result;
         }
 
@@ -115,16 +118,17 @@ namespace MusicPrj.Models
             var albums = new List<tAlbum>();
             if (method == "account")
             {
-                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fAccount.Contains(keyword) && a.fStatus == 2).OrderByDescending(a => a.fYear).ToList();
             }
             else if (method == "group")
             {
-                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fMaker.Contains(keyword) && a.fStatus == 2).OrderByDescending(a => a.fYear).ToList();
             }
             else if (method == "albumName")
             {
-                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword)).ToList();
+                albums = db.tAlbums.Where(a => a.fAlbumName.Contains(keyword) && a.fStatus == 2).OrderByDescending(a => a.fYear).ToList();
             }
+            albums.OrderBy(a => a.fYear);
 
             foreach (var a in albums)
             {
@@ -141,10 +145,10 @@ namespace MusicPrj.Models
                     };
                     musics.Add(pro);
                 }
-                tAlbum album = new tAlbum()
+                myNewAlbum album = new myNewAlbum()
                 {
                     fAlbumID = a.fAlbumID,
-                    fYear = a.fYear,
+                    fYear = ((DateTime)a.fYear).ToShortDateString(),
                     fCoverPath = a.fCoverPath,
                     fAccount = a.fAccount,
                     fMaker = a.fMaker,
@@ -155,5 +159,38 @@ namespace MusicPrj.Models
             }
             return result;
         }
+
+        internal object accountManage(string keyword)
+        {
+            List<object> result = new List<object>();
+            var members = db.tMembers.Where(m => m.fAccount.Contains(keyword)).ToList();
+            foreach (var m in members)
+            {
+                var member = new
+                {
+                    m.fAccount,
+                    m.fNickName,
+                    m.fEmail,
+                    m.fPrivilege,
+                    m.fSubscriptStartDate,
+                    m.fSubscriptEndDate,
+                    m.fMoney
+                };
+                result.Add(member);
+            }
+            return result;
+        }
     }
+    //急就章的寫法
+    public class myNewAlbum
+    {
+        public int fAlbumID { get; set; }
+        public string fAlbumName { get; set; }
+        public string fMaker { get; set; }
+        public string fAccount { get; set; }
+        public string fYear { get; set; }
+        public Nullable<decimal> fALPrice { get; set; }
+        public string fCoverPath { get; set; }
+    }
+
 }

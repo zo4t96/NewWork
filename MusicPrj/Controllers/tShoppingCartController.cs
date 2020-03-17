@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MusicPrj.Models;
+using MainWork.Models;
 
 namespace MusicPrj.Controllers
 {
@@ -11,27 +11,65 @@ namespace MusicPrj.Controllers
     {
         // GET: tShoppingCart
         tShoppingCartFram tCart = new tShoppingCartFram();
-        public ActionResult ShoppingCart(string cname)
+        //購物車頁面
+
+        public ActionResult ShoppingCart(string cname, bool ajax = false)
         {
-                return View(tCart.getShoppingCart(cname));
+            if (ajax)
+            {
+                ViewBag.ajax = true;
+            }
+
+            return View(tCart.getShoppingCart(cname));
+
+
         }
+        //加入購物車
+
         public ActionResult AddCart(string cname, string pdid)
         {
-
-            tCart.shopcartadd(cname, pdid);
-            return JavaScript("alert('已加入購物車');");
+            return JavaScript($"alert('{tCart.shopcartadd(cname, pdid)}');");
             //return Content("已加入購物車");
 
         }
+        //購物車資料刪除
+        [HttpPost]
         public ActionResult DelCart(int pID, int cID)
         {
             tCart.CartItemDel(pID, cID);
             return Content("已刪除該筆訂單");
         }
-        public ActionResult BuyCheck(int shopcarid)
+        //購買專輯確認付款後相關狀態更新
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult BuyCheck(int shopcartid, int dis = 0, bool ajax = false)
         {
-            tCart.CarType(shopcarid);
-            return Content("test");
+            string mes = tCart.CarType(shopcartid, dis);
+            ViewBag.Mes = mes;
+            return RedirectToAction("MyMusic", "Album");
+        }
+        //確認剩餘積分
+        [HttpPost]
+        public ActionResult CheckDis(string cname)
+        {
+            return Content(tCart.Dsc(cname));
+        }
+        //購買專輯確認付款後導向的訂單頁面或是要倒其他頁?
+        [HttpPost]
+        public ActionResult CheckCart(int cartid, bool ajax = false)
+        {
+
+            ViewBag.ajax = ajax;
+
+            return View(tCart.CCheck(cartid));
+        }
+        //購買包月付款後狀態更新
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult BuyMonth(string account)
+        {
+            tCart.BMounth(account);
+            return RedirectToAction("Main", "Homepage");
         }
     }
 }

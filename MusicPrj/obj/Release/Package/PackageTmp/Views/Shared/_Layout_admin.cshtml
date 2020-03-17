@@ -1,4 +1,4 @@
-﻿@using MusicPrj.Models;
+﻿@using MainWork.Models;
 <!DOCTYPE html>
 <html lang="en">
 @{
@@ -56,31 +56,73 @@
             color: black;
         }
 
-        #aaa {
-            background-color: #f5f5f5;
-            height: 100vh;
-            overflow: auto;
+        #aside {
+            overflow: hidden;
         }
 
-        #bbb {
+        #all {
             background-color: #f5f5f5;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        #page {
+            background-color: #f5f5f5;
+        }
+
+        .admin {
+            filter: invert();
+            display: inline-block;
+            width: 180px;
+            height: 70px;
+            background-size: cover;
+        }
+
+        #leftMenu {
+            padding-left: 50px;
+            padding-top: 30px;
+            /*background-color: #c9e1e5;*/
+            background-image: linear-gradient(to bottom,#f5f5f5 5%,#c1e5eb);
+            /*background: -webkit-radial-gradient(center, ellipse cover, #C1E5EB 38%, #F5F5F5 60%);*/
+            color: black;
+        }
+        /*#menuList{
+            background: -webkit-radial-gradient(center, ellipse cover, #C1E5EB 38%, #F5F5F5 60%);
+
+        }*/
+        .myLogo {
+            height: 100px;
+            background-image: linear-gradient(to top,#f5f5f5 5%,#c1e5eb);
+            box-shadow: none;
+            padding-left: 50px;
+            border: none;
+        }
+
+        #head {
+            height: 100px;
+            background-image: linear-gradient(to top,#f5f5f5 5%,#c1e5eb);
+            box-shadow: none;
+        }
+
+        #sub {
+            background-color: transparent;
         }
     </style>
 </head>
 
 <body @*class="animsition"*@>
-    <div class="page-wrapper" id="aaa">
+    <div class="page-wrapper" id="all">
 
         <!-- MENU SIDEBAR-->
-        <aside class="menu-sidebar d-none d-lg-block">
-            <div class="logo">
-                <a href="#">
-                    <img src="~/images/logo.png" alt="Cool Admin" />
+        <aside class="menu-sidebar d-none d-lg-block" id="aside">
+            <div class="myLogo" id="logo">
+                <a href="@Url.Action("index","Admin")">
+                    <img src="~/images/spiderfly.png" class="admin" />
                 </a>
             </div>
-            <div class="menu-sidebar__content js-scrollbar1">
+            <div class="menu-sidebar__content js-scrollbar1" id="leftMenu">
                 <nav class="navbar-sidebar">
-                    <ul class="list-unstyled navbar__list">
+                    <ul class="list-unstyled navbar__list" id="menuList">
                         <li>
                             <a href="@Url.Action("TypeAlter","Admin")">
                                 <i class='far fa-clone mr-4' style='font-size:20px'></i>類別管理
@@ -97,7 +139,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="@Url.Action("Index4","Admin")">
+                            <a href="@Url.Action("MemberManage","Admin")">
                                 <i class='fas fa-address-card mr-4' style='font-size:20px'></i>會員管理
                             </a>
                         </li>
@@ -105,7 +147,7 @@
                             <a class="js-arrow" href="#">
                                 <i class='fas fa-music mr-4' style='font-size:20px'></i>音樂管理
                             </a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list" id="sub">
                                 <li class="ml-3">
                                     <a href="@Url.Action("MusicManage","Admin")">
                                         上架音樂管理
@@ -119,12 +161,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="@Url.Action("Index4","Admin")">
-                                <i class='far fa-copy mr-4' style='font-size:20px'></i>訂單管理
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Index4","Admin")">
+                            <a href="@Url.Action("SaleStatistic","Admin")">
                                 <i class="fa fa-bar-chart" style='font-size:22px'></i>統計資料
                             </a>
                         </li>
@@ -135,9 +172,9 @@
         </aside>
         <!-- END MENU SIDEBAR-->
         <!-- PAGE CONTAINER-->
-        <div class="page-container" id="bbb">
+        <div class="page-container" id="page">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
+            <header class="header-desktop" id="head">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="header-wrap">
@@ -145,41 +182,7 @@
                                 @* 保留form框架，不然右邊的選項會擠到中間 *@
                             </form>
                             <div class="header-button">
-                                <div class="noti-wrap">
-                                    <div class="noti__item js-item-menu">
-                                        <i class="zmdi zmdi-comment-more"></i>
-                                        <span class="quantity">1</span>
-                                        <div class="mess-dropdown js-dropdown">
-                                            <div class="mess__title">
-                                                <p>You have 2 news message</p>
-                                            </div>
-                                            <div class="mess__item">
-                                                <div class="image img-cir img-40">
-                                                    <img src="images/icon/avatar-06.jpg" alt="Michelle Moreno" />
-                                                </div>
-                                                <div class="content">
-                                                    <h6>Michelle Moreno</h6>
-                                                    <p>Have sent a photo</p>
-                                                    <span class="time">3 min ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="mess__item">
-                                                <div class="image img-cir img-40">
-                                                    <img src="images/icon/avatar-04.jpg" alt="Diane Myers" />
-                                                </div>
-                                                <div class="content">
-                                                    <h6>Diane Myers</h6>
-                                                    <p>You are now connected on message</p>
-                                                    <span class="time">Yesterday</span>
-                                                </div>
-                                            </div>
-                                            <div class="mess__footer">
-                                                <a href="#">View all messages</a>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
@@ -199,24 +202,6 @@
                                                     <h5 class="name">
                                                         <a href="#">Hello,管理員</a>
                                                     </h5>
-                                                    <span class="email">johndoe@example.com</span>
-                                                </div>
-                                            </div>
-                                            <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account
-                                                    </a>
-                                                </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-settings"></i>Setting
-                                                    </a>
-                                                </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-money-box"></i>Billing
-                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
@@ -292,6 +277,7 @@
         $(function () {
             // for now, there is something adding a click handler to 'a'
             var tues = moment().day(2).hour(19);
+
             // build trival night events for example data
             var events = [
                 {
@@ -304,8 +290,11 @@
                     start: moment().hour(9).add(2, 'days').toISOString(),
                     url: '#'
                 }
+
             ];
+
             var trivia_nights = []
+
             for (var i = 1; i <= 4; i++) {
                 var n = tues.clone().add(i, 'weeks');
                 console.log("isoString: " + n.toISOString());
@@ -316,6 +305,7 @@
                     url: '#'
                 });
             }
+
             // setup a few events
             $('#calendar').fullCalendar({
                 header: {

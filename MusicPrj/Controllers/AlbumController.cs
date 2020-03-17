@@ -1,4 +1,4 @@
-﻿using MusicPrj.Models;
+﻿using MainWork.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,9 +9,10 @@ using Newtonsoft.Json.Linq;
 using System.Web.Script.Services;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
-using MusicPrj.ViewModels;
+using MainWork.ViewModels;
+using prjSpotifyProject.ViewModels;
 
-namespace MusicPrj.Controllers
+namespace MainWork.Controllers
 {
     public class testO
     {
@@ -20,7 +21,7 @@ namespace MusicPrj.Controllers
 
     public class AlbumController : Controller
     {
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         CPlaylist playlist = new CPlaylist();
         CAlbum album = new CAlbum();
         // GET: Album
@@ -67,9 +68,9 @@ namespace MusicPrj.Controllers
         {
             //      Session[CDictionary.SK_ACCOUNT] = "aaa";
             var album = from a in db.tAlbums
-                        where a.fStatus ==1
+                        where a.fStatus == 1
                         select a;
-       //     Session[CDictionary.SK_sideboxList1Id] = "1";
+            //     Session[CDictionary.SK_sideboxList1Id] = "1";
             CSearch cs = new CSearch();
             CEvent ce = new CEvent();
             ViewBag.events = ce.eventQuery();
@@ -82,6 +83,13 @@ namespace MusicPrj.Controllers
             ViewBag.AlbInfo = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid);
             var list = db.tProducts.Where(p => p.fAlbumID == amid);
             //         Session["account"] = "aaa";
+
+            if (Session[CDictionary.SK_ACCOUNT] != null)
+            {
+                string nowAccount = Session[CDictionary.SK_ACCOUNT].ToString();
+                ViewBag.privilege = db.tMembers.FirstOrDefault(m => m.fAccount == nowAccount).fPrivilege;
+            }
+
             if (list != null)
             {
                 Session["albumid"] = amid;
@@ -104,8 +112,10 @@ namespace MusicPrj.Controllers
             }
             else
             {
-                return Content("撥放清單是空的喔");
+                //    return View();
+                return Content("<span>撥放清單是空的喔<span>");
             }
+
         }
 
         public ActionResult _PlayLists()
@@ -131,17 +141,18 @@ namespace MusicPrj.Controllers
             }
             if (tp.Count != 0)
             {
-                return PartialView("_PlayLists",tp);
+                return PartialView("_PlayLists", tp);
             }
             else
             {
+                //    return View();
                 return PartialView("_PlayLists", tp);
             }
         }
 
         public ActionResult addPlayLists(int amid)
         {
-            string s1 ="";
+            string s1 = "";
             try
             {
                 s1 = Session[CDictionary.SK_ACCOUNT].ToString();
@@ -150,7 +161,17 @@ namespace MusicPrj.Controllers
             {
                 s1 = "";
             }
-            return JavaScript("alert('"+playlist.userAddPlayLists(s1,amid)+ "');");
+            string msg = playlist.userAddPlayLists(s1, amid);
+
+            //只有成功時不跳alert
+            if(msg == "成功")
+            {
+                return Content("成功");
+            }
+            else
+            {
+                return JavaScript("alert('" + msg + "');");
+            }
         }
 
         public ActionResult nextPlayLists(int amid, int playmode)
@@ -166,13 +187,13 @@ namespace MusicPrj.Controllers
                 s3 = "包月會員";
                 if (playmode != 2)
                 {
-                    if(playmode != 4)
+                    if (playmode != 4)
                     {
-                    tprodSec = playlist.getUserPlaylistSubscribeNext(s1, amid).Skip(1).Take(1).FirstOrDefault();
+                        tprodSec = playlist.getUserPlaylistSubscribeNext(s1, amid).Skip(1).Take(1).FirstOrDefault();
                     }
                     else
                     {
-                    tprodSec = playlist.getUserPlaylistSubscribeNext(s1, amid).LastOrDefault();
+                        tprodSec = playlist.getUserPlaylistSubscribeNext(s1, amid).LastOrDefault();
                     }
 
                 }
@@ -253,7 +274,6 @@ namespace MusicPrj.Controllers
             }
         }
 
-        //0311新增撥放刪除功能
         [HttpPost]
         public ActionResult deletePlayLists(int deleteid)
         {
@@ -269,13 +289,12 @@ namespace MusicPrj.Controllers
             string Msg = playlist.userDeletePlayLists(s1, deleteid);
             if (Msg == "")
             {
-            return JavaScript("");
+                return JavaScript("");
             }
             else
             {
-            return JavaScript("alert('" + Msg + "');");
+                return JavaScript("alert('" + Msg + "');");
             }
-
         }
 
         //創作者相關
@@ -284,7 +303,7 @@ namespace MusicPrj.Controllers
             //Session[CDictionary.SK_ACCOUNT] = "aaa";
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             var list = db.tAlbums.Where(p => p.fAccount == s1);
-            return View(list) ;
+            return PartialView(list);
         }
 
         //創作者所有專輯
@@ -292,7 +311,7 @@ namespace MusicPrj.Controllers
         {
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             var list = db.tAlbums.Where(p => p.fAccount == s1);
-            return PartialView(list);
+            return View(list);
         }
 
         public ActionResult _MyAlbumAddAlbum()
@@ -312,7 +331,7 @@ namespace MusicPrj.Controllers
 
         public ActionResult AlbumInfo(int amid, bool ajax = false)
         {
-            string s1 = "";
+            string s1 ="";
             if (Session[CDictionary.SK_ACCOUNT] == null)
             {
                 return RedirectToAction("Main", "Homepage");
@@ -324,16 +343,15 @@ namespace MusicPrj.Controllers
             }
             var list = db.tProducts.Where(p => p.fAlbumID == amid);
             //非創作者或管理員
-            if (db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid).fAccount != s1)
+            if (db.tAlbums.FirstOrDefault(p=>p.fAlbumID == amid).fAccount != s1)
             {
                 return RedirectToAction("Main", "Homepage");
                 //Response.Redirect("~/Homepage/Main");
             }
             Session["albumid"] = amid;
             return View(list);
+            
         }
-
-        //Line互動相關 0311
 
         public ActionResult _LinePlayer()
         {
@@ -358,7 +376,6 @@ namespace MusicPrj.Controllers
             }
             else
             {
-                //    return View();
                 return PartialView("_PlayLists", tp);
             }
         }
@@ -376,7 +393,7 @@ namespace MusicPrj.Controllers
             if (data != null)
             {
                 string account = data.txtAccount;
-                tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
+                tMember cust = (new dbProjectMusicStoreEntities1()).tMembers.FirstOrDefault(p => p.fAccount == account);
                 if (cust != null)
                 {
                     if (cust.fPassword.Equals(data.txtPassword))
@@ -424,7 +441,7 @@ namespace MusicPrj.Controllers
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             tMember tM = db.tMembers.FirstOrDefault(p => p.fAccount == s1);
             List<tProduct> tp = null;
-            tp = playlist.getUserPlaylistNormal(s1);
+            tp = playlist.getUserPlaylistNormalformusic(s1);
             if (tp != null)
             {
                 return View(tp);
@@ -475,13 +492,13 @@ namespace MusicPrj.Controllers
         [HttpPost]
         public ActionResult AlbumInfoUpload(FormCollection formCollection, HttpPostedFileBase tP_fRealFile)
         {
-            if(formCollection == null)
+            if (formCollection == null)
             {
                 return View();
             }
-            int amid =Int32.Parse(Session["albumid"].ToString());
+            int amid = Int32.Parse(Session["albumid"].ToString());
             ViewBag.Msg = album.userAddsong(formCollection, amid, tP_fRealFile);
-           // string s1 = "AlbumInfo?amid=" + Session["albumid"].ToString();
+            // string s1 = "AlbumInfo?amid=" + Session["albumid"].ToString();
             return JavaScript("alert('" + ViewBag.Msg + "');");
             //    return Redirect(s1);
         }
@@ -501,7 +518,7 @@ namespace MusicPrj.Controllers
         {
             string s1 = "MyAlbumList?account=" + Session[CDictionary.SK_ACCOUNT].ToString();
             string s2 = Session[CDictionary.SK_ACCOUNT].ToString();
-            ViewBag.Msg = album.userDeleteAlbum(amid,s2);
+            ViewBag.Msg = album.userDeleteAlbum(amid, s2);
             TempData["message"] = ViewBag.Msg;
             //return Content(ViewBag.Msg); //除錯用
             return Redirect(s1);
@@ -521,12 +538,13 @@ namespace MusicPrj.Controllers
         public ActionResult updateAlbumInfoFile(FormCollection formCollection, HttpPostedFileBase fCoverPathUpload)
         {
             string s1 = Session["albumid"].ToString();
-            if(fCoverPathUpload != null)
+            string s2 = Session[CDictionary.SK_ACCOUNT].ToString();
+            if (fCoverPathUpload != null)
             {
-            ViewBag.Msg = album.userUpdateAlbumFile(s1, fCoverPathUpload);
+                ViewBag.Msg = album.userUpdateAlbumFile(s1, fCoverPathUpload, s2);
             }
-            ViewBag.Msg = album.userUpdateAlbumInfo(s1, formCollection);
-           // TempData["message"] = ViewBag.Msg;
+            ViewBag.Msg = album.userUpdateAlbumInfo(s1, formCollection, s2);
+            // TempData["message"] = ViewBag.Msg;
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
 
@@ -548,7 +566,7 @@ namespace MusicPrj.Controllers
         public ActionResult _updateSongInterface(string soid)
         {
             int intSoid = Int32.Parse(soid);
-            tProduct tP = (new dbProjectMusicStoreEntities()).tProducts.FirstOrDefault(p => p.fProductID == intSoid);
+            tProduct tP = (new dbProjectMusicStoreEntities1()).tProducts.FirstOrDefault(p => p.fProductID == intSoid);
             if (tP != null)
             {
                 return PartialView("_updateSongInterface", tP);
@@ -562,23 +580,25 @@ namespace MusicPrj.Controllers
         //重新上傳單曲
         public ActionResult updateSong(FormCollection formCollection, HttpPostedFileBase fRealFile)
         {
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             string fProductID = formCollection["fProductID"];
-         //   string fProductID = "5";
+            //   string fProductID = "5";
             if (fRealFile != null)
             {
-                ViewBag.Msg = album.userUpdateSongFile(fProductID, fRealFile);
+                ViewBag.Msg = album.userUpdateSongFile(fProductID, fRealFile, s1);
             }
-            ViewBag.Msg = album.userUpdateSongInfo(fProductID, formCollection);
-          //  TempData["message"] = ViewBag.Msg;
+            ViewBag.Msg = album.userUpdateSongInfo(fProductID, formCollection, s1);
+            //  TempData["message"] = ViewBag.Msg;
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
 
         //更新單曲
         [HttpPost]
-        public ActionResult updateSongInfoAjax(int soid,FormCollection formCollection)
+        public ActionResult updateSongInfoAjax(FormCollection formCollection)
         {
-            ViewBag.Msg = album.userUpdateSongInfoDetail(soid, formCollection);
-         //   TempData["message"] = ViewBag.Msg;
+            string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
+            ViewBag.Msg = album.userUpdateSongInfoDetail(formCollection, s1);
+            //   TempData["message"] = ViewBag.Msg;
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
 
@@ -591,7 +611,7 @@ namespace MusicPrj.Controllers
         //更新專輯Kind處理
         public ActionResult kindRevise(string tAfKinds)
         {
-             string s1 = Session["albumid"].ToString();
+            string s1 = Session["albumid"].ToString();
             ViewBag.Msg = album.userUpdateAlbumKind(s1, tAfKinds);
             //TempData["message"] = ViewBag.Msg;
             return JavaScript("alert('" + ViewBag.Msg + "');");
@@ -601,6 +621,19 @@ namespace MusicPrj.Controllers
         public ActionResult _kindAddInterface()
         {
             return PartialView("_kindAddInterface");
+        }
+
+   
+    //03/08/2020新增使用自訂活動頁面(先放棄實作)
+    public ActionResult _userEvent()
+        {
+            return PartialView();
+        }
+        public ActionResult userEventRenew(string account)
+        {
+            CEvent ce = new CEvent();
+            var result = ce.eventQuery(account).Select(e => new { e.fTitle, e.fStartTime, e.fEndTime });
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
     }

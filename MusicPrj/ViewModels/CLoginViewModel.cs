@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.ViewModel
+namespace MainWork.ViewModel
 {
     public class CLoginViewModel
     {
         public string emailoraccount { get; set; }
         public string password { get; set; }
     }
-
     public class LineLoginToken
     {
         public string access_token { get; set; }

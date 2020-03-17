@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @{
     Layout = null;
     //if (Session[CDictionary.SK_ACCOUNT] != null || Session[CDictionary.SK_ACCOUNT].ToString()!="")
@@ -9,9 +9,10 @@
 
 <style>
 
+
     /*滑鼠拖曳選擇Kind效果css開始*/
     .containerDrag ul {
-        width: 43%;
+        width: 220px;
         padding: 7px;
         min-height: 300px;
         background-color: #292929;
@@ -25,7 +26,7 @@
         .containerDrag ul li {
             display: block;
             float: left;
-            width: 45%;
+            width: 80px;
             height: 35px;
             line-height: 35px;
             border-radius: 4px;
@@ -38,14 +39,14 @@
             user-select: none;
             text-indent: 10px;
             color: black;
-            margin-right: 5px
+            margin-right: 10px
         }
 
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
-        max-width: 800px;
-        text-align: left;
+        max-width: 1200px;
+        text-align: center;
     }
 
     .kindReviseBtn {
@@ -60,27 +61,21 @@
         transition: 0.4s;
     }
 
-    .kindReviseBtn:hover {
+    .loingBtn:hover {
         background-color: #1dd15d;
-    }
-    .kindTitle{
-    text-align:center;
-    }
-    .containerDrag{
-
     }
 </style>
 <script>
-                            dragReflash();
+    dragReflash();
 </script>
 <div class="box">
 
     @*//防止網站被攻擊的防護，但目前會報錯先註解*@
     @*@Html.AntiForgeryToken();*@
-    <div class="h2 kindTitle">單曲類型</div>
+    <div clsdd="h2">類型更改</div>
 
     @*使用拖曳填入input的專輯Kind*@
-    <div class="form-group" style="min-height:450px">
+    <div class="form-group" style="min-height:400px">
         <div class="col-md-12">
             <div class="containerDrag">
                 <ul id="userKindtaginput"></ul>
@@ -93,9 +88,9 @@
         </div>
     </div>
     <script>
-            $(function () {
-                drag.init('containerDrag');
-            });
+        $(function () {
+            drag.init('containerDrag');
+        });
     </script>
 
 
@@ -125,23 +120,23 @@
     //重新載入drag
     function dragReflash() {
         //可拖動Ul/Li物件初始化
-drag = {
-class_name: null,
-permitDrag: false,
-_x: 0,
-_y: 0,
-_left: 0,
-_top: 0,
-old_elm: null,
-tmp_elm: null,
-new_elm: null,
-init: function (className) {
-drag.class_name = className;
-    $('.' + drag.class_name).on('mousedown', 'ul > li', function (event) {
-                drag.permitDrag = true;
-                drag.old_elm = $(this);
-                drag.mousedown(event);
-                return false;
+        drag = {
+        class_name: null,
+        permitDrag: false,
+        _x: 0,
+        _y: 0,
+        _left: 0,
+        _top: 0,
+        old_elm: null,
+        tmp_elm: null,
+        new_elm: null,
+        init: function (className) {
+        drag.class_name = className;
+            $('.' + drag.class_name).on('mousedown', 'ul > li', function (event) {
+                        drag.permitDrag = true;
+                        drag.old_elm = $(this);
+                        drag.mousedown(event);
+                        return false;
     });
 
     $(document).mousemove(function (event) {
@@ -157,10 +152,10 @@ drag.class_name = className;
                 drag.mouseup(event);
                 return false;
 });
-    }, 
+    },
     mousedown: function (event) {
-    
-       
+
+
             console.log('我被mousedown了');
             drag.tmp_elm = $(drag.old_elm).clone();
 
@@ -268,7 +263,6 @@ drag.class_name = className;
              }
 
          })
-
     })
 
         //滑鼠拖動時取得拖曳內容轉成文字方塊

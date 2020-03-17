@@ -1,5 +1,5 @@
-﻿@using MusicPrj.ViewModel;
-@using MusicPrj.Models;
+﻿@using MainWork.ViewModel;
+@using MainWork.Models;
 
 @{
     Layout = null;
@@ -10,6 +10,7 @@
 }
 
 <style>
+
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
@@ -34,14 +35,14 @@
         transition: 0.4s;
     }
 
-    .loingBtn:hover {
-        background-color: #1dd15d;
-    }
+        .loingBtn:hover {
+            background-color: #1dd15d;
+        }
 
-    .lineLoginBtn{
-        width:25%;
-        padding-top:20px;
-        cursor:pointer;
+    .lineLoginBtn {
+        width: 25%;
+        padding-top: 20px;
+        cursor: pointer;
     }
 </style>
 
@@ -50,31 +51,48 @@
     {
         //防止網站被攻擊的防護，但目前會報錯先註解
         @*@Html.AntiForgeryToken();*@
-        <h2>用戶登入</h2>
+        <div class="h2">用戶登入</div>
         <div class="col-xs-12">
             <input type="text" name="txtAccount" placeholder="用戶名稱" class="form-control " value="">
         </div>
         <div class="form-input-password">
             <input type="password" name="txtPassword" placeholder="密碼" class="form-control " value="">
         </div>
+        <div class="error"></div>
         <div class="loingBtn">登入</div>
     }
     <div>
         <a onclick="openPopupWindow()">
-            <img class="lineLoginBtn" src="~/images/btn_login_base.png"/>
+            <img class="lineLoginBtn" src="~/images/btn_login_base.png" />
         </a>
     </div>
     <div id="LineLoginresult"></div>
 </div>
 
 <script>
+    // 帳號密碼判斷
     $(".loingBtn").click(function () {
-        $("form").submit();
+        $.post("@Url.Action("Login", "MemberLogin")",
+            {
+                txtAccount:$("input[name='txtAccount']").val(),
+                txtPassword: $("input[name='txtPassword']").val(),
+                ajax:true
+            },
+            function (data) {
+                if (data == "false") {
+                    $(".error").text("帳號或密碼錯誤");
+                    //alert("帳號或密碼錯誤");
+                } else {
+                    $("form").submit();
+                }
+            })
     })
+</script>
 
+
+<script>
     let LineLoginUrl = "@Url.Action("GetLineLoginUrl","MemberLogin")";
     let RevokeLineLoginUrl = "@Url.Action("RevokeLineLoginUrl","MemberLogin")";
-
     //Line回傳成功後關閉此容器
     $("body").on('DOMSubtreeModified', "#LineLoginresult", function () {
                  setTimeout(function () {
@@ -86,7 +104,6 @@
                 }, 500)
                 window.location.href = "@Url.Action("Main","Homepage")"
     });
-
     function openPopupWindow() {
         $("#result").html("");//清空顯示結果
         //另開popup window前，每次都取得新的LineLoginUrl(每次Url的state參數都不一樣)

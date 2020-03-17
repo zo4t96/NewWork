@@ -68,11 +68,11 @@
     <Property Name="fSubscriptStartDate" Type="datetime" />
     <Property Name="fSubscriptEndDate" Type="datetime" />
     <Property Name="fLastPlaySong" Type="int" />
-    <Property Name="fLineId" Type="varchar" MaxLength="40" />
+    <Property Name="fLineId" Type="nvarchar(max)" />
     <Property Name="fLineName" Type="nvarchar" MaxLength="50" />
     <Property Name="fLineTimeMark" Type="datetime" />
-    <Property Name="fLineStatus" Type="int" />
     <Property Name="fPayPalAccount" Type="nvarchar(max)" />
+    <Property Name="fLineStatus" Type="int" />
   </EntityType>
   <EntityType Name="tMessage">
     <Key>
@@ -84,6 +84,7 @@
     <Property Name="fContent" Type="nvarchar(max)" />
     <Property Name="fTime" Type="datetime" />
     <Property Name="fStatus" Type="int" />
+    <Property Name="fRead" Type="int" />
     <Property Name="fTitle" Type="nvarchar(max)" />
     <Property Name="fReaded" Type="int" />
   </EntityType>
@@ -105,9 +106,13 @@
     <Property Name="fSinger" Type="nvarchar" MaxLength="50" />
     <Property Name="fSIPrice" Type="money" />
     <Property Name="fComposer" Type="nvarchar" MaxLength="50" />
+    <Property Name="fArranger" Type="nvarchar" MaxLength="50" />
+    <Property Name="fLyricist" Type="nvarchar" MaxLength="50" />
     <Property Name="fFilePath" Type="nvarchar(max)" />
     <Property Name="fPlayStart" Type="float" />
     <Property Name="fPlayEnd" Type="float" />
+    <Property Name="fStatus" Type="int" />
+    <Property Name="fModifiedDate" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tPurchaseItem">
     <Key>

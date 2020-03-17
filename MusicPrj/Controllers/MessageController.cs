@@ -1,4 +1,5 @@
-﻿using MusicPrj.Models;
+﻿using MainWork;
+using MainWork.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace MusicPrj.Controllers
 {
     public class MessageController : Controller
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         CMessage message = new CMessage();
         // GET: Message
         public ActionResult Index()
@@ -24,7 +25,7 @@ namespace MusicPrj.Controllers
             return View();
         }
 
-        public ActionResult _MessageListView(int page=1)
+        public ActionResult _MessageListView(int page = 1)
         {
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             if (page != -1)
@@ -57,7 +58,7 @@ namespace MusicPrj.Controllers
             }
             else
             {
-                List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities()).tMessages.Where(p => p.fAccountFrom == s1 && p.fStatus == 0).ToList();
+                List<tMessage> tMesCopy = (new dbProjectMusicStoreEntities1()).tMessages.Where(p => p.fAccountFrom == s1 && p.fStatus == 0).ToList();
                 tMesCopy.Reverse();
                 if (tMesCopy != null)
                 {
@@ -78,7 +79,7 @@ namespace MusicPrj.Controllers
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
 
-        
+
         public ActionResult DelteMail(int mailid)
         {
             string issuerName = Session[CDictionary.SK_ACCOUNT].ToString();
@@ -99,8 +100,8 @@ namespace MusicPrj.Controllers
             ViewBag.Msg = message.userDeleteAllMailCopy(issuerName);
             return JavaScript("alert('" + ViewBag.Msg + "');");
         }
-        
-        public ActionResult MessageSearch(string text ="")
+
+        public ActionResult MessageSearch(string text = "")
         {
             string s1 = Session[CDictionary.SK_ACCOUNT].ToString();
             List<tMessage> tME = db.tMessages.Where(p => p.fAccountTo == s1 && p.fStatus == 1 && (p.fContent.Contains(text) || p.fTitle.Contains(text))).ToList();

@@ -4,20 +4,27 @@ using System.Linq;
 using System.Web;
 //using CDictionary;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CPlaylist
     {
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         //包月連續撥放
         public List<tProduct> getUserPlaylistSubscribe(string s1)
         {
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
-            List<tPlayList> tPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
-            int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
-            List<tPlayList> tPLOut = null;
-            if (lastPlayID != 0)
+            //如果包月帳號的fLastPlaySong裡面值在tPlayList找不到的時候,將fLastPlaySong清空避免無法登入
+            if (db.tPlayLists.FirstOrDefault(p => p.fPlayId == fLastPlaySong) == null)
             {
+                db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong = null;
+                db.SaveChanges();
+                fLastPlaySong = null;
+            }
+            List<tPlayList> tPL = db.tPlayLists.Where(p => p.fAccount == s1).ToList();
+            List<tPlayList> tPLOut = null;    
+            if (fLastPlaySong != null)
+            {
+                int lastPlayID = tPL.FirstOrDefault(p => p.fPlayId == fLastPlaySong).fPlayId;
                 tPLOut = tPL.Where(p => p.fPlayId >= lastPlayID).ToList();
                 tPLOut.AddRange(tPL.Where(p => p.fPlayId < lastPlayID));
             }
@@ -61,7 +68,7 @@ namespace MusicPrj.Models
         public List<tProduct> getUserPlaylistNormal(string s1)
         {
             int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
-            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1 && p.tShoppingCart.fType ==1).ToList();
+            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1 && p.tShoppingCart.fType == 1).ToList();
             tPurchaseItem tPI = tPL.FirstOrDefault(p => p.fProductID == fLastPlaySong);
             List<tPurchaseItem> tPLOut = null;
             if (tPI != null)
@@ -84,10 +91,44 @@ namespace MusicPrj.Models
                     tp.AddRange(db.tProducts.Where(p => p.fAlbumID == a.tProduct.fAlbumID));
                 }
                 //如果是買單曲則只列該單曲
-                else 
+                else
                 {
                     tp.Add(db.tProducts.FirstOrDefault(p => p.fProductID == a.fProductID));
                 }
+            }
+            return tp;
+        }
+
+        public List<tProduct> getUserPlaylistNormalformusic(string s1)
+        {
+            int? fLastPlaySong = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fLastPlaySong;
+            List<tPurchaseItem> tPL = db.tPurchaseItems.Where(p => p.fCustomer == s1 && p.tShoppingCart.fType == 1).ToList();
+            tPurchaseItem tPI = tPL.FirstOrDefault(p => p.fProductID == fLastPlaySong);
+            List<tPurchaseItem> tPLOut = null;
+            if (tPI != null)
+            {
+                int lastPlayID = tPI.fProductID;
+                tPLOut = tPL.Where(p => p.fProductID >= lastPlayID).ToList();
+                tPLOut.AddRange(tPL.Where(p => p.fProductID < lastPlayID));
+            }
+            else
+            {
+                tPLOut = tPL;
+            }
+            // List<tProduct> tp = null;
+            List<tProduct> tp = new List<tProduct>();
+            foreach (var a in tPLOut)
+            {
+                //如果是買整張專輯則列出所有單曲
+                //if (a.fisAlbum == 1)
+                //{
+                //    tp.AddRange(db.tProducts.Where(p => p.fAlbumID == a.tProduct.fAlbumID));
+                //}
+                //如果是買單曲則只列該單曲
+                //else
+                //{
+                    tp.Add(db.tProducts.FirstOrDefault(p => p.fProductID == a.fProductID));
+                //}
             }
             return tp;
         }
@@ -121,14 +162,14 @@ namespace MusicPrj.Models
         {
             string s2 = "";
             //有無此人
-            if(db.tMembers.FirstOrDefault(p=>p.fAccount == s1) == null)
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == s1) == null)
             {
                 s2 = "撥放清單需登入才能使用";
                 return s2;
             }
             //是否過期
             DateTime? dt = db.tMembers.FirstOrDefault(p => p.fAccount == s1).fSubscriptEndDate;
-            if (dt ==null || dt<DateTime.Now)
+            if (dt == null || dt < DateTime.Now)
             {
                 s2 = "此帳號包月已過期無法加入單曲";
                 return s2;

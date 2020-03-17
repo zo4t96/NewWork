@@ -11,28 +11,27 @@ tmp_elm: null,
 new_elm: null,
 init: function (className) {
 drag.class_name = className;
-    $('.' + drag.class_name).on('mousedown', 'ul li', function (event) {
+$('.' + drag.class_name).on('mousedown', 'ul li', function (event) {
                 drag.permitDrag = true;
                 drag.old_elm = $(this);
                 drag.mousedown(event);
                 return false;
 });
-    $(document).mousemove(function (event) {
+$(document).mousemove(function (event) {
                 if (!drag.permitDrag) return false;
                 drag.mousemove(event);
                 return false;
 });
-    $(document).mouseup(function (event) {
+$(document).mouseup(function (event) {
                 if (!drag.permitDrag) return false;
                 drag.permitDrag = false;
                 drag.mouseup(event);
                 return false;
 });
-    }, 
-    mousedown: function (event) {
-    
-       
-            console.log('我被mousedown了');
+        },
+mousedown: function (event) {
+
+          //  console.log('我被mousedown了');
             drag.tmp_elm = $(drag.old_elm).clone();
 
             drag._x = $(drag.old_elm).offset().left;
@@ -126,4 +125,4 @@ drag.class_name = className;
 
         },
 
-};
+    };

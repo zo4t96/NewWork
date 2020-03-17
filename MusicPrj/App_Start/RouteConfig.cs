@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MusicPrj
+namespace MainWork
 {
     public class RouteConfig
     {
@@ -17,7 +17,6 @@ namespace MusicPrj
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Homepage", action = "Main", id = UrlParameter.Optional }
-                //              defaults: new { controller = "Album", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

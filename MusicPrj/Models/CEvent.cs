@@ -1,18 +1,29 @@
-﻿using MusicPrj.ViewModels;
+﻿using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CEvent
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         //全活動查詢
-        public IEnumerable<tActivity> eventQuery()
+        public IEnumerable<tActivity> eventQuery(string account = "")
         {
-            var result = db.tActivities.Select(a => a);
+            List<tActivity> result = new List<tActivity>();
+            //如果有帳號代表只搜索該帳號所上傳的活動
+            if (account != "")
+            {
+                result = db.tActivities.Where(a => a.fLauncher == account).Where(a => a.fStartTime < DateTime.Now).ToList();
+            }
+            //沒有代表查全部
+            else
+            {
+                result = db.tActivities.Select(a => a).Where(a => a.fStartTime < DateTime.Now).ToList();
+            }
             return result;
         }
         //單一活動查詢
@@ -29,11 +40,11 @@ namespace MusicPrj.Models
             IEnumerable<tAlbum> albums;
             if (eventid == 0)
             {
-                albums = db.tAlbums.Where(a => a.fActivityID == null);
+                albums = db.tAlbums.Where(a => a.fActivityID == null && a.fStatus == 2);
             }
             else
             {
-                albums = db.tAlbums.Where(a => a.fActivityID == null || a.fActivityID == eventid);
+                albums = db.tAlbums.Where(a => (a.fActivityID == null || a.fActivityID == eventid) && a.fStatus == 2);
             }
             var kindList = new List<tAlbumKind>();
             if (type != 1)
@@ -95,7 +106,7 @@ namespace MusicPrj.Models
             db.SaveChanges();
         }
 
-        public void eventAlter(CEventObject eventObj)
+        public void eventAlter(CEventObject eventObj, string serverPath)
         {
             //修改資料時，先把該活動的相關專輯的活動清空
             var albums = db.tAlbums.Where(a => a.fActivityID == eventObj.eventId);
@@ -110,7 +121,9 @@ namespace MusicPrj.Models
             target.fEndTime = eventObj.endDate;
             if (eventObj.eventImage != null)
             {
-                eventObj.eventImage.SaveAs(target.fPhotoPath);
+                string newName = Guid.NewGuid().ToString() + ".jpg";
+                eventObj.eventImage.SaveAs(serverPath + newName);
+                target.fPhotoPath = newName;
             }
             foreach (int i in eventObj.eventAlbums)
             {

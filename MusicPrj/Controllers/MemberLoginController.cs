@@ -1,7 +1,9 @@
-﻿using MusicPrj.Models;
-using MusicPrj.ViewModel;
-using MusicPrj.ViewModels;
+﻿using MainWork;
+using MainWork.Models;
+using MainWork.ViewModel;
+using MainWork.ViewModels;
 using Newtonsoft.Json;
+using prjSpotifyProject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,14 +14,14 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MusicPrj.Controllers
+namespace prjSpotifyProject.Controllers
 {
     public class MemberLoginController : Controller
     {
-        dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
 
         //string redirect_uri;
-        string redirect_uri = "http://114.34.9.151/test/MemberLogin/AfterLineLogin";//網址需要再雲端後看雲端網址是什麼再改
+        string redirect_uri = "http://musicstore.southeastasia.cloudapp.azure.com/MemberLogin/AfterLineLogin";//網址需要再雲端後看雲端網址是什麼再改
         string client_id = "1653927630";
         string client_secret = "a92834ca3cb1d19554db273b160a659f";
 
@@ -36,9 +38,9 @@ namespace MusicPrj.Controllers
             TempData["state"] = state;//利用TempData被取出資料後即消失的特性，來防禦CSRF攻擊
             string redirect_uri_1 = "http://";
             string redirect_uri_2 = Request.Url.Authority;
-            string redirect_uri_3 = Url.Content("~")+"MemberLogin/AfterLineLogin";
+            string redirect_uri_3 = Url.Content("~") + "MemberLogin/AfterLineLogin";
             //redirect_uri = redirect_uri_1+ redirect_uri_2 + redirect_uri_3;
-            string LineLoginUrl = 
+            string LineLoginUrl =
              $@"https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&state={state}&scope={HttpUtility.UrlEncode("openid profile email")}";
             //scope給openid是程式為了抓id_token用，設email則為了id_token的Payload裡才會有用戶的email資訊
             return Content(LineLoginUrl);
@@ -125,8 +127,8 @@ namespace MusicPrj.Controllers
                 //          {//有包含email，使用者有授權email個資存取，並且用戶的email有值
                 //              user.email = jst.Payload["email"].ToString();
                 //        }
-                tMember tm = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fLineId == user.userId);
-                if(tm == null)
+                tMember tm = (new dbProjectMusicStoreEntities1()).tMembers.FirstOrDefault(p => p.fLineId == user.userId);
+                if (tm == null)
                 {
                     return Content("此帳號未被綁定,請改用一般方式登入");
                 }
@@ -147,7 +149,7 @@ namespace MusicPrj.Controllers
 
 
             }//end if 
-          
+
             return View();
         }
 
@@ -165,14 +167,14 @@ namespace MusicPrj.Controllers
         }
         // 登入
         [HttpPost]
-        public ActionResult Login(CLoginData data)
+        public ActionResult Login(CLoginData data, bool ajax = false)
         {
-            if (string.IsNullOrEmpty(data.txtAccount))
-                return View("Search", "Kind");
+            //if (string.IsNullOrEmpty(data.txtAccount))
+            //    return View("Search", "Kind");
             if (data != null)
             {
                 string account = data.txtAccount;
-                tMember cust = (new dbProjectMusicStoreEntities()).tMembers.FirstOrDefault(p => p.fAccount == account);
+                tMember cust = (new dbProjectMusicStoreEntities1()).tMembers.FirstOrDefault(p => p.fAccount == account);
                 if (cust != null)
                 {
                     if (cust.fPassword.Equals(data.txtPassword))
@@ -181,10 +183,11 @@ namespace MusicPrj.Controllers
                         Session[CDictionary.SK_CURRENT_LOGINED_USER] = cust;
                         return RedirectToAction("Main", "Homepage");
                     }
+                    return Content("false");
                 }
-                ViewBag.ErrorMessage = "帳號與密碼不符";
+                //ViewBag.ErrorMessage = "帳號或密碼錯誤";
             }
-            return View();
+            return Content("false");
         }
 
         // Creat
@@ -202,9 +205,10 @@ namespace MusicPrj.Controllers
             //m.SaveAs(path);
 
             m.fPicPath = "nobody.jpg";
+            m.fPrivilege = 0;
             db.tMembers.Add(m);
             db.SaveChanges();
-            return RedirectToAction("Main", "Homepage");
+            return RedirectToAction("Main","Homepage");
             //tMemberFactory factory = new tMemberFactory();
             //factory.create(c);
 
@@ -223,7 +227,7 @@ namespace MusicPrj.Controllers
             string account = fAccount;
             tMember loginUser = db.tMembers.FirstOrDefault(m => m.fAccount == account);
 
-            string message = "此帳號已被使用";
+            string  message = "此帳號已被使用";
 
             if (loginUser == null)
             {
@@ -236,8 +240,5 @@ namespace MusicPrj.Controllers
             }
             return Content(message);
         }
-
-
     }
-
 }

@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @{
     ViewBag.Title = "AfterLineLogin";
     Layout = null;
@@ -13,13 +13,11 @@
 
 @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.user)))
 {
-<script type="text/javascript">
-    window.onload = function () {
+    <script type="text/javascript">window.onload = function () {
         //Line登入成功後回傳字串給容器,容器收到後自動關閉
         window.opener.document.getElementById("LineLoginresult").innerHTML = "success";
 
           //      window.opener.access_token = "Html.Raw(ViewBag.access_token)";
                 window.close();
-        }
-    </script>
+        }</script>
 }

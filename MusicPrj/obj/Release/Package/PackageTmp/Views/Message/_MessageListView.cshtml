@@ -1,10 +1,11 @@
-﻿@model IEnumerable<MusicPrj.tMessage>
-@using MusicPrj.Models;
-@{ 
+﻿﻿@model IEnumerable<MainWork.tMessage>
+@using MainWork.Models;
+@{
 
 }
 <style>
-    .mailListDisp{
+
+    .mailListDisp {
         position: relative;
         display: block;
         padding: 0.75rem 1.25rem;
@@ -13,71 +14,76 @@
         /*width:200px;*/
         /*width:50%;*/
         /*overflow:auto;*/
-      /*display:inline-block;*/
+        /*display:inline-block;*/
     }
-    .mailListDisp:first-child {
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-    }
-    .mailListDisp:last-child {
-        border-bottom-right-radius: 0.25rem;
-        border-bottom-left-radius: 0.25rem;
+
+        .mailListDisp:first-child {
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
         }
-    .mailListDisp + .mailListDisp {
-        border-top-width: 0;
+
+        .mailListDisp:last-child {
+            border-bottom-right-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .mailListDisp + .mailListDisp {
+            border-top-width: 0;
+        }
+
+    .mailPic {
+        display: inline-block;
+        margin-right: 5px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        vertical-align: top;
     }
-    .mailPic{
-            display: inline-block;
-            margin-right: 5px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-size: 100%;
-            background-repeat: no-repeat;
-            vertical-align:top;
-    }
-    .textInbox{
-        word-break:break-all;
-        white-space:normal; 
+
+    .textInbox {
+        word-break: break-all;
+        white-space: normal;
         /*overflow:auto;*/
-      display:inline-block;/*與頭像並排*/
-      width:70%;
-      height:20%;
+        display: inline-block; /*與頭像並排*/
+        width: 70%;
+        height: 20%;
     }
 </style>
 
 @foreach (var item in Model)
 {
-<div class="mailListDisp list-group-item-action active">
-    <div class="d-flex w-100 justify-content-between">
-        <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
-        <small class="mailTextColor">
-            @if (item.fReaded == 2 && item.fStatus == 1)
-            {
-                <span class="mailTextColor">  已讀</span>
+    <div class="mailListDisp list-group-item-action active">
+        <div class="d-flex w-100 justify-content-between">
+            <div class="mb-1 h5 mailTextColor">@Html.DisplayFor(modelItem => item.fTitle)</div>
+            <small class="mailTextColor">
+                @if (item.fReaded == 2 && item.fStatus == 1)
+                {
+                    <span class="mailTextColor">  已讀</span>
 
-            }
-            else if(item.fStatus == 1)
+                }
+                else if (item.fStatus == 1)
+                {
+                    <span class="mailTextColor">  未讀</span>
+                }
+                <span class="mailTextColor">  @Html.DisplayFor(modelItem => item.fTime)</span>
+                <span>  <button data-mailid="@item.fMessageId" class="btn btn-danger deletemail">刪除</button></span>
+            </small>
+        </div>
+        <img src="~/Images/@(new dbProjectMusicStoreEntities1().tMembers.FirstOrDefault(p=>p.fAccount==item.fAccountTo).fPicPath)" class="mailPic" />
+        <div class="textInbox mailTextColor"> @Html.DisplayFor(modelItem => item.fContent) </div>
+        <div>
+            @if (item.fStatus == 1)
             {
-                <span class="mailTextColor">  未讀</span>
+                <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
             }
-            <span class="mailTextColor">  @Html.DisplayFor(modelItem => item.fTime)</span>
-            <span>  <button data-mailid="@item.fMessageId" class="btn btn-danger deletemail">刪除</button></span>
-        </small>
+            else
+            {
+                <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
+            }
+        </div>
     </div>
-    <img src="~/Images/@(new dbProjectMusicStoreEntities().tMembers.FirstOrDefault(p=>p.fAccount==item.fAccountTo).fPicPath)" class="mailPic" />
-    <div class="textInbox mailTextColor"> @Html.DisplayFor(modelItem => item.fContent) </div>
-    <div>
-        @if (item.fStatus == 1)
-        {
-            <small class="mailTextColor">來自:@Html.DisplayFor(modelItem => item.fAccountFrom)</small>
-        }
-        else
-        {
-            <small class="mailTextColor">寄到:@Html.DisplayFor(modelItem => item.fAccountTo)</small>
-        }
-    </div>
-</div>
-    }
+}
 
 

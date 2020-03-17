@@ -1,10 +1,11 @@
-﻿@model List<MusicPrj.tAlbum>
+﻿@model List<MainWork.tAlbum>
+@using MainWork.Models;
 @{
     if (ViewBag.ajax != null)
     {
         @(Layout = null);
     }
-        var events = ViewBag.events as IEnumerable<tActivity>;
+    var events = ViewBag.events as IEnumerable<tActivity>;
 }
 <style>
     .albumPanel {
@@ -27,10 +28,11 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-        transform: scale(0.8);
-
+        overflow: hidden;
         transition: 0.4s;
         opacity: 0;
+        /*避免廣告輪播過程中網頁中的字串突然出現的閃動效果*/
+        -webkit-transform: translateZ(0px);
     }
 
     .animation {
@@ -49,6 +51,7 @@
         height: 12vw;
         min-width: 160px;
         min-height: 160px;
+        border-radius: 10px;
         /*測試用圖片*/
         /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
@@ -56,7 +59,7 @@
 
     .albumContent {
         position: relative;
-        width: 12vw;
+        width: 100%;
         min-width: 160px;
         overflow: hidden;
         text-align: left;
@@ -65,9 +68,8 @@
 
     .albumTitle {
         display: block;
-        width: 12vw;
         min-width: 160px;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         margin-bottom: 8px;
         /*使多出的字元變...，下面三個屬性都要設才有效果*/
@@ -77,93 +79,107 @@
     }
 
     .albumDescripion {
-        display: inline-block;
-        width: 12vw;
+        display: block;
         min-width: 160px;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         color: #808080;
-
+        margin-bottom: 5px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
     }
-        /*廣告牆*/
+
+    /*廣告牆*/
     #adCarousel {
         margin: 50px auto;
         width: 900px;
     }
-    .carousel-item{
-        cursor:pointer;
+
+    .carousel-item {
+        cursor: pointer;
+    }
+
+    /*折扣文字*/
+    .discount {
+        position: relative;
+        font-size: 12px;
+        font-weight: 800;
+        color: red;
     }
 </style>
 <link href="~/Content/bootstrap.css" rel="stylesheet" />
 <body>
-    <div id="adCarousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            @{int c = 0;}
-            @foreach (var e in events)
-            {
-                if (c == 0)
+    @if (events.Count() != 0)
+    {
+        <div id="adCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                @{int c = 0;}
+                @foreach (var e in events)
                 {
-                    <li data-target="#adCarousel" data-slide-to="@c" class="active"></li>
+                    if (c == 0)
+                    {
+                        <li data-target="#adCarousel" data-slide-to="@c" class="active"></li>
+                    }
+                    else
+                    {
+                        <li data-target="#adCarousel" data-slide-to="@c"></li>
+                    }
+                    c++;
                 }
-                else
+                @*<li data-target="#adCarousel" data-slide-to="@(c)"></li>
+                    <li data-target="#adCarousel" data-slide-to="@(c+1)"></li>
+                    <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>*@
+            </ol>
+            <div class="carousel-inner">
+                @{c = 0;}
+                @foreach (var item in events)
                 {
-                    <li data-target="#adCarousel" data-slide-to="@c"></li>
+                    if (c == 0)
+                    {
+                        <a class="carousel-item active" data-event="@item.fId">
+                            <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="carousel-item" data-event="@item.fId">
+                            <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
+                        </a>
+                    }
+                    c++;
                 }
-                c++;
-            }
-            <li data-target="#adCarousel" data-slide-to="@(c)"></li>
-            <li data-target="#adCarousel" data-slide-to="@(c+1)+"></li>
-            <li data-target="#adCarousel" data-slide-to="@(c+2)"></li>
-        </ol>
-        <div class="carousel-inner">
-            @{c = 0;}
-            @foreach (var item in events)
-            {
-                if (c == 0)
-                {
-                    <a class="carousel-item active" data-event="@item.fId">
-                        <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
+                @*<a class="carousel-item" href="@Url.Action("Kinds","Search")">
+                        <img src="~/Images/top12.jpg" class="d-block w-100">
                     </a>
-                }
-                else
-                {
-                    <a class="carousel-item" data-event="@item.fId">
-                        <img src="~/Images/@item.fPhotoPath" class="d-block w-100">
+                    <a class="carousel-item" href="@Url.Action("Kinds","Search")">
+                        <img src="~/Images/top18.jpg" class="d-block w-100">
                     </a>
-                }
-                c++;
-            }
-            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
-                <img src="~/Images/top12.jpg" class="d-block w-100">
+                    <a class="carousel-item" href="@Url.Action("Kinds","Search")">
+                        <img src="~/Images/top20.jpg" class="d-block w-100">
+                    </a>*@
+            </div>
+
+            <a class="carousel-control-prev" href="#adCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
-                <img src="~/Images/top18.jpg" class="d-block w-100">
+            <a class="carousel-control-next" href="#adCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
             </a>
-            <a class="carousel-item" href="@Url.Action("Kinds","Search")">
-                <img src="~/Images/top20.jpg" class="d-block w-100">
-            </a>
+
+
         </div>
-        <a class="carousel-control-prev" href="#adCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#adCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
+    }
 
 
-    <div class="h3 mx-5 mt-5 font-weight-bold">所有音樂</div>
+    <div class="h3 mx-5 mt-5 font-weight-bold">最新音樂</div>
     <div class="albumPanel">
         @foreach (var item in Model)
         {
             //data屬性如果命名含大寫會讀不到!!!!!!!!!!!
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID">
-                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID" title="@item.fAlbumName">
                 <img src="~/CoverFiles/@item.fCoverPath" class="albumCover" />
                 <div class="albumContent">
                     <span class="albumTitle">@item.fAlbumName</span>
@@ -172,25 +188,30 @@
                     {
                         <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
                     }
-                    <span class="albumDescripion">@item.fKinds</span>
+                    <span class="albumDescripion">@item.fKinds.Replace(",", "、")</span>
+                    @if (item.fActivityID != null)
+                    {
+                        <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+                    }
                 </div>
             </a>
         }
     </div>
-
     @* 建立廣告牆輪播需讀取的js *@
     <script src="~/Scripts/bootstrap.js"></script>
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
-        }, 100)
+        }, 200)
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
-            let url = `${$(this).attr("href")}?amid=${amid}`;
+            let url = this.href;
             let stateObj = { amid: amid, ajax: true, scrollY: 0 };
+
             history.pushState(stateObj, null, url);
+
             $.ajax({
                 url: url,
                 data: history.state,
@@ -209,12 +230,15 @@
                     $(window).scrollTop(0);
                 }
             })
+
             let title = $(this).data("title");
             document.title = title;
         });
+
         $("#adCarousel").carousel(function () {
             intetval: 1000;
         });
+
         $(".carousel-item").click(function (e) {
             e.preventDefault();
             let eventId = $(this).data("event");
@@ -222,6 +246,7 @@
             let stateObj = { eventId: eventId, ajax: true, scrollY: 0 };
             y = 0;
             history.pushState(stateObj, null, url);
+
             $.ajax({
                 url: url,
                 data: history.state,

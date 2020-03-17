@@ -1,12 +1,12 @@
-﻿using MusicPrj.Models;
-using MusicPrj.ViewModels;
+﻿using MainWork.Models;
+using MainWork.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MusicPrj.Controllers
+namespace MainWork.Controllers
 {
     public class SearchController : Controller
     {
@@ -15,6 +15,7 @@ namespace MusicPrj.Controllers
 
         // GET: BasicSearch
         //曲風選擇頁面
+        
         public ActionResult Kinds(bool ajax = false)
         {
             if (ajax)
@@ -25,22 +26,26 @@ namespace MusicPrj.Controllers
         }
 
         //進行搜尋時先跳轉到空頁面，並將搜尋資料傳遞，之後再讓該頁面實作搜尋的指令
-        public ActionResult KindResult(int kindId, bool ajax = false)
+        public ActionResult KindResult(int kindId ,bool ajax = false)
         {
             if (ajax)
             {
                 ViewBag.ajax = true;
             }
             ViewBag.kindId = kindId;
+
+            dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
+            string kindName = db.tAlbumKinds.FirstOrDefault(k => k.KindID == kindId).KindName;
+            ViewBag.kindName = kindName;
             return View();
         }
 
         //沒有帶ajax參數代表僅提供讀取資料的頁面而無自己的網址
-        public ActionResult KindResultView(int kindID)
-        {
-            return PartialView(search.byKindPage(kindID));
+        public ActionResult KindResultView(int kindId)
+        {    
+            return PartialView(search.byKindPage(kindId).ToList());
         }
-
+        
         //基礎搜尋頁面
         public ActionResult Result(bool ajax = false)
         {
@@ -52,7 +57,7 @@ namespace MusicPrj.Controllers
         }
         public ActionResult ResultView(string keyword)
         {
-            return PartialView(search.byKeyword(keyword));
+            return PartialView(search.byKeyword(keyword).ToList());
         }
 
         //進階搜尋，實作方法與普通差不多
@@ -66,7 +71,7 @@ namespace MusicPrj.Controllers
         }
         public ActionResult AdvancedResultView(CAdvancedSearchObject keyObj)
         {
-            return PartialView(search.byAdvanced(keyObj));
+            return PartialView(search.byAdvanced(keyObj).ToList());
         }
 
         //活動的商品一覽頁面
@@ -80,7 +85,7 @@ namespace MusicPrj.Controllers
         }
         public ActionResult EventResultView(int eventId)
         {
-            return PartialView(search.byEvent(eventId));
+            return PartialView(search.byEvent(eventId).ToList());
         }
 
         //以下皆為autocomplete的實作
@@ -126,5 +131,6 @@ namespace MusicPrj.Controllers
             var result = data.Select(d => new { d.KindName, d.fColor });
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        
     }
 }

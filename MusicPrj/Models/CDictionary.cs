@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CDictionary
     {
+        //竹皓寫的
         public static readonly string SK_ACCOUNT = "SK_ACCOUNT";
         public static readonly string SK_sideboxList1Name = "SK_sideboxList1Name";
         public static readonly string SK_sideboxList1Method = "SK_sideboxList1Method";

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicPrj.tAlbum>
+﻿@model List<MainWork.tAlbum>
 
 <style>
     .albumPanel {
@@ -43,7 +43,7 @@
         min-height: 160px;
         border-radius: 10px;
         /*測試用圖片*/
-        background-image: url("/Images/4.jpg");
+        /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
     }
 
@@ -74,17 +74,10 @@
         font-size: 16px;
         font-weight: 600;
         color: #808080;
-        margin-bottom: 5px;
+        margin-bottom:5px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-    }
-
-    .noResult {
-        position: relative;
-        text-align: center;
-        top: 40%;
-        margin: auto;
     }
     /*折扣文字*/
     .discount {
@@ -94,75 +87,34 @@
         color: #dc0000;
     }
 </style>
-<<<<<<< HEAD:MusicPrj/Views/Search/EventResultView.cshtml
-@*<div class="h2">@Model.First().tActivity.fTitle</div>*@
+
+<div class="h3 mx-5 mt-4 font-weight-bold searchTitle">@Model.First().tActivity.fTitle</div>
 <div class="albumPanel">
-    <a class="albumBlock">
-        <div class="albumCover"></div>
+    @foreach (var item in Model)
+    {
+    <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID" data-title="@item.fAlbumName" title="@item.fAlbumName">
+        <img src="~/CoverFiles/@item.fCoverPath" class="albumCover" />
+        @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
         <div class="albumContent">
-            <span class="albumTitle">測試用專輯名稱</span>
-            <span class="albumDescripion">測試用團體名或歌手</span>
-            <span class="albumDescripion">歌手或作曲者，(進階搜尋用)</span>
-            <span class="albumDescripion">曲風放這裡，字數太多會被刪節號取代</span>
+            <span class="albumTitle">@item.fAlbumName</span>
+            <span class="albumDescripion">@item.fMaker</span>
+            @if (item.tAlbumType.fTypeName != "不指定")
+            {
+                <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
+            }
+            <span class="albumDescripion">@item.fKinds.Replace(",", "、")</span>
+            @if (item.fActivityID != null)
+            {
+                <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+            }
         </div>
     </a>
-    @foreach (var item in Model)
-    {
-        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
-=======
-@{string name = ViewBag.kindName as string; }
-@if (Model.FirstOrDefault() == null)
-{
-    <div class="noResult">
-        <div class="h3">查無資料</div>
-        <p>該曲風可能為近期新增內容，目前還沒有相關音樂喔！</p>
-    </div>
-}
-else
-{
-    <div class="h3 mx-5 mt-4 font-weight-bold searchTitle">曲風名稱</div>
-}
-<div class="albumPanel">
-    @foreach (var item in Model)
-    {
-        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID" data-title="@item.fAlbumName" title="@item.fAlbumName">
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/KindResultView.cshtml
-            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-            <div class="albumCover"></div>
-            <div class="albumContent">
-                <span class="albumTitle">@item.fAlbumName</span>
-                <span class="albumDescripion">@item.fMaker</span>
-                @if (item.tAlbumType.fTypeName != "不指定")
-                {
-                    <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
-                }
-                <span class="albumDescripion">@item.fKinds</span>
-                @if (item.fActivityID != null)
-                {
-                    <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
-                }
-            </div>
-        </a>
     }
 </div>
 <script>
     setTimeout(function () {
         $(".albumBlock").addClass("animation");
     }, 200)
-<<<<<<< HEAD:MusicPrj/Views/Search/EventResultView.cshtml
-    $(".albumBlock").click(function (e) {
-        e.preventDefault();
-        let amid = $(this).data("album");
-        let url = `${$(this).attr("href")}?amid=${amid}`;
-        let stateObj = { amid: amid, ajax: true };
-        $.ajax({
-            url: url,
-            data: stateObj,
-            type: "post",
-            beforeSend: function () {
-                $(".mainbox").html(
-                `<div class="loading">
-=======
 
     $(".albumBlock").click(function (e) {
         e.preventDefault();
@@ -176,30 +128,20 @@ else
             type: "post",
             beforeSend: function () {
                 $(".mainbox").html(
-                    `<div class="loading">
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/KindResultView.cshtml
+                `<div class="loading">
                     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                     <span class="sr-only">Loading...</span>
                 </div>`);
             },
             success: function (data) {
                 $(".mainbox").html(data);
-<<<<<<< HEAD:MusicPrj/Views/Search/EventResultView.cshtml
-                $(window).scrollTop(0);
-            }
-        })
-        history.pushState(stateObj, null, url);
-=======
             },
             complete: function () {
                 $(window).scrollTop(0);
             }
         })
 
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/KindResultView.cshtml
         let title = $(this).data("title");
         document.title = title;
     });
-    var name ="@name";
-    $(".searchTitle").text(name);
 </script>

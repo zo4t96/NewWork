@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MusicPrj
+namespace MainWork
 {
     //使用者新增單曲時上傳音樂用的變數類別,更新Entity時沒有此型別會報錯故在此新增
     public partial class tProduct
@@ -19,11 +19,11 @@ namespace MusicPrj
     }
 }
 
-    namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CAlbum
     {
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
 
         //使用者新增專輯
         public string userAddAlbum(tAlbum tA, string user)
@@ -41,13 +41,14 @@ namespace MusicPrj
             {
                 return "只接受圖片檔(jpg,jpeg,png)";
             }
-            string name = Guid.NewGuid().ToString() + "."+ fileType;
+            string name = Guid.NewGuid().ToString() + "." + fileType;
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/CoverFiles/"), name);
             tA.fCoverRealFile.SaveAs(path);
             tA.fCoverPath = name;
             tA.fStatus = 0;
             tA.fAccount = user;
             tA.fYear = DateTime.Now;
+            tA.fDiscount = 1;
             db.tAlbums.Add(tA);
             try
             {
@@ -67,15 +68,6 @@ namespace MusicPrj
             if (tP_fRealFile == null)
             {
                 return "並未選擇上傳檔案";
-            }
-            if (tP_fRealFile.ContentLength <= 0)
-            {
-                return "檔案大小不可為0";
-            }
-            string fileType = tP_fRealFile.FileName.Split('.').Last().ToLower();
-            if (!(fileType.Equals("mp3")))
-            {
-                return "只接受mp3音樂檔";
             }
             string name = Guid.NewGuid().ToString() + ".mp3";
             var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), name);
@@ -124,8 +116,8 @@ namespace MusicPrj
         }
 
         //使用者更新專輯資料不含封面
-        public string userUpdateAlbumInfo(string albumid, FormCollection formCollection)
-         {
+        public string userUpdateAlbumInfo(string albumid, FormCollection formCollection,string s3)
+        {
             int intAlbumid = Int32.Parse(albumid);
             tAlbum tA = db.tAlbums.FirstOrDefault(p => p.fAlbumID == intAlbumid);
             string s2 = "";
@@ -135,6 +127,12 @@ namespace MusicPrj
                 s2 = "失敗";
                 return s2;
             }
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s3;
+            tLg.fActionTo = s3;
+            tLg.fCategory = "update";
+            tLg.fMessage = $"user:{s3} update albumid:{albumid} at{DateTime.Now} before{tA.fAlbumName} {tA.fMaker} {tA.fYear} {tA.fType} {tA.fALPrice} {tA.fStatus}after{formCollection["revisefAlbumName"]} {formCollection["revisefMaker"]} {Int32.Parse(formCollection["revisefType"])} {(decimal)Single.Parse(formCollection["revisefALPrice"])} {Int32.Parse(formCollection["o.fstatus"])}";
+            db.tLogs.Add(tLg);
             tA.fAlbumName = formCollection["revisefAlbumName"];
             tA.fMaker = formCollection["revisefMaker"];
             tA.fYear = DateTime.Now;
@@ -172,7 +170,7 @@ namespace MusicPrj
         }
 
         //使用者更新專輯封面(only封面)
-        public string userUpdateAlbumFile(string albumid, HttpPostedFileBase fCoverPathUpload)
+        public string userUpdateAlbumFile(string albumid, HttpPostedFileBase fCoverPathUpload , string s3)
         {
             if (fCoverPathUpload == null)
             {
@@ -196,14 +194,26 @@ namespace MusicPrj
                 s2 = "失敗";
                 return s2;
             }
-            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/CoverFiles/"), tA.fCoverPath);
-            fCoverPathUpload.SaveAs(path);
+            var originalPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/CoverFiles/"), tA.fCoverPath);
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s3;
+            tLg.fActionTo = s3;
+            tLg.fCategory = "update";
+            string name = Guid.NewGuid().ToString() + "." + fileType;
+            tLg.fMessage = $"user:{s3} update albumid:{albumid} at{DateTime.Now} before{tA.fCoverPath} after{name}";
+            db.tLogs.Add(tLg);
+            System.IO.File.Delete(originalPath);
+            var newPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/CoverFiles/"), name);
+            fCoverPathUpload.SaveAs(newPath);
+            tA.fCoverPath = name;
+            db.SaveChanges();
+            //fCoverPathUpload.SaveAs(path);
             s2 = "成功";
             return s2;
         }
 
         //使用者透過介面更新單曲資料不含檔案
-        public string userUpdateSongInfo(string fProductID, FormCollection formCollection)
+        public string userUpdateSongInfo(string fProductID, FormCollection formCollection, string s1)
         {
             int intSongid = Int32.Parse(fProductID);
             tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == intSongid);
@@ -213,6 +223,12 @@ namespace MusicPrj
                 s2 = "失敗";
                 return s2;
             }
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s1;
+            tLg.fActionTo = s1;
+            tLg.fCategory = "update";
+            tLg.fMessage = $"user:{s1} update productID:{fProductID} at{DateTime.Now} before{tP.fProductName},{tP.fSinger} after{formCollection["fProductName"]},{formCollection["fSinger"]}";
+            db.tLogs.Add(tLg);
             tP.fProductName = formCollection["fProductName"];
             tP.fSinger = formCollection["fSinger"];
             db.SaveChanges();
@@ -246,20 +262,24 @@ namespace MusicPrj
             {
                 return "Products中找不到這首";
             }
-            tAlbum owner = db.tAlbums.FirstOrDefault(p => p.fAlbumID == amid && p.fAccount == s2);
-            int? tMpri = db.tMembers.FirstOrDefault(p => p.fAccount == s2).fPrivilege;
-            if (tMpri < 2 && owner == null)
+            if (tP.tAlbum.fAccount!= s2)
             {
-                return "您無權限執行刪除,必須是管理員或作者";
+                return "您無權限執行刪除,必須是作者";
             }
             //1.關聯資料移除,2.Entity db的產生物件不能在另一個Entity db使用
             List<tPlayList> tPL = db.tPlayLists.Where(p => p.fProductID == amid).ToList();
-            List <tPurchaseItem> tPI = db.tPurchaseItems.Where(p => p.fProductID == amid).ToList();
-         //   List <tShoppingCart> tSC = db.tShoppingCarts.Where(p => p.fProductID == amid).ToList();
+            List<tPurchaseItem> tPI = db.tPurchaseItems.Where(p => p.fProductID == amid).ToList();
+            //   List <tShoppingCart> tSC = db.tShoppingCarts.Where(p => p.fProductID == amid).ToList();
             db.tPlayLists.RemoveRange(tPL);
             db.tPurchaseItems.RemoveRange(tPI);
-        //    db.tShoppingCarts.RemoveRange(tSC);
+            //    db.tShoppingCarts.RemoveRange(tSC);
             db.tProducts.Remove(tP);
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s2;
+            tLg.fActionTo = s2;
+            tLg.fCategory = "delete";
+            tLg.fMessage = $"user:{s2} delete productID:{amid} at{DateTime.Now}";
+            db.tLogs.Add(tLg);
             try
             {
                 db.SaveChanges();
@@ -299,6 +319,12 @@ namespace MusicPrj
             List<tProduct> tP = db.tProducts.Where(p => p.fAlbumID == amid).ToList();
             db.tProducts.RemoveRange(tP);
             db.tAlbums.Remove(tA);
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s2;
+            tLg.fActionTo = s2;
+            tLg.fCategory = "delete";
+            tLg.fMessage = $"user:{s2} delete Album ID:{amid} at{DateTime.Now}";
+            db.tLogs.Add(tLg);
             try
             {
                 db.SaveChanges();
@@ -317,7 +343,7 @@ namespace MusicPrj
             {
                 //return "檔案不存在或在使用中";
             }
-            string errorFile= "檔案不存在或在使用中:";
+            string errorFile = "檔案不存在或在使用中:";
             foreach (var prod in tP)
             {
                 var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), prod.fFilePath);
@@ -331,31 +357,22 @@ namespace MusicPrj
                     errorFile += path;
                 }
             }
-            if(errorFile!= "檔案不存在或在使用中:")
+            if (errorFile != "檔案不存在或在使用中:")
             {
                 return errorFile;
             }
             else
             {
-            return "成功";
+                return "成功";
             }
         }
 
         //使用者透過介面更新單曲資料含檔案
-        public string userUpdateSongFile(string fProductID, HttpPostedFileBase fRealFile)
+        public string userUpdateSongFile(string fProductID, HttpPostedFileBase fRealFile, string s1)
         {
             if (fRealFile == null)
             {
                 return "並未選擇上傳檔案";
-            }
-            if (fRealFile.ContentLength <= 0)
-            {
-                return "檔案大小不可為0";
-            }
-            string fileType = fRealFile.FileName.Split('.').Last().ToLower();
-            if (!(fileType.Equals("mp3")))
-            {
-                return "只接受mp3音樂檔";
             }
             int intProductID = Int32.Parse(fProductID);
             tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == intProductID);
@@ -366,16 +383,28 @@ namespace MusicPrj
                 s2 = "失敗";
                 return s2;
             }
-            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), tP.fFilePath);
-            fRealFile.SaveAs(path);
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s1;
+            tLg.fActionTo = s1;
+            tLg.fCategory = "update";
+            string name = Guid.NewGuid().ToString() + ".mp3";
+            tLg.fMessage = $"user:{s1} update productID:{fProductID} at{DateTime.Now} from{tP.fFilePath} to {name}";
+            db.tLogs.Add(tLg);
+            var originalPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), tP.fFilePath);
+            System.IO.File.Delete(originalPath);
+            var newPath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/MusicFiles/"), name);
+            fRealFile.SaveAs(newPath);
+            tP.fFilePath = name;
+            db.SaveChanges();
             s2 = "成功";
             return s2;
         }
 
         //使用者直接更新單曲資料不含檔案
-        public string userUpdateSongInfoDetail(int soid, FormCollection formCollection)
+        public string userUpdateSongInfoDetail(FormCollection formCollection,string s1)
         {
-       //     int intSongid = Int32.Parse(soid);
+            //     int intSongid = Int32.Parse(soid);
+            int soid = Int32.Parse(formCollection["revise_fProductID"]);
             tProduct tP = db.tProducts.FirstOrDefault(p => p.fProductID == soid);
             string s2 = "";
             if (tP == null)
@@ -383,12 +412,20 @@ namespace MusicPrj
                 s2 = "失敗";
                 return s2;
             }
+            tLog tLg = new tLog();
+            tLg.fIssuerFrom = s1;
+            tLg.fActionTo = s1;
+            tLg.fCategory = "update";
+            tLg.fMessage = $"user:{s1} update productID:{soid} at{DateTime.Now} from{tP.fProductName} {tP.fSinger} {tP.fComposer} {tP.fSIPrice} {tP.fPlayStart} {tP.fPlayEnd}" +
+                $"to {formCollection["revise_fProductName"]} {formCollection["revise_fSinger"]} {formCollection["revise_fComposer"]} {Convert.ToDecimal(formCollection["revise_fSIPrice"])}" +
+                $"{Convert.ToDouble(formCollection["revise_fPlayStart"])} {Convert.ToDouble(formCollection["revise_fPlayEnd"])}";
+            db.tLogs.Add(tLg);
             tP.fProductName = formCollection["revise_fProductName"];
             tP.fSinger = formCollection["revise_fSinger"];
             tP.fComposer = formCollection["revise_fComposer"];
-            tP.fSIPrice = (decimal)Single.Parse(formCollection["revise_fSIPrice"]);
-            tP.fPlayStart = Double.Parse(formCollection["revise_fPlayStart"]);
-            tP.fPlayEnd = Double.Parse(formCollection["revise_fPlayEnd"]);
+            tP.fSIPrice = Convert.ToDecimal(formCollection["revise_fSIPrice"]);
+            tP.fPlayStart = Convert.ToDouble(formCollection["revise_fPlayStart"]);
+            tP.fPlayEnd = Convert.ToDouble(formCollection["revise_fPlayEnd"]);
             db.SaveChanges();
             s2 = "成功";
             return s2;
@@ -403,7 +440,7 @@ namespace MusicPrj
                 s2 = "找不到帳號";
                 return s2;
             }
-            if (tM.fLineStatus == 0|| tM.fLineStatus == 2)
+            if (tM.fLineStatus == 0 || tM.fLineStatus == 2)
             {
                 s2 = "帳號未至Line進行綁定或已經綁定帳號了";
                 return s2;

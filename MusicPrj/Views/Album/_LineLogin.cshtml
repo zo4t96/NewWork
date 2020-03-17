@@ -1,5 +1,5 @@
-﻿@using MusicPrj.ViewModel;
-@using MusicPrj.Models;
+﻿﻿@using MainWork.ViewModel;
+@using MainWork.Models;
 
 @{
     Layout = null;
@@ -11,6 +11,11 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
 <style>
+        * {
+        background-color: black;
+        color: white;
+    }
+
     .box {
         font-family: "微軟正黑體";
         margin: 0 auto;
@@ -56,9 +61,7 @@
     }
 </div>
 
-<script>
-    $(".loingBtn").click(function () {
+<script>$(".loingBtn").click(function () {
         $("form").submit();
-    })
-</script>
+    })</script>
 

@@ -1,5 +1,5 @@
-﻿@model IEnumerable<MusicPrj.tProduct>
-@using MusicPrj.Models;
+﻿@model IEnumerable<tProduct>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "PlayLists";
@@ -141,6 +141,7 @@
         border-radius: 4px;
         background-color: #4a4a4a;
     }
+
     /*播放清單的右鍵*/
     .contextmenu {
         position: fixed;
@@ -180,63 +181,60 @@
         <div class="h5">播放清單是空的喔</div>
     </div>
 }
-<div class="playList">
 
-    @if (ViewBag.memberUseType == "一般會員")
-    {
-        <div class="mx-3 my-3">
-            <div>覺得音樂太少不夠聽嗎?</div>
-            <div>立即加入<span class="monthlyBtn">包月會員</span>即可暢享所有音樂!</div>
+@if (ViewBag.memberUseType == "一般會員")
+{
+    <div class="mx-3 my-3">
+        <div>覺得音樂太少不夠聽嗎?</div>
+        <div>立即加入<span class="monthlyBtn">包月會員</span>即可暢享所有音樂!</div>
+    </div>
+}
+
+
+@if (Model.FirstOrDefault() != null)
+{
+
+    @* 正在撥放的音樂 *@
+    <div class="playListItem" title="點擊撥放"
+         data-singer="@Model.First().fComposer"
+         data-songn="@Model.First().fProductName"
+         data-soid="@Model.First().fProductID"
+         data-songcover="@Model.First().tAlbum.fCoverPath"
+         data-albumname="@Model.First().tAlbum.fAlbumName"
+         data-playurl="@(Url.Content("~/MusicFiles/") + Model.First().fFilePath)">
+        <div class="plSymbol">
+            <i class='fas fa-music symbol'></i>
         </div>
-    }
-
-
-
-
-    else
+        <div class="plDescription">
+            <div class="mTitle">@Model.First().fProductName</div>
+            <div class="hr"></div>
+            <div class="mDetail">@Model.First().tAlbum.fAlbumName - @Model.First().fSinger</div>
+        </div>
+    </div>
+    foreach (var item in Model)
     {
-        @* 正在撥放的音樂 *@
-        <div class="playListItem" title="點擊撥放"
-             data-singer="@Model.First().fComposer"
-             data-songn="@Model.First().fProductName"
-             data-soid="@Model.First().fProductID"
-             data-songcover="@Model.First().tAlbum.fCoverPath"
-             data-albumname="@Model.First().tAlbum.fAlbumName"
-             data-playurl="@(Url.Content("~/MusicFiles/") + Model.First().fFilePath)">
+        FirstAlbumId++;
+        if (FirstAlbumId == 1)
+        { continue; }
+        @* 每一項音樂 *@
+        <div class="playListItem"
+             data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
+             data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
+             data-soid="@item.fProductID"
+             data-songcover="@item.tAlbum.fCoverPath"
+             data-albumname="@item.tAlbum.fAlbumName"
+             data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
             <div class="plSymbol">
                 <i class='fas fa-music symbol'></i>
             </div>
             <div class="plDescription">
-                <div class="mTitle">@Model.First().fProductName</div>
+                <div class="mTitle">@Html.DisplayFor(modelItem => item.fProductName)</div>
                 <div class="hr"></div>
-                <div class="mDetail">@Model.First().tAlbum.fAlbumName - @Model.First().fSinger - (xx:xx)</div>
+                <div class="mDetail">@Html.DisplayFor(modelItem => item.tAlbum.fAlbumName) - @Html.DisplayFor(modelItem => item.fSinger)</div>
             </div>
         </div>
-        foreach (var item in Model)
-        {
-            FirstAlbumId++;
-            if (FirstAlbumId == 1)
-            { continue; }
-            @* 每一項音樂 *@
-            <div class="playListItem"
-                 data-singer="@Html.DisplayFor(modelItem => item.fComposer)"
-                 data-songn="@Html.DisplayFor(modelItem => item.fProductName)"
-                 data-soid="@item.fProductID"
-                 data-songcover="@item.tAlbum.fCoverPath"
-                 data-albumname="@item.tAlbum.fAlbumName"
-                 data-playurl="@(Url.Content("~/MusicFiles/") + Html.DisplayFor(modelItem => item.fFilePath))">
-                <div class="plSymbol">
-                    <i class='fas fa-music symbol'></i>
-                </div>
-                <div class="plDescription">
-                    <div class="mTitle">@Html.DisplayFor(modelItem => item.fProductName)</div>
-                    <div class="hr"></div>
-                    <div class="mDetail">@Html.DisplayFor(modelItem => item.tAlbum.fAlbumName) - @Html.DisplayFor(modelItem => item.fSinger) - (xx:xx)</div>
-                </div>
-            </div>
-        }
     }
-</div>
+}
 
 <div class="contextmenu">
     <div class="itemDelete" data-deleteid="0">從播放清單中刪除此曲</div>
@@ -245,7 +243,7 @@
 
 <script>
     //音樂播放暫停鍵
-    $(".playListItem").on("click", function () {
+    $(document).on("click",".playListItem", function () {
         console.log($(this).prop("class"));
 
             if ($(this).prop("class") == "playListItem") {
@@ -271,8 +269,8 @@
             $("#pause").css("display", "none")
         }
     })
-            //到時候音樂點擊播放也放這裡
-    $(".playListItem").on('click', function (e) {
+    //到時候音樂點擊播放也放這裡
+    $(document).on('click','.playListItem', function (e) {
         if ($(this).prop("class") == "playListItem") {
             $(".playListItem").removeClass("playingItem");
             $(this).siblings().find(".plSymbol").removeClass("playingSymbol")
@@ -285,7 +283,7 @@
     })
 
     //播放清單右鍵
-    $(".playListItem").contextmenu(function (e) {
+    $(document).on('contextmenu','.playListItem',function (e) {
         e.preventDefault();
         $(".contextmenu").css("display", "block");
         $(".contextmenu").css("left", e.clientX + "px");
@@ -296,6 +294,11 @@
         let id = $(this).data("deleteid");
         $.post('@Url.Action("deletePlayLists","Album")', {deleteid:id}, function () {
             $(".playList").find(`.playListItem[data-soid=${id}]`).remove();
+            if ($(".playListItem").length == 0) {
+                $(".playListPartialView").append(`<div class="noMusic">
+                <div class="h5">播放清單是空的喔</div>
+                </div>`)
+            }
         });
     })
     $(document).click(function () {
@@ -306,7 +309,8 @@
         $.ajax({
                 url:"@Url.Action("_MonthlyPage","Homepage")",
                 type: "get",
-                beforeSend:function() {
+                beforeSend: function () {
+                    $("#modal").css("display", "block");
                     $("#modal").html(
                         `<div class="loading">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
@@ -315,12 +319,28 @@
                 },
                 success: function (data) {
                     $("#modal").html(data);
-                }
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#modal").addClass("fadein");
+                    $(".modalMonthly").addClass("fadein");
+                }, 10)
+            }
         })
-        $("#modal").css("display", "block");
-        setTimeout(function () {
-            $("#modal").addClass("fadein");
-            $(".modalMonthly").addClass("fadein");
-        }, 10)
+
+    })
+
+    $(function () {
+        let a = '@account'
+        if (a != "") {
+            var firstMusic = $(".playListItem").first();
+            if (firstMusic.length != 0) {
+                player.src = firstMusic.data("playurl")
+                $("#titlePanel > .description").text(firstMusic.data("albumname"));
+                $("#Descriptiontwo").text(firstMusic.data("songn"));
+                $("#singer").text(firstMusic.data("singer"));
+                $("#playercover").attr("src", `/CoverFiles/${firstMusic.data("songcover")}`);
+            }
+        }
     })
 </script>

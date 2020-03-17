@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MusicPrj
+namespace MainWork
 {
     using System;
     using System.Collections.Generic;

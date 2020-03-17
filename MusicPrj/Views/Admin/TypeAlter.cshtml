@@ -1,0 +1,143 @@
+﻿@model IEnumerable<MainWork.tAlbumType>
+@using MainWork.Models;
+
+@{
+    Layout = "~/Views/Shared/_Layout_admin.cshtml";
+    var account = "";
+
+    if (Session[CDictionary.SK_ACCOUNT] == null || string.IsNullOrWhiteSpace(Session[CDictionary.SK_ACCOUNT].ToString()))
+    {
+        Response.Redirect("~/Admin/login/");
+    }
+    else
+    {
+        account = Session[CDictionary.SK_ACCOUNT].ToString();
+        if (account != "aaa")
+        {
+            Response.Redirect("~/Admin/login/");
+        }
+        else
+        {
+
+        }
+    }
+}
+<style>
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 60px;
+    }
+
+    .groupPanel {
+        width: 50%;
+        margin-bottom: 40px;
+        margin: 10px 60px;
+        background-color: rgba(206, 226, 231, 0.30);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px outset white;
+    }
+
+    .readName {
+        color: black;
+        background-color: #a0d1e2;
+    }
+
+    .small {
+        color: black
+    }
+</style>
+<div class="container mx-3">
+    <div class="title">
+        <p>販售類別</p>
+    </div>
+
+    <div class="groupPanel">
+        <div class="h5">新增販賣類別</div>
+        <form action="@Url.Action("TypeNew","Admin")" method="post" class="newType">
+            <div class="input-group">
+                <input type="text" name="typeName" maxlength="8" class="form-control newName" placeholder="請輸入要新增的販賣類別名稱">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary new">新增</button>
+                </div>
+            </div>
+            <small class="form-text text-muted small">最多不得超過八個字</small>
+        </form>
+    </div>
+
+    <div class="groupPanel">
+        <div class="h5">現有類別刪除或修改</div>
+        <small class="form-text text-muted">任意刪除或修改都會造成專輯分類上的影響!請慎選</small>
+        <p></p>
+
+        @foreach (var item in Model)
+        {
+            //不指定為不得修改的類別項目(配合刪除指令，使被刪除專輯的販售類別可以轉移到這項上)
+            if (item.fTypeName == "不指定")
+            {
+                continue;
+            }
+            <div>
+                <form class="fedit" action="@Url.Action("TypeEdit", "Admin")" method="post">
+                    <input type="hidden" value="@item.fTypeID" name="typeOrigin" />
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <input type="text" readonly class="input-group-text readName" value="@item.fTypeName" />
+                        </div>
+                        <input type="text" class="form-control changeName" name="typeChange" placeholder="請輸入修改名稱">
+                        <div class="input-group-append">
+                            <button class="btn btn-warning edit" type="button">修改</button>
+                            <button class="btn btn-danger delete" type="button">刪除</button>
+                        </div>
+                    </div>
+                </form>
+                <form class="fdelete" action="@Url.Action("TypeDelete","Admin")" method="post">
+                    <input type="hidden" name="deleteId" value="@item.fTypeID" />
+                </form>
+            </div>
+            <p></p>
+        }
+    </div>
+</div>
+<script>
+    $(".new").click(function () {
+        var newName = $(this).parent().siblings(".newName").val().trim();
+        if (newName == "") {
+            alert("新增欄位不得為空!");
+        }
+        else if (!nameTwice(newName)) {
+            $(this).parents(".newType").submit();
+        }
+    })
+
+    $(".edit").click(function () {
+        var changeName = $(this).parent().siblings(".changeName").val().trim();
+        if (changeName == "") {
+            alert("修改欄位不得為空!");
+        }
+        else if (!nameTwice(changeName)) {
+            if (confirm("這麼做會連帶改變所有使用此類別的專輯，確定要修改嗎?")) {
+                $(this).parents(".fedit").submit();
+            }
+        }
+    })
+
+    $(".delete").click(function () {
+        if (confirm("這麼做會影響所有使用此類別的專輯，真的要刪除嗎?")) {
+            $(this).parents(".fedit").siblings(".fdelete").submit();
+        }
+    })
+
+    //判斷是否有重名的方法
+    function nameTwice(name) {
+        var cancel = false;
+        $(".readName").each(function () {
+            if ($(this).val() == name) {
+                alert("資料庫裡已有同名的類型!")
+                cancel = true;
+            }
+        })
+        return cancel;
+    }
+</script>

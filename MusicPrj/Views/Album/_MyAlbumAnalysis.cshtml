@@ -1,5 +1,5 @@
-﻿
-    <link href="~/css/theme.css" rel="stylesheet" media="all">
+﻿﻿
+<link href="~/css/theme.css" rel="stylesheet" media="all">
 
 <div class="row">
     <div class="col-md-5">
@@ -65,7 +65,7 @@
     <div class="col-md-5">
         <div class="au-card m-b-20">
             <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">By 月試聽專輯/單曲總數</h3>
+                <h3 class="title-2 m-b-40">近6個月試聽專輯/單曲總數</h3>
                 <canvas id="byMonthTry"></canvas>
             </div>
         </div>
@@ -73,7 +73,7 @@
     <div class="col-md-5">
         <div class="au-card m-b-20">
             <div class="au-card-inner">
-                <h3 class="title-2 m-b-40">By 月購買專輯/單曲總數</h3>
+                <h3 class="title-2 m-b-40">近6個月購買專輯/單曲總數</h3>
                 <canvas id="byMonthSale"></canvas>
             </div>
         </div>
@@ -123,7 +123,7 @@
                     defaultFontFamily: 'Poppins',
                     datasets: [{
                         data: m_statistCntTry,
-                        label: "Expense",
+                        label: "次",
                         backgroundColor: 'rgba(0,103,255,.15)',
                         borderColor: 'rgba(0,103,255,0.5)',
                         borderWidth: 3.5,
@@ -215,7 +215,7 @@
                     defaultFontFamily: 'Poppins',
                     datasets: [{
                         data: m_statistCntPruchase,
-                        label: "Expense",
+                        label: "次",
                         backgroundColor: 'rgba(0,103,255,.15)',
                         borderColor: 'rgba(0,103,255,0.5)',
                         borderWidth: 3.5,
@@ -432,6 +432,13 @@
     $.getJSON('@Url.Action("getStatistic_memberTryWeekTop5Song","Statistic")', function (datas) {
             $.each(datas, function (name, value) {
                 $("#memberTryWeekTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
+                  })
+    })
+
+    //本月最多試聽單曲
+    $.getJSON('@Url.Action("getStatistic_memberTryMonthTop5Song","Statistic")', function (datas) {
+            $.each(datas, function (name, value) {
+                $("#memberTryMonthTop5SongList").append(`<tr><td title="${value.Album}">${value.Song}</td><td>${value.CNT}</td></tr>`);
                   })
     })
 

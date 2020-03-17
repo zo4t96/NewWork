@@ -1,5 +1,5 @@
-﻿@model List<MusicPrj.tAlbum>
-@using MusicPrj.Models;
+﻿@model List<MainWork.tAlbum>
+@using MainWork.Models;
 
 @{
     ViewBag.Title = "Index";
@@ -60,13 +60,13 @@
             background-color: #cde4ea;
         }
 
-        .trItemMain td {
+        .trItemMain > td {
             text-align: center;
             vertical-align: middle;
-            line-height: 110px;
         }
 
     .cover {
+        display: inline-block;
         width: 120px;
         height: 120px;
     }
@@ -74,6 +74,7 @@
     .all {
         cursor: pointer;
     }
+
     /*次表單(專輯內音樂內容)*/
     .tableSub {
         display: none;
@@ -130,8 +131,8 @@
                 <tr class="trItemMain">
                     <td><div class="btn btn-info open">詳細內容</div></td>
                     <td><input type="checkbox" data-account="@item.fAccount" data-album="@item.fAlbumID" /></td>
-                    <td>@item.fYear</td>
-                    <td><img class="cover" src="~/Images/@item.fCoverPath" /></td>
+                    <td>@(((DateTime)item.fYear).ToShortDateString())</td>
+                    <td><img class="cover" src="~/CoverFiles/@item.fCoverPath" /></td>
                     <td>@item.fAccount</td>
                     <td>@item.fAlbumName</td>
                     <td>@Convert.ToInt32(item.fALPrice)元</td>
@@ -165,7 +166,7 @@
                                         <td>@music.fSinger</td>
                                         <td>@music.fComposer</td>
                                         <td>@Convert.ToInt32(music.fSIPrice)元</td>
-                                        <td><audio src="~/Music/@music.fFilePath" controls></audio></td>
+                                        <td><audio src="~/MusicFiles/@music.fFilePath" controls></audio></td>
                                     </tr>
                                 }
                             </tbody>
@@ -181,6 +182,7 @@
     $(".open").click(function () {
         $(this).parents("tr").next().slideToggle(1);
     })
+
     //表單內checkbox的處理
     $(".trItemMain").click(function (e) {
         let target = $(this).find("input[type = checkbox]")[0];
@@ -203,6 +205,7 @@
         e.preventDefault();
         $(".all").trigger("click")
     })
+
     $(".pass").click(function () {
         $(this).prop("disabled", true);
         $(this).siblings().prop("disabled", true);
@@ -225,6 +228,7 @@
         $(this).parents("tr").next().html("");
         $(this).parents("tr").html("");
     })
+
     $(".multiplePass,.multipleNoPass").click(function () {
         $(this).prop("disabled", true);
         let accounts = [];
@@ -235,6 +239,7 @@
         })
         if (accounts[0] == null || albums[0] == null) {
             alert("還未選取任何專輯");
+            $(this).prop("disabled", false);
             return
         }
         let url;

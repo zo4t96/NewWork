@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MainWork;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace MusicPrj.Models
+namespace prjSpotifyProject.Models.Member
 {
     public class tMemberFactory
     {
@@ -19,7 +20,7 @@ namespace MusicPrj.Models
         public List<tMember> queryBySql(string sql)
         {
             SqlConnection con = new SqlConnection();
-            con.ConnectionString = @"Server=tcp:sqlserverprj.database.windows.net,1433;Initial Catalog=dbProjectMusicStore;Persist Security Info=False;User ID=webuser1;Password=user123My;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
+            con.ConnectionString = @"Data Source=.;Initial Catalog=dbProjectMusicStore;Integrated Security=True";
             con.Open();
 
             SqlDataAdapter adapter = new SqlDataAdapter(sql, con);
@@ -32,10 +33,11 @@ namespace MusicPrj.Models
             {
                 tMember x = new tMember();
                 x.fAccount = r["fAccount"].ToString();
-                x.fPassword = r["fPassword"].ToString();
+                x.fPassword = r["fPassword"].ToString();                
                 x.fEmail = r["fEmail"].ToString();
                 x.fNickName = r["fNickName"].ToString();
-
+                x.fPrivilege = 0;
+                
                 list.Add(x);
             }
             return list;
@@ -55,16 +57,12 @@ namespace MusicPrj.Models
         private static void executeSql(string sql)
         {
             SqlConnection con = new SqlConnection();
-            con.ConnectionString = @"Server=tcp:sqlserverprj.database.windows.net,1433;Initial Catalog=dbProjectMusicStore;Persist Security Info=False;User ID=webuser1;Password=user123My;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
+            con.ConnectionString = @"Data Source=.;Initial Catalog=dbProjectMusicStore;Integrated Security=True";
             con.Open();
-            //
-            //Integrated Security =True
 
             SqlCommand cmd = new SqlCommand(sql, con);
             cmd.ExecuteNonQuery();
             con.Close();
         }
-
-
     }
 }

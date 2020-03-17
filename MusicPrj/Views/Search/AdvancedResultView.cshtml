@@ -1,8 +1,4 @@
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-﻿@model IEnumerable<MusicPrj.tAlbum>
-=======
-﻿@model IEnumerable<MainWork.tAlbum>
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
+﻿@model List<MainWork.tAlbum>
 
 <style>
     .albumPanel {
@@ -25,22 +21,18 @@
         margin: 10px;
         padding: 20px;
         cursor: pointer;
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-=======
 
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
         transition: 0.4s;
-        opacity: 0;
+        opacity:0;
     }
-
     .animation {
         opacity: 1;
     }
 
-    .albumBlock:hover {
-        background-color: #353535;
-        text-decoration: none;
-    }
+        .albumBlock:hover {
+            background-color: #353535;
+            text-decoration: none;
+        }
 
     .albumCover {
         position: relative;
@@ -51,7 +43,7 @@
         min-height: 160px;
         border-radius: 10px;
         /*測試用圖片*/
-        background-image: url("/Images/4.jpg");
+        /*background-image: url("/Images/4.jpg");*/
         background-size: cover;
     }
 
@@ -87,21 +79,11 @@
         white-space: nowrap;
         overflow: hidden;
     }
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-
-        .albumDescripion.kind {
-            font-size: 10px;
-        }
-=======
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
 
     .noResult {
-        position: relative;
+        position:relative;
         text-align: center;
         top: 40%;
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-        margin: auto;
-=======
         margin:auto;
     }
     /*折扣文字*/
@@ -110,7 +92,6 @@
         font-size: 12px;
         font-weight: 600;
         color: red;
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
     }
 </style>
 
@@ -130,42 +111,31 @@
     <div class="albumPanel">
         @foreach (var item in Model)
         {
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")" data-album="@item.fAlbumID" data-title="@item.fAlbumName">
-=======
-            <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID" data-title="@item.fAlbumName" title="@item.fAlbumName">
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
-                @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
-                <div class="albumCover"></div>
-                <div class="albumContent">
-                    <span class="albumTitle">@item.fAlbumName</span>
-                    <span class="albumDescripion">@item.fMaker</span>
-                    <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
-                    <span class="albumDescripion">@item.fKinds</span>
-                    @if (item.fActivityID != null)
-                    {
-                        <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
-                    }
-                </div>
-            </a>
+        <a class="albumBlock" href="@Url.Action("AlbumDetail","Album")?amid=@item.fAlbumID" data-album="@item.fAlbumID" data-title="@item.fAlbumName" title="@item.fAlbumName">
+            <img src="~/CoverFiles/@item.fCoverPath" class="albumCover" />
+            @* 這邊的封面連結記得到時候要改成連接圖片路徑 *@
+            <div class="albumContent">
+                <span class="albumTitle">@item.fAlbumName</span>
+                <span class="albumDescripion">@item.fMaker</span>
+                <span class="albumDescripion">@item.tAlbumType.fTypeName</span>
+                <span class="albumDescripion">@item.fKinds.Replace(",", "、")</span>
+                @if (item.fActivityID != null)
+                {
+                    <div class="discount">@((1 - item.fDiscount) * 100)% off!</div>
+                }
+            </div>
+        </a>
         }
     </div>
     <script>
         setTimeout(function () {
             $(".albumBlock").addClass("animation");
         }, 200)
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-        $(".albumBlock").click(function (e) {
-            e.preventDefault();
-            let amid = $(this).data("album");
-            let url = `${$(this).attr("href")}?amid=${amid}`;
-=======
 
         $(".albumBlock").click(function (e) {
             e.preventDefault();
             let amid = $(this).data("album");
             let url = this.href;
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
             let stateObj = { amid: amid, ajax: true };
             history.pushState(stateObj, null, url);
             $.ajax({
@@ -175,15 +145,9 @@
                 beforeSend: function () {
                     $(".mainbox").html(
                         `<div class="loading">
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                            <span class="sr-only">Loading...</span>
-                        </div>`);
-=======
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>`);
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
                 },
                 success: function (data) {
                     $(".mainbox").html(data);
@@ -192,10 +156,7 @@
                     $(window).scrollTop(0);
                 }
             })
-<<<<<<< HEAD:MusicPrj/Views/Search/AdvancedResultView.cshtml
-=======
 
->>>>>>> 3f8fc7c0f3f2b90fde00f2155b735ad35c7fe8ae:MainWork/Views/Search/AdvancedResultView.cshtml
             let title = $(this).data("title");
             document.title = title;
         });

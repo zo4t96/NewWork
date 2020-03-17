@@ -1,0 +1,368 @@
+﻿@model IEnumerable<MainWork.tActivity>
+@using MainWork.Models;
+
+@{
+    Layout = null;
+}
+<style>
+    .title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 20px 0px;
+    }
+
+    .tab {
+        overflow: hidden;
+        border-left: 1px groove #949494;
+        border-right: 1px groove #949494;
+        border-top: 1px groove #949494;
+        border-radius: 5px 5px 0px 0px;
+        background-color: #4765aa;
+        background-image: linear-gradient(to bottom,#16161660 10%,#4765aa)
+    }
+
+        .tab button {
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            color: white;
+        }
+
+            .tab button:hover {
+                background-color: #4582b5;
+                background-image: linear-gradient(to bottom,#16161660 10%,#4582b5)
+            }
+
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px groove #949494;
+        border-top: none;
+        background-color: rgba(230, 230, 230, 0.1);
+    }
+
+    .eventMenu {
+        text-align: center;
+    }
+
+    .newPanel {
+        padding: 20px 50px;
+        flex:auto;
+    }
+
+    .kindPanel {
+        display: inline-block;
+        position: relative;
+    }
+
+    .preview {
+        width: 504px;
+        height: 210px;
+        border: 1px dashed gray;
+        background-size: cover;
+    }
+
+    .albumRowPanel {
+        width: 100%;
+        height: 550px;
+        box-shadow: inset 0px 0px 1px 1px #949494;
+        padding: 5px;
+        overflow: auto;
+    }
+
+    .table-bordered > thead > tr > th,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tfoot > tr > td {
+        border: 1px solid #838383;
+    }
+
+    .tableTitle {
+        background-color: #43477d;
+        background-image: linear-gradient(to bottom,#16161660 10%,#43477d)
+    }
+
+    .trItem {
+        cursor: pointer;
+    }
+
+        .trItem:hover {
+            background-color: #828282;
+        }
+</style>
+
+<div class="py-1 col-10">
+    <div class="title">
+        <p>活動管理</p>
+    </div>
+
+    <div class="tab">
+        <button class="tablinks" data-link="eventMenu">活動查詢</button>
+        <button class="tablinks" data-link="eventNew">新增活動</button>
+    </div>
+
+    @* 現有活動一覽 *@
+    <div class="tabcontent eventMenu pb-3">
+        <div class="h3 m-4 font-weight-bold">活動一覽表</div>
+        <table class="table col-10 m-auto table-bordered">
+            <thead>
+                <tr class="tableTitle">
+                    <th scope="col">排序</th>
+                    <th scope="col">活動名稱</th>
+                    @* 暫時先不做 *@
+                    @*<th scope="col">發起人</th>*@
+                    <th scope="col">開始日期</th>
+                    <th scope="col">結束日期</th>
+                    <th scope="col">查看資訊</th>
+                </tr>
+            </thead>
+            <tbody class="eventList">
+                @*@if (Model.FirstOrDefault() == null)
+                {
+                    <tr><td colspan="7">目前還沒有舉辦中的活動喔!</td></tr>
+                }
+                @{int count = 0; }
+                @foreach (var item in Model)
+                {
+                    count++;
+                    <tr>
+                        <th>@count</th>
+                        <td>@item.fTitle</td>
+                        <td>@item.tMember</td>
+                        <td>@item.fStartTime.ToString().Split(' ')[0]</td>
+                        <td>@item.fEndTime.ToString().Split(' ')[0]</td>
+                        <td>
+                            <a href="@Url.Action("EventEdit","Admin")?eventId=@item.fId"><div class="btn btn-primary">查看</div></a>
+                        </td>
+                    </tr>
+                }*@
+
+            </tbody>
+        </table>
+    </div>
+
+    @* 新增活動版面 *@
+    <div class="tabcontent eventNew">
+        <form id="eventNew" enctype="multipart/form-data" method="post">
+            <div class="newPanel row">
+                @* 左邊那行(表單輸入) *@
+                <div class="col-4">
+                    <div class="h3 mb-3 font-weight-bold">新增活動</div>
+
+                    @* 活動內容的表單 *@
+                    <div class="form-group">
+                        <label for="eventName" class="col-form-label">活動名稱</label>
+                        <div>
+                            <input class="form-control" type="text" maxlength="20" name="eventName" placeholder="最多二十個字元" id="eventName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">開始日期</label>
+                        <div>
+                            <input class="form-control startDate" type="date" name="startDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">結束日期</label>
+                        <div>
+                            <input class="form-control endDate" type="date" name="endDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label">上傳活動圖片</label>
+                        <div>
+                            <input type="file" class="w-75 mr-3 mt-1 upload" accept="image/jpg" name="eventImage" />
+                        </div>
+                    </div>
+                    <small class="form-text mb-3">活動圖片僅限jpg檔，並且大小為840x350，否則會發生切圖</small>
+                    
+                    <div class="btn btn-success mt-4 create">創建活動</div>
+                </div>
+
+                @* 右邊那行(顯示資料) *@
+                <div class="col-7 ml-3">
+                    <div class="h5 font-weight-bold">上傳圖片預覽</div>
+                    <div class="mb-5 preview">
+                        @* 上傳圖片會讀進來 *@
+                    </div>
+
+                    <div class="h5 mb-3 font-weight-bold">選擇專輯加入活動</div>
+                    <div class="btn btn-primary mb-1 all">全選擇</div>
+                    <div class="btn btn-info mb-1 cancelAll">全取消</div>
+                    <div class="albumRowPanel">
+                        <table class="table text-center table-bordered">
+                            <thead>
+                                <tr class="tableTitle">
+                                    <th scope="col">選取</th>
+                                    <th scope="col">專輯名稱</th>
+                                    <th scope="col">折扣選擇</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list">
+                                <tr class="trItem">
+                                    <td><input type="checkbox" /></td>
+                                    <td>測試用名稱，所以試著打長一點看看</td>
+                                    <td>
+                                        <select class="form-control">
+                                            @for(int i =9; i > 0; i--)
+                                            {
+                                                <option value="@i">@(i)折</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    //紀錄現在的帳號，之後讀取相應的活動資訊
+    var nowAccount = "@Session[CDictionary.SK_ACCOUNT].ToString()";
+
+    //自動更新活動列表的ajax方法(更新的是活動列表，跟後台更新的地方不一樣喔!)
+    function listRenew() {
+        $.ajax({
+            url: "@Url.Action("userEventRenew","Album")",
+            data: { account: nowAccount },
+            method: "POST",
+            beforeSend: function () {
+                $(".eventList").html(`<tr><td colspan=5>
+                        <div class="loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span></div>
+                        </td></tr>`);
+            },
+            success: function (datas) {
+                $(".eventList").html("");
+                if (datas.length == 0) {
+                    $(".eventList").append(`<tr><td colspan=5>您目前沒有創建任何活動喔</td></tr>`);
+                }
+                var count = 0;
+                $.each(datas, function (idx, value) {
+                    count++;
+                    let num = `<td>${count}</td>`;
+                    let title = `<td>${value.fTitle}</td>`;
+                    let startDate = `<td>${value.fStartTime}</td>`
+                    let endDate = `<td>${value.fEndTime}</td>`
+                    let info = `<td><div class="btn btn-primary">查看</div></td>`
+                    $(".eventList").append(`<tr>${num + title + startDate + endDate + info}</tr>`);
+                })
+            }
+        });
+    }
+    //切換tab頁面的開關
+    $(".tab button").click(function () {
+        $(".tabcontent").each(function () {
+            $(this).css("display", "none");
+        })
+        $(`.${$(this).data("link")}`).css("display", "block");
+        listRenew();
+
+    })
+    $(".tablinks[data-link = eventMenu]").trigger("click");
+
+    //控制時間上下限，使開始日期最早為今天，結束日期最早為開始日期的1天後
+    //預設開始日為今天，結束時間為一週後，省去使用端不填欄位的判斷
+    //toISOString()方法會將時間轉換成如"2020-02-23T08:59:20.255Z"的字串
+    var date = new Date().toISOString().split("T")[0];
+    var date2 = new Date();
+    var date3 = new Date();
+    date2.setDate(date2.getDate() + 1);
+    date2 = date2.toISOString().split("T")[0];
+
+    date3.setDate(date3.getDate() + 7);
+    date3 = date3.toISOString().split("T")[0];
+    $(".startDate").attr("min", date);3
+    $(".startDate").val(date);
+    $(".endDate").attr("min", date2);
+    $(".endDate").val(date3);
+
+    //每次設定起始時間時都要更新結束時間的最小值
+    $(".startDate").change(function () {
+        let min = new Date(this.value);
+        min.setDate(min.getDate() + 1);
+        min = min.toISOString().split("T")[0];
+        $(".endDate").attr("min", min);
+        //如果起始時間大於目前結束時間，自動將結束時間更改為起始時間＋１日
+        let end = new Date($(".endDate").val());
+        if (end < (new Date(this.value))) {
+            $(".endDate").val(min);
+        }
+    })
+
+    //音樂清單的全選全取消
+    $(".all").click(function () {
+        $(".trItem").find("input[type = checkbox]").each(function () {
+            this.checked = true;
+        })
+    })
+    $(".cancelAll").click(function () {
+        $(".trItem").find("input[type = checkbox]").each(function () {
+            this.checked = false;
+        })
+    })
+
+    //讀圖片檔使之呈現預覽
+    $(".upload").change(function (e) {
+        file = this.files[0];
+        f = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            $(".preview").css("background-image", `url(${e.target.result})`)
+        }
+    })
+
+    //建立活動．使用ajax實作
+    $(".create").click(function () {
+        //用了FormData就不用特地寫checkbox的陣列
+        //let eventAlbums = [];
+        //$(".trItem").each(function () {
+        //    if ($(this).find("input").prop("checked")) {
+        //        eventAlbums.push($(this).find("input").val());
+        //    }
+        //})
+        if ($("#eventName").val().trim() == "") {
+            alert("還未填寫活動名稱!")
+            return;
+        }
+        if ($(".upload").val() == "") {
+            alert("還沒有上傳活動圖片!");
+            return;
+        }
+        if (eventAlbums.length == 0) {
+            alert("沒有選擇任何專輯!")
+            return;
+        }
+        $("#eventName").val($("#eventName").val().trim())
+
+        let eventObj = new FormData($("#eventNew")[0]);
+
+        $.ajax({
+            url: '@Url.Action("EventNew","Admin")',
+            type: "post",
+            contentType: false,
+            processData: false,
+            data: eventObj,
+            success: function () {
+                alert("新增成功!")
+                window.location.href = "@Url.Action("EventPage","Admin")";
+            }
+        })
+    })
+
+    
+</script>
+

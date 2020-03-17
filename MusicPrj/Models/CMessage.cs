@@ -4,16 +4,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MusicPrj.Models
+namespace MainWork.Models
 {
     public class CMessage
     {
-        private dbProjectMusicStoreEntities db = new dbProjectMusicStoreEntities();
+        private dbProjectMusicStoreEntities1 db = new dbProjectMusicStoreEntities1();
         //使用者寄信
         public string userSendMail(string senderName, FormCollection formCollection)
         {
             string s2 = "";
-            if (db.tMembers.FirstOrDefault(p=>p.fAccount == senderName) == null)
+            if (db.tMembers.FirstOrDefault(p => p.fAccount == senderName) == null)
             {
                 s2 = "失敗,無此寄件人";
                 return s2;
@@ -30,7 +30,7 @@ namespace MusicPrj.Models
             string[] singelAccounts = { };
             if (!string.IsNullOrWhiteSpace(fAccountTo))
             {
-                char[] c1 = { ';'};
+                char[] c1 = { ';' };
                 singelAccounts = fAccountTo.Split(c1, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in singelAccounts)
                 {
@@ -40,14 +40,14 @@ namespace MusicPrj.Models
                     }
                 }
             }
-            if(s2 == "失敗,無此收件人")
+            if (s2 == "失敗,無此收件人")
             {
                 return s2;
             }
             //信件內容加入DB
             tMessage tMes = new tMessage();
             tMes.fAccountFrom = senderName;
-      //      tMes.fAccountTo = fAccountTo;
+            //      tMes.fAccountTo = fAccountTo;
             tMes.fTitle = formCollection["tMes.fTitle"];
             tMes.fContent = formCollection["tMes.fContent"];
             tMes.fTime = DateTime.Now;
@@ -136,7 +136,7 @@ namespace MusicPrj.Models
                 s2 = "失敗,查無此人";
                 return s2;
             }
-            List<tMessage> tMes = db.tMessages.Where(p => p.fAccountTo == issuerName && p.fStatus ==1).ToList();
+            List<tMessage> tMes = db.tMessages.Where(p => p.fAccountTo == issuerName && p.fStatus == 1).ToList();
             if (tMes == null)
             {
                 s2 = "失敗,信箱內找不到信";
